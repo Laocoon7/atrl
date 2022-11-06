@@ -27,6 +27,7 @@
 	Artifacts may be equipped or held in inventory to provide adjustments to the player.
 
 # Progression
+	Along with tradition RPG mechanics, blueprints will be found allowing crafting of items.
 
 # Technical
 ## License
