@@ -16,7 +16,5 @@ impl Random {
         Self { prng, prht, noise }
     }
 
-    pub fn from_entropy() -> Self {
-        Self::new(Prng::entropy_u64())
-    }
+    pub fn from_entropy() -> Self { Self::new(Prng::entropy_u64()) }
 }

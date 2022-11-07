@@ -38,10 +38,7 @@ pub fn print_spanstats(
             println!("]");
         }
         (Some(reference), None) if !reference_only => {
-            print!(
-                "[count: {:8} |          |        ]  [min:  ",
-                reference.count
-            );
+            print!("[count: {:8} |          |        ]  [min:  ", reference.count);
             print_delta_time_us(reference.min);
             print!(" |         |         ]  [avg: ");
             print_delta_time_us(reference.avg);
@@ -129,55 +126,25 @@ impl Scale {
     pub fn from_value_and_scale(v: f32, v_scale: f32) -> Self {
         assert!(v >= 0.0);
         if v == 0.0 {
-            Self {
-                name: " ",
-                scale_factor: Self::UNIT,
-            }
+            Self { name: " ", scale_factor: Self::UNIT }
         } else if v * v_scale >= Self::TERA {
-            Self {
-                name: "T",
-                scale_factor: Self::TERA,
-            }
+            Self { name: "T", scale_factor: Self::TERA }
         } else if v * v_scale >= Self::GIGA {
-            Self {
-                name: "G",
-                scale_factor: Self::GIGA,
-            }
+            Self { name: "G", scale_factor: Self::GIGA }
         } else if v * v_scale >= Self::MEGA {
-            Self {
-                name: "M",
-                scale_factor: Self::MEGA,
-            }
+            Self { name: "M", scale_factor: Self::MEGA }
         } else if v * v_scale >= Self::KILO {
-            Self {
-                name: "k",
-                scale_factor: Self::KILO,
-            }
+            Self { name: "k", scale_factor: Self::KILO }
         } else if v * v_scale >= Self::UNIT {
-            Self {
-                name: " ",
-                scale_factor: Self::UNIT,
-            }
+            Self { name: " ", scale_factor: Self::UNIT }
         } else if v * v_scale >= Self::MILLI {
-            Self {
-                name: "m",
-                scale_factor: Self::MILLI,
-            }
+            Self { name: "m", scale_factor: Self::MILLI }
         } else if v * v_scale >= Self::MICRO {
-            Self {
-                name: "µ",
-                scale_factor: Self::MICRO,
-            }
+            Self { name: "µ", scale_factor: Self::MICRO }
         } else if v * v_scale >= Self::NANO {
-            Self {
-                name: "n",
-                scale_factor: Self::NANO,
-            }
+            Self { name: "n", scale_factor: Self::NANO }
         } else {
-            Self {
-                name: "p",
-                scale_factor: Self::PICO,
-            }
+            Self { name: "p", scale_factor: Self::PICO }
         }
     }
 
@@ -200,8 +167,10 @@ impl Scale {
 
 lazy_static! {
     static ref SYSTEM_NAME: Regex = Regex::new(r#"system: name="([^"]+)""#).unwrap();
-    static ref SYSTEM_OVERHEAD: Regex = Regex::new(r#"system overhead: name="([^"]+)""#).unwrap();
-    static ref SYSTEM_COMMANDS: Regex = Regex::new(r#"system_commands: name="([^"]+)""#).unwrap();
+    static ref SYSTEM_OVERHEAD: Regex =
+        Regex::new(r#"system overhead: name="([^"]+)""#).unwrap();
+    static ref SYSTEM_COMMANDS: Regex =
+        Regex::new(r#"system_commands: name="([^"]+)""#).unwrap();
 }
 
 pub fn simplify_name(name: &str) -> String {
@@ -209,24 +178,16 @@ pub fn simplify_name(name: &str) -> String {
         return format!(r#"system: name="{}""#, get_short_name(&captures[1]));
     }
     if let Some(captures) = SYSTEM_OVERHEAD.captures(name) {
-        return format!(
-            r#"system overhead: name="{}""#,
-            get_short_name(&captures[1])
-        );
+        return format!(r#"system overhead: name="{}""#, get_short_name(&captures[1]));
     }
     if let Some(captures) = SYSTEM_COMMANDS.captures(name) {
-        return format!(
-            r#"system_commands: name="{}""#,
-            get_short_name(&captures[1])
-        );
+        return format!(r#"system_commands: name="{}""#, get_short_name(&captures[1]));
     }
     name.to_string()
 }
 
 fn set_fg(stdout: &mut StandardStream, color: Color) {
-    stdout
-        .set_color(ColorSpec::new().set_fg(Some(color)))
-        .unwrap();
+    stdout.set_color(ColorSpec::new().set_fg(Some(color))).unwrap();
 }
 
 pub fn set_bold(stdout: &mut StandardStream, bold: bool) {

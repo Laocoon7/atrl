@@ -30,7 +30,7 @@ pub mod prelude {
     // Bevy Plugins
     pub use bevy_ecs_tilemap::prelude::*;
     pub use bevy_inspector_egui::prelude::*; // For derive(Inspectable)
-    // Serialization
+                                             // Serialization
     pub use serde::{Deserialize, Serialize};
     pub use serde_json;
 

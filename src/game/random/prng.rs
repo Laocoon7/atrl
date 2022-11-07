@@ -12,33 +12,20 @@ pub struct Prng {
 }
 
 impl Prng {
-    pub fn new(seed: u64) -> Self {
-        Self {
-            seed,
-            rng: Pcg64::seed_from_u64(seed),
-        }
-    }
+    pub fn new(seed: u64) -> Self { Self { seed, rng: Pcg64::seed_from_u64(seed) } }
 
-    pub fn from_entropy() -> Self {
-        Self::new(Pcg64::from_entropy().next_u64())
-    }
+    pub fn from_entropy() -> Self { Self::new(Pcg64::from_entropy().next_u64()) }
 
     pub fn advance(&mut self, delta: u128) -> &mut Self {
         self.rng.advance(delta);
         self
     }
 
-    pub fn seed(&self) -> u64 {
-        self.seed
-    }
+    pub fn seed(&self) -> u64 { self.seed }
 
-    pub fn coin(&mut self) -> bool {
-        self.max_inclusive(1) == 1
-    }
+    pub fn coin(&mut self) -> bool { self.max_inclusive(1) == 1 }
 
-    pub fn next(&mut self) -> u32 {
-        self.rng.next_u32()
-    }
+    pub fn next(&mut self) -> u32 { self.rng.next_u32() }
 
     pub fn max(&mut self, max: u32) -> u32 {
         if max == 0 {
@@ -73,9 +60,7 @@ impl Prng {
         self.max_inclusive(end - start) + start
     }
 
-    pub fn next_u64(&mut self) -> u64 {
-        self.rng.next_u64()
-    }
+    pub fn next_u64(&mut self) -> u64 { self.rng.next_u64() }
 
     pub fn max_u64(&mut self, max: u64) -> u64 {
         if max == 0 {
@@ -118,13 +103,9 @@ impl Prng {
         (self.next_u64() as f64 / (u64::MAX as u128 + 1) as f64) as f64
     }
 
-    pub fn entropy() -> u32 {
-        Pcg64::from_entropy().gen::<u32>()
-    }
+    pub fn entropy() -> u32 { Pcg64::from_entropy().gen::<u32>() }
 
-    pub fn entropy_u64() -> u64 {
-        Pcg64::from_entropy().gen::<u64>()
-    }
+    pub fn entropy_u64() -> u64 { Pcg64::from_entropy().gen::<u64>() }
 
     pub fn entropy_f32() -> f32 {
         (Pcg64::from_entropy().gen::<u32>() as f64 / (u32::MAX as u64 + 1) as f64) as f32

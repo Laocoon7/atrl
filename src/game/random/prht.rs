@@ -87,9 +87,8 @@ impl<'de> Deserialize<'de> for Prht {
             where
                 A: SeqAccess<'de>,
             {
-                let seed = seq
-                    .next_element()?
-                    .ok_or_else(|| de::Error::invalid_length(0, &self))?;
+                let seed =
+                    seq.next_element()?.ok_or_else(|| de::Error::invalid_length(0, &self))?;
                 Ok(Prht::new(seed))
             }
 

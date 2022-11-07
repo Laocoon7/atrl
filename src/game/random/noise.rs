@@ -62,9 +62,8 @@ impl<'de> Deserialize<'de> for Noise {
             where
                 A: SeqAccess<'de>,
             {
-                let seed = seq
-                    .next_element()?
-                    .ok_or_else(|| de::Error::invalid_length(0, &self))?;
+                let seed =
+                    seq.next_element()?.ok_or_else(|| de::Error::invalid_length(0, &self))?;
                 Ok(Noise::new(seed))
             }
 
