@@ -95,9 +95,7 @@ impl Prng {
         self.max_inclusive_u64(end - start) + start
     }
 
-    pub fn next_f32(&mut self) -> f32 {
-        (self.next() as f64 / (u32::MAX as u64 + 1) as f64) as f32
-    }
+    pub fn next_f32(&mut self) -> f32 { (self.next() as f64 / (u32::MAX as u64 + 1) as f64) as f32 }
 
     pub fn next_f64(&mut self) -> f64 {
         (self.next_u64() as f64 / (u64::MAX as u128 + 1) as f64) as f64
