@@ -3,34 +3,6 @@ mod camera {
     pub use main_camera::*;
 }
 
-mod random {
-    mod noise;
-    pub use self::noise::*;
-    mod prht;
-    pub use prht::*;
-    mod prng;
-    pub use prng::*;
-    mod random;
-    pub use random::*;
-}
-
-mod shapes {
-    mod circle;
-    pub use circle::*;
-    mod line;
-    pub use line::*;
-    mod polygon;
-    pub use polygon::*;
-    mod ray;
-    pub use ray::*;
-    mod rectangle;
-    pub use rectangle::*;
-    mod segment;
-    pub use segment::*;
-    mod triangle;
-    pub use triangle::*;
-}
-
 mod tilemap {
     mod draw_tilemaps;
     pub use draw_tilemaps::*;
@@ -61,6 +33,36 @@ mod utils {
         pub use grid_arithmitic::*;
     }
     pub use grid::*;
+
+    mod random {
+        mod noise;
+        pub use self::noise::*;
+        mod prht;
+        pub use prht::*;
+        mod prng;
+        pub use prng::*;
+        mod random;
+        pub use random::*;
+    }
+    pub use random::*;
+
+    mod shapes {
+        mod circle;
+        pub use circle::*;
+        mod line;
+        pub use line::*;
+        mod polygon;
+        pub use polygon::*;
+        mod ray;
+        pub use ray::*;
+        mod rectangle;
+        pub use rectangle::*;
+        mod segment;
+        pub use segment::*;
+        mod triangle;
+        pub use triangle::*;
+    }
+    pub use shapes::*;
 }
 
 mod game_assets;
@@ -83,8 +85,6 @@ pub mod prelude {
     // local
     pub use super::camera::*;
     pub use super::game_assets::*;
-    pub use super::random::*;
-    pub use super::shapes::*;
     pub use super::tilemap::*;
     pub use super::utils::*;
     //pub use super::game_plugin::*; // only needed by main()
