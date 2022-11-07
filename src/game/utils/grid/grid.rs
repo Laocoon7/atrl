@@ -5,6 +5,7 @@ use std::{
     slice,
 };
 
+#[allow(dead_code)]
 pub type PointIter = PointIterRowMajor;
 pub type GridIter<'a, T> = slice::Iter<'a, T>;
 pub type GridIterMut<'a, T> = slice::IterMut<'a, T>;
@@ -18,6 +19,7 @@ pub struct Grid<T> {
     pub cells: Vec<T>,
 }
 
+#[allow(dead_code)]
 impl<T: Clone> Grid<T> {
     pub fn new_clone(size: impl Size2d, value: T) -> Self {
         let count = size.count();
@@ -27,6 +29,7 @@ impl<T: Clone> Grid<T> {
     }
 }
 
+#[allow(dead_code)]
 impl<T: Copy> Grid<T> {
     pub fn new_copy(size: impl Size2d, value: T) -> Self {
         let count = size.count();
@@ -36,6 +39,7 @@ impl<T: Copy> Grid<T> {
     }
 }
 
+#[allow(dead_code)]
 impl<T: Default> Grid<T> {
     pub fn new_default(size: impl Size2d) -> Self {
         let count = size.count();
@@ -45,6 +49,7 @@ impl<T: Default> Grid<T> {
     }
 }
 
+#[allow(dead_code)]
 impl<T> Grid<T> {
     #[inline(always)]
     pub fn new_fn<F>(size: impl Size2d, mut f: F) -> Self
