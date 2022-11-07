@@ -1,6 +1,17 @@
 mod camera {
+    mod camera_plugin;
+    pub use camera_plugin::*;
     mod main_camera;
     pub use main_camera::*;
+}
+
+mod map {
+    mod map_plugin;
+    pub use map_plugin::*;
+    mod map_tile_template;
+    pub use map_tile_template::*;
+    mod map;
+    pub use map::*;
 }
 
 mod tilemap {
@@ -72,19 +83,21 @@ mod game_state;
 
 pub mod prelude {
     // Bevy
-    pub use bevy::prelude::*;
+    pub use bevy::{prelude::*, utils::HashMap};
 
     // Bevy Plugins
     //pub use bevy_ecs_tilemap::prelude::*; // on hold
     pub use bevy_inspector_egui::prelude::*; // For derive(Inspectable)
 
     // Serialization
+    pub use ron;
     pub use serde::{Deserialize, Serialize};
     pub use serde_json;
 
     // local
     pub use super::camera::*;
     pub use super::game_assets::*;
+    pub use super::map::*;
     pub use super::tilemap::*;
     pub use super::utils::*;
     //pub use super::game_plugin::*; // only needed by main()
