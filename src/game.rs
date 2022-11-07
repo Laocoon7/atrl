@@ -14,6 +14,23 @@ mod random {
     pub use random::*;
 }
 
+mod shapes {
+    mod circle;
+    pub use circle::*;
+    mod line;
+    pub use line::*;
+    mod polygon;
+    pub use polygon::*;
+    mod ray;
+    pub use ray::*;
+    mod rectangle;
+    pub use rectangle::*;
+    mod segment;
+    pub use segment::*;
+    mod triangle;
+    pub use triangle::*;
+}
+
 mod tilemap {
     mod draw_tilemaps;
     pub use draw_tilemaps::*;
