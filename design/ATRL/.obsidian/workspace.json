@@ -4,22 +4,35 @@
     "type": "split",
     "children": [
       {
-        "id": "5b7bffb7b183ad24",
+        "id": "4989273f9119f99c",
         "type": "tabs",
         "children": [
           {
-            "id": "01f0133b94ac176c",
+            "id": "9c3a19749fe71690",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Design.md",
+                "file": "SUMMARY.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "5b118ee0cee23e96",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "git.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -85,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Design.md",
+                "file": "git.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Design.md",
+                "file": "git.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,20 +138,53 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Design.md"
+                "file": "git.md"
               }
             }
+          },
+          {
+            "id": "6c4ebaf2c29a9d1c",
+            "type": "leaf",
+            "state": {
+              "type": "BC-matrix",
+              "state": {}
+            }
+          },
+          {
+            "id": "9941fac3bfca307c",
+            "type": "leaf",
+            "state": {
+              "type": "BC-tree",
+              "state": {}
+            }
+          },
+          {
+            "id": "8e66c95406ed9f7e",
+            "type": "leaf",
+            "state": {
+              "type": "advanced-tables-toolbar",
+              "state": {}
+            }
           }
-        ]
+        ],
+        "currentTab": 6
       }
     ],
     "direction": "horizontal",
     "width": 300,
     "collapsed": true
   },
-  "active": "01f0133b94ac176c",
+  "active": "5b118ee0cee23e96",
   "lastOpenFiles": [
-    "Notes.md",
-    "Design.md"
+    "SUMMARY.md",
+    "Design.md",
+    "git.md",
+    "README.md",
+    "CleanShot 2022-11-06 at 21.03.30@2x.png.md",
+    "images/CleanShot 2022-11-06 at 21.03.30@2x.png",
+    "WIKI/git/Untitled.md",
+    "Untitled.md",
+    "2022-11-06.md",
+    "ATRL Kanban Board/What is this?.md"
   ]
 }
