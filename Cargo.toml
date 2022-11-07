@@ -1,16 +1,18 @@
 [package]
-name = "atrl"
-version = "0.1.0"
-edition = "2021"
-authors = ["Laocoon <laocoon7@gmail.com>"]
+authors     = ["Laocoon <laocoon7@gmail.com>"]
 description = "Away Team Roguelike Game"
-readme = "README.md"
-homepage = "https://github.com/Laocoon7/atrl"
-repository = "https://github.com/Laocoon7/atrl"
-license = "BlueOak-1.0.0"
+edition     = "2021"
+homepage    = "https://github.com/Laocoon7/atrl"
+license     = "BlueOak-1.0.0"
+name        = "atrl"
+readme      = "README.md"
+repository  = "https://github.com/Laocoon7/atrl"
+version     = "0.1.0"
 #license-file = "LICENSE"
-keywords = ["game", "ascii", "roguelike"]
 categories = ["games"]
+exclude    = ["assets/", "tools/", ".github/"]
+keywords   = ["game", "ascii", "roguelike"]
+resolver   = "2"
 
 [profile.dev]
 opt-level = 1
@@ -18,23 +20,38 @@ opt-level = 1
 [profile.dev.package."*"]
 opt-level = 3
 
+# Optimizations for WASM
+[profile.release]
+codegen-units = 1
+lto           = true
+opt-level     = 'z'
+panic         = 'abort'
+
+[workspace]
+members = ["tools/ci", "tools/spancmp"]
+
+[features]
+default = ["dev"]
+dev     = ["bevy/dynamic"]
+release = []
+
 [dependencies]
 # Bevy
 bevy = "0.8.1"
 
 # Bevy Plugins
 bevy-inspector-egui = "0.13.0"
-iyes_loopless = "0.8.0"
-bevy_ecs_tilemap = "0.8.0"
+bevy_ecs_tilemap    = "0.8.0"
+iyes_loopless       = "0.8.0"
 #kayak_ui = "0.1.0"
 
 # Serialization
-serde = {version = "1.0.147", features = ["derive"]}
+serde      = { version = "1.0.147", features = ["derive"] }
 serde_json = "1.0.87"
 
 # Random
-rand = "0.8.5"
+noise       = "0.8"
+rand        = "0.8.5"
+rand_pcg    = { version = "0.3.1", features = ["serde1"] }
 rand_seeder = "0.2.3"
-rand_pcg = {version = "0.3.1", features = ["serde1"]}
-xxhash-rust = {version = "0.8.6", features = ["xxh3", "const_xxh3"]}
-noise = "0.8"
+xxhash-rust = { version = "0.8.6", features = ["xxh3", "const_xxh3"] }
