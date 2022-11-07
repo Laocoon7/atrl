@@ -77,6 +77,7 @@ pub mod prelude {
     pub use super::camera::*;
     pub use super::game_assets::*;
     pub use super::random::*;
+    pub use super::shapes::*;
     pub use super::tilemap::*;
     pub use super::utils::*;
     //pub use super::game_plugin::*; // only needed by main()
