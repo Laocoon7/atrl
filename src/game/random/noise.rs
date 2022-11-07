@@ -1,49 +1,44 @@
 use std::fmt::{self, Debug};
 
+use noise::{NoiseFn, Perlin};
 use serde::{
     de::{self, Deserializer, MapAccess, SeqAccess, Visitor},
     ser::SerializeStruct,
     Deserialize, Serialize,
 };
-use xxhash_rust::xxh3::*;
 
-pub struct Prht {
-    seed: u64,
-    xxhash: Xxh3,
+pub struct Noise {
+    seed: u32,
+    perlin: Perlin,
 }
 
-impl Prht {
-    pub fn new(seed: u64) -> Self {
-        let xxhash = Xxh3Builder::new().with_seed(seed).build();
-
-        Self { seed, xxhash }
+impl Noise {
+    pub fn new(seed: u32) -> Self {
+        let perlin = Perlin::new(seed);
+        Self { seed, perlin }
     }
 
-    pub fn get<X: Into<i64>, Y: Into<i64>, Z: Into<i64>>(&mut self, x: X, y: Y, z: Z) -> u64 {
+    pub fn get<X: Into<f64>, Y: Into<f64>, Z: Into<f64>>(&mut self, x: X, y: Y, z: Z) -> f64 {
         let x = x.into();
         let y = y.into();
         let z = z.into();
 
-        self.xxhash.reset();
-        self.xxhash.update(&x.to_be_bytes());
-        self.xxhash.update(&y.to_be_bytes());
-        self.xxhash.update(&z.to_be_bytes());
-        self.xxhash.digest()
+        self.perlin.get([x, y, z])
     }
 }
 
-impl Serialize for Prht {
+impl Serialize for Noise {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: serde::Serializer,
     {
-        let mut state = serializer.serialize_struct("Prht", 1)?;
+        let mut state = serializer.serialize_struct("Noise", 1)?;
         state.serialize_field("seed", &self.seed)?;
         state.end()
     }
 }
 
-impl<'de> Deserialize<'de> for Prht {
+impl<'de> Deserialize<'de> for Noise {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
@@ -53,34 +48,14 @@ impl<'de> Deserialize<'de> for Prht {
         enum Field {
             Seed,
         }
-        /*
-        impl<'de> Deserialize<'de> for Field {
-            fn deserialize<D>(deserializer: D) -> Result<Self, D::Error> where D: Deserializer<'de> {
-                struct FieldVisitor;
 
-                impl<'de> Visitor for FieldVisitor {
-                    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-                        formatter.write_str("'seed'")
-                    }
+        struct NoiseVisitor;
 
-                    fn visit_str<E>(self, v: &str) -> Result<Self::Value, E> where E: de::Error, {
-                        match v {
-                            "seed" => Ok(Field::Seed)
-                            _ => Err(de::Error::unknown_field(v, FIELDS))
-                        }
-                    }
-                }
-            }
-        }
-        */
-
-        struct PrhtVisitor;
-
-        impl<'de> Visitor<'de> for PrhtVisitor {
-            type Value = Prht;
+        impl<'de> Visitor<'de> for NoiseVisitor {
+            type Value = Noise;
 
             fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-                formatter.write_str("struct Prht")
+                formatter.write_str("struct Noise")
             }
 
             fn visit_seq<A>(self, mut seq: A) -> Result<Self::Value, A::Error>
@@ -90,7 +65,7 @@ impl<'de> Deserialize<'de> for Prht {
                 let seed = seq
                     .next_element()?
                     .ok_or_else(|| de::Error::invalid_length(0, &self))?;
-                Ok(Prht::new(seed))
+                Ok(Noise::new(seed))
             }
 
             fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
@@ -109,17 +84,17 @@ impl<'de> Deserialize<'de> for Prht {
                     }
                 }
                 let seed = seed.ok_or_else(|| de::Error::missing_field("seed"))?;
-                Ok(Prht::new(seed))
+                Ok(Noise::new(seed))
             }
         }
 
         const FIELDS: &'static [&'static str] = &["seed"];
-        deserializer.deserialize_struct("Prht", FIELDS, PrhtVisitor)
+        deserializer.deserialize_struct("Noise", FIELDS, NoiseVisitor)
     }
 }
 
-impl Debug for Prht {
+impl Debug for Noise {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.write_fmt(format_args!("Prht {{ seed:{} }}", self.seed))
+        f.write_fmt(format_args!("Noise {{ seed:{} }}", self.seed))
     }
 }
