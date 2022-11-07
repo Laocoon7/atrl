@@ -2,7 +2,28 @@
 name = "atrl"
 version = "0.1.0"
 edition = "2021"
+authors = ["Laocoon <laocoon7@gmail.com>"]
+description = "Away Team Roguelike Game"
+readme = "README.md"
+homepage = "https://github.com/Laocoon7/atrl"
+repository = "https://github.com/Laocoon7/atrl"
+license = "BlueOak-1.0.0"
+#license-file = "LICENSE"
+keywords = ["game", "ascii", "roguelike"]
+categories = ["games"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3
 
 [dependencies]
+bevy = "0.8.1"
+bevy-inspector-egui = "0.13.0"
+iyes_loopless = "0.8.0"
+bevy_ecs_tilemap = "0.8.0"
+#kayak_ui = "0.1.0"
+
+serde = "1.0.147"
+serde_json = "1.0.87"
