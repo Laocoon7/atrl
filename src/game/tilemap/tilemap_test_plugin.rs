@@ -1,19 +1,24 @@
+use iyes_loopless::prelude::AppLooplessStateExt;
+
 use crate::app_settings::*;
 use crate::game::prelude::*;
 
-pub struct TilemapTestPlugin;
-impl Plugin for TilemapTestPlugin {
+pub struct TilemapTestPlugin<T> {
+    pub state_running: T,
+}
+
+impl<T: StateNext> Plugin for TilemapTestPlugin<T> {
     fn build(&self, app: &mut App) {
         app.add_system_to_stage(CoreStage::First, draw_tilemaps)
-            .add_startup_system(build_tilemap)
+            .add_enter_system(self.state_running.clone(), build_tilemap)
             .add_system(tilemap_input);
     }
 }
 
 /// Test building a new tilemap
-fn build_tilemap(mut commands: Commands, default_assets: Res<DefaultAssets>) {
+fn build_tilemap(mut commands: Commands, game_assets: Res<GameAssets>) {
     // get texture_atlas_handle from default_assets for now
-    let texture_atlas_handle = default_assets.texture_atlas_handle.clone();
+    let texture_atlas_handle = game_assets.terminal8x8_atlas.clone();
 
     // Create a new Tilemap
     Tilemap::build(0, 80, 45, 0.0, texture_atlas_handle, &mut commands, &mut |(x, y)| {

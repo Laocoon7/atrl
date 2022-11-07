@@ -86,7 +86,6 @@ mod raws {
     pub use crate::raws::*;
 }
 
-mod game_assets;
 mod game_plugin;
 pub use game_plugin::*; // pub use for main()
 mod game_state;
@@ -97,7 +96,9 @@ pub mod prelude {
 
     // Bevy Plugins
     //pub use bevy_ecs_tilemap::prelude::*; // on hold
+    pub use banana_bevy_utils::prelude::*;
     pub use bevy_inspector_egui::prelude::*; // For derive(Inspectable)
+    pub use iyes_loopless::prelude::*;
 
     // Serialization
     pub use ron;
@@ -106,7 +107,6 @@ pub mod prelude {
 
     // local
     pub use super::camera::*;
-    pub use super::game_assets::*;
     pub use super::map::*;
     pub use super::raws::*;
     pub use super::tilemap::*;

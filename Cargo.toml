@@ -48,6 +48,10 @@ rand_pcg    = { version = "0.3", features = ["serde1"] }
 rand_seeder = "0.2"
 xxhash-rust = { version = "0.8", features = ["xxh3", "const_xxh3"] }
 
+[dependencies.banana_bevy_utils]
+features = ["states"]
+git      = "https://github.com/banana-studios/banana_bevy_utils"
+
 # Bevy
 [dependencies.bevy]
 default-features = false
