@@ -8,6 +8,7 @@ impl Plugin for GamePlugin {
         app.add_loopless_state(GameState::SplashScreen)
             .init_resource::<DefaultAssets>()
             .add_plugin(CameraPlugin)
+            .add_plugin(MapPlugin)
             .add_plugin(TilemapTestPlugin);
     }
 }
