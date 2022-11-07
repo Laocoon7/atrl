@@ -60,6 +60,7 @@ mod utils {
         mod grid_arithmitic;
         pub use grid_arithmitic::*;
     }
+    pub use grid::*;
 }
 
 mod game_assets;
