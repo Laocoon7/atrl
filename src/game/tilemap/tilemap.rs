@@ -10,23 +10,26 @@ pub struct Tilemap {
 
 #[allow(dead_code)]
 impl Tilemap {
-    pub fn new(
+    pub fn build<F: FnMut((u32, u32)) -> (usize, Color)>(
         id: u64,
         width: u32,
         height: u32,
         z_level: f32,
         texture_atlas_handle: Handle<TextureAtlas>,
         commands: &mut Commands,
-    ) -> Self {
+        f: &mut F,
+    ) {
         let capacity = (width * height) as usize;
         let mut tile_entities = Vec::with_capacity(capacity);
 
         for y in 0..height {
             for x in 0..width {
+                let (tile_index, tile_color) = f((x, y));
                 let tile_entity = commands
                     .spawn_bundle(SpriteSheetBundle {
                         sprite: TextureAtlasSprite {
-                            index: 0,
+                            index: tile_index,
+                            color: tile_color,
                             custom_size: Some(Vec2 { x: 1.0, y: 1.0 }),
                             anchor: bevy::sprite::Anchor::BottomLeft,
                             ..Default::default()
@@ -42,10 +45,8 @@ impl Tilemap {
             }
         }
 
-        Self { id, tile_entities, width, height }
+        commands.spawn().insert(Self { id, tile_entities, width, height });
     }
-
-    pub fn finalize(self, commands: &mut Commands) { commands.spawn().insert(self); }
 
     pub fn get_editor(&self) -> TilemapEditor { TilemapEditor::new(&self) }
 

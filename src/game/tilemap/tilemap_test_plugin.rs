@@ -16,40 +16,16 @@ fn build_tilemap(mut commands: Commands, default_assets: Res<DefaultAssets>) {
     let texture_atlas_handle = default_assets.texture_atlas_handle.clone();
 
     // Create a new Tilemap
-    let tilemap = Tilemap::new(0, 80, 45, 0.0, texture_atlas_handle, &mut commands);
-
-    // Get an editor (This should be switched to a closure for initial setup)
-    let mut editor = tilemap.get_editor();
-
-    // fill the screen
-    for y in 0..GRID_HEIGHT {
-        for x in 0..GRID_WIDTH {
-            // Set the borders to RED '#'s
-            if x == 0 || x == GRID_WIDTH - 1 || y == 0 || y == GRID_HEIGHT - 1 {
-                editor.set_index(x, y, from_cp437('#'));
-                editor.set_color(x, y, Color::RED);
-            } else {
-                // Random everything else
-                let index = (Prng::entropy() % 256) as usize;
-                let color =
-                    Color::rgb(Prng::entropy_f32(), Prng::entropy_f32(), Prng::entropy_f32());
-
-                // we set the texture_atlas's index
-                editor.set_index(x, y, index);
-                // we set the glyph's color
-                editor.set_color(x, y, color);
-            }
+    Tilemap::build(0, 80, 45, 0.0, texture_atlas_handle, &mut commands, &mut |(x, y)| {
+        if x == 0 || x == GRID_WIDTH - 1 || y == 0 || y == GRID_HEIGHT - 1 {
+            (from_cp437('#'), Color::RED)
+        } else {
+            // Random everything else
+            let index = (Prng::entropy() % 256) as usize;
+            let color = Color::rgb(Prng::entropy_f32(), Prng::entropy_f32(), Prng::entropy_f32());
+            (index, color)
         }
-    }
-
-    // finalize consumes the object, but add's it as an entity for later retrieval
-    // the editor will be consumed by "draw_tilemaps" system and removed automatically
-    // technically the editor is borrow dependent on tilemap, so it's action queue is
-    // passed to a context in order to drop the borrow.
-    // This means the editor MUST be finalized first! HOWEVER, if we use a closure for
-    // setup, this will be impossible to screw up.
-    editor.finalize(&mut commands);
-    tilemap.finalize(&mut commands);
+    });
 }
 
 /// test dynamically changing the tilemap
