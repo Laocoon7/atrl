@@ -22,6 +22,12 @@ use debug::*;
 mod game;
 use game::*;
 
+mod raws {
+    mod raw_plugin;
+    pub use raw_plugin::*;
+}
+use raws::*;
+
 use bevy::{
     prelude::*,
     render::texture::ImageSettings,
@@ -53,5 +59,6 @@ fn main() {
         //.add_plugin(TilemapPlugin)
         // game related
         .add_plugin(GamePlugin)
+        .add_plugin(RawPlugin)
         .run();
 }

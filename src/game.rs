@@ -1,3 +1,5 @@
+#![allow(clippy::module_inception)]
+
 mod camera {
     mod camera_plugin;
     pub use camera_plugin::*;
@@ -80,6 +82,10 @@ mod utils {
     pub use shapes::*;
 }
 
+mod raws {
+    pub use crate::raws::*;
+}
+
 mod game_assets;
 mod game_plugin;
 pub use game_plugin::*; // pub use for main()
@@ -102,6 +108,7 @@ pub mod prelude {
     pub use super::camera::*;
     pub use super::game_assets::*;
     pub use super::map::*;
+    pub use super::raws::*;
     pub use super::tilemap::*;
     pub use super::utils::*;
     //pub use super::game_plugin::*; // only needed by main()
