@@ -1,6 +1,11 @@
-use bevy::prelude::*;
+mod game_plugin;
+pub use game_plugin::*;
 
-pub struct GamePlugin;
-impl Plugin for GamePlugin {
-    fn build(&self, _app: &mut App) {}
+mod game_state;
+
+pub mod prelude {
+    pub use bevy::prelude::*;
+    pub use iyes_loopless::prelude::*;
+
+    pub use super::game_state::*;
 }
