@@ -1,10 +1,17 @@
 pub mod app_settings {
+    /// Long name
     pub const APP_NAME: &str = "Away Team Roguelike";
+    /// Short name
     pub const _APP_NAME_SHORT: &str = "ATRL";
+    /// Grid width in cells
     pub const GRID_WIDTH: u32 = 80;
+    /// Grid height in cells
     pub const GRID_HEIGHT: u32 = 45;
+    /// Minimum sprite width expected
     pub const MIN_SPRITE_WIDTH: u32 = 8;
+    /// Minimum sprite height expected
     pub const MIN_SPRITE_HEIGHT: u32 = 8;
+    /// Startup window size will be scaled by this value
     pub const INITIAL_WINDOW_SCALE: f32 = 2.0;
 }
 use app_settings::*;
@@ -40,7 +47,9 @@ fn main() {
         .insert_resource(WinitSettings::desktop_app())
         .insert_resource(ImageSettings::default_nearest())
         .add_plugins(DefaultPlugins)
+        // bevy-inspector-egui related
         .add_plugin(DebugPlugin)
+        // game related
         .add_plugin(GamePlugin)
         .run();
 }
