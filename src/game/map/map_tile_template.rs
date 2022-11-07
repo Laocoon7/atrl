@@ -44,56 +44,13 @@ pub struct MapTileTemplate {
     pub tile_type: u64,
     pub image_index: usize,
     pub image_color: Color,
+    pub image_color_background: Color,
+    pub required_movement: Vec<MovementType>,
     pub required_vision_to_see: Vec<VisionType>,
     pub required_vision_to_see_through: Vec<VisionType>,
-    pub required_movement: Vec<MovementType>,
 }
 
+#[allow(dead_code)]
 impl MapTileTemplate {
-    pub fn spawn(&self, commands: &mut Commands) -> Entity {
-        commands
-            .spawn()
-            .insert(MapTile {
-                tile_type: self.tile_type,
-                required_vision_to_see: self.required_vision_to_see.clone(),
-                required_vision_to_see_through: self.required_vision_to_see_through.clone(),
-                required_movement: self.required_movement.clone(),
-            })
-            .id()
-    }
-}
-
-#[derive(Inspectable, Component, Clone, PartialEq, Debug)]
-pub struct MapTile {
-    tile_type: u64,
-    required_vision_to_see: Vec<VisionType>,
-    required_vision_to_see_through: Vec<VisionType>,
-    required_movement: Vec<MovementType>,
-}
-
-#[derive(Inspectable, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Debug)]
-pub enum VisionType {
-    Blind = 0,
-    BlackAndWhite,
-    Colored,
-    Infared,
-    XRay,
-}
-
-impl Default for VisionType {
-    fn default() -> Self { VisionType::Blind }
-}
-
-#[derive(Inspectable, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Debug)]
-pub enum MovementType {
-    None = 0,
-    Walk,
-    Run,
-    Swim,
-    Fly,
-    Phase,
-}
-
-impl Default for MovementType {
-    fn default() -> Self { MovementType::None }
+    pub fn spawn(&self, index: impl Point2d, map: &mut Map) { map.set_from_template(index, self); }
 }

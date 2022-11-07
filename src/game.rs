@@ -12,6 +12,10 @@ mod map {
     pub use map_tile_template::*;
     mod map;
     pub use map::*;
+    mod movement_type;
+    pub use movement_type::*;
+    mod vision_type;
+    pub use vision_type::*;
 }
 
 mod tilemap {
