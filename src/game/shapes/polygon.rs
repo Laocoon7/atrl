@@ -1,15 +1,10 @@
 use crate::game::prelude::*;
 
-
 pub struct Polygon {
     pub points: Vec<IVec2>,
 }
 
 #[allow(dead_code)]
 impl Polygon {
-    pub fn new(points: Vec<IVec2>) -> Self {
-        Self {
-            points,
-        }
-    }
+    pub fn new(points: Vec<IVec2>) -> Self { Self { points } }
 }
