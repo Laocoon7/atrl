@@ -54,10 +54,12 @@ mod utils {
     pub use cp437::*;
     mod range;
     pub use range::*;
-    mod grid;
-    pub use grid::*;
-    mod grid_arithmitic;
-    pub use grid_arithmitic::*;
+    mod grid {
+        mod grid;
+        pub use grid::*;
+        mod grid_arithmitic;
+        pub use grid_arithmitic::*;
+    }
 }
 
 mod game_assets;
