@@ -7,6 +7,7 @@ pub struct Random {
     pub noise: Noise,
 }
 
+#[allow(dead_code)]
 impl Random {
     pub fn new(seed: u64) -> Self {
         let mut prng = Prng::new(seed);

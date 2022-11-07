@@ -1,7 +1,7 @@
 use crate::app_settings::*;
 use crate::game::prelude::*;
 
-use bevy::render::camera::ScalingMode;
+use bevy::render::camera::{ScalingMode, WindowOrigin};
 
 #[derive(Component, Debug)]
 pub struct MainCamera;
@@ -14,6 +14,7 @@ pub fn spawn_main_camera(mut commands: Commands) {
             bottom: 0.0,
             top: GRID_HEIGHT as f32,
             scaling_mode: ScalingMode::None,
+            window_origin: WindowOrigin::BottomLeft,
 
             ..Default::default()
         },

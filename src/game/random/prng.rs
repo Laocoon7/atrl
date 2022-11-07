@@ -11,6 +11,7 @@ pub struct Prng {
     rng: Pcg64,
 }
 
+#[allow(dead_code)]
 impl Prng {
     pub fn new(seed: u64) -> Self { Self { seed, rng: Pcg64::seed_from_u64(seed) } }
 

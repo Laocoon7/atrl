@@ -49,6 +49,8 @@ fn main() {
         .add_plugins(DefaultPlugins)
         // bevy-inspector-egui related
         .add_plugin(DebugPlugin)
+        // Tilemap (on hold)
+        //.add_plugin(TilemapPlugin)
         // game related
         .add_plugin(GamePlugin)
         .run();

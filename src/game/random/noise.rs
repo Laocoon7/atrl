@@ -12,6 +12,7 @@ pub struct Noise {
     perlin: Perlin,
 }
 
+#[allow(dead_code)]
 impl Noise {
     pub fn new(seed: u32) -> Self {
         let perlin = Perlin::new(seed);

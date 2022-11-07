@@ -12,6 +12,7 @@ pub struct Prht {
     xxhash: Xxh3,
 }
 
+#[allow(dead_code)]
 impl Prht {
     pub fn new(seed: u64) -> Self {
         let xxhash = Xxh3Builder::new().with_seed(seed).build();
