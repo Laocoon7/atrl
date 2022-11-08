@@ -5,7 +5,6 @@ use std::{
 };
 
 #[allow(dead_code)]
-pub type PointIter = PointIterRowMajor;
 pub type GridIter<'a, T> = slice::Iter<'a, T>;
 pub type GridIterMut<'a, T> = slice::IterMut<'a, T>;
 pub type GridRows<'a, T> = slice::Chunks<'a, T>;

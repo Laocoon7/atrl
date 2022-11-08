@@ -110,8 +110,8 @@ mod utils {
     mod grid {
         mod grid;
         pub use grid::*;
-        mod grid_arithmitic;
-        pub use grid_arithmitic::*;
+        mod grid_arithmetic;
+        pub use grid_arithmetic::*;
     }
     pub use grid::*;
 
