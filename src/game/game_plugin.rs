@@ -11,7 +11,7 @@ pub struct GamePlugin<T> {
 
 impl<T: StateNext> Plugin for GamePlugin<T> {
     fn build(&self, app: &mut App) {
-        app.init_resource::<Random>()
+        app.init_resource::<GameContext>()
             .add_plugin(CameraPlugin)
             .add_plugin(MapPlugin { state_running: self.state_running.clone() })
             .add_plugin(ProcgenPlugin {

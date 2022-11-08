@@ -88,6 +88,7 @@ mod procgen {
     pub use crate::procgen::*;
 }
 
+mod game_context;
 mod game_plugin;
 pub use game_plugin::*; // pub use for main()
 mod game_state;
@@ -113,6 +114,7 @@ pub mod prelude {
     pub use super::map::*;
     pub use super::procgen::*;
     pub use super::raws::*;
+    pub use super::game_context::*;
     //pub use super::game_plugin::*; // only needed by main()
     pub use super::game_state::*;
 }
