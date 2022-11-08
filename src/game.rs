@@ -1,10 +1,32 @@
 #![allow(clippy::module_inception)]
 
 mod camera {
+    mod systems {
+        mod spawn_main_camera;
+        pub use spawn_main_camera::*;
+    }
     mod camera_plugin;
     pub use camera_plugin::*;
     mod main_camera;
     pub use main_camera::*;
+}
+
+mod components {
+    mod movement {
+        mod movement_type;
+        pub use movement_type::*;
+        mod movement;
+        pub use movement::*;
+    }
+    pub use movement::*;
+
+    mod vision {
+        mod vision_type;
+        pub use vision_type::*;
+        mod vision;
+        pub use vision::*;
+    }
+    pub use vision::*;
 }
 
 mod map {
@@ -18,14 +40,46 @@ mod map {
     pub use map_tile_template::*;
     mod map;
     pub use map::*;
-    mod movement_type;
-    pub use movement_type::*;
     mod tilemap_id;
     pub use tilemap_id::*;
     mod update_map_tiles;
     pub use update_map_tiles::*;
-    mod vision_type;
-    pub use vision_type::*;
+}
+
+mod map_new {
+    mod loader {
+        mod systems {}
+        pub use systems::*;
+
+        mod current_map;
+        pub use current_map::*;
+        mod map_loader_plugin;
+        pub use map_loader_plugin::*;
+        mod map_loader;
+        pub use map_loader::*;
+    }
+    pub use loader::*;
+
+    mod renderer {
+        mod systems {}
+        pub use systems::*;
+
+        mod map_renderer_plugin;
+        pub use map_renderer_plugin::*;
+        mod map_renderer;
+        pub use map_renderer::*;
+    }
+    pub use renderer::*;
+
+    mod systems {}
+    pub use systems::*;
+
+    mod map_plugin;
+    pub use map_plugin::*;
+    mod map;
+    pub use map::*;
+    mod tile_definition;
+    pub use tile_definition::*;
 }
 
 mod tilemap {
@@ -116,6 +170,7 @@ pub mod prelude {
 
     // local
     pub use super::camera::*;
+    pub use super::components::*;
     pub use super::map::*;
     pub use super::raws::*;
     pub use super::tilemap::*;

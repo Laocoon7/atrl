@@ -78,12 +78,12 @@ impl<T> Grid<T> {
     pub fn is_empty(&self) -> bool { self.cells.is_empty() }
 
     /// Tests whether a point is in bounds.
-    pub fn in_bounds(&self, point: impl Point2d) -> bool {
-        point.is_valid(self.size())
-    }
+    pub fn in_bounds(&self, point: impl Point2d) -> bool { point.is_valid(self.size()) }
 
     /// Gets the index corresponding to a coordinate, which is row-wise.
-    pub fn get_idx_unchecked(&self, point: impl Point2d) -> usize { point.as_index(self.width() as usize) }
+    pub fn get_idx_unchecked(&self, point: impl Point2d) -> usize {
+        point.as_index(self.width() as usize)
+    }
 
     /// Try Gets the `GridPoint` corresponding to an index
     ///
