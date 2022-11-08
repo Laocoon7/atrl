@@ -1,3 +1,4 @@
+use crate::game::prelude::*;
 use super::{Point2d, PointIterRowMajor, Size2d};
 use bevy::prelude::{IVec2, UVec2};
 use std::{
@@ -12,8 +13,7 @@ pub type GridIterMut<'a, T> = slice::IterMut<'a, T>;
 pub type GridRows<'a, T> = slice::Chunks<'a, T>;
 pub type GridRowsMut<'a, T> = slice::ChunksMut<'a, T>;
 
-#[cfg_attr(feature = "serialize", derive(Serialize, Deserialize))]
-#[derive(Default, Debug, Clone, Hash, PartialEq, Eq)]
+#[derive(Serialize, Deserialize, Default, Debug, Clone, Hash, PartialEq, Eq)]
 pub struct Grid<T> {
     pub size: UVec2,
     pub cells: Vec<T>,
