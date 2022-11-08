@@ -1,5 +1,5 @@
 use crate::app_settings::*;
-use crate::game::prelude::*;
+use crate::prelude::*;
 
 pub struct MapPlugin<T> {
     pub state_running: T,

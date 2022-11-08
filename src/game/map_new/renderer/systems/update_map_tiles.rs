@@ -1,5 +1,5 @@
 use crate::app_settings::*;
-use crate::game::prelude::*;
+use crate::prelude::*;
 
 pub fn update_map_tiles(
     mut commands: Commands,

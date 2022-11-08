@@ -1,4 +1,4 @@
-use crate::game::prelude::*;
+use crate::prelude::*;
 use bevy_asset_loader::prelude::*;
 
 #[derive(AssetCollection)]

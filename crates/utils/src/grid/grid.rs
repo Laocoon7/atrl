@@ -1,11 +1,11 @@
-use crate::game::prelude::*;
+use crate::{prelude::*, Point2d, PointIterRowMajor, Size2d};
+
 use std::{
     ops::{Index, IndexMut},
     slice,
 };
 
 #[allow(dead_code)]
-pub type PointIter = PointIterRowMajor;
 pub type GridIter<'a, T> = slice::Iter<'a, T>;
 pub type GridIterMut<'a, T> = slice::IterMut<'a, T>;
 pub type GridRows<'a, T> = slice::Chunks<'a, T>;
@@ -173,6 +173,25 @@ impl<T> Grid<T> {
     #[inline]
     pub fn cols_mut(&mut self) -> GridRowsMut<T> {
         self.cells.chunks_mut(self.size.width() as usize)
+    }
+
+    pub fn count_neighbors(&self, index: impl Point2d, val: T) -> usize
+    where
+        T: std::cmp::PartialEq,
+    {
+        let mut neighbors = 0;
+        for iy in -1..=1 {
+            for ix in -1..=1 {
+                let x = (index.x() + ix) as usize;
+                let y = (index.y() + iy) as usize;
+                if !(ix == 0 && iy == 0)
+                    && self.cells[(x, y).as_index(self.width() as usize)] == val
+                {
+                    neighbors += 1;
+                }
+            }
+        }
+        neighbors
     }
 }
 

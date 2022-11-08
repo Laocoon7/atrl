@@ -1,5 +1,4 @@
-use banana_bevy_utils::state::StateNext;
-use iyes_loopless::state::CurrentState;
+use crate::prelude::*;
 
 pub type CurrentGameState = CurrentState<GameState>;
 

@@ -88,7 +88,7 @@ impl<'de> Deserialize<'de> for Noise {
             }
         }
 
-        const FIELDS: &'static [&'static str] = &["seed"];
+        const FIELDS: &[&str] = &["seed"];
         deserializer.deserialize_struct("Noise", FIELDS, NoiseVisitor)
     }
 }

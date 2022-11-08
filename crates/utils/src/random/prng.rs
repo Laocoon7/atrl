@@ -1,4 +1,5 @@
-use crate::game::prelude::*;
+use crate::{get_range_bounds, prelude::*};
+
 use std::ops::RangeBounds;
 
 use rand::RngCore;
@@ -26,6 +27,9 @@ impl Prng {
 
     pub fn coin(&mut self) -> bool { self.max_inclusive(1) == 1 }
 
+    // TODO: Better name?
+    // https://rust-lang.github.io/rust-clippy/master/index.html#should_implement_trait
+    #[allow(clippy::should_implement_trait)]
     pub fn next(&mut self) -> u32 { self.rng.next_u32() }
 
     pub fn max(&mut self, max: u32) -> u32 {
@@ -61,8 +65,6 @@ impl Prng {
         self.max_inclusive(end - start) + start
     }
 
-    pub fn next_u64(&mut self) -> u64 { self.rng.next_u64() }
-
     pub fn max_u64(&mut self, max: u64) -> u64 {
         if max == 0 {
             return max;
@@ -96,11 +98,17 @@ impl Prng {
         self.max_inclusive_u64(end - start) + start
     }
 
+    pub fn next_usize(&mut self) -> usize { self.rng.gen::<usize>() }
+
+    pub fn next_i32(&mut self) -> i32 { self.rng.gen::<i32>() }
+
+    pub fn next_u32(&mut self) -> u32 { self.rng.next_u32() }
+
+    pub fn next_u64(&mut self) -> u64 { self.rng.next_u64() }
+
     pub fn next_f32(&mut self) -> f32 { (self.next() as f64 / (u32::MAX as u64 + 1) as f64) as f32 }
 
-    pub fn next_f64(&mut self) -> f64 {
-        (self.next_u64() as f64 / (u64::MAX as u128 + 1) as f64) as f64
-    }
+    pub fn next_f64(&mut self) -> f64 { self.next_u64() as f64 / (u64::MAX as u128 + 1) as f64 }
 
     pub fn entropy() -> u32 { Pcg64::from_entropy().gen::<u32>() }
 
@@ -111,6 +119,17 @@ impl Prng {
     }
 
     pub fn entropy_f64() -> f64 {
-        (Pcg64::from_entropy().gen::<u64>() as f64 / (u64::MAX as u128 + 1) as f64) as f64
+        Pcg64::from_entropy().gen::<u64>() as f64 / (u64::MAX as u128 + 1) as f64
     }
+
+    /// Rolls dice, using the classic 3d6 type of format: n is the number of dice, die_type is
+    /// the size of the dice.
+    pub fn roll_dice(&mut self, n: u32, dice_type: u32) -> u32 {
+        (0..n).map(|_| self.range(1..dice_type + 1)).sum()
+    }
+}
+
+impl Iterator for Prng {
+    type Item = u32;
+    fn next(&mut self) -> Option<Self::Item> { Some(self.next()) }
 }
