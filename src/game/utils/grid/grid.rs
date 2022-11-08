@@ -1,6 +1,4 @@
-use super::{Point2d, PointIterRowMajor, Size2d};
 use crate::game::prelude::*;
-use bevy::prelude::{IVec2, UVec2};
 use std::{
     ops::{Index, IndexMut},
     slice,
@@ -65,42 +63,41 @@ impl<T> Grid<T> {
     }
 
     #[inline]
-    fn width(&self) -> u32 { self.size.width() }
+    pub fn width(&self) -> u32 { self.size.width() }
 
     #[inline]
-    fn height(&self) -> u32 { self.size.height() }
+    pub fn height(&self) -> u32 { self.size.height() }
 
     #[inline]
-    fn size(&self) -> UVec2 { self.size }
+    pub fn size(&self) -> UVec2 { self.size }
 
     #[inline]
-    fn len(&self) -> usize { self.cells.len() }
+    pub fn len(&self) -> usize { self.cells.len() }
 
     #[inline]
-    fn is_empty(&self) -> bool { self.cells.is_empty() }
+    pub fn is_empty(&self) -> bool { self.cells.is_empty() }
 
     /// Tests whether a point is in bounds.
-    fn in_bounds(&self, point: impl Point2d) -> bool {
-        let pos = point.as_ivec2();
-        pos.cmpge(IVec2::ZERO).all() && pos.cmplt(self.size().as_ivec2()).all()
+    pub fn in_bounds(&self, point: impl Point2d) -> bool {
+        point.is_valid(self.size())
     }
 
     /// Gets the index corresponding to a coordinate, which is row-wise.
-    fn get_idx(&self, point: impl Point2d) -> usize { point.as_index(self.width() as usize) }
+    pub fn get_idx_unchecked(&self, point: impl Point2d) -> usize { point.as_index(self.width() as usize) }
 
     /// Try Gets the `GridPoint` corresponding to an index
     ///
     /// Returns `None` if the index is out of bounds.
-    fn try_idx(&self, coord: impl Point2d) -> Option<usize> {
+    pub fn get_idx(&self, coord: impl Point2d) -> Option<usize> {
         if coord.is_valid(self.size()) {
-            Some(self.get_idx(coord))
+            Some(self.get_idx_unchecked(coord))
         } else {
             None
         }
     }
 
     /// Gets the `GridPoint` corresponding to an index
-    fn index_to_pt(&self, idx: usize) -> IVec2 {
+    pub fn index_to_pt_unchecked(&self, idx: usize) -> IVec2 {
         let x = idx % self.width() as usize;
         let y = idx / self.width() as usize;
         IVec2::new(x as i32, y as i32)
@@ -109,29 +106,43 @@ impl<T> Grid<T> {
     /// Try Gets the `GridPoint` corresponding to an index
     ///
     /// Returns `None` if the index is out of bounds.
-    fn try_index_to_pt(&self, idx: usize) -> Option<IVec2> {
-        let w: usize = self.width().try_into().expect("width is too large");
-        let x = idx % w;
-        let y = idx / w;
-        if self.in_bounds((x, y)) {
-            Some(Point2d::as_ivec2(&(x, y)))
+    pub fn index_to_pt(&self, idx: usize) -> Option<IVec2> {
+        let pt = self.index_to_pt_unchecked(idx);
+        if pt.is_valid(self.size()) {
+            Some(pt)
         } else {
             None
         }
     }
 
-    fn get(&self, index: impl Point2d) -> Option<&T> {
-        self.try_idx(index).map(|idx| &self.cells[idx])
+    pub fn get(&self, index: impl Point2d) -> Option<&T> {
+        self.get_idx(index).map(|idx| &self.cells[idx])
     }
 
-    fn get_mut(&mut self, index: impl Point2d) -> Option<&mut T> {
-        self.try_idx(index).map(move |idx| &mut self.cells[idx])
+    pub fn get_mut(&mut self, index: impl Point2d) -> Option<&mut T> {
+        self.get_idx(index).map(move |idx| &mut self.cells[idx])
     }
 
-    fn get_checked(&self, index: impl Point2d) -> &T { self.cells.index(self.get_idx(index)) }
+    pub fn get_unchecked(&self, index: impl Point2d) -> &T {
+        self.cells.index(self.get_idx_unchecked(index))
+    }
 
-    fn get_mut_checked(&mut self, index: impl Point2d) -> &mut T {
-        self.cells.index_mut(self.get_idx(index))
+    pub fn get_mut_unchecked(&mut self, index: impl Point2d) -> &mut T {
+        self.cells.index_mut(self.get_idx_unchecked(index))
+    }
+
+    pub fn set(&mut self, index: impl Point2d, value: T) -> Option<T> {
+        if index.is_valid(self.size()) {
+            let index = self.get_idx_unchecked(index);
+            Some(std::mem::replace(&mut self.cells[index], value))
+        } else {
+            None
+        }
+    }
+
+    pub fn set_unchecked(&mut self, index: impl Point2d, value: T) -> T {
+        let index = self.get_idx_unchecked(index);
+        std::mem::replace(&mut self.cells[index], value)
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -185,10 +196,10 @@ impl<T: Copy, P: Point2d> Index<P> for Grid<T> {
     type Output = T;
 
     #[inline]
-    fn index(&self, index: P) -> &T { self.get_checked(index) }
+    fn index(&self, index: P) -> &T { self.get_unchecked(index) }
 }
 
 impl<T: Copy, P: Point2d> IndexMut<P> for Grid<T> {
     #[inline]
-    fn index_mut(&mut self, index: P) -> &mut Self::Output { self.get_mut_checked(index) }
+    fn index_mut(&mut self, index: P) -> &mut Self::Output { self.get_mut_unchecked(index) }
 }
