@@ -7,7 +7,8 @@ pub struct RenderContext<'a> {
 
 #[allow(dead_code)]
 impl<'a> RenderContext<'a> {
-    pub fn new(renderer: &'a MapRenderer) -> Self { Self { renderer, actions: Vec::new() } }
+    #[inline(always)]
+    pub const fn new(renderer: &'a MapRenderer) -> Self { Self { renderer, actions: Vec::new() } }
 
     pub fn set_index(&mut self, layer: MapLayer, index: impl Point2d, image_index: usize) {
         if let Some(entity) = self.renderer.get_entity(layer, index) {

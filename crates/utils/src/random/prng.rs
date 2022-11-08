@@ -27,16 +27,14 @@ impl Prng {
 
     pub fn coin(&mut self) -> bool { self.max_inclusive(1) == 1 }
 
-    // TODO: Better name?
-    // https://rust-lang.github.io/rust-clippy/master/index.html#should_implement_trait
     #[allow(clippy::should_implement_trait)]
     pub fn next(&mut self) -> u32 { self.rng.next_u32() }
 
     pub fn max(&mut self, max: u32) -> u32 {
-        if max == 0 {
-            return max;
+        match max {
+            0 => max,
+            _ => self.max_inclusive(max - 1),
         }
-        self.max_inclusive(max - 1)
     }
 
     pub fn max_inclusive(&mut self, max: u32) -> u32 {
@@ -44,11 +42,11 @@ impl Prng {
             return max;
         }
 
-        let mut x;
         let top = max as u64 + 1;
-        let buckets = u32::MAX as u64 / top;
-        let limit = buckets * top;
+        let buckets = (u32::MAX as u64 / top).max(1);
+        let limit = (buckets * top).max(1);
 
+        let mut x;
         loop {
             x = self.next() as u64;
             if x < limit {
@@ -61,15 +59,14 @@ impl Prng {
 
     pub fn range<R: RangeBounds<u32>>(&mut self, range: R) -> u32 {
         let (start, end) = get_range_bounds(range, u32::MIN, u32::MAX);
-
         self.max_inclusive(end - start) + start
     }
 
     pub fn max_u64(&mut self, max: u64) -> u64 {
-        if max == 0 {
-            return max;
+        match max {
+            0 => max,
+            _ => self.max_inclusive_u64(max - 1),
         }
-        self.max_inclusive_u64(max - 1)
     }
 
     pub fn max_inclusive_u64(&mut self, max: u64) -> u64 {
@@ -77,11 +74,11 @@ impl Prng {
             return max;
         }
 
-        let mut x;
         let top = max as u128 + 1;
-        let buckets = u64::MAX as u128 / top;
-        let limit = buckets * top;
+        let buckets = (u64::MAX as u128 / top).max(1);
+        let limit = (buckets * top).max(1);
 
+        let mut x;
         loop {
             x = self.next_u64() as u128;
             if x < limit {
@@ -94,7 +91,6 @@ impl Prng {
 
     pub fn range_u64<R: RangeBounds<u64>>(&mut self, range: R) -> u64 {
         let (start, end) = get_range_bounds(range, u64::MIN, u64::MAX);
-
         self.max_inclusive_u64(end - start) + start
     }
 

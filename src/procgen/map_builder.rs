@@ -5,10 +5,7 @@ use crate::prelude::*;
 ////////////////////////////////////////////////////////////////////////////////
 
 #[derive(Debug, Clone)]
-pub struct MapBuilder<S>
-where
-    S: Size2d,
-{
+pub struct MapBuilder<S: Size2d> {
     pub size: S,
     pub level: u32,
     pub name: String,
@@ -19,10 +16,7 @@ where
     pub corridors: Option<Vec<Vec<usize>>>,
 }
 
-impl<S> MapBuilder<S>
-where
-    S: Size2d,
-{
+impl<S: Size2d> MapBuilder<S> {
     pub fn new<Str: ToString>(size: S, level: u32, name: Str) -> Self {
         Self {
             size,

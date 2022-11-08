@@ -5,18 +5,12 @@ use crate::prelude::*;
 // TileMap Builder Traits
 ////////////////////////////////////////////////////////////////////////////////
 
-pub trait InitialMapArchitect<S>
-where
-    S: Size2d,
-{
+pub trait InitialMapArchitect<S: Size2d> {
     fn name(&self) -> &str;
     fn generate(&mut self, builder: &mut MapBuilder<S>, rng: &mut Random);
 }
 
-pub trait MapArchitect<S>
-where
-    S: Size2d,
-{
+pub trait MapArchitect<S: Size2d> {
     fn name(&self) -> &str;
     fn generate(&mut self, builder: &mut MapBuilder<S>, rng: &mut Random);
 }
@@ -25,10 +19,7 @@ where
 // BuilderChain - A builder that chains together map builders
 ////////////////////////////////////////////////////////////////////////////////
 
-pub struct BuilderChain<S>
-where
-    S: Size2d,
-{
+pub struct BuilderChain<S: Size2d> {
     pub level: u32,
     pub map_name: String,
     pub map_builder: MapBuilder<S>,
@@ -36,12 +27,9 @@ where
     starter: Option<Box<dyn InitialMapArchitect<S>>>,
 }
 
-impl<S> BuilderChain<S>
-where
-    S: Size2d,
-{
+impl<S: Size2d> BuilderChain<S> {
     pub fn new<Str: ToString>(level: u32, size: S, name: Str) -> Self {
-        BuilderChain {
+        Self {
             level,
             starter: None,
             builders: Vec::new(),

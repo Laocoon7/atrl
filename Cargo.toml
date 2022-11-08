@@ -10,7 +10,7 @@ repository  = "https://github.com/Laocoon7/atrl"
 version     = "0.1.0"
 #license-file = "LICENSE"
 categories = ["games"]
-exclude    = ["assets/", "tools/", ".github/"]
+exclude    = ["assets/", "tools/", ".github/", "crates/engine", "crates/utils"]
 keywords   = ["game", "ascii", "roguelike"]
 resolver   = "2"
 

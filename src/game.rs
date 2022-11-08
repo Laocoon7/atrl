@@ -76,8 +76,8 @@ mod map {
     pub use map_plugin::*;
     mod map;
     pub use map::*;
-    mod tile_definition;
-    pub use tile_definition::*;
+    // mod tile_definition;
+    // pub use tile_definition::*;
 }
 
 mod raws {

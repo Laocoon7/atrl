@@ -29,8 +29,8 @@ impl<S: Size2d> MapArchitect<S> for AreaStartingPosition<S> {
 }
 
 impl<S: Size2d> AreaStartingPosition<S> {
-    pub fn new(x: XStart, y: YStart) -> Box<AreaStartingPosition<S>> {
-        Box::new(AreaStartingPosition { x, y, phantom: std::marker::PhantomData })
+    pub fn new(x: XStart, y: YStart) -> Box<Self> {
+        Box::new(Self { x, y, phantom: std::marker::PhantomData })
     }
 
     fn build(&mut self, builder: &mut MapBuilder<S>) {

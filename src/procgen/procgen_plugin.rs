@@ -16,8 +16,8 @@ impl<S: StateNext> ProcgenPlugin<S> {
         let (start_x, start_y) = random_start_position(&mut rng);
         let chain = BuilderChain::new(0, [125, 125], "New Map")
             .start_with(CellularAutomataArchitect::new())
-            // .start_with(RoomMapArchitect::new())
-            // .with(AreaStartingPosition::new(start_x, start_y))
+            .with(RoomMapArchitect::new())
+            .with(AreaStartingPosition::new(start_x, start_y))
             .generate(&mut rng);
 
         let map = chain.get_map();

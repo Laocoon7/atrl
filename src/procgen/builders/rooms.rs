@@ -4,17 +4,11 @@ use crate::{
 };
 use std::marker::PhantomData;
 
-pub struct RoomMapArchitect<S>
-where
-    S: Size2d,
-{
+pub struct RoomMapArchitect<S: Size2d> {
     phantom: PhantomData<S>,
 }
 
-impl<S> InitialMapArchitect<S> for RoomMapArchitect<S>
-where
-    S: Size2d,
-{
+impl<S: Size2d> InitialMapArchitect<S> for RoomMapArchitect<S> {
     fn generate(&mut self, builder: &mut MapBuilder<S>, rng: &mut Random) {
         self.build_rooms(builder, rng);
     }
@@ -22,10 +16,7 @@ where
     fn name(&self) -> &str { "RoomMapArchitectStarter" }
 }
 
-impl<S> MapArchitect<S> for RoomMapArchitect<S>
-where
-    S: Size2d,
-{
+impl<S: Size2d> MapArchitect<S> for RoomMapArchitect<S> {
     fn generate(&mut self, builder: &mut MapBuilder<S>, rng: &mut Random) {
         self.build_rooms(builder, rng);
     }
@@ -33,12 +24,9 @@ where
     fn name(&self) -> &str { "RoomMapArchitect" }
 }
 
-impl<S> RoomMapArchitect<S>
-where
-    S: Size2d,
-{
+impl<S: Size2d> RoomMapArchitect<S> {
     #[inline(always)]
-    pub fn new() -> Box<RoomMapArchitect<S>> { Box::new(RoomMapArchitect { phantom: PhantomData }) }
+    pub fn new() -> Box<Self> { Box::new(Self { phantom: PhantomData }) }
 
     fn build_rooms(&mut self, builder: &mut MapBuilder<S>, rng: &mut Random) {
         const MAX_ROOMS: u32 = 25;

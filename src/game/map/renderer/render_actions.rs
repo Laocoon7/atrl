@@ -6,7 +6,7 @@ pub struct RenderActions {
 }
 
 // feel free to add this back if needed
-//#[allow(clippy::enum_variant_names)]
+#[allow(clippy::enum_variant_names)]
 pub enum RenderAction {
     SetAtlasIndex(Entity, usize),
     SetAtlasHandle(Entity, Handle<TextureAtlas>),

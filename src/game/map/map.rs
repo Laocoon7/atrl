@@ -25,9 +25,9 @@ pub enum TileType {
 }
 
 impl TileType {
-    pub fn is_wall(self) -> bool { matches!(self, TileType::Wall) }
-    pub fn is_floor(self) -> bool { matches!(self, TileType::Floor) }
-    pub fn is_walkable(self) -> bool { matches!(TileType::Floor, TileType::DownStairs) }
+    pub const fn is_wall(self) -> bool { matches!(self, Self::Wall) }
+    pub const fn is_floor(self) -> bool { matches!(self, Self::Floor) }
+    pub const fn is_walkable(self) -> bool { matches!(Self::Floor, Self::DownStairs) }
 }
 
 impl From<TileType> for u64 {
@@ -69,10 +69,6 @@ impl Map {
     }
 
     pub fn new_with_tiles(size: impl Size2d, tile_types: Grid<TileType>) -> Self {
-        Self {
-            size: size.as_uvec2(),
-            update_tiles: Vec::new(),
-            tile_types: Grid::new_default(size),
-        }
+        Self { tile_types, size: size.as_uvec2(), update_tiles: Vec::new() }
     }
 }

@@ -11,5 +11,5 @@ pub enum MovementType {
 }
 
 impl Default for MovementType {
-    fn default() -> Self { MovementType::None }
+    fn default() -> Self { Self::None }
 }

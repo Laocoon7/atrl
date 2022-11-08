@@ -1,7 +1,13 @@
 [package]
-edition = "2021"
-name    = "atrl-engine"
-version = "0.1.0"
+categories  = ["games", "game-engine"]
+description = "Away Team Roguelike Game Engine"
+edition     = "2021"
+license     = "BlueOak-1.0.0"
+name        = "atrl-engine"
+publish     = false
+readme      = "../README.md"
+repository  = "https://github.com/Laocoon7/atrl"
+version     = "0.1.0"
 
 [features]
 default = ["dev"]

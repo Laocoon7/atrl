@@ -33,8 +33,8 @@ impl<S: Size2d> MapArchitect<S> for AreaEndingPosition<S> {
 
 impl<S: Size2d> AreaEndingPosition<S> {
     #[allow(dead_code)]
-    pub fn new(x: XEnd, y: YEnd) -> Box<AreaEndingPosition<S>> {
-        Box::new(AreaEndingPosition { x, y, phantom: std::marker::PhantomData })
+    pub fn new(x: XEnd, y: YEnd) -> Box<Self> {
+        Box::new(Self { x, y, phantom: std::marker::PhantomData })
     }
 
     fn build(&mut self, builder: &mut MapBuilder<S>) {

@@ -21,9 +21,7 @@ where
     S: Size2d,
 {
     #[allow(dead_code)]
-    pub fn new() -> Box<CullUnreachable<S>> {
-        Box::new(CullUnreachable { phantom: std::marker::PhantomData })
-    }
+    pub fn new() -> Box<Self> { Box::new(Self { phantom: std::marker::PhantomData }) }
 
     fn build(&mut self, builder: &mut MapBuilder<S>) {
         let mut seen = Grid::new_copy(builder.grid.size(), false);

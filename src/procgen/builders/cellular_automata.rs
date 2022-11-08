@@ -7,10 +7,7 @@ use smart_default::SmartDefault;
 const MAX_ITERATIONS: std::ops::Range<u32> = 5..15;
 
 #[derive(SmartDefault, Debug, Clone)]
-pub struct CellularAutomataArchitect<S>
-where
-    S: Size2d,
-{
+pub struct CellularAutomataArchitect<S: Size2d> {
     #[default(10)]
     number_of_iterations: u32,
     #[default(55)]
@@ -19,10 +16,7 @@ where
     phantom: std::marker::PhantomData<S>,
 }
 
-impl<S> InitialMapArchitect<S> for CellularAutomataArchitect<S>
-where
-    S: Size2d,
-{
+impl<S: Size2d> InitialMapArchitect<S> for CellularAutomataArchitect<S> {
     fn generate(&mut self, builder: &mut MapBuilder<S>, rng: &mut Random) {
         self.generate(builder, rng);
     }
@@ -30,10 +24,7 @@ where
     fn name(&self) -> &str { "CellularAutomataArchitectStarter" }
 }
 
-impl<S> MapArchitect<S> for CellularAutomataArchitect<S>
-where
-    S: Size2d,
-{
+impl<S: Size2d> MapArchitect<S> for CellularAutomataArchitect<S> {
     fn generate(&mut self, builder: &mut MapBuilder<S>, _rng: &mut Random) {
         println!("CellularAutomataArchitect generate");
         self.iteration(&mut builder.grid);
@@ -42,28 +33,27 @@ where
     fn name(&self) -> &str { "CellularAutomataArchitect" }
 }
 
-impl<S> CellularAutomataArchitect<S>
-where
-    S: Size2d,
-{
-    #[allow(dead_code)]
+impl<S: Size2d> CellularAutomataArchitect<S> {
     #[inline(always)]
-    pub fn new() -> Box<CellularAutomataArchitect<S>> { Box::default() }
+    pub fn new() -> Box<Self> { Box::default() }
 
+    #[allow(dead_code)]
     #[inline]
-    pub fn with_iterations(mut self, iterations: u32) -> Self {
+    pub const fn with_iterations(mut self, iterations: u32) -> Self {
         self.number_of_iterations = iterations;
         self
     }
 
+    #[allow(dead_code)]
     #[inline]
-    pub fn with_start_floor_percent(mut self, start_floor_percent: u32) -> Self {
+    pub const fn with_start_floor_percent(mut self, start_floor_percent: u32) -> Self {
         self.start_floor_percent = start_floor_percent;
         self
     }
 
+    #[allow(dead_code)]
     #[inline]
-    pub fn with_randomize_iterations(mut self, randomize_iterations: bool) -> Self {
+    pub const fn with_randomize_iterations(mut self, randomize_iterations: bool) -> Self {
         self.randomize_iterations = randomize_iterations;
         self
     }
@@ -80,10 +70,7 @@ where
     }
 }
 
-impl<S> CellularAutomataArchitect<S>
-where
-    S: Size2d,
-{
+impl<S: Size2d> CellularAutomataArchitect<S> {
     fn random_noise_map(&mut self, grid: &mut Grid<TileType>, rng: &mut Random) {
         grid.iter_mut().for_each(|t| {
             let roll = rng.prng.range(0..100);

@@ -138,57 +138,22 @@ impl MapRenderer {
         });
     }
 
-    pub fn get_context(&self) -> RenderContext { RenderContext::new(&self) }
+    #[inline(always)]
+    pub const fn get_context(&self) -> RenderContext { RenderContext::new(self) }
 
     pub fn get_entity(&self, layer: MapLayer, index: impl Point2d) -> Option<Entity> {
         match layer {
-            MapLayer::Terrain => {
-                if let Some(opt) = self.terrain_entities.get(index) {
-                    Some(*opt)
-                } else {
-                    None
-                }
-            }
-            MapLayer::Features => {
-                if let Some(opt) = self.feature_entities.get(index) {
-                    Some(*opt)
-                } else {
-                    None
-                }
-            }
-            MapLayer::Items => {
-                if let Some(opt) = self.item_entities.get(index) {
-                    Some(*opt)
-                } else {
-                    None
-                }
-            }
+            MapLayer::Terrain => self.terrain_entities.get(index).copied(),
+            MapLayer::Features => self.feature_entities.get(index).copied(),
+            MapLayer::Items => self.item_entities.get(index).copied(),
         }
     }
 
     pub fn get_background_entity(&self, layer: MapLayer, index: impl Point2d) -> Option<Entity> {
         match layer {
-            MapLayer::Terrain => {
-                if let Some(opt) = self.terrain_background_entities.get(index) {
-                    Some(*opt)
-                } else {
-                    None
-                }
-            }
-            MapLayer::Features => {
-                if let Some(opt) = self.feature_background_entities.get(index) {
-                    Some(*opt)
-                } else {
-                    None
-                }
-            }
-            MapLayer::Items => {
-                if let Some(opt) = self.item_background_entities.get(index) {
-                    Some(*opt)
-                } else {
-                    None
-                }
-            }
+            MapLayer::Terrain => self.terrain_background_entities.get(index).copied(),
+            MapLayer::Features => self.feature_background_entities.get(index).copied(),
+            MapLayer::Items => self.item_background_entities.get(index).copied(),
         }
     }
 }

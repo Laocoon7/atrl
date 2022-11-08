@@ -1,10 +1,5 @@
 use crate::prelude::*;
-
-use bevy::{
-    diagnostic::{Diagnostics, EntityCountDiagnosticsPlugin, FrameTimeDiagnosticsPlugin},
-    prelude::*,
-};
-use bevy_inspector_egui::*;
+use bevy::diagnostic::{Diagnostics, EntityCountDiagnosticsPlugin, FrameTimeDiagnosticsPlugin};
 
 const DEBUG_UI_STAGE: &str = "debug_ui_stage";
 

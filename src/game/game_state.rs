@@ -15,11 +15,11 @@ pub enum GameState {
 impl StateNext for GameState {
     fn next(&self) -> Option<Self> {
         match self {
-            GameState::Initializing => Some(GameState::AssetLoad),
-            GameState::AssetLoad => Some(GameState::Construct),
-            GameState::Construct => Some(GameState::InGame),
-            GameState::MainMenu => Some(GameState::InGame),
-            GameState::InGame => None,
+            Self::Initializing => Some(Self::AssetLoad),
+            Self::AssetLoad => Some(Self::Construct),
+            Self::Construct => Some(Self::InGame),
+            Self::MainMenu => Some(Self::InGame),
+            Self::InGame => None,
         }
     }
 }

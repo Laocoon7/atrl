@@ -1,3 +1,6 @@
+#![warn(clippy::nursery, clippy::all)]
+#![allow(clippy::type_complexity)] // Bevy can have complex queries, so we shush clippy
+
 use banana_bevy_utils::switch_in_game_state;
 
 pub mod app_settings {
@@ -32,10 +35,17 @@ use raws::*;
 
 mod procgen {
     mod builder_chain;
-    mod builders;
     mod common;
     mod map_builder;
     mod procgen_plugin;
+
+    mod builders {
+        mod cellular_automata;
+        mod rooms;
+        pub use cellular_automata::*;
+        pub use rooms::*;
+    }
+    pub use builders::*;
 
     mod meta {
         mod area_points;
@@ -43,15 +53,14 @@ mod procgen {
         pub use area_points::*;
         pub use cull_unreachable::*;
     }
+    pub use meta::*;
 
     pub use builder_chain::*;
     pub use builders::*;
     pub use common::*;
     pub use map_builder::*;
-    pub use meta::*;
     pub use procgen_plugin::*;
 }
-use procgen::*;
 
 use atrl_engine::{
     bevy::render::texture::ImageSettings,

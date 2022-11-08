@@ -10,5 +10,5 @@ pub enum VisionType {
 }
 
 impl Default for VisionType {
-    fn default() -> Self { VisionType::Blind }
+    fn default() -> Self { Self::Blind }
 }
