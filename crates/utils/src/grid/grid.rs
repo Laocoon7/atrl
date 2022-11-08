@@ -1,5 +1,4 @@
 use crate::{prelude::*, Point2d, PointIterRowMajor, Size2d};
-
 use std::{
     ops::{Index, IndexMut},
     slice,
@@ -145,36 +144,6 @@ impl<T> Grid<T> {
         std::mem::replace(&mut self.cells[index], value)
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Iterator Functionality
-    ///////////////////////////////////////////////////////////////////////////
-
-    /// An iterator over all elements in the grid.
-    #[inline]
-    pub fn iter(&self) -> GridIter<T> { self.cells.iter() }
-
-    /// A mutable iterator over all elements in the grid.
-    #[inline]
-    pub fn iter_mut(&mut self) -> GridIterMut<T> { self.cells.iter_mut() }
-
-    pub fn point_iter(&self) -> PointIterRowMajor { self.size.iter() }
-
-    #[inline]
-    pub fn rows(&self) -> GridRows<T> { self.cells.chunks(self.size.width() as usize) }
-
-    #[inline]
-    pub fn rows_mut(&mut self) -> GridRowsMut<T> {
-        self.cells.chunks_mut(self.size.width() as usize)
-    }
-
-    #[inline]
-    pub fn cols(&self) -> GridRows<T> { self.cells.chunks(self.size.width() as usize) }
-
-    #[inline]
-    pub fn cols_mut(&mut self) -> GridRowsMut<T> {
-        self.cells.chunks_mut(self.size.width() as usize)
-    }
-
     pub fn count_neighbors(&self, index: impl Point2d, val: T) -> usize
     where
         T: std::cmp::PartialEq,
@@ -192,6 +161,89 @@ impl<T> Grid<T> {
             }
         }
         neighbors
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Iterator Functionality
+    ///////////////////////////////////////////////////////////////////////////
+
+    /// An iterator over all elements in the grid.
+    #[inline]
+    pub fn iter(&self) -> GridIter<T> { self.cells.iter() }
+
+    /// A mutable iterator over all elements in the grid.
+    #[inline]
+    pub fn iter_mut(&mut self) -> GridIterMut<T> { self.cells.iter_mut() }
+
+    pub fn point_iter(&self) -> PointIterRowMajor { self.size.iter() }
+}
+
+///////////////////////////////////////////////////////////////////////////
+// Row / Column Iterators
+///////////////////////////////////////////////////////////////////////////
+
+impl<T> Grid<T> {
+    #[inline]
+    pub fn rows(&self) -> GridRows<T> { self.cells.chunks(self.size.width() as usize) }
+
+    #[inline]
+    pub fn rows_mut(&mut self) -> GridRowsMut<T> {
+        self.cells.chunks_mut(self.size.width() as usize)
+    }
+
+    #[inline]
+    pub fn cols(&self) -> GridRows<T> { self.cells.chunks(self.size.width() as usize) }
+
+    #[inline]
+    pub fn cols_mut(&mut self) -> GridRowsMut<T> {
+        self.cells.chunks_mut(self.size.width() as usize)
+    }
+
+    /// An iterator over a single column of the grid.
+    ///
+    /// Goes from bottom to top.
+    #[inline]
+    pub fn iter_column(&self, x: usize) -> Option<impl DoubleEndedIterator<Item = &T>> {
+        if x < self.size().count() {
+            let w = self.width() as usize;
+            return Some(self.cells[x..].iter().step_by(w));
+        } else {
+            None
+        }
+    }
+
+    /// An iterator over a single column of the grid.
+    ///
+    /// Goes from bottom to top.
+    #[inline]
+    pub fn iter_column_unchecked(&self, x: usize) -> impl DoubleEndedIterator<Item = &T> {
+        let w = self.width() as usize;
+        return self.cells[x..].iter().step_by(w);
+    }
+
+    /// A mutable iterator over a single column of the grid.
+    ///
+    /// Goes from bottom to top.
+    #[inline]
+    pub fn iter_column_mut(&mut self, x: usize) -> Option<impl DoubleEndedIterator<Item = &mut T>> {
+        if x < self.size().count() {
+            let w = self.width() as usize;
+            return Some(self.cells[x..].iter_mut().step_by(w));
+        } else {
+            None
+        }
+    }
+
+    /// A mutable iterator over a single column of the grid.
+    ///
+    /// Goes from bottom to top.
+    #[inline]
+    pub fn iter_column_mut_unchecked(
+        &mut self,
+        x: usize,
+    ) -> impl DoubleEndedIterator<Item = &mut T> {
+        let w = self.width() as usize;
+        return self.cells[x..].iter_mut().step_by(w);
     }
 }
 

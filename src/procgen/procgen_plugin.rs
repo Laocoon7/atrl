@@ -24,7 +24,7 @@ impl<S: StateNext> ProcgenPlugin<S> {
 
         #[cfg(feature = "debug")]
         {
-            use colored::Colorized;
+            use crate::debug::colorized::Colorized;
             info!("{}", map.to_colorized_string());
         }
 

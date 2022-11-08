@@ -27,7 +27,7 @@ pub enum TileType {
 impl TileType {
     pub const fn is_wall(self) -> bool { matches!(self, Self::Wall) }
     pub const fn is_floor(self) -> bool { matches!(self, Self::Floor) }
-    pub const fn is_walkable(self) -> bool { matches!(Self::Floor, Self::DownStairs) }
+    pub const fn is_walkable(self) -> bool { matches!(self, Self::Floor | Self::DownStairs) }
 }
 
 impl From<TileType> for u64 {
@@ -45,9 +45,9 @@ pub struct Map {
         required_vision_to_see: Grid<Vec<VisionType>>,
         required_vision_to_see_through: Grid<Vec<VisionType>>,
     */
-    size: UVec2,
-    tile_types: Grid<TileType>,
-    update_tiles: Vec<UVec2>,
+    pub size: UVec2,
+    pub tile_types: Grid<TileType>,
+    pub update_tiles: Vec<UVec2>,
 }
 
 impl Map {

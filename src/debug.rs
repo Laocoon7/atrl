@@ -56,3 +56,44 @@ impl Plugin for DebugPlugin {
         }
     }
 }
+
+#[cfg(feature = "debug")]
+pub mod colorized {
+    use crate::prelude::{Map, TileType};
+    use colored::Colorize;
+
+    pub trait Colorized {
+        fn to_colorized_string(&self) -> String;
+    }
+
+    impl Colorized for TileType {
+        fn to_colorized_string(&self) -> String {
+            format!(
+                "{}",
+                match self {
+                    Self::Wall => "#".bright_yellow(),
+                    Self::Floor => ".".bright_green(),
+                    Self::DownStairs => ">".bright_blue(),
+                }
+            )
+        }
+    }
+
+    impl Colorized for Map {
+        fn to_colorized_string(&self) -> String {
+            let mut buffer = format!("Map (w: {}, h: {})\n", self.size.x, self.size.y);
+            let line: String = (0..(self.size.x + 2)).into_iter().map(|_| '-').collect();
+            buffer = format!("{}{}\n", buffer, line);
+
+            for y in 0..self.size.y as usize {
+                buffer = format!("{}|", buffer);
+                for tile in self.tile_types.iter_column_unchecked(y) {
+                    buffer = format!("{}{}", buffer, tile.to_colorized_string());
+                }
+                buffer = format!("{}|\n", buffer);
+            }
+
+            format!("{}{}", buffer, line)
+        }
+    }
+}
