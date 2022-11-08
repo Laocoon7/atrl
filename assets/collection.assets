@@ -1,5 +1,5 @@
 ({
-    "julioa_mono": Folder (
+    "julia_mono": Folder (
         path: "fonts/JuliaMono",
     ),
 })

@@ -1,16 +1,6 @@
 use crate::game::prelude::*;
 use bevy_asset_loader::prelude::*;
 
-// const DEFAULT_TEXTURE_ATLAS_PATH: &str = "tilesets/terminal8x8_transparent.png";
-// const DEFAULT_TEXTURE_ATLAS_TILE_WIDTH: f32 = 8.0;
-// const DEFAULT_TEXTURE_ATLAS_TILE_HEIGHT: f32 = 8.0;
-// const DEFAULT_TEXTURE_ATLAS_COLUMNS: usize = 16;
-// const DEFAULT_TEXTURE_ATLAS_ROWS: usize = 16;
-// const DEFAULT_TEXTURE_ATLAS_PADDING_X: f32 = 0.0;
-// const DEFAULT_TEXTURE_ATLAS_PADDING_Y: f32 = 0.0;
-// const DEFAULT_TEXTURE_ATLAS_OFFSET_X: f32 = 0.0;
-// const DEFAULT_TEXTURE_ATLAS_OFFSET_Y: f32 = 0.0;
-
 #[derive(AssetCollection)]
 pub struct GameAssets {
     // Any file that can be loaded and turned into a texture atlas
@@ -25,7 +15,7 @@ pub struct GameAssets {
 
 #[derive(AssetCollection)]
 pub struct FontAssets {
-    #[asset(key = "julioa_mono", collection(typed))]
+    #[asset(key = "julia_mono", collection(typed))]
     pub julia_mono: Vec<Handle<Font>>,
 }
 
