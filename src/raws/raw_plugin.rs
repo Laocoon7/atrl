@@ -11,6 +11,9 @@ pub struct GameAssets {
     // Any file that can be loaded and turned into a Image
     #[asset(path = "tilesets/terminal8x8_transparent.png")]
     pub terminal8x8: Handle<Image>,
+
+    #[asset(path = "images/white_pixel.png")]
+    pub white_pixel: Handle<Image>,
 }
 
 #[derive(AssetCollection)]
