@@ -14,7 +14,6 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
         app.init_resource::<Random>()
             .add_plugin(CameraPlugin)
             .add_plugin(MapPlugin { state_running: self.state_running.clone() })
-            .add_plugin(TilemapTestPlugin { state_running: self.state_running.clone() })
             .add_plugin(ProcgenPlugin {
                 state_construct: self.state_construct.clone(),
                 state_running: self.state_running.clone(),

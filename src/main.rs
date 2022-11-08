@@ -75,7 +75,7 @@ fn main() {
         ..Default::default()
     })
     .insert_resource(ClearColor(Color::BLACK))
-    //.insert_resource(WinitSettings::desktop_app())
+    //.insert_resource(bevy::winit::WinitSettings::desktop_app())
     .insert_resource(ImageSettings::default_nearest())
     .add_plugins(DefaultPlugins);
 
