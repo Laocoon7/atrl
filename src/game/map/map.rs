@@ -1,6 +1,7 @@
 use crate::game::prelude::*;
 
 #[allow(dead_code)]
+#[derive(Component, Clone, Debug)]
 pub struct Map {
     tile_types: Grid<u64>,
     image_index: Grid<usize>,

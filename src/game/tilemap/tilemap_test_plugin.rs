@@ -1,6 +1,3 @@
-use iyes_loopless::prelude::AppLooplessStateExt;
-
-use crate::app_settings::*;
 use crate::game::prelude::*;
 
 pub struct TilemapTestPlugin<T> {
@@ -8,15 +5,12 @@ pub struct TilemapTestPlugin<T> {
 }
 
 impl<T: StateNext> Plugin for TilemapTestPlugin<T> {
-    fn build(&self, app: &mut App) {
-        app.add_system_to_stage(CoreStage::First, draw_tilemaps)
-            .add_enter_system(self.state_running.clone(), build_tilemap)
-            .add_system(tilemap_input);
-    }
+    fn build(&self, app: &mut App) { app.add_system_to_stage(CoreStage::First, draw_tilemaps); }
 }
 
+/*
 /// Test building a new tilemap
-fn build_tilemap(mut commands: Commands, game_assets: Res<GameAssets>) {
+fn _build_tilemap(mut commands: Commands, game_assets: Res<GameAssets>) {
     // get texture_atlas_handle from default_assets for now
     let texture_atlas_handle = game_assets.terminal8x8_atlas.clone();
 
@@ -34,7 +28,7 @@ fn build_tilemap(mut commands: Commands, game_assets: Res<GameAssets>) {
 }
 
 /// test dynamically changing the tilemap
-fn tilemap_input(mut commands: Commands, input: Res<Input<KeyCode>>, q_tilemaps: Query<&Tilemap>) {
+fn _tilemap_input(mut commands: Commands, input: Res<Input<KeyCode>>, q_tilemaps: Query<&Tilemap>) {
     if input.pressed(KeyCode::Space) {
         // get all Tilemap's
         for tilemap in q_tilemaps.iter() {
@@ -73,3 +67,4 @@ fn tilemap_input(mut commands: Commands, input: Res<Input<KeyCode>>, q_tilemaps:
         }
     }
 }
+*/

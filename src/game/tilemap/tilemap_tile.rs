@@ -1,4 +1,4 @@
 use crate::game::prelude::*;
 
-#[derive(Component)]
+#[derive(Component, Debug)]
 pub struct TilemapTile;

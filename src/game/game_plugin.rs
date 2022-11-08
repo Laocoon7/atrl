@@ -12,7 +12,7 @@ pub struct GamePlugin<T> {
 impl<T: StateNext> Plugin for GamePlugin<T> {
     fn build(&self, app: &mut App) {
         app.add_plugin(CameraPlugin)
-            .add_plugin(MapPlugin)
+            .add_plugin(MapPlugin { state_running: self.state_running.clone() })
             .add_plugin(TilemapTestPlugin { state_running: self.state_running.clone() });
     }
 }

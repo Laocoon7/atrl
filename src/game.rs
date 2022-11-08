@@ -8,6 +8,10 @@ mod camera {
 }
 
 mod map {
+    mod create_tilemaps;
+    pub use create_tilemaps::*;
+    mod current_map;
+    pub use current_map::*;
     mod map_plugin;
     pub use map_plugin::*;
     mod map_tile_template;
@@ -16,6 +20,10 @@ mod map {
     pub use map::*;
     mod movement_type;
     pub use movement_type::*;
+    mod tilemap_id;
+    pub use tilemap_id::*;
+    mod update_map_tiles;
+    pub use update_map_tiles::*;
     mod vision_type;
     pub use vision_type::*;
 }
@@ -23,6 +31,8 @@ mod map {
 mod tilemap {
     mod draw_tilemaps;
     pub use draw_tilemaps::*;
+    mod tile_definition;
+    pub use tile_definition::*;
     mod tilemap_action;
     pub use tilemap_action::*;
     mod tilemap_context;

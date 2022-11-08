@@ -1,5 +1,5 @@
-use crate::game::prelude::*;
 use super::{Point2d, PointIterRowMajor, Size2d};
+use crate::game::prelude::*;
 use bevy::prelude::{IVec2, UVec2};
 use std::{
     ops::{Index, IndexMut},
