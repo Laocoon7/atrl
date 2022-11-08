@@ -81,7 +81,7 @@ pub mod colorized {
 
     impl Colorized for Map {
         fn to_colorized_string(&self) -> String {
-            let mut buffer = format!("Map (w: {}, h: {})\n", self.size.x, self.size.y);
+            let mut buffer = format!("\nMap (w: {}, h: {})\n", self.size.x, self.size.y);
             let line: String = (0..(self.size.x + 2)).into_iter().map(|_| '-').collect();
             buffer = format!("{}{}\n", buffer, line);
 

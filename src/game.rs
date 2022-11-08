@@ -76,8 +76,6 @@ mod map {
     pub use map_plugin::*;
     mod map;
     pub use map::*;
-    // mod tile_definition;
-    // pub use tile_definition::*;
 }
 
 mod raws {
@@ -111,10 +109,10 @@ pub mod prelude {
     // local
     pub use super::camera::*;
     pub use super::components::*;
+    pub use super::game_context::*;
     pub use super::map::*;
     pub use super::procgen::*;
     pub use super::raws::*;
-    pub use super::game_context::*;
     //pub use super::game_plugin::*; // only needed by main()
     pub use super::game_state::*;
 }

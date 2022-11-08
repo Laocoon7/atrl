@@ -201,6 +201,7 @@ dependencies = [
  "colored",
  "num-derive",
  "num-traits",
+ "parking_lot 0.12.1",
  "ron 0.8.0",
  "serde",
  "serde_json",
