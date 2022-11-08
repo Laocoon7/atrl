@@ -1,0 +1,19 @@
+[package]
+edition = "2021"
+name    = "atrl-utils"
+version = "0.1.0"
+
+[dependencies]
+atrl-engine = { path = "../engine" }
+serde       = { version = "1", features = ["derive"] }
+
+######################################
+############    Random    ############
+######################################
+noise       = "0.8"
+rand        = "0.8"
+rand_pcg    = { version = "0.3", features = ["serde1"] }
+rand_seeder = "0.2"
+xxhash-rust = { version = "0.8", features = ["xxh3", "const_xxh3"] }
+
+parking_lot = "0.12"

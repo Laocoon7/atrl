@@ -1,4 +1,4 @@
-use crate::game::prelude::*;
+use crate::prelude::*;
 
 #[allow(dead_code)]
 #[derive(Clone, Debug)]

@@ -1,4 +1,4 @@
-use crate::game::prelude::*;
+use crate::prelude::*;
 
 pub struct TilemapEditor<'a> {
     tilemap: &'a Tilemap,

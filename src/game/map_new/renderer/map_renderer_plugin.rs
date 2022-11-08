@@ -1,4 +1,4 @@
-use crate::game::prelude::*;
+use crate::prelude::*;
 
 pub struct MapRendererPlugin<T> {
     pub state_running: T,

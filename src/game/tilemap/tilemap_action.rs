@@ -1,4 +1,4 @@
-use crate::game::prelude::*;
+use crate::prelude::*;
 
 // TODO: Is this needed or should we switch names?
 // https://rust-lang.github.io/rust-clippy/master/index.html#enum_variant_names

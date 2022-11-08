@@ -1,5 +1,4 @@
-use crate::game::prelude::*;
-
+use crate::prelude::*;
 use std::fs::{read_dir, read_to_string};
 
 const MAP_TILE_TEMPLATE_PATH: &str = "assets/data/map_tiles/";
@@ -50,7 +49,7 @@ pub struct MapTileTemplate {
     pub required_vision_to_see_through: Vec<VisionType>,
 }
 
-#[allow(dead_code)]
-impl MapTileTemplate {
-    pub fn spawn(&self, index: impl Point2d, map: &mut Map) { map.set_from_template(index, self); }
-}
+// #[allow(dead_code)]
+// impl MapTileTemplate {
+//     pub fn spawn(&self, index: impl Point2d, map: &mut Map) { map.set_from_template(index,
+// self); } }

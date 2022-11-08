@@ -1,4 +1,4 @@
-use crate::game::prelude::*;
+use crate::prelude::*;
 
 pub fn draw_tilemaps(
     mut commands: Commands,

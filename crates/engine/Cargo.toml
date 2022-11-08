@@ -1,0 +1,106 @@
+[package]
+edition = "2021"
+name    = "atrl-engine"
+version = "0.1.0"
+
+[features]
+default = ["dev"]
+
+# configuration for dev builds
+dev = ["bevy/filesystem_watcher", "bevy/dynamic"]
+
+# configuration for release builds
+release = ["bevy_embedded_assets"]
+
+# Parallelism
+parallel = ["rayon"]
+
+# Debbuing
+debug-graph        = ["bevy_mod_debugdump"]
+debug_asset_server = ["bevy/debug_asset_server"]
+
+# Trace
+trace        = ["bevy/trace"]
+trace_chrome = ["bevy/trace_chrome"]
+trace_tracy  = ["bevy/trace_tracy"]
+wgpu_trace   = ["bevy/wgpu_trace"]
+
+######################################
+##############    Bevy    ############
+######################################
+[dependencies.bevy]
+default-features = false
+features = [
+  "bevy_asset",
+  "bevy_winit",
+  "png",
+  "x11",
+  "bevy_scene",
+  "wayland",
+  "bevy_core_pipeline",
+
+  # Render
+  "bevy_render",
+  "bevy_sprite",
+  "bevy_text",
+  "bevy_ui",
+
+  # File formats
+  "png",
+
+  # Serialization
+  "serialize",
+]
+version = "0.8"
+
+[dependencies.iyes_loopless]
+features = ["states"]
+version  = "0.8"
+
+######################################
+##########    Tilemaps    ############
+######################################
+[dependencies.bevy_ecs_tilemap]
+features = ["atlas"]
+git      = "https://github.com/StarArawn/bevy_ecs_tilemap"
+
+######################################
+############    Assets    ############
+######################################
+
+[dependencies.bevy_common_assets]
+features = ["ron", "toml", "json"]
+git      = "https://github.com/NiklasEi/bevy_common_assets"
+
+[dependencies.bevy_embedded_assets]
+git      = "https://github.com/vleue/bevy_embedded_assets"
+optional = true
+
+######################################
+########    Debug + UI    ############
+######################################
+[dependencies.bevy-inspector-egui]
+version = "0.13"
+#kayak_ui = "0.1.0"
+
+[dependencies.bevy_egui]
+git = "https://github.com/mvlabat/bevy_egui"
+
+[dependencies.bevy_mod_debugdump]
+git      = "https://github.com/jakobhellermann/bevy_mod_debugdump"
+optional = true
+
+######################################
+###########    Utility    ############
+######################################
+
+[dependencies.big-brain]
+git = "https://github.com/zkat/big-brain"
+
+[dependencies.bevy_tweening]
+features = ["bevy_asset"]
+git      = "https://github.com/djeedai/bevy_tweening"
+
+[dependencies.rayon]
+git      = "https://github.com/rayon-rs/rayon"
+optional = true

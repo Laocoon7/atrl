@@ -1,4 +1,4 @@
-use crate::game::prelude::*;
+use crate::{prelude::*, Noise, Prht, Prng};
 
 #[derive(Serialize, Deserialize)]
 pub struct Random {
@@ -18,4 +18,8 @@ impl Random {
     }
 
     pub fn from_entropy() -> Self { Self::new(Prng::entropy_u64()) }
+}
+
+impl Default for Random {
+    fn default() -> Self { Self::from_entropy() }
 }

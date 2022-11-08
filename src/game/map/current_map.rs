@@ -1,3 +1,3 @@
-use crate::game::prelude::*;
+use crate::prelude::*;
 
 pub struct CurrentMap(pub Map);

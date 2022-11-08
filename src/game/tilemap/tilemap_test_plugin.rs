@@ -1,4 +1,4 @@
-use crate::game::prelude::*;
+use crate::prelude::*;
 
 pub struct TilemapTestPlugin<T> {
     pub state_running: T,

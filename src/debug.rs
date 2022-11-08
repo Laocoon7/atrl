@@ -1,4 +1,5 @@
-use crate::game::prelude::*;
+use crate::prelude::*;
+
 use bevy::{
     diagnostic::{Diagnostics, EntityCountDiagnosticsPlugin, FrameTimeDiagnosticsPlugin},
     prelude::*,

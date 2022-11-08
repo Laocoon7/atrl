@@ -1,5 +1,5 @@
 use crate::app_settings::*;
-use crate::game::prelude::*;
+use crate::prelude::*;
 
 pub fn create_tilemaps(mut commands: Commands, game_assets: Res<GameAssets>) {
     let texture_atlas_handle = game_assets.terminal8x8_atlas.clone();

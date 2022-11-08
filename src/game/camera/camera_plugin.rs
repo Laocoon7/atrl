@@ -1,5 +1,5 @@
 use super::systems::*;
-use crate::game::prelude::*;
+use crate::prelude::*;
 
 pub struct CameraPlugin;
 impl Plugin for CameraPlugin {
