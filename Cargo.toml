@@ -66,10 +66,6 @@ version          = "0.8"
 features = ["states"]
 version  = "0.8"
 
-[dependencies.bevy_ecs_tilemap]
-features = ["atlas"]
-version  = "0.8"
-
 # Assets
 [dependencies.bevy_asset_loader]
 features = ["stageless", "2d", "standard_dynamic_assets"]

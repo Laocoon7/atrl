@@ -1,5 +1,4 @@
 use crate::game::prelude::*;
-use iyes_loopless::prelude::*;
 
 pub struct GamePlugin<T> {
     /// Asset loading happens in this state. When it finishes it transitions to
@@ -12,8 +11,7 @@ pub struct GamePlugin<T> {
 
 impl<T: StateNext> Plugin for GamePlugin<T> {
     fn build(&self, app: &mut App) {
-        app.add_loopless_state(GameState::default())
-            .add_plugin(CameraPlugin)
+        app.add_plugin(CameraPlugin)
             .add_plugin(MapPlugin)
             .add_plugin(TilemapTestPlugin { state_running: self.state_running.clone() });
     }

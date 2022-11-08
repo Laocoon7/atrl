@@ -95,7 +95,6 @@ pub mod prelude {
     pub use bevy::{prelude::*, utils::HashMap};
 
     // Bevy Plugins
-    //pub use bevy_ecs_tilemap::prelude::*; // on hold
     pub use banana_bevy_utils::prelude::*;
     pub use bevy_inspector_egui::prelude::*; // For derive(Inspectable)
     pub use iyes_loopless::prelude::*;

@@ -184,7 +184,6 @@ dependencies = [
  "bevy-inspector-egui",
  "bevy_asset_loader",
  "bevy_common_assets 0.3.0 (git+https://github.com/NiklasEi/bevy_common_assets)",
- "bevy_ecs_tilemap",
  "iyes_loopless",
  "noise",
  "rand 0.8.5",
@@ -447,17 +446,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
-]
-
-[[package]]
-name = "bevy_ecs_tilemap"
-version = "0.8.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "efd2e8dc13b82406dc2b7ce1b1463f9acb84ba3efa3857558ff9768ba9d7293d"
-dependencies = [
- "bevy",
- "log",
- "regex",
 ]
 
 [[package]]

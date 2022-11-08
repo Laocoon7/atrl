@@ -40,6 +40,7 @@ use bevy::{
 
 fn main() {
     let mut app = App::new();
+    // Default Plugins
     app.insert_resource(WindowDescriptor {
         title: APP_NAME.to_string(),
         width: (GRID_WIDTH * MIN_SPRITE_WIDTH) as f32 * INITIAL_WINDOW_SCALE,
@@ -55,21 +56,26 @@ fn main() {
     .insert_resource(ClearColor(Color::BLACK))
     .insert_resource(WinitSettings::desktop_app())
     .insert_resource(ImageSettings::default_nearest())
-    .add_plugins(DefaultPlugins)
-    // bevy-inspector-egui related
-    .add_plugin(DebugPlugin)
-    // Tilemap (on hold)
-    //.add_plugin(TilemapPlugin)
+    .add_plugins(DefaultPlugins);
+
+    // anything we don't need in release versions
+    app.add_plugin(DebugPlugin);
+
+    // set entry state
+    app.add_loopless_state(GameState::default());
+
+    // asset loading
+    app.add_plugin(RawPlugin {
+        state_asset_load: GameState::AssetLoad,
+        state_construct: GameState::Construct,
+    });
+
     // game related
-    .add_plugin(GamePlugin {
+    app.add_plugin(GamePlugin {
         state_asset_load: GameState::AssetLoad,
         state_construct: GameState::Construct,
         state_main_menu: GameState::MainMenu,
         state_running: GameState::InGame,
-    })
-    .add_plugin(RawPlugin {
-        state_asset_load: GameState::AssetLoad,
-        state_construct: GameState::Construct,
     });
 
     // `AppState::Initializing` is a buffer state to allow bevy plugins to initialize
