@@ -201,6 +201,7 @@ dependencies = [
  "colored",
  "num-derive",
  "num-traits",
+ "once_cell",
  "parking_lot 0.12.1",
  "ron 0.8.0",
  "serde",
@@ -260,7 +261,7 @@ checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
 [[package]]
 name = "banana_bevy_utils"
 version = "0.1.0"
-source = "git+https://github.com/banana-studios/banana_bevy_utils#3c1f7170a9c18170e726ac90fbb490b523d62b6f"
+source = "git+https://github.com/banana-studios/banana_bevy_utils#d24fdaa9073bc50a2af2f4750286125c3872555e"
 dependencies = [
  "bevy 0.8.1",
  "iyes_loopless",
@@ -1501,9 +1502,9 @@ checksum = "1582e1c9e755dd6ad6b224dcffb135d199399a4568d454bd89fe515ca8425695"
 
 [[package]]
 name = "cc"
-version = "1.0.74"
+version = "1.0.76"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "581f5dba903aac52ea3feb5ec4810848460ee833876f1f9b0fdeab1f19091574"
+checksum = "76a284da2e6fe2092f2353e51713435363112dfd60030e22add80be333fb928f"
 
 [[package]]
 name = "cesu8"
