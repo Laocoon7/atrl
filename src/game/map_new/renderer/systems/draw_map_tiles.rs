@@ -1,33 +1,42 @@
 use crate::game::prelude::*;
 
-pub fn draw_tilemaps(
+pub fn draw_map_tiles(
     mut commands: Commands,
-    q_tilemap_contexts: Query<(Entity, &TilemapContext)>,
-    mut q_tiles: Query<(Entity, &mut TextureAtlasSprite), With<TilemapTile>>,
+    q_render_actions: Query<(Entity, &RenderActions)>,
+    mut q_tiles: Query<(Entity, &mut TextureAtlasSprite), (With<RenderTile>, Without<Sprite>)>,
+    mut q_background_tiles: Query<
+        (Entity, &mut Sprite),
+        (With<RenderTile>, Without<TextureAtlasSprite>),
+    >,
 ) {
-    for (context_entity, context) in q_tilemap_contexts.iter() {
-        for action in &context.actions {
+    for (render_actions_entity, render_actions) in q_render_actions.iter() {
+        for action in &render_actions.actions {
             match action {
-                TilemapAction::SetIndex(entity_index, index) => {
-                    if let Ok((_, mut sprite)) = q_tiles.get_mut(*entity_index) {
+                RenderAction::SetAtlasIndex(entity, index) => {
+                    if let Ok((_, mut sprite)) = q_tiles.get_mut(*entity) {
                         sprite.index = *index;
                     }
                 }
-                TilemapAction::SetAtlas(entity_index, handle) => {
-                    if let Ok((tile_entity, _)) = q_tiles.get_mut(*entity_index) {
+                RenderAction::SetAtlasHandle(entity, handle) => {
+                    if let Ok((tile_entity, _)) = q_tiles.get_mut(*entity) {
                         commands
                             .entity(tile_entity)
                             .remove::<Handle<TextureAtlas>>()
                             .insert(handle.clone());
                     }
                 }
-                TilemapAction::SetColor(entity_index, color) => {
-                    if let Ok((_, mut sprite)) = q_tiles.get_mut(*entity_index) {
+                RenderAction::SetForegroundColor(entity, color) => {
+                    if let Ok((_, mut sprite)) = q_tiles.get_mut(*entity) {
+                        sprite.color = *color;
+                    }
+                }
+                RenderAction::SetBackgroundColor(entity, color) => {
+                    if let Ok((_, mut sprite)) = q_background_tiles.get_mut(*entity) {
                         sprite.color = *color;
                     }
                 }
             };
         }
-        commands.entity(context_entity).despawn_recursive();
+        commands.entity(render_actions_entity).despawn_recursive();
     }
 }
