@@ -3,12 +3,7 @@ use crate::prelude::*;
 pub fn update_map_tiles(
     mut commands: Commands,
     renderer: Res<MapRenderer>,
-<<<<<<< HEAD
     tile_loader: Res<TileLoader>,
-    _game_assets: Res<GameAssets>,
-=======
-    game_assets: Res<TextureAssets>,
->>>>>>> 5507690ee34759066bfa6cbc4805a78c4e631f67
     mut q_current_map: Query<&mut Map, With<CurrentMap>>,
 ) {
     let mut context = renderer.get_context();
