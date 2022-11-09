@@ -33,7 +33,7 @@ where
             for direction in CardinalDirection::all() {
                 let neighbour_coord = current + direction.coord();
                 if let Some(neighbour_cell) = builder.terrain_grid.get(neighbour_coord) {
-                    if !neighbour_cell.is_wall() {
+                    if *neighbour_cell != TerrainType::Wall {
                         let seen_cell = seen.get_mut_unchecked(neighbour_coord);
                         if !*seen_cell {
                             to_visit.push(neighbour_coord);
@@ -45,7 +45,7 @@ where
         }
 
         for (&seen_cell, map_cell) in seen.iter().zip(builder.terrain_grid.iter_mut()) {
-            if !seen_cell && map_cell.is_floor() {
+            if !seen_cell {
                 *map_cell = TerrainType::Wall;
             }
         }

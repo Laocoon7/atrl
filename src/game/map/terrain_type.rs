@@ -82,9 +82,6 @@ impl TerrainType {
             ],
         }
     }
-
-    pub const fn is_wall(self) -> bool { matches!(self, Self::Wall) }
-    pub const fn is_floor(self) -> bool { matches!(self, Self::Floor) }
 }
 
 impl From<TerrainType> for u64 {
