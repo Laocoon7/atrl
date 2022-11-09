@@ -3,7 +3,7 @@ use crate::prelude::*;
 pub fn update_map_tiles(
     mut commands: Commands,
     renderer: Res<MapRenderer>,
-    game_assets: Res<GameAssets>,
+    game_assets: Res<TextureAssets>,
     mut q_current_map: Query<&mut Map, With<CurrentMap>>,
     _keys: Res<Input<KeyCode>>,
 ) {

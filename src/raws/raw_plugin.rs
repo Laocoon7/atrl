@@ -12,10 +12,7 @@ impl<T: StateNext> Plugin for RawPlugin<T> {
         app.add_loading_state(
             LoadingState::new(self.state_asset_load.clone())
                 .continue_to_state(self.state_construct.clone())
-                .with_collection::<GameAssets>()
-                .with_dynamic_collections::<StandardDynamicAssetCollection>(vec![
-                    "collection.assets",
-                ])
+                .with_collection::<TextureAssets>()
                 .with_collection::<FontAssets>(),
         )
         .add_enter_system(self.state_construct.clone(), check_loaded_assets);

@@ -72,6 +72,12 @@ pub mod procgen {
     pub use procgen_plugin::*;
 }
 
+mod ui {
+    mod splash;
+    pub use splash::*;
+}
+use ui::*;
+
 use atrl_engine::{
     bevy::render::texture::ImageSettings,
     bevy_window::{PresentMode, WindowResizeConstraints},
@@ -105,6 +111,8 @@ fn main() {
     // set entry state
     app.add_loopless_state(GameState::default());
 
+    app.add_plugin(SplashPlugin { state_splash: GameState::SplashScreen, ..Default::default() });
+
     // asset loading
     app.add_plugin(RawPlugin {
         state_asset_load: GameState::AssetLoad,
@@ -120,7 +128,7 @@ fn main() {
     });
 
     // `AppState::Initializing` is a buffer state to allow bevy plugins to initialize
-    app.add_enter_system(GameState::default(), switch_in_game_state!(GameState::AssetLoad));
+    app.add_enter_system(GameState::default(), switch_in_game_state!(GameState::SplashScreen));
 
     app.run();
 }
