@@ -112,6 +112,10 @@ mod map {
         pub use update_map_tiles::*;
     }
 
+    mod feature_type;
+    pub use feature_type::*;
+    mod item_type;
+    pub use item_type::*;
     mod map_layer;
     pub use map_layer::*;
     mod map_plugin;

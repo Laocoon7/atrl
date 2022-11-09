@@ -9,7 +9,9 @@ pub struct MapBuilder<S: Size2d> {
     pub size: S,
     pub world_position: WorldPosition,
     pub name: String,
-    pub grid: Grid<TerrainType>,
+    pub terrain_grid: Grid<TerrainType>,
+    pub feature_grid: Grid<FeatureType>,
+    pub item_grid: Grid<ItemType>,
     pub rooms: Option<Vec<Rectangle>>,
     pub starting_position: Option<IVec2>,
     pub spawn_list: Vec<(IVec2, String)>,
@@ -26,7 +28,9 @@ impl<S: Size2d> MapBuilder<S> {
             name: name.to_string(),
             spawn_list: Vec::new(),
             starting_position: None,
-            grid: Grid::new_default(size),
+            terrain_grid: Grid::new_default(size),
+            feature_grid: Grid::new_default(size),
+            item_grid: Grid::new_default(size),
         }
     }
 }
@@ -35,6 +39,6 @@ impl<S: Size2d> MapBuilder<S> {
 
 impl<S: Size2d> From<MapBuilder<S>> for Map {
     fn from(builder: MapBuilder<S>) -> Self {
-        Self::new(builder.size, builder.world_position, builder.grid)
+        Self::new(builder.size, builder.world_position, builder.terrain_grid)
     }
 }

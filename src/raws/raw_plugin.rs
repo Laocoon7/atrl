@@ -1,5 +1,5 @@
-use crate::prelude::*;
 use super::systems::*;
+use crate::prelude::*;
 use bevy_asset_loader::prelude::*;
 
 pub struct RawPlugin<T> {
@@ -21,5 +21,3 @@ impl<T: StateNext> Plugin for RawPlugin<T> {
         .add_enter_system(self.state_construct.clone(), check_loaded_assets);
     }
 }
-
-

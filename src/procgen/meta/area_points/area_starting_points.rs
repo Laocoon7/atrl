@@ -1,6 +1,6 @@
 use crate::{
+    game::prelude::*,
     procgen::{MapArchitect, MapBuilder},
-    *,
 };
 use atrl_utils::{DistanceAlg, Random, Size2d};
 
@@ -36,20 +36,20 @@ impl<S: Size2d> AreaStartingPosition<S> {
     fn build(&mut self, builder: &mut MapBuilder<S>) {
         let seed_x = match self.x {
             XStart::Left => 1,
-            XStart::Center => (builder.grid.width() / 2) as i32,
-            XStart::Right => (builder.grid.width() - 2) as i32,
+            XStart::Center => (builder.terrain_grid.width() / 2) as i32,
+            XStart::Right => (builder.terrain_grid.width() - 2) as i32,
         };
 
         let seed_y = match self.y {
             YStart::Top => 1,
-            YStart::Center => (builder.grid.height() / 2) as i32,
-            YStart::Bottom => (builder.grid.height() - 2) as i32,
+            YStart::Center => (builder.terrain_grid.height() / 2) as i32,
+            YStart::Bottom => (builder.terrain_grid.height() - 2) as i32,
         };
 
         let mut available_floors: Vec<(IVec2, f32)> = Vec::new();
-        for (idx, tile) in builder.grid.iter().enumerate() {
-            if tile.is_walkable() {
-                if let Some(pt) = builder.grid.index_to_pt(idx) {
+        for (idx, tile) in builder.terrain_grid.iter().enumerate() {
+            if tile.allowed_movement().contains(&MovementType::Walk) {
+                if let Some(pt) = builder.terrain_grid.index_to_pt(idx) {
                     available_floors.push((
                         pt,
                         DistanceAlg::PythagorasSquared.distance2d(pt, IVec2::new(seed_x, seed_y)),

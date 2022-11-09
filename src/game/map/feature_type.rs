@@ -17,44 +17,38 @@ use num_traits::ToPrimitive;
     Deserialize,
 )]
 #[repr(u8)]
-pub enum TerrainType {
+pub enum FeatureType {
     #[default]
     None,
-    Wall,
-    Floor,
-    Water,
+    DownStairs,
+    UpStairs,
 }
 
-impl TerrainType {
+impl FeatureType {
     /// Movement is allowed if MovementComponent allows any of these types
     pub fn allowed_movement(&self) -> Vec<MovementType> {
         match self {
-            TerrainType::None => vec![],
-            TerrainType::Wall => vec![MovementType::Fly, MovementType::Phase],
-            TerrainType::Floor => {
+            FeatureType::None => vec![],
+            FeatureType::DownStairs => {
                 vec![MovementType::Walk, MovementType::Run, MovementType::Fly, MovementType::Phase]
             }
-            TerrainType::Water => vec![MovementType::Swim, MovementType::Fly, MovementType::Phase],
+            FeatureType::UpStairs => {
+                vec![MovementType::Walk, MovementType::Run, MovementType::Fly, MovementType::Phase]
+            }
         }
     }
 
     /// The tile is visible to these vision types (but not necessarily explored)
     pub fn allowed_vision(&self) -> Vec<VisionType> {
         match self {
-            TerrainType::None => vec![],
-            TerrainType::Wall => vec![
+            FeatureType::None => vec![],
+            FeatureType::DownStairs => vec![
                 VisionType::BlackAndWhite,
                 VisionType::Colored,
                 VisionType::Infared,
                 VisionType::XRay,
             ],
-            TerrainType::Floor => vec![
-                VisionType::BlackAndWhite,
-                VisionType::Colored,
-                VisionType::Infared,
-                VisionType::XRay,
-            ],
-            TerrainType::Water => vec![
+            FeatureType::UpStairs => vec![
                 VisionType::BlackAndWhite,
                 VisionType::Colored,
                 VisionType::Infared,
@@ -66,15 +60,14 @@ impl TerrainType {
     /// The tile is considered opaque unless VisionComponent includes one of these types
     pub fn vision_penetrates(&self) -> Vec<VisionType> {
         match self {
-            TerrainType::None => vec![],
-            TerrainType::Wall => vec![VisionType::XRay],
-            TerrainType::Floor => vec![
+            FeatureType::None => vec![],
+            FeatureType::DownStairs => vec![
                 VisionType::BlackAndWhite,
                 VisionType::Colored,
                 VisionType::Infared,
                 VisionType::XRay,
             ],
-            TerrainType::Water => vec![
+            FeatureType::UpStairs => vec![
                 VisionType::BlackAndWhite,
                 VisionType::Colored,
                 VisionType::Infared,
@@ -83,34 +76,31 @@ impl TerrainType {
         }
     }
 
-    pub const fn is_wall(self) -> bool { matches!(self, Self::Wall) }
-    pub const fn is_floor(self) -> bool { matches!(self, Self::Floor) }
+    pub const fn is_walkable(self) -> bool { matches!(self, Self::DownStairs) }
 }
 
-impl From<TerrainType> for u64 {
-    fn from(value: TerrainType) -> Self {
-        ToPrimitive::to_u64(&value).expect("Failed to convert `TerrainType` to u64")
+impl From<FeatureType> for u64 {
+    fn from(value: FeatureType) -> Self {
+        ToPrimitive::to_u64(&value).expect("Failed to convert `FeatureType` to u64")
     }
 }
 
-impl From<TerrainType> for usize {
-    fn from(value: TerrainType) -> Self {
+impl From<FeatureType> for usize {
+    fn from(value: FeatureType) -> Self {
         match value {
-            TerrainType::None => 0,
-            TerrainType::Wall => from_cp437('#'),
-            TerrainType::Floor => from_cp437('.'),
-            TerrainType::Water => from_cp437('~'),
+            FeatureType::None => 0,
+            FeatureType::DownStairs => from_cp437('>'),
+            FeatureType::UpStairs => from_cp437('<'),
         }
     }
 }
 
-impl From<TerrainType> for Color {
-    fn from(value: TerrainType) -> Self {
+impl From<FeatureType> for Color {
+    fn from(value: FeatureType) -> Self {
         match value {
-            TerrainType::None => Color::NONE,
-            TerrainType::Wall => Color::GREEN,
-            TerrainType::Floor => Color::GRAY,
-            TerrainType::Water => Color::BLUE,
+            FeatureType::None => Color::NONE,
+            FeatureType::DownStairs => Color::WHITE,
+            FeatureType::UpStairs => Color::WHITE,
         }
     }
 }

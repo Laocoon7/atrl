@@ -27,7 +27,7 @@ impl<S: Size2d> InitialMapArchitect<S> for CellularAutomataArchitect<S> {
 impl<S: Size2d> MapArchitect<S> for CellularAutomataArchitect<S> {
     fn generate(&mut self, builder: &mut MapBuilder<S>, _rng: &mut Random) {
         println!("CellularAutomataArchitect generate");
-        self.iteration(&mut builder.grid);
+        self.iteration(&mut builder.terrain_grid);
     }
 
     fn name(&self) -> &str { "CellularAutomataArchitect" }
@@ -63,9 +63,9 @@ impl<S: Size2d> CellularAutomataArchitect<S> {
             self.number_of_iterations = rng.prng.range(MAX_ITERATIONS);
         }
 
-        self.random_noise_map(&mut builder.grid, rng);
+        self.random_noise_map(&mut builder.terrain_grid, rng);
         for _ in 0..=self.number_of_iterations {
-            self.iteration(&mut builder.grid);
+            self.iteration(&mut builder.terrain_grid);
         }
     }
 }
