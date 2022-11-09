@@ -10,8 +10,11 @@ pub fn check_progress(
         let progress = progress_counter.progress();
         let progress_perc: f32 = progress.into();
         let progress_perc = if progress_perc.is_nan() { 0.0 } else { progress_perc };
+        let force_continue = progress.done == 0 && progress.total == 0;
 
-        if progress_perc >= 1.0 && splash_timer.finished() {
+        if (progress_perc >= 1.0 && splash_timer.finished())
+            || (force_continue && splash_timer.finished())
+        {
             info!("Assets loaded and splash timer complete!");
             state.set_next(&mut commands);
         }
@@ -20,12 +23,14 @@ pub fn check_progress(
 
 pub fn check_loaded_assets(
     mut commands: Commands,
-    font_assets: Res<FontAssets>,
     asset_server: Res<AssetServer>,
-    game_assets: Res<TextureAssets>,
     image_assets: Res<Assets<Image>>,
-    mut state: ResMut<CurrentGameState>,
     texture_atlases: Res<Assets<TextureAtlas>>,
+
+    font_assets: Res<FontAssets>,
+    game_assets: Res<TextureAssets>,
+
+    mut state: ResMut<CurrentGameState>,
 ) {
     use bevy::asset::LoadState;
 

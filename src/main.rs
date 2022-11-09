@@ -1,5 +1,6 @@
 #![warn(clippy::nursery, clippy::all)]
 #![allow(clippy::type_complexity)] // Bevy can have complex queries, so we shush clippy
+#![allow(clippy::too_many_arguments)] // Bevy has a lot of arguments, so we shush clippy
 
 use game::prelude::{
     *,
@@ -47,11 +48,13 @@ pub mod raws {
     pub use systems::*;
 
     mod font_assets;
-    pub use font_assets::*;
     mod game_assets;
-    pub use game_assets::*;
     mod raw_plugin;
+    pub mod splash_plugin;
+    pub use font_assets::*;
+    pub use game_assets::*;
     pub use raw_plugin::*;
+    pub use splash_plugin::*;
 }
 
 pub mod procgen {
