@@ -39,6 +39,8 @@ impl Plugin for DebugPlugin {
 
             // Inspector Egui
             app.add_plugin(WorldInspectorPlugin::new())
+                .register_inspectable::<Equipable>()
+                .register_inspectable::<Health>()
                 .register_inspectable::<MovementType>()
                 .register_inspectable::<LocalPosition>()
                 .register_inspectable::<WorldPosition>()
@@ -73,9 +75,12 @@ pub mod colorized {
             format!(
                 "{}",
                 match self {
+                    Self::None => "X".bright_yellow(),
                     Self::Wall => "#".bright_yellow(),
                     Self::Floor => ".".bright_green(),
+                    Self::Water => "~".bright_blue(),
                     Self::DownStairs => ">".bright_blue(),
+                    Self::UpStairs => ">".bright_blue(),
                 }
             )
         }
@@ -89,7 +94,7 @@ pub mod colorized {
 
             for y in 0..self.size.y as usize {
                 buffer = format!("{}|", buffer);
-                for tile in self.tile_types.iter_column_unchecked(y) {
+                for tile in self.terrain_types.iter_column_unchecked(y) {
                     buffer = format!("{}{}", buffer, tile.to_colorized_string());
                 }
                 buffer = format!("{}|\n", buffer);

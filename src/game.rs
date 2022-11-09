@@ -1,5 +1,37 @@
 #![allow(clippy::module_inception)]
 
+mod abilities {
+    mod systems {
+        mod apply_damage;
+        pub use apply_damage::*;
+    }
+    mod ability_plugin;
+    pub use ability_plugin::*;
+}
+
+mod actors {
+    mod systems {
+        mod input;
+        pub use input::*;
+        mod move_actors;
+        pub use move_actors::*;
+    }
+    mod actor_bundle;
+    pub use actor_bundle::*;
+    mod actor_plugin;
+    pub use actor_plugin::*;
+    mod attributes;
+    pub use attributes::*;
+    mod class_type;
+    pub use class_type::*;
+    mod equipment_slots;
+    pub use equipment_slots::*;
+    mod race_type;
+    pub use race_type::*;
+    mod timing;
+    pub use timing::*;
+}
+
 mod camera {
     mod systems {
         mod spawn_main_camera;
@@ -12,6 +44,13 @@ mod camera {
 }
 
 mod components {
+    mod ai_component {
+        mod ai_component;
+        pub use ai_component::*;
+        mod ai_type;
+        pub use ai_type::*;
+    }
+    pub use ai_component::*;
     mod movement {
         mod movement_type;
         pub use movement_type::*;
@@ -35,6 +74,24 @@ mod components {
         pub use vision::*;
     }
     pub use vision::*;
+
+    mod consumable;
+    pub use consumable::*;
+    mod equipable;
+    pub use equipable::*;
+    mod health;
+    pub use health::*;
+}
+
+mod items {
+    mod systems {
+        mod perform_healing;
+        pub use perform_healing::*;
+    }
+    mod item_bundle;
+    pub use item_bundle::*;
+    mod item_plugin;
+    pub use item_plugin::*;
 }
 
 mod map {
@@ -107,9 +164,12 @@ pub mod prelude {
     pub use serde_json;
 
     // local
+    pub use super::abilities::*;
+    pub use super::actors::*;
     pub use super::camera::*;
     pub use super::components::*;
     pub use super::game_context::*;
+    pub use super::items::*;
     pub use super::map::*;
     pub use super::procgen::*;
     pub use super::raws::*;

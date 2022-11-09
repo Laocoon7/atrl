@@ -21,7 +21,9 @@ pub mod app_settings {
 }
 use app_settings::*;
 
+#[cfg(feature = "debug")]
 mod debug;
+#[cfg(feature = "debug")]
 use debug::*;
 
 mod game;
@@ -89,6 +91,7 @@ fn main() {
     .add_plugins(DefaultPlugins);
 
     // anything we don't need in release versions
+    #[cfg(feature = "debug")]
     app.add_plugin(DebugPlugin);
 
     // set entry state
