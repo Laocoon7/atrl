@@ -82,6 +82,8 @@ mod items {
 
 mod map {
     mod loader {
+        mod change_theme;
+        pub use change_theme::*;
         mod current_map;
         pub use current_map::*;
         mod map_loader;
@@ -102,6 +104,8 @@ mod map {
     pub use renderer::*;
 
     mod systems {
+        mod change_map_theme;
+        pub use change_map_theme::*;
         mod create_renderer;
         pub use create_renderer::*;
         mod draw_map_tiles;
@@ -111,6 +115,25 @@ mod map {
         mod update_map_tiles;
         pub use update_map_tiles::*;
     }
+
+    mod tiles {
+        mod loader {
+            mod color_definition;
+            pub use color_definition::*;
+            mod tile_template;
+            pub use tile_template::*;
+            mod texture_atlas_template;
+            pub use texture_atlas_template::*;
+            mod tile_loader;
+            pub use tile_loader::*;
+        }
+        pub use loader::*;
+        mod theme;
+        pub use theme::*;
+        mod tile_definition;
+        pub use tile_definition::*;
+    }
+    pub use tiles::*;
 
     mod feature_type;
     pub use feature_type::*;
@@ -153,6 +176,7 @@ pub mod prelude {
     pub use iyes_loopless::prelude::*;
 
     // Serialization
+    pub use ron;
     pub use serde::{Deserialize, Serialize};
     pub use serde_json;
 

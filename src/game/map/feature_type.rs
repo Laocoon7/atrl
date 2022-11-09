@@ -20,8 +20,10 @@ use num_traits::ToPrimitive;
 pub enum FeatureType {
     #[default]
     None,
-    DownStairs,
-    UpStairs,
+    StairsDown,
+    StairsUp,
+    DoorClosed,
+    DoorOpen,
 }
 
 impl FeatureType {
@@ -29,10 +31,16 @@ impl FeatureType {
     pub fn allowed_movement(&self) -> Vec<MovementType> {
         match self {
             FeatureType::None => vec![],
-            FeatureType::DownStairs => {
+            FeatureType::StairsDown => {
                 vec![MovementType::Walk, MovementType::Run, MovementType::Fly, MovementType::Phase]
             }
-            FeatureType::UpStairs => {
+            FeatureType::StairsUp => {
+                vec![MovementType::Walk, MovementType::Run, MovementType::Fly, MovementType::Phase]
+            }
+            FeatureType::DoorClosed => {
+                vec![MovementType::Walk, MovementType::Run, MovementType::Fly, MovementType::Phase]
+            }
+            FeatureType::DoorOpen => {
                 vec![MovementType::Walk, MovementType::Run, MovementType::Fly, MovementType::Phase]
             }
         }
@@ -42,13 +50,25 @@ impl FeatureType {
     pub fn allowed_vision(&self) -> Vec<VisionType> {
         match self {
             FeatureType::None => vec![],
-            FeatureType::DownStairs => vec![
+            FeatureType::StairsDown => vec![
                 VisionType::BlackAndWhite,
                 VisionType::Colored,
                 VisionType::Infared,
                 VisionType::XRay,
             ],
-            FeatureType::UpStairs => vec![
+            FeatureType::StairsUp => vec![
+                VisionType::BlackAndWhite,
+                VisionType::Colored,
+                VisionType::Infared,
+                VisionType::XRay,
+            ],
+            FeatureType::DoorClosed => vec![
+                VisionType::BlackAndWhite,
+                VisionType::Colored,
+                VisionType::Infared,
+                VisionType::XRay,
+            ],
+            FeatureType::DoorOpen => vec![
                 VisionType::BlackAndWhite,
                 VisionType::Colored,
                 VisionType::Infared,
@@ -61,13 +81,20 @@ impl FeatureType {
     pub fn vision_penetrates(&self) -> Vec<VisionType> {
         match self {
             FeatureType::None => vec![],
-            FeatureType::DownStairs => vec![
+            FeatureType::StairsDown => vec![
                 VisionType::BlackAndWhite,
                 VisionType::Colored,
                 VisionType::Infared,
                 VisionType::XRay,
             ],
-            FeatureType::UpStairs => vec![
+            FeatureType::StairsUp => vec![
+                VisionType::BlackAndWhite,
+                VisionType::Colored,
+                VisionType::Infared,
+                VisionType::XRay,
+            ],
+            FeatureType::DoorClosed => vec![VisionType::XRay],
+            FeatureType::DoorOpen => vec![
                 VisionType::BlackAndWhite,
                 VisionType::Colored,
                 VisionType::Infared,
@@ -75,32 +102,16 @@ impl FeatureType {
             ],
         }
     }
+}
 
-    pub const fn is_walkable(self) -> bool { matches!(self, Self::DownStairs) }
+impl From<FeatureType> for u8 {
+    fn from(value: FeatureType) -> Self {
+        ToPrimitive::to_u8(&value).expect("Failed to convert `TerrainType` to u8")
+    }
 }
 
 impl From<FeatureType> for u64 {
     fn from(value: FeatureType) -> Self {
         ToPrimitive::to_u64(&value).expect("Failed to convert `FeatureType` to u64")
-    }
-}
-
-impl From<FeatureType> for usize {
-    fn from(value: FeatureType) -> Self {
-        match value {
-            FeatureType::None => 0,
-            FeatureType::DownStairs => from_cp437('>'),
-            FeatureType::UpStairs => from_cp437('<'),
-        }
-    }
-}
-
-impl From<FeatureType> for Color {
-    fn from(value: FeatureType) -> Self {
-        match value {
-            FeatureType::None => Color::NONE,
-            FeatureType::DownStairs => Color::WHITE,
-            FeatureType::UpStairs => Color::WHITE,
-        }
     }
 }

@@ -33,7 +33,7 @@ impl MapLoader {
             return;
         }
 
-        match self.get_map_entity(world_position) {
+        let map_entity = match self.get_map_entity(world_position) {
             Some(map_entity) => map_entity,
             None => {
                 let map = Self::gen_map(
@@ -48,6 +48,8 @@ impl MapLoader {
                     world_position,
                 );
                 let map_entity = commands.spawn().insert(map).insert(CurrentMap).id();
+                commands.init_resource::<ChangeTheme>();
+
                 self.add_map_entity(world_position, map_entity);
                 map_entity
             }
@@ -56,6 +58,8 @@ impl MapLoader {
         for entity in q_current_map.iter() {
             commands.entity(entity).remove::<CurrentMap>();
         }
+
+        commands.entity(map_entity).insert(CurrentMap);
 
         // TODO: Unload far away maps
     }
@@ -76,12 +80,10 @@ impl MapLoader {
             .generate(&mut game_context.get_rng());
 
         let map = chain.get_map();
-
-        #[cfg(feature = "debug")]
-        {
-            use crate::debug::colorized::Colorized;
-            info!("{}", map.to_colorized_string());
-        }
         map
     }
+}
+
+impl Default for MapLoader {
+    fn default() -> Self { Self { maps: HashMap::new() } }
 }

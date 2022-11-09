@@ -1,0 +1,20 @@
+(
+    file: "tilesets/terminal8x8_transparent.png",
+    tile_width: 8.0,
+    tile_height: 8.0,
+    columns: 16,
+    rows: 16,
+    padding_x: None,
+    padding_y: None,
+    offset_x: None,
+    offset_y: None,
+    tile_templates: [
+        (
+            x: 0,
+            y: 0,
+            tile_type: 0,
+            foreground_color: None,
+            background_color: None,
+        ),
+    ],
+)

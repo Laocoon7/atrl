@@ -84,30 +84,14 @@ impl TerrainType {
     }
 }
 
+impl From<TerrainType> for u8 {
+    fn from(value: TerrainType) -> Self {
+        ToPrimitive::to_u8(&value).expect("Failed to convert `TerrainType` to u8")
+    }
+}
+
 impl From<TerrainType> for u64 {
     fn from(value: TerrainType) -> Self {
         ToPrimitive::to_u64(&value).expect("Failed to convert `TerrainType` to u64")
-    }
-}
-
-impl From<TerrainType> for usize {
-    fn from(value: TerrainType) -> Self {
-        match value {
-            TerrainType::None => 0,
-            TerrainType::Wall => from_cp437('#'),
-            TerrainType::Floor => from_cp437('.'),
-            TerrainType::Water => from_cp437('~'),
-        }
-    }
-}
-
-impl From<TerrainType> for Color {
-    fn from(value: TerrainType) -> Self {
-        match value {
-            TerrainType::None => Color::NONE,
-            TerrainType::Wall => Color::GREEN,
-            TerrainType::Floor => Color::GRAY,
-            TerrainType::Water => Color::BLUE,
-        }
     }
 }

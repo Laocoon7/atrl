@@ -1,0 +1,232 @@
+use crate::game::prelude::*;
+use bevy::ecs::system::SystemState;
+
+const TERRAIN_DIR: &str = "assets/tilesets/terrain/";
+const FEATURE_DIR: &str = "assets/tilesets/features/";
+const ITEM_DIR: &str = "assets/tilesets/items/";
+
+pub struct TileLoader {
+    pub terrain_themes: HashMap<String, Theme>,
+    pub feature_themes: HashMap<String, Theme>,
+    pub item_themes: HashMap<String, Theme>,
+}
+
+impl TileLoader {
+    pub fn get_terrain_theme(&self, theme_name: &str) -> Option<&Theme> {
+        if self.terrain_themes.contains_key(theme_name) {
+            Some(&self.terrain_themes[theme_name])
+        } else {
+            None
+        }
+    }
+
+    pub fn get_terrain_theme_or_default(&self, theme_name: &str) -> &Theme {
+        if let Some(theme) = self.get_terrain_theme(theme_name) {
+            theme
+        } else {
+            self.get_default_theme_terrain().expect("No default theme found!!!")
+        }
+    }
+
+    fn get_default_theme_terrain(&self) -> Option<&Theme> {
+        for theme in self.terrain_themes.values() {
+            return Some(theme);
+        }
+        None
+    }
+
+    pub fn get_feature_theme(&self, theme_name: &str) -> Option<&Theme> {
+        if self.feature_themes.contains_key(theme_name) {
+            Some(&self.feature_themes[theme_name])
+        } else {
+            None
+        }
+    }
+
+    pub fn get_feature_theme_or_default(&self, theme_name: &str) -> &Theme {
+        if let Some(theme) = self.get_feature_theme(theme_name) {
+            theme
+        } else {
+            self.get_default_theme_feature().expect("No default theme found!!!")
+        }
+    }
+
+    fn get_default_theme_feature(&self) -> Option<&Theme> {
+        for theme in self.feature_themes.values() {
+            return Some(theme);
+        }
+        None
+    }
+
+    pub fn get_item_theme(&self, theme_name: &str) -> Option<&Theme> {
+        if self.terrain_themes.contains_key(theme_name) {
+            Some(&self.terrain_themes[theme_name])
+        } else {
+            None
+        }
+    }
+
+    pub fn get_item_theme_or_default(&self, theme_name: &str) -> &Theme {
+        if let Some(theme) = self.get_item_theme(theme_name) {
+            theme
+        } else {
+            self.get_default_theme_item().expect("No default theme found!!!")
+        }
+    }
+
+    fn get_default_theme_item(&self) -> Option<&Theme> {
+        for theme in self.item_themes.values() {
+            return Some(theme);
+        }
+        None
+    }
+}
+
+impl FromWorld for TileLoader {
+    fn from_world(world: &mut World) -> Self {
+        let mut system_state: SystemState<(Res<AssetServer>, ResMut<Assets<TextureAtlas>>)> =
+            SystemState::new(world);
+        let (asset_server, mut atlases) = system_state.get_mut(world);
+
+        let terrain_themes = load_themes(TERRAIN_DIR, &asset_server, &mut atlases);
+        let feature_themes = load_themes(FEATURE_DIR, &asset_server, &mut atlases);
+        let item_themes = load_themes(ITEM_DIR, &asset_server, &mut atlases);
+
+        info!("TerrainThemes Loaded: {}", terrain_themes.len());
+        info!("FeatureThemes Loaded: {}", feature_themes.len());
+        info!("ItemThemes Loaded: {}", item_themes.len());
+
+        Self { terrain_themes, feature_themes, item_themes }
+    }
+}
+
+fn load_themes(
+    path: &str,
+    asset_server: &Res<AssetServer>,
+    atlases: &mut ResMut<Assets<TextureAtlas>>,
+) -> HashMap<String, Theme> {
+    let mut texture_atlases = HashMap::new();
+
+    let mut default_name_count = 0;
+
+    match std::fs::read_dir(path) {
+        Ok(paths) => paths.filter_map(|x| x.ok()).for_each(|dir| {
+            let path = dir.path();
+            match path.extension() {
+                Some(ext) => {
+                    if ext == "ron" {
+                        let path_name = match path.file_name() {
+                            Some(n) => match n.to_str() {
+                                Some(n) => n.to_string(),
+                                None => {
+                                    let n = format!("Default{}", default_name_count);
+                                    default_name_count += 1;
+                                    n
+                                }
+                            },
+                            None => {
+                                let n = format!("Default{}", default_name_count);
+                                default_name_count += 1;
+                                n
+                            }
+                        };
+
+                        match std::fs::read_to_string(path) {
+                            Ok(contents) => {
+                                match ron::from_str::<TextureAtlasTemplate>(&contents) {
+                                    Ok(template) => {
+                                        texture_atlases.insert(path_name, template);
+                                    }
+                                    Err(e) => error!("{}", e),
+                                }
+                            }
+                            Err(e) => error!("{}", e),
+                        }
+                    }
+                }
+                None => (),
+            }
+        }),
+        Err(e) => error!("{}", e),
+    }
+
+    let mut themes = HashMap::new();
+
+    for (theme_name, texture_atlas) in texture_atlases.iter() {
+        // get image_handle
+        let image_handle = asset_server.load(&texture_atlas.file);
+
+        // load texture_atlas if necessary
+        // Find and get Handle<TextureAtlas> if exists
+        let mut atlas_handle = None;
+        for (id, atlas) in atlases.iter() {
+            if atlas.texture == image_handle {
+                let tmp: Handle<TextureAtlas> = Handle::weak(id);
+                atlas_handle = Some(tmp);
+                break;
+            }
+        }
+
+        // Build / Load new TextureAtlas if we didn't find one
+        if atlas_handle.is_none() {
+            let padding = Vec2::new(
+                texture_atlas.padding_x.unwrap_or(0.0),
+                texture_atlas.padding_y.unwrap_or(0.0),
+            );
+
+            let offset = Vec2::new(
+                texture_atlas.offset_x.unwrap_or(0.0),
+                texture_atlas.offset_y.unwrap_or(0.0),
+            );
+
+            let texture_atlas_handle = atlases.add(TextureAtlas::from_grid_with_padding(
+                image_handle,
+                Vec2::new(texture_atlas.tile_width, texture_atlas.tile_height),
+                texture_atlas.columns,
+                texture_atlas.rows,
+                padding,
+                offset,
+            ));
+
+            atlas_handle = Some(texture_atlas_handle);
+        }
+
+        match atlas_handle {
+            None => (),
+            Some(handle) => {
+                let mut theme = Theme { tiles: HashMap::new() };
+                for template in texture_atlas.tile_templates.iter() {
+                    let foreground_color = match &template.foreground_color {
+                        Some(color_definition) => Some(Color::rgba_u8(
+                            color_definition.r,
+                            color_definition.g,
+                            color_definition.b,
+                            color_definition.a,
+                        )),
+                        None => None,
+                    };
+
+                    let background_color = match &template.background_color {
+                        Some(color_definition) => Some(Color::rgba_u8(
+                            color_definition.r,
+                            color_definition.g,
+                            color_definition.b,
+                            color_definition.a,
+                        )),
+                        None => None,
+                    };
+
+                    let tile_definition = TileDefinition {
+                        index: (template.x, template.y).as_index(texture_atlas.columns),
+                        atlas: handle.clone(),
+                        foreground_color,
+                        background_color,
+                    };
+                    theme.tiles.insert(template.tile_type, tile_definition);
+                }
+                themes.insert(theme_name.clone(), theme);
+            }
+        }
+    }
+    themes
+}

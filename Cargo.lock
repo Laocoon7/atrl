@@ -203,6 +203,7 @@ dependencies = [
  "num-traits",
  "once_cell",
  "parking_lot 0.12.1",
+ "ron 0.8.0",
  "serde",
  "serde_json",
  "smart-default",
@@ -428,7 +429,7 @@ checksum = "3f7be9ee39085d8319d5cd853447b0b5c4f8b4bfd647aec91e2bd996e9db67ef"
 dependencies = [
  "anyhow",
  "bevy 0.8.1",
- "ron",
+ "ron 0.7.1",
  "serde",
 ]
 
@@ -439,7 +440,7 @@ source = "git+https://github.com/NiklasEi/bevy_common_assets#b9b81232484ca76915b
 dependencies = [
  "anyhow",
  "bevy 0.8.1",
- "ron",
+ "ron 0.7.1",
  "serde",
  "serde_json",
  "toml",
@@ -1147,7 +1148,7 @@ dependencies = [
  "bevy_render 0.8.1",
  "bevy_transform 0.8.1",
  "bevy_utils 0.8.1",
- "ron",
+ "ron 0.7.1",
  "serde",
  "thiserror",
  "uuid",
@@ -3569,6 +3570,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "ron"
+version = "0.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "300a51053b1cb55c80b7a9fde4120726ddf25ca241a1cbb926626f62fb136bff"
+dependencies = [
+ "base64",
+ "bitflags",
+ "serde",
+]
+
+[[package]]
 name = "rustc-hash"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4332,7 +4344,7 @@ dependencies = [
  "parking_lot 0.12.1",
  "profiling",
  "raw-window-handle 0.4.3",
- "ron",
+ "ron 0.7.1",
  "serde",
  "smallvec",
  "thiserror",

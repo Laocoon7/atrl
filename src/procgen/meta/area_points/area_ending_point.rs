@@ -65,6 +65,6 @@ impl<S: Size2d> AreaEndingPosition<S> {
         }
 
         available_floors.sort_by(|a, b| a.1.partial_cmp(&b.1).unwrap());
-        builder.feature_grid[available_floors[0].0] = FeatureType::DownStairs;
+        builder.feature_grid[available_floors[0].0] = FeatureType::StairsDown;
     }
 }

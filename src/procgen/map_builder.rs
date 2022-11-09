@@ -39,6 +39,12 @@ impl<S: Size2d> MapBuilder<S> {
 
 impl<S: Size2d> From<MapBuilder<S>> for Map {
     fn from(builder: MapBuilder<S>) -> Self {
-        Self::new(builder.size, builder.world_position, builder.terrain_grid)
+        Self::new(
+            builder.size,
+            builder.world_position,
+            builder.terrain_grid,
+            Grid::new_copy(builder.size, FeatureType::None),
+            Grid::new_clone(builder.size, Vec::new()),
+        )
     }
 }

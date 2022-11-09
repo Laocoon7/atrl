@@ -1,5 +1,5 @@
 (
-    file: "assets/tilesets/terminal8x8_transparent.png",
+    file: "tilesets/terminal8x8_transparent.png",
     tile_width: 8.0,
     tile_height: 8.0,
     columns: 16,
@@ -8,18 +8,18 @@
     padding_y: None,
     offset_x: None,
     offset_y: None,
-    terrain_templates: [
+    tile_templates: [
         (
             x: 0,
             y: 0,
-            tile_type: None,
+            tile_type: 0,
             foreground_color: None,
             background_color: None,
         ),
         (
             x: 3,
             y: 2,
-            tile_type: Wall,
+            tile_type: 1,
             foreground_color: Some((
                 r: 255,
                 g: 255,
@@ -36,7 +36,7 @@
         (
             x: 14,
             y: 2,
-            tile_type: Floor,
+            tile_type: 2,
             foreground_color: Some((
                 r: 45,
                 g: 45,
@@ -53,7 +53,7 @@
         (
             x: 14,
             y: 7,
-            tile_type: Water,
+            tile_type: 3,
             foreground_color: Some((
                 r: 45,
                 g: 45,
@@ -70,7 +70,7 @@
         (
             x: 3,
             y: 2,
-            tile_type: Boulder,
+            tile_type: 5,
             foreground_color: Some((
                 r: 85,
                 g: 60,
@@ -87,7 +87,7 @@
         (
             x: 3,
             y: 2,
-            tile_type: Tree,
+            tile_type: 4,
             foreground_color: Some((
                 r: 45,
                 g: 255,

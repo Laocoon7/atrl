@@ -22,24 +22,14 @@ pub enum ItemType {
     None,
 }
 
+impl From<ItemType> for u8 {
+    fn from(value: ItemType) -> Self {
+        ToPrimitive::to_u8(&value).expect("Failed to convert `TerrainType` to u8")
+    }
+}
+
 impl From<ItemType> for u64 {
     fn from(value: ItemType) -> Self {
         ToPrimitive::to_u64(&value).expect("Failed to convert `ItemType` to u64")
-    }
-}
-
-impl From<ItemType> for usize {
-    fn from(value: ItemType) -> Self {
-        match value {
-            ItemType::None => 0,
-        }
-    }
-}
-
-impl From<ItemType> for Color {
-    fn from(value: ItemType) -> Self {
-        match value {
-            ItemType::None => Color::NONE,
-        }
     }
 }
