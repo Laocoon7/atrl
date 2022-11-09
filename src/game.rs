@@ -75,6 +75,8 @@ mod map {
     pub use map_plugin::*;
     mod map;
     pub use map::*;
+    mod terrain_type;
+    pub use terrain_type::*;
 }
 
 mod raws {

@@ -11,7 +11,7 @@ pub struct MapBuilder<S: Size2d> {
     pub size: S,
     pub world_position: WorldPosition,
     pub name: String,
-    pub grid: Grid<TileType>,
+    pub grid: Grid<TerrainType>,
     pub rooms: Option<Vec<Rectangle>>,
     pub starting_position: Option<IVec2>,
     pub spawn_list: Vec<(IVec2, String)>,

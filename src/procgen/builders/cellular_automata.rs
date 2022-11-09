@@ -71,28 +71,28 @@ impl<S: Size2d> CellularAutomataArchitect<S> {
 }
 
 impl<S: Size2d> CellularAutomataArchitect<S> {
-    fn random_noise_map(&mut self, grid: &mut Grid<TileType>, rng: &mut Random) {
+    fn random_noise_map(&mut self, grid: &mut Grid<TerrainType>, rng: &mut Random) {
         grid.iter_mut().for_each(|t| {
             let roll = rng.prng.range(0..100);
             if roll > self.start_floor_percent {
-                *t = TileType::Floor;
+                *t = TerrainType::Floor;
             } else {
-                *t = TileType::Wall;
+                *t = TerrainType::Wall;
             }
         });
     }
 
-    fn iteration(&mut self, map: &mut Grid<TileType>) {
+    fn iteration(&mut self, map: &mut Grid<TerrainType>) {
         let mut new_tiles = map.clone();
 
         for y in 1..map.height() as i32 - 1 {
             for x in 1..map.width() as i32 - 1 {
-                let neighbors = map.count_neighbors((x, y), TileType::Wall);
+                let neighbors = map.count_neighbors((x, y), TerrainType::Wall);
 
                 if neighbors > 4 || neighbors == 0 {
-                    new_tiles.set((x, y), TileType::Wall);
+                    new_tiles.set((x, y), TerrainType::Wall);
                 } else {
-                    new_tiles.set((x, y), TileType::Floor);
+                    new_tiles.set((x, y), TerrainType::Floor);
                 }
             }
         }

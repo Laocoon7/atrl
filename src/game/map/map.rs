@@ -1,62 +1,31 @@
-use crate::prelude::*;
-
-use num_derive::{FromPrimitive, ToPrimitive};
-use num_traits::ToPrimitive;
-
-#[derive(
-    Debug,
-    Default,
-    FromPrimitive,
-    ToPrimitive,
-    Clone,
-    Copy,
-    Hash,
-    PartialEq,
-    Eq,
-    Serialize,
-    Deserialize,
-)]
-#[repr(u8)]
-pub enum TileType {
-    #[default]
-    Wall,
-    Floor,
-    DownStairs,
-}
-
-impl TileType {
-    pub const fn is_wall(self) -> bool { matches!(self, Self::Wall) }
-    pub const fn is_floor(self) -> bool { matches!(self, Self::Floor) }
-    pub const fn is_walkable(self) -> bool { matches!(self, Self::Floor | Self::DownStairs) }
-}
-
-impl From<TileType> for u64 {
-    fn from(value: TileType) -> Self {
-        ToPrimitive::to_u64(&value).expect("Failed to convert `TileType` to u64")
-    }
-}
+use crate::game::prelude::*;
 
 #[derive(Component)]
 pub struct Map {
     /*
-        image_index: Grid<usize>,
-        image_color: Grid<Color>,
-        image_color_background: Grid<Color>,
-        required_movement: Grid<Vec<MovementType>>,
-        required_vision_to_see: Grid<Vec<VisionType>>,
-        required_vision_to_see_through: Grid<Vec<VisionType>>,
+    image_index: Grid<usize>,
+    image_color_background: Grid<Color>,
+    required_movement: Grid<Vec<MovementType>>,
+    required_vision_to_see: Grid<Vec<VisionType>>,
+    required_vision_to_see_through: Grid<Vec<VisionType>>,
     */
     pub size: UVec2,
     pub world_position: WorldPosition,
-    pub tile_types: Grid<TileType>,
+
+    pub terrain_types: Grid<TerrainType>,
+    pub terrain_color: Grid<Option<Color>>,
+    pub terrain_background_color: Grid<Option<Color>>,
+    pub terrain_atlas: Grid<Option<Handle<TextureAtlas>>>,
+
     pub update_tiles: Vec<UVec2>,
+    pub update_all: bool,
 }
 
 impl Map {
     pub fn new(
         size: impl Size2d,
         world_position: WorldPosition,
-        tile_types: Grid<TileType>,
+        terrain_types: Grid<TerrainType>,
     ) -> Self {
         /*
                     tile_types: Grid::new_default(size),
@@ -67,6 +36,19 @@ impl Map {
                     required_vision_to_see: Grid::new_default(size),
                     required_vision_to_see_through: Grid::new_default(size),
         */
-        Self { size: size.as_uvec2(), world_position, tile_types, update_tiles: Vec::new() }
+        Self {
+            size: size.as_uvec2(),
+            world_position,
+
+            // Terrain Layer
+            terrain_types,
+            terrain_color: Grid::new_copy(size, None),
+            terrain_background_color: Grid::new_copy(size, None),
+            terrain_atlas: Grid::new_clone(size, None),
+
+            // Internal render fields
+            update_tiles: Vec::new(),
+            update_all: true,
+        }
     }
 }

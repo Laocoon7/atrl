@@ -46,7 +46,7 @@ where
 
         for (&seen_cell, map_cell) in seen.iter().zip(builder.grid.iter_mut()) {
             if !seen_cell && map_cell.is_floor() {
-                *map_cell = TileType::Wall;
+                *map_cell = TerrainType::Wall;
             }
         }
     }

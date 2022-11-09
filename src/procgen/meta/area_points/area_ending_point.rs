@@ -1,5 +1,5 @@
 use crate::{
-    game::prelude::TileType,
+    game::prelude::TerrainType,
     procgen::{MapArchitect, MapBuilder},
     *,
 };
@@ -66,6 +66,6 @@ impl<S: Size2d> AreaEndingPosition<S> {
         }
 
         available_floors.sort_by(|a, b| a.1.partial_cmp(&b.1).unwrap());
-        builder.grid[available_floors[0].0] = TileType::DownStairs
+        builder.grid[available_floors[0].0] = TerrainType::DownStairs
     }
 }

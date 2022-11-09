@@ -33,7 +33,7 @@ impl MapLoader {
             return;
         }
 
-        let map_entity = match self.get_map_entity(world_position) {
+        match self.get_map_entity(world_position) {
             Some(map_entity) => map_entity,
             None => {
                 let map = Self::gen_map(
@@ -47,7 +47,9 @@ impl MapLoader {
                     .as_str(),
                     world_position,
                 );
-                commands.spawn().insert(map).insert(CurrentMap).id()
+                let map_entity = commands.spawn().insert(map).insert(CurrentMap).id();
+                self.add_map_entity(world_position, map_entity);
+                map_entity
             }
         };
 

@@ -61,14 +61,14 @@ impl Plugin for DebugPlugin {
 
 #[cfg(feature = "debug")]
 pub mod colorized {
-    use crate::prelude::{Map, TileType};
+    use crate::prelude::{Map, TerrainType};
     use colored::Colorize;
 
     pub trait Colorized {
         fn to_colorized_string(&self) -> String;
     }
 
-    impl Colorized for TileType {
+    impl Colorized for TerrainType {
         fn to_colorized_string(&self) -> String {
             format!(
                 "{}",
