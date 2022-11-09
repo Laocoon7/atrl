@@ -172,6 +172,7 @@ pub mod prelude {
 
     // Bevy Plugins
     pub use banana_bevy_utils::prelude::*;
+    pub use banana_bevy_utils::{state::*, switch_in_game_state};
     pub use bevy_inspector_egui::prelude::*; // For derive(Inspectable)
     pub use iyes_loopless::prelude::*;
 
@@ -194,4 +195,9 @@ pub mod prelude {
     pub use super::map::*;
     //pub use super::game_plugin::*; // only needed by main()
     pub use super::game_state::*;
+
+    pub use iyes_loopless;
+    pub use iyes_loopless::prelude::*;
+    pub use iyes_progress;
+    pub use iyes_progress::prelude::*;
 }

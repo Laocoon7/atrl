@@ -3,7 +3,6 @@ use crate::prelude::*;
 pub struct GamePlugin<T> {
     /// Asset loading happens in this state. When it finishes it transitions to
     /// [`state_construct`]
-    pub state_asset_load: T,
     pub state_construct: T,
     pub state_main_menu: T,
     pub state_running: T,

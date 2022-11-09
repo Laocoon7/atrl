@@ -13,7 +13,7 @@ pub struct MapRenderer {
 
 #[allow(dead_code)]
 impl MapRenderer {
-    pub fn build(size: impl Size2d, game_assets: &Res<GameAssets>, commands: &mut Commands) {
+    pub fn build(size: impl Size2d, game_assets: &Res<TextureAssets>, commands: &mut Commands) {
         let terrain_entities = Grid::new_fn(size, |index| {
             commands
                 .spawn_bundle(RenderTileBundle {

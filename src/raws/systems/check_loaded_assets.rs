@@ -1,26 +1,57 @@
 use crate::prelude::*;
 
+pub fn check_progress(
+    mut commands: Commands,
+    splash_timer: Res<SplashTimer>,
+    mut state: ResMut<CurrentGameState>,
+    progress_counter: Option<Res<ProgressCounter>>,
+) {
+    if let Some(progress_counter) = progress_counter {
+        let progress = progress_counter.progress();
+        let progress_perc: f32 = progress.into();
+        let progress_perc = if progress_perc.is_nan() { 0.0 } else { progress_perc };
+        let force_continue = progress.done == 0 && progress.total == 0;
+
+        if (progress_perc >= 1.0 && splash_timer.finished())
+            || (force_continue && splash_timer.finished())
+        {
+            info!("Assets loaded and splash timer complete!");
+            state.set_next(&mut commands);
+        }
+    }
+}
+
 pub fn check_loaded_assets(
-    game_assets: Res<GameAssets>,
-    font_assets: Res<FontAssets>,
+    mut commands: Commands,
     asset_server: Res<AssetServer>,
     image_assets: Res<Assets<Image>>,
     texture_atlases: Res<Assets<TextureAtlas>>,
+
+    font_assets: Res<FontAssets>,
+    game_assets: Res<TextureAssets>,
+
+    mut state: ResMut<CurrentGameState>,
 ) {
     use bevy::asset::LoadState;
 
     info!("Done loading the collection. Checking expectations...");
 
     // Did fonts load?
-    for handle in font_assets.julia_mono.iter() {
-        assert_eq!(asset_server.get_load_state(handle.clone()), LoadState::Loaded);
-    }
+    [
+        font_assets.julia_mono.clone(),
+        font_assets.julia_mono_bold.clone(),
+        font_assets.julia_mono_medium.clone(),
+    ]
+    .iter()
+    .for_each(|f| {
+        assert_eq!(asset_server.get_load_state(f.clone()), LoadState::Loaded);
+    });
 
-    // Did `terminal8x8 image` load?
+    // Did `white_pixel image` load?
     image_assets
-        .get(&game_assets.terminal8x8)
-        .expect("terminal8x8 should be added to its assets resource.");
-    assert_eq!(asset_server.get_load_state(game_assets.terminal8x8.clone()), LoadState::Loaded);
+        .get(&game_assets.white_pixel)
+        .expect("white_pixel should be added to its assets resource.");
+    assert_eq!(asset_server.get_load_state(game_assets.white_pixel.clone()), LoadState::Loaded);
 
     // Did `terminal8x8_atlas` load?
     let atlas = texture_atlases
@@ -29,4 +60,5 @@ pub fn check_loaded_assets(
     assert_eq!(asset_server.get_load_state(atlas.texture.clone()), LoadState::Loaded);
 
     info!("Everything looks good! Switching to the next state.");
+    state.set_next(&mut commands);
 }
