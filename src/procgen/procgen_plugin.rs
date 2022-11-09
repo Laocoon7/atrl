@@ -14,7 +14,7 @@ impl<S: StateNext> Plugin for ProcgenPlugin<S> {
 impl<S: StateNext> ProcgenPlugin<S> {
     fn setup(ctx: Res<GameContext>, mut commands: Commands, mut state: ResMut<CurrentState<S>>) {
         let (start_x, start_y) = random_start_position(&mut ctx.get_rng());
-        let chain = BuilderChain::new(0, [125, 125], "New Map")
+        let chain = BuilderChain::new(0, [80, 50], "New Map")
             .start_with(CellularAutomataArchitect::new())
             .with(RoomMapArchitect::new())
             .with(AreaStartingPosition::new(start_x, start_y))

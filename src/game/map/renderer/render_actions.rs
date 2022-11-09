@@ -5,7 +5,6 @@ pub struct RenderActions {
     pub actions: Vec<RenderAction>,
 }
 
-// feel free to add this back if needed
 #[allow(clippy::enum_variant_names)]
 pub enum RenderAction {
     SetAtlasIndex(Entity, usize),

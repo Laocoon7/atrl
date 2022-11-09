@@ -2,7 +2,7 @@
 db-path = "~/.cargo/advisory-db"
 db-urls = ["https://github.com/rustsec/advisory-db"]
 ignore = [
-    "RUSTSEC-2020-0056", # from cpal v0.14.1 - unmaintained - https://github.com/koute/stdweb/issues/403
+    "RUSTSEC-2022-0048", # from xml-rs v0.8.4 - unmaintained - https://github.com/netvl/xml-rs/issues/221
 ]
 notice = "deny"
 unmaintained = "deny"
@@ -21,6 +21,7 @@ allow = [
     "BSD-2-Clause",
     "CC0-1.0",
     "BSL-1.0",
+    "BlueOak-1.0.0",
 ]
 copyleft = "deny"
 default = "deny"
@@ -36,29 +37,22 @@ unlicensed = "deny"
 
 [bans]
 highlight         = "all"
-multiple-versions = "deny"
-wildcards         = "deny"
+multiple-versions = "allow"
+wildcards         = "allow"
 # Certain crates/versions that will be skipped when doing duplicate detection.
 skip = [
-    { name = "ndk-sys", version = "0.3" },               # from rodio v0.16.0
-    { name = "ndk", version = "0.6" },                   # from rodio v0.16.0
-    { name = "raw-window-handle", version = "0.4" },     # from winit v0.27.4
-    { name = "nix", version = "0.24" },                  # from cpal v0.14.1
-    { name = "windows_aarch64_msvc", version = "0.36" }, # from notify v5.0.0
-    { name = "windows_i686_gnu", version = "0.36" },     # from notify v5.0.0
-    { name = "windows_i686_msvc", version = "0.36" },    # from notify v5.0.0
-    { name = "windows_x86_64_gnu", version = "0.36" },   # from notify v5.0.0
-    { name = "windows_x86_64_msvc", version = "0.36" },  # from notify v5.0.0
-    { name = "windows-sys", version = "0.36" },          # from notify v5.0.0
-    { name = "windows_aarch64_msvc", version = "0.37" }, # from rodio v0.16.0
-    { name = "windows_i686_gnu", version = "0.37" },     # from rodio v0.16.0
-    { name = "windows_i686_msvc", version = "0.37" },    # from rodio v0.16.0
-    { name = "windows_x86_64_gnu", version = "0.37" },   # from rodio v0.16.0
-    { name = "windows_x86_64_msvc", version = "0.37" },  # from rodio v0.16.0
+    { name = "rand_core", version = "0.6" },
+    { name = "rand", version = "0.8" },
+    { name = "rand_chacha", version = "0.3" },
+    { name = "wasi", version = "0.11" },
+    { name = "png", version = "0.17" },
+    { name = "parking_lot", version = "0.12" },
+    { name = "nix", version = "0.24" },
+
 ]
 
 [sources]
 allow-git        = []
 allow-registry   = ["https://github.com/rust-lang/crates.io-index"]
-unknown-git      = "deny"
+unknown-git      = "allow"
 unknown-registry = "deny"

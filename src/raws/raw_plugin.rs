@@ -43,12 +43,10 @@ impl<T: StateNext> Plugin for RawPlugin<T> {
 }
 
 fn expectations(
-    mut commands: Commands,
     game_assets: Res<GameAssets>,
     font_assets: Res<FontAssets>,
     asset_server: Res<AssetServer>,
     image_assets: Res<Assets<Image>>,
-    mut state: ResMut<CurrentGameState>,
     texture_atlases: Res<Assets<TextureAtlas>>,
 ) {
     use bevy::asset::LoadState;
@@ -73,5 +71,4 @@ fn expectations(
     assert_eq!(asset_server.get_load_state(atlas.texture.clone()), LoadState::Loaded);
 
     info!("Everything looks good! Switching to the next state.");
-    state.set_next(&mut commands);
 }
