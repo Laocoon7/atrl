@@ -29,13 +29,21 @@ use debug::*;
 mod game;
 use game::{prelude::GameState, *};
 
-mod raws {
+pub mod raws {
+    mod systems {
+        mod check_loaded_assets;
+        pub use check_loaded_assets::*;
+    }
+    mod font_assets;
+    pub use font_assets::*;
+    mod game_assets;
+    pub use game_assets::*;
     mod raw_plugin;
     pub use raw_plugin::*;
 }
 use raws::*;
 
-mod procgen {
+pub mod procgen {
     mod builder_chain;
     mod common;
     mod map_builder;

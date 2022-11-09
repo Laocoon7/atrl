@@ -133,14 +133,6 @@ mod systems {
     pub use perform_healing::*;
 }
 
-mod procgen {
-    pub use crate::procgen::*;
-}
-
-mod raws {
-    pub use crate::raws::*;
-}
-
 mod game_context;
 mod game_plugin;
 pub use game_plugin::*; // pub use for main()
@@ -160,6 +152,10 @@ pub mod prelude {
     pub use serde::{Deserialize, Serialize};
     pub use serde_json;
 
+    // Our external Crates
+    pub use crate::procgen::*;
+    pub use crate::raws::*;
+
     // local
     pub use super::abilities::*;
     pub use super::actors::*;
@@ -168,8 +164,6 @@ pub mod prelude {
     pub use super::game_context::*;
     pub use super::items::*;
     pub use super::map::*;
-    pub use super::procgen::*;
-    pub use super::raws::*;
     //pub use super::game_plugin::*; // only needed by main()
     pub use super::game_state::*;
 }
