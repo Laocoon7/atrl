@@ -20,6 +20,14 @@ mod components {
     }
     pub use movement::*;
 
+    mod position {
+        mod local_position;
+        pub use local_position::*;
+        mod world_position;
+        pub use world_position::*;
+    }
+    pub use position::*;
+
     mod vision {
         mod vision_type;
         pub use vision_type::*;
@@ -31,31 +39,14 @@ mod components {
 
 mod map {
     mod loader {
-        mod systems {}
-        pub use systems::*;
-
         mod current_map;
         pub use current_map::*;
-        mod map_loader_plugin;
-        pub use map_loader_plugin::*;
         mod map_loader;
         pub use map_loader::*;
     }
     pub use loader::*;
 
     mod renderer {
-        mod systems {
-            mod create_renderer;
-            pub use create_renderer::*;
-            mod draw_map_tiles;
-            pub use draw_map_tiles::*;
-            mod update_map_tiles;
-            pub use update_map_tiles::*;
-        }
-        pub use systems::*;
-
-        mod map_renderer_plugin;
-        pub use map_renderer_plugin::*;
         mod map_renderer;
         pub use map_renderer::*;
         mod render_actions;
@@ -67,8 +58,16 @@ mod map {
     }
     pub use renderer::*;
 
-    mod systems {}
-    pub use systems::*;
+    mod systems {
+        mod create_renderer;
+        pub use create_renderer::*;
+        mod draw_map_tiles;
+        pub use draw_map_tiles::*;
+        mod load_first_map;
+        pub use load_first_map::*;
+        mod update_map_tiles;
+        pub use update_map_tiles::*;
+    }
 
     mod map_layer;
     pub use map_layer::*;

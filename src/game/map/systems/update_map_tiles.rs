@@ -4,7 +4,6 @@ use crate::prelude::*;
 pub fn update_map_tiles(
     mut commands: Commands,
     keys: Res<Input<KeyCode>>,
-    _current_map: Res<CurrentMap>,
     renderer: Res<MapRenderer>,
 ) {
     if keys.pressed(KeyCode::Space) {

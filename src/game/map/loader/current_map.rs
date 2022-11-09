@@ -1,3 +1,4 @@
 use crate::game::prelude::*;
 
-pub struct CurrentMap(pub Map);
+#[derive(Component)]
+pub struct CurrentMap;

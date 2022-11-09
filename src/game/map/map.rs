@@ -36,6 +36,7 @@ impl From<TileType> for u64 {
     }
 }
 
+#[derive(Component)]
 pub struct Map {
     /*
         image_index: Grid<usize>,
@@ -46,29 +47,26 @@ pub struct Map {
         required_vision_to_see_through: Grid<Vec<VisionType>>,
     */
     pub size: UVec2,
+    pub world_position: WorldPosition,
     pub tile_types: Grid<TileType>,
     pub update_tiles: Vec<UVec2>,
 }
 
 impl Map {
-    pub fn new(size: impl Size2d) -> Self {
-        Self {
-            /*
-                        tile_types: Grid::new_default(size),
-                        image_index: Grid::new_default(size),
-                        image_color: Grid::new_copy(size, Color::WHITE),
-                        image_color_background: Grid::new_copy(size, Color::BLACK),
-                        required_movement: Grid::new_default(size),
-                        required_vision_to_see: Grid::new_default(size),
-                        required_vision_to_see_through: Grid::new_default(size),
-            */
-            size: size.as_uvec2(),
-            update_tiles: Vec::new(),
-            tile_types: Grid::new_default(size),
-        }
-    }
-
-    pub fn new_with_tiles(size: impl Size2d, tile_types: Grid<TileType>) -> Self {
-        Self { tile_types, size: size.as_uvec2(), update_tiles: Vec::new() }
+    pub fn new(
+        size: impl Size2d,
+        world_position: WorldPosition,
+        tile_types: Grid<TileType>,
+    ) -> Self {
+        /*
+                    tile_types: Grid::new_default(size),
+                    image_index: Grid::new_default(size),
+                    image_color: Grid::new_copy(size, Color::WHITE),
+                    image_color_background: Grid::new_copy(size, Color::BLACK),
+                    required_movement: Grid::new_default(size),
+                    required_vision_to_see: Grid::new_default(size),
+                    required_vision_to_see_through: Grid::new_default(size),
+        */
+        Self { size: size.as_uvec2(), world_position, tile_types, update_tiles: Vec::new() }
     }
 }

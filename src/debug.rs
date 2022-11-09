@@ -39,8 +39,10 @@ impl Plugin for DebugPlugin {
 
             // Inspector Egui
             app.add_plugin(WorldInspectorPlugin::new())
-                .register_inspectable::<VisionType>()
-                .register_inspectable::<MovementType>();
+                .register_inspectable::<MovementType>()
+                .register_inspectable::<LocalPosition>()
+                .register_inspectable::<WorldPosition>()
+                .register_inspectable::<VisionType>();
 
             app.add_stage_after(
                 CoreStage::PostUpdate,

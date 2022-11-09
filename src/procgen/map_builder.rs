@@ -1,3 +1,5 @@
+use atrl_engine::bevy_ecs::world;
+
 use crate::prelude::*;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -7,7 +9,7 @@ use crate::prelude::*;
 #[derive(Debug, Clone)]
 pub struct MapBuilder<S: Size2d> {
     pub size: S,
-    pub level: u32,
+    pub world_position: WorldPosition,
     pub name: String,
     pub grid: Grid<TileType>,
     pub rooms: Option<Vec<Rectangle>>,
@@ -17,10 +19,10 @@ pub struct MapBuilder<S: Size2d> {
 }
 
 impl<S: Size2d> MapBuilder<S> {
-    pub fn new<Str: ToString>(size: S, level: u32, name: Str) -> Self {
+    pub fn new<Str: ToString>(size: S, world_position: WorldPosition, name: Str) -> Self {
         Self {
             size,
-            level,
+            world_position,
             rooms: None,
             corridors: None,
             name: name.to_string(),
@@ -34,5 +36,7 @@ impl<S: Size2d> MapBuilder<S> {
 ////////////////////////////////////////////////////////////////////////////////
 
 impl<S: Size2d> From<MapBuilder<S>> for Map {
-    fn from(builder: MapBuilder<S>) -> Self { Self::new_with_tiles(builder.size, builder.grid) }
+    fn from(builder: MapBuilder<S>) -> Self {
+        Self::new(builder.size, builder.world_position, builder.grid)
+    }
 }

@@ -20,21 +20,21 @@ pub trait MapArchitect<S: Size2d> {
 ////////////////////////////////////////////////////////////////////////////////
 
 pub struct BuilderChain<S: Size2d> {
-    pub level: u32,
     pub map_name: String,
+    pub world_position: WorldPosition,
     pub map_builder: MapBuilder<S>,
     builders: Vec<Box<dyn MapArchitect<S>>>,
     starter: Option<Box<dyn InitialMapArchitect<S>>>,
 }
 
 impl<S: Size2d> BuilderChain<S> {
-    pub fn new<Str: ToString>(level: u32, size: S, name: Str) -> Self {
+    pub fn new<Str: ToString>(size: S, world_position: WorldPosition, name: Str) -> Self {
         Self {
-            level,
+            map_name: name.to_string(),
+            world_position,
             starter: None,
             builders: Vec::new(),
-            map_name: name.to_string(),
-            map_builder: MapBuilder::new(size, level, name),
+            map_builder: MapBuilder::new(size, world_position, name),
         }
     }
 
