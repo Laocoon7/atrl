@@ -199,6 +199,8 @@ dependencies = [
  "banana_bevy_utils",
  "bevy_asset_loader",
  "colored",
+ "iyes_loopless",
+ "iyes_progress",
  "num-derive",
  "num-traits",
  "once_cell",
@@ -222,7 +224,6 @@ dependencies = [
  "bevy_mod_debugdump",
  "bevy_tweening",
  "big-brain",
- "iyes_loopless",
  "rayon",
 ]
 
@@ -407,6 +408,7 @@ dependencies = [
  "bevy_asset_loader_derive",
  "bevy_common_assets 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "iyes_loopless",
+ "iyes_progress",
  "serde",
 ]
 
@@ -2505,6 +2507,19 @@ dependencies = [
  "bevy_ecs 0.8.1",
  "bevy_time 0.8.1",
  "bevy_utils 0.8.1",
+]
+
+[[package]]
+name = "iyes_progress"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9eaeccd2b11ae5271bf1fe04c94915b61cb1697fbba97dd313f5844381c57c38"
+dependencies = [
+ "bevy_app 0.8.1",
+ "bevy_asset 0.8.1",
+ "bevy_ecs 0.8.1",
+ "bevy_utils 0.8.1",
+ "iyes_loopless",
 ]
 
 [[package]]

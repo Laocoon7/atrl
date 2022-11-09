@@ -79,8 +79,6 @@ pub mod colorized {
                     Self::Wall => "#".bright_yellow(),
                     Self::Floor => ".".bright_green(),
                     Self::Water => "~".bright_blue(),
-                    Self::DownStairs => ">".bright_blue(),
-                    Self::UpStairs => ">".bright_blue(),
                 }
             )
         }

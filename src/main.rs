@@ -1,7 +1,15 @@
 #![warn(clippy::nursery, clippy::all)]
 #![allow(clippy::type_complexity)] // Bevy can have complex queries, so we shush clippy
 
-use banana_bevy_utils::switch_in_game_state;
+use game::prelude::{
+    *,
+    {AssetLoadStates::*, ConstructStates::*, GameState, UiStates::*},
+};
+
+use atrl_engine::{
+    bevy::render::texture::ImageSettings,
+    bevy_window::{PresentMode, WindowResizeConstraints},
+};
 
 pub mod app_settings {
     /// Long name
@@ -27,13 +35,17 @@ mod debug;
 use debug::*;
 
 mod game;
-use game::{prelude::GameState, *};
+use game::*;
 
 pub mod raws {
     mod systems {
         mod check_loaded_assets;
+        mod splash;
         pub use check_loaded_assets::*;
+        pub use splash::*;
     }
+    pub use systems::*;
+
     mod font_assets;
     pub use font_assets::*;
     mod game_assets;
@@ -41,7 +53,6 @@ pub mod raws {
     mod raw_plugin;
     pub use raw_plugin::*;
 }
-use raws::*;
 
 pub mod procgen {
     mod builder_chain;
@@ -72,18 +83,6 @@ pub mod procgen {
     pub use procgen_plugin::*;
 }
 
-mod ui {
-    mod splash;
-    pub use splash::*;
-}
-use ui::*;
-
-use atrl_engine::{
-    bevy::render::texture::ImageSettings,
-    bevy_window::{PresentMode, WindowResizeConstraints},
-    *,
-};
-
 fn main() {
     let mut app = App::new();
     // Default Plugins
@@ -111,24 +110,25 @@ fn main() {
     // set entry state
     app.add_loopless_state(GameState::default());
 
-    app.add_plugin(SplashPlugin { state_splash: GameState::SplashScreen, ..Default::default() });
-
     // asset loading
     app.add_plugin(RawPlugin {
-        state_asset_load: GameState::AssetLoad,
-        state_construct: GameState::Construct,
+        state_asset_load: GameState::AssetLoadStates(Load),
+        state_asset_check: GameState::AssetLoadStates(LoadCheck),
+        state_asset_load_failure: GameState::AssetLoadStates(LoadFailure),
     });
 
     // game related
     app.add_plugin(GamePlugin {
-        state_asset_load: GameState::AssetLoad,
-        state_construct: GameState::Construct,
-        state_main_menu: GameState::MainMenu,
+        state_construct: GameState::ConstructStates(MapGen),
+        state_main_menu: GameState::UiStates(MainMenu),
         state_running: GameState::InGame,
     });
 
     // `AppState::Initializing` is a buffer state to allow bevy plugins to initialize
-    app.add_enter_system(GameState::default(), switch_in_game_state!(GameState::SplashScreen));
+    app.add_enter_system(
+        GameState::default(),
+        switch_in_game_state!(GameState::default().next().unwrap()),
+    );
 
     app.run();
 }
