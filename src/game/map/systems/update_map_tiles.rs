@@ -53,27 +53,22 @@ fn update_tile(
         None => TerrainType::None,
     };
 
-    if let Some(tile) = terrain_theme.get_tile_definition(terrain_type.into()) {
-        let terrain_index = tile.index;
-        let terrain_color = match tile.foreground_color {
-            Some(color) => color,
-            None => Color::WHITE,
-        };
+    terrain_theme.get_tile_definition(terrain_type.into()).map_or_else(
+        || {
+            error!("Theme is missing TerrainType::{}", u8::from(terrain_type));
+        },
+        |tile| {
+            let terrain_index = tile.index;
+            let terrain_color = tile.foreground_color.map_or(Color::WHITE, |color| color);
+            let terrain_background_color = tile.background_color.map_or(Color::NONE, |color| color);
+            let terrain_atlas = tile.atlas.clone();
 
-        let terrain_background_color = match tile.background_color {
-            Some(color) => color,
-            None => Color::NONE,
-        };
-
-        let terrain_atlas = tile.atlas.clone();
-
-        render_context.set_atlas(MapLayer::Terrain, index, terrain_atlas);
-        render_context.set_index(MapLayer::Terrain, index, terrain_index);
-        render_context.set_foreground_color(MapLayer::Terrain, index, terrain_color);
-        render_context.set_background_color(MapLayer::Terrain, index, terrain_background_color);
-    } else {
-        error!("Theme is missing TerrainType::{}", u8::from(terrain_type));
-    }
+            render_context.set_atlas(MapLayer::Terrain, index, terrain_atlas);
+            render_context.set_index(MapLayer::Terrain, index, terrain_index);
+            render_context.set_foreground_color(MapLayer::Terrain, index, terrain_color);
+            render_context.set_background_color(MapLayer::Terrain, index, terrain_background_color);
+        },
+    );
 
     // FEATURES
 
@@ -82,54 +77,48 @@ fn update_tile(
         None => FeatureType::None,
     };
 
-    if let Some(tile) = feature_theme.get_tile_definition(feature_type.into()) {
-        let feature_index = tile.index;
-        let feature_color = match tile.foreground_color {
-            Some(color) => color,
-            None => Color::WHITE,
-        };
+    feature_theme.get_tile_definition(feature_type.into()).map_or_else(
+        || {
+            error!("Theme is missing FeatureType::{}", u8::from(feature_type));
+        },
+        |tile| {
+            let feature_index = tile.index;
+            let feature_color = tile.foreground_color.map_or(Color::WHITE, |color| color);
+            let feature_background_color = tile.background_color.map_or(Color::NONE, |color| color);
+            let feature_atlas = tile.atlas.clone();
 
-        let feature_background_color = match tile.background_color {
-            Some(color) => color,
-            None => Color::NONE,
-        };
-
-        let feature_atlas = tile.atlas.clone();
-
-        render_context.set_atlas(MapLayer::Features, index, feature_atlas);
-        render_context.set_index(MapLayer::Features, index, feature_index);
-        render_context.set_foreground_color(MapLayer::Features, index, feature_color);
-        render_context.set_background_color(MapLayer::Features, index, feature_background_color);
-    } else {
-        error!("Theme is missing FeatureType::{}", u8::from(feature_type));
-    }
+            render_context.set_atlas(MapLayer::Features, index, feature_atlas);
+            render_context.set_index(MapLayer::Features, index, feature_index);
+            render_context.set_foreground_color(MapLayer::Features, index, feature_color);
+            render_context.set_background_color(
+                MapLayer::Features,
+                index,
+                feature_background_color,
+            );
+        },
+    );
 
     // ITEMS
 
-    let item_type = match map.item_types.get(index) {
-        Some(item_types) => *item_types.first().unwrap_or(&ItemType::None),
-        None => ItemType::None,
-    };
+    let item_type = map
+        .item_types
+        .get(index)
+        .map_or(ItemType::None, |item_types| *item_types.first().unwrap_or(&ItemType::None));
 
-    if let Some(tile) = item_theme.get_tile_definition(item_type.into()) {
-        let item_index = tile.index;
-        let item_color = match tile.foreground_color {
-            Some(color) => color,
-            None => Color::WHITE,
-        };
+    item_theme.get_tile_definition(item_type.into()).map_or_else(
+        || {
+            error!("Theme is missing itemType::{}", u8::from(item_type));
+        },
+        |tile| {
+            let item_index = tile.index;
+            let item_color = tile.foreground_color.map_or(Color::WHITE, |color| color);
+            let item_background_color = tile.background_color.map_or(Color::NONE, |color| color);
+            let item_atlas = tile.atlas.clone();
 
-        let item_background_color = match tile.background_color {
-            Some(color) => color,
-            None => Color::NONE,
-        };
-
-        let item_atlas = tile.atlas.clone();
-
-        render_context.set_atlas(MapLayer::Items, index, item_atlas);
-        render_context.set_index(MapLayer::Items, index, item_index);
-        render_context.set_foreground_color(MapLayer::Items, index, item_color);
-        render_context.set_background_color(MapLayer::Items, index, item_background_color);
-    } else {
-        error!("Theme is missing itemType::{}", u8::from(item_type));
-    }
+            render_context.set_atlas(MapLayer::Items, index, item_atlas);
+            render_context.set_index(MapLayer::Items, index, item_index);
+            render_context.set_foreground_color(MapLayer::Items, index, item_color);
+            render_context.set_background_color(MapLayer::Items, index, item_background_color);
+        },
+    )
 }

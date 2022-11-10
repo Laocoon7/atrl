@@ -1,6 +1,7 @@
 use crate::game::prelude::*;
 use bevy::ecs::system::SystemState;
 
+const RON_EXT: &str = "ron";
 const TERRAIN_DIR: &str = "assets/tilesets/terrain/";
 const FEATURE_DIR: &str = "assets/tilesets/features/";
 const ITEM_DIR: &str = "assets/tilesets/items/";
@@ -21,19 +22,13 @@ impl TileLoader {
     }
 
     pub fn get_terrain_theme_or_default(&self, theme_name: &str) -> &Theme {
-        if let Some(theme) = self.get_terrain_theme(theme_name) {
-            theme
-        } else {
-            self.get_default_theme_terrain().expect("No default theme found!!!")
-        }
+        self.get_terrain_theme(theme_name).map_or_else(
+            || self.get_default_theme_terrain().expect("No default theme found!!!"),
+            |theme| theme,
+        )
     }
 
-    fn get_default_theme_terrain(&self) -> Option<&Theme> {
-        for theme in self.terrain_themes.values() {
-            return Some(theme);
-        }
-        None
-    }
+    fn get_default_theme_terrain(&self) -> Option<&Theme> { self.terrain_themes.values().next() }
 
     pub fn get_feature_theme(&self, theme_name: &str) -> Option<&Theme> {
         if self.feature_themes.contains_key(theme_name) {
@@ -44,19 +39,13 @@ impl TileLoader {
     }
 
     pub fn get_feature_theme_or_default(&self, theme_name: &str) -> &Theme {
-        if let Some(theme) = self.get_feature_theme(theme_name) {
-            theme
-        } else {
-            self.get_default_theme_feature().expect("No default theme found!!!")
-        }
+        self.get_feature_theme(theme_name).map_or_else(
+            || self.get_default_theme_feature().expect("No default theme found!!!"),
+            |theme| theme,
+        )
     }
 
-    fn get_default_theme_feature(&self) -> Option<&Theme> {
-        for theme in self.feature_themes.values() {
-            return Some(theme);
-        }
-        None
-    }
+    fn get_default_theme_feature(&self) -> Option<&Theme> { self.feature_themes.values().next() }
 
     pub fn get_item_theme(&self, theme_name: &str) -> Option<&Theme> {
         if self.terrain_themes.contains_key(theme_name) {
@@ -67,19 +56,13 @@ impl TileLoader {
     }
 
     pub fn get_item_theme_or_default(&self, theme_name: &str) -> &Theme {
-        if let Some(theme) = self.get_item_theme(theme_name) {
-            theme
-        } else {
-            self.get_default_theme_item().expect("No default theme found!!!")
-        }
+        self.get_item_theme(theme_name).map_or_else(
+            || self.get_default_theme_item().expect("No default theme found!!!"),
+            |theme| theme,
+        )
     }
 
-    fn get_default_theme_item(&self) -> Option<&Theme> {
-        for theme in self.item_themes.values() {
-            return Some(theme);
-        }
-        None
-    }
+    fn get_default_theme_item(&self) -> Option<&Theme> { self.item_themes.values().next() }
 }
 
 impl FromWorld for TileLoader {
@@ -106,52 +89,44 @@ fn load_themes(
     atlases: &mut ResMut<Assets<TextureAtlas>>,
 ) -> HashMap<String, Theme> {
     let mut texture_atlases = HashMap::new();
-
     let mut default_name_count = 0;
 
     match std::fs::read_dir(path) {
         Ok(paths) => paths.filter_map(|x| x.ok()).for_each(|dir| {
             let path = dir.path();
-            match path.extension() {
-                Some(ext) => {
-                    if ext == "ron" {
-                        let path_name = match path.file_name() {
-                            Some(n) => match n.to_str() {
-                                Some(n) => n.to_string(),
-                                None => {
-                                    let n = format!("Default{}", default_name_count);
-                                    default_name_count += 1;
-                                    n
-                                }
-                            },
-                            None => {
-                                let n = format!("Default{}", default_name_count);
-                                default_name_count += 1;
-                                n
-                            }
-                        };
 
-                        match std::fs::read_to_string(path) {
-                            Ok(contents) => {
-                                match ron::from_str::<TextureAtlasTemplate>(&contents) {
-                                    Ok(template) => {
-                                        texture_atlases.insert(path_name, template);
-                                    }
-                                    Err(e) => error!("{}", e),
-                                }
-                            }
-                            Err(e) => error!("{}", e),
-                        }
+            if path.extension().map(|ext| ext == RON_EXT).is_some() {
+                let path_name = match path.file_name() {
+                    Some(n) => n.to_str().map_or_else(
+                        || {
+                            let n = format!("Default{}", default_name_count);
+                            default_name_count += 1;
+                            n
+                        },
+                        |n| n.to_string(),
+                    ),
+                    None => {
+                        let n = format!("Default{}", default_name_count);
+                        default_name_count += 1;
+                        n
                     }
+                };
+
+                match std::fs::read_to_string(path) {
+                    Ok(contents) => match ron::from_str::<TextureAtlasTemplate>(&contents) {
+                        Ok(template) => {
+                            texture_atlases.insert(path_name, template);
+                        }
+                        Err(e) => error!("{}", e),
+                    },
+                    Err(e) => error!("{}", e),
                 }
-                None => (),
             }
         }),
         Err(e) => error!("{}", e),
     }
 
     let mut themes = HashMap::new();
-
     for (theme_name, texture_atlas) in texture_atlases.iter() {
         // get image_handle
         let image_handle = asset_server.load(&texture_atlas.file);
@@ -191,42 +166,37 @@ fn load_themes(
             atlas_handle = Some(texture_atlas_handle);
         }
 
-        match atlas_handle {
-            None => (),
-            Some(handle) => {
-                let mut theme = Theme { tiles: HashMap::new() };
-                for template in texture_atlas.tile_templates.iter() {
-                    let foreground_color = match &template.foreground_color {
-                        Some(color_definition) => Some(Color::rgba_u8(
-                            color_definition.r,
-                            color_definition.g,
-                            color_definition.b,
-                            color_definition.a,
-                        )),
-                        None => None,
-                    };
+        atlas_handle.map_or((), |handle| {
+            let mut theme = Theme { tiles: HashMap::new() };
+            for template in texture_atlas.tile_templates.iter() {
+                let foreground_color = template.foreground_color.as_ref().map(|color_definition| {
+                    Color::rgba_u8(
+                        color_definition.r,
+                        color_definition.g,
+                        color_definition.b,
+                        color_definition.a,
+                    )
+                });
 
-                    let background_color = match &template.background_color {
-                        Some(color_definition) => Some(Color::rgba_u8(
-                            color_definition.r,
-                            color_definition.g,
-                            color_definition.b,
-                            color_definition.a,
-                        )),
-                        None => None,
-                    };
+                let background_color = template.background_color.as_ref().map(|color_definition| {
+                    Color::rgba_u8(
+                        color_definition.r,
+                        color_definition.g,
+                        color_definition.b,
+                        color_definition.a,
+                    )
+                });
 
-                    let tile_definition = TileDefinition {
-                        index: (template.x, template.y).as_index(texture_atlas.columns),
-                        atlas: handle.clone(),
-                        foreground_color,
-                        background_color,
-                    };
-                    theme.tiles.insert(template.tile_type, tile_definition);
-                }
-                themes.insert(theme_name.clone(), theme);
+                let tile_definition = TileDefinition {
+                    index: (template.x, template.y).as_index(texture_atlas.columns),
+                    atlas: handle.clone(),
+                    foreground_color,
+                    background_color,
+                };
+                theme.tiles.insert(template.tile_type, tile_definition);
             }
-        }
+            themes.insert(theme_name.clone(), theme);
+        })
     }
     themes
 }

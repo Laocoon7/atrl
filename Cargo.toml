@@ -68,14 +68,8 @@ smart-default = { version = "0.6" }
 strum         = { version = "0.24", features = ["derive"] }
 
 [dependencies.bevy_asset_loader]
-features = [
-  "stageless",
-  "2d",
-  "standard_dynamic_assets",
-  "progress_tracking_stageless",
-  "progress_tracking",
-]
-git = "https://github.com/NiklasEi/bevy_asset_loader"
+features = ["stageless", "2d", "standard_dynamic_assets", "progress_tracking_stageless"]
+git      = "https://github.com/NiklasEi/bevy_asset_loader"
 
 [dependencies.banana_bevy_utils]
 features = ["states"]

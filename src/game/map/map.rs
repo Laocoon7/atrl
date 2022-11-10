@@ -85,9 +85,8 @@ impl Map {
 
                     if let Some(tile) = theme.get_tile_definition(tile_type) {
                         self.terrain_index.set_unchecked((x, y), tile.index);
-                        self.terrain_color.set_unchecked((x, y), tile.foreground_color.clone());
-                        self.terrain_background_color
-                            .set_unchecked((x, y), tile.background_color.clone());
+                        self.terrain_color.set_unchecked((x, y), tile.foreground_color);
+                        self.terrain_background_color.set_unchecked((x, y), tile.background_color);
                         self.terrain_atlas.set_unchecked((x, y), Some(tile.atlas.clone()));
                     } else {
                         error!("Theme is missing TerrainType::{}", tile_type);
@@ -108,9 +107,8 @@ impl Map {
 
                     if let Some(tile) = theme.get_tile_definition(tile_type) {
                         self.terrain_index.set_unchecked((x, y), tile.index);
-                        self.terrain_color.set_unchecked((x, y), tile.foreground_color.clone());
-                        self.terrain_background_color
-                            .set_unchecked((x, y), tile.background_color.clone());
+                        self.terrain_color.set_unchecked((x, y), tile.foreground_color);
+                        self.terrain_background_color.set_unchecked((x, y), tile.background_color);
                         self.terrain_atlas.set_unchecked((x, y), Some(tile.atlas.clone()));
                     } else {
                         error!("Theme is missing FeatureType::{}", tile_type);
@@ -131,9 +129,8 @@ impl Map {
 
                     if let Some(tile) = theme.get_tile_definition(tile_type) {
                         self.terrain_index.set_unchecked((x, y), tile.index);
-                        self.terrain_color.set_unchecked((x, y), tile.foreground_color.clone());
-                        self.terrain_background_color
-                            .set_unchecked((x, y), tile.background_color.clone());
+                        self.terrain_color.set_unchecked((x, y), tile.foreground_color);
+                        self.terrain_background_color.set_unchecked((x, y), tile.background_color);
                         self.terrain_atlas.set_unchecked((x, y), Some(tile.atlas.clone()));
                     } else {
                         error!("Theme is missing ItemType::{}", tile_type);

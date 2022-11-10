@@ -29,32 +29,32 @@ impl TerrainType {
     /// Movement is allowed if MovementComponent allows any of these types
     pub fn allowed_movement(&self) -> Vec<MovementType> {
         match self {
-            TerrainType::None => vec![],
-            TerrainType::Wall => vec![MovementType::Fly, MovementType::Phase],
-            TerrainType::Floor => {
+            Self::None => vec![],
+            Self::Wall => vec![MovementType::Fly, MovementType::Phase],
+            Self::Floor => {
                 vec![MovementType::Walk, MovementType::Run, MovementType::Fly, MovementType::Phase]
             }
-            TerrainType::Water => vec![MovementType::Swim, MovementType::Fly, MovementType::Phase],
+            Self::Water => vec![MovementType::Swim, MovementType::Fly, MovementType::Phase],
         }
     }
 
     /// The tile is visible to these vision types (but not necessarily explored)
     pub fn allowed_vision(&self) -> Vec<VisionType> {
         match self {
-            TerrainType::None => vec![],
-            TerrainType::Wall => vec![
+            Self::None => vec![],
+            Self::Wall => vec![
                 VisionType::BlackAndWhite,
                 VisionType::Colored,
                 VisionType::Infared,
                 VisionType::XRay,
             ],
-            TerrainType::Floor => vec![
+            Self::Floor => vec![
                 VisionType::BlackAndWhite,
                 VisionType::Colored,
                 VisionType::Infared,
                 VisionType::XRay,
             ],
-            TerrainType::Water => vec![
+            Self::Water => vec![
                 VisionType::BlackAndWhite,
                 VisionType::Colored,
                 VisionType::Infared,
@@ -66,15 +66,15 @@ impl TerrainType {
     /// The tile is considered opaque unless VisionComponent includes one of these types
     pub fn vision_penetrates(&self) -> Vec<VisionType> {
         match self {
-            TerrainType::None => vec![],
-            TerrainType::Wall => vec![VisionType::XRay],
-            TerrainType::Floor => vec![
+            Self::None => vec![],
+            Self::Wall => vec![VisionType::XRay],
+            Self::Floor => vec![
                 VisionType::BlackAndWhite,
                 VisionType::Colored,
                 VisionType::Infared,
                 VisionType::XRay,
             ],
-            TerrainType::Water => vec![
+            Self::Water => vec![
                 VisionType::BlackAndWhite,
                 VisionType::Colored,
                 VisionType::Infared,

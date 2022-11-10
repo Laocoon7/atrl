@@ -116,7 +116,6 @@ fn main() {
     // asset loading
     app.add_plugin(RawPlugin {
         state_asset_load: GameState::AssetLoadStates(Load),
-        state_asset_check: GameState::AssetLoadStates(LoadCheck),
         state_asset_load_failure: GameState::AssetLoadStates(LoadFailure),
     });
 

@@ -30,17 +30,17 @@ impl FeatureType {
     /// Movement is allowed if MovementComponent allows any of these types
     pub fn allowed_movement(&self) -> Vec<MovementType> {
         match self {
-            FeatureType::None => vec![],
-            FeatureType::StairsDown => {
+            Self::None => vec![],
+            Self::StairsDown => {
                 vec![MovementType::Walk, MovementType::Run, MovementType::Fly, MovementType::Phase]
             }
-            FeatureType::StairsUp => {
+            Self::StairsUp => {
                 vec![MovementType::Walk, MovementType::Run, MovementType::Fly, MovementType::Phase]
             }
-            FeatureType::DoorClosed => {
+            Self::DoorClosed => {
                 vec![MovementType::Walk, MovementType::Run, MovementType::Fly, MovementType::Phase]
             }
-            FeatureType::DoorOpen => {
+            Self::DoorOpen => {
                 vec![MovementType::Walk, MovementType::Run, MovementType::Fly, MovementType::Phase]
             }
         }
@@ -49,26 +49,26 @@ impl FeatureType {
     /// The tile is visible to these vision types (but not necessarily explored)
     pub fn allowed_vision(&self) -> Vec<VisionType> {
         match self {
-            FeatureType::None => vec![],
-            FeatureType::StairsDown => vec![
+            Self::None => vec![],
+            Self::StairsDown => vec![
                 VisionType::BlackAndWhite,
                 VisionType::Colored,
                 VisionType::Infared,
                 VisionType::XRay,
             ],
-            FeatureType::StairsUp => vec![
+            Self::StairsUp => vec![
                 VisionType::BlackAndWhite,
                 VisionType::Colored,
                 VisionType::Infared,
                 VisionType::XRay,
             ],
-            FeatureType::DoorClosed => vec![
+            Self::DoorClosed => vec![
                 VisionType::BlackAndWhite,
                 VisionType::Colored,
                 VisionType::Infared,
                 VisionType::XRay,
             ],
-            FeatureType::DoorOpen => vec![
+            Self::DoorOpen => vec![
                 VisionType::BlackAndWhite,
                 VisionType::Colored,
                 VisionType::Infared,
@@ -80,21 +80,21 @@ impl FeatureType {
     /// The tile is considered opaque unless VisionComponent includes one of these types
     pub fn vision_penetrates(&self) -> Vec<VisionType> {
         match self {
-            FeatureType::None => vec![],
-            FeatureType::StairsDown => vec![
+            Self::None => vec![],
+            Self::StairsDown => vec![
                 VisionType::BlackAndWhite,
                 VisionType::Colored,
                 VisionType::Infared,
                 VisionType::XRay,
             ],
-            FeatureType::StairsUp => vec![
+            Self::StairsUp => vec![
                 VisionType::BlackAndWhite,
                 VisionType::Colored,
                 VisionType::Infared,
                 VisionType::XRay,
             ],
-            FeatureType::DoorClosed => vec![VisionType::XRay],
-            FeatureType::DoorOpen => vec![
+            Self::DoorClosed => vec![VisionType::XRay],
+            Self::DoorOpen => vec![
                 VisionType::BlackAndWhite,
                 VisionType::Colored,
                 VisionType::Infared,

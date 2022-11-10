@@ -5,7 +5,6 @@ pub type CurrentGameState = CurrentState<GameState>;
 pub enum AssetLoadStates {
     #[default]
     Load,
-    LoadCheck,
     LoadFailure,
 }
 
@@ -56,8 +55,7 @@ impl StateNext for GameState {
 
             // Assets
             Self::AssetLoadStates(asset_state) => match asset_state {
-                AssetLoadStates::Load => Some(Self::AssetLoadStates(AssetLoadStates::LoadCheck)),
-                AssetLoadStates::LoadCheck => Some(Self::ConstructStates(ConstructStates::MapGen)),
+                AssetLoadStates::Load => Some(Self::ConstructStates(ConstructStates::MapGen)),
                 AssetLoadStates::LoadFailure => Some(Self::Quit),
             },
 

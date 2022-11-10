@@ -33,11 +33,10 @@ impl MapLoader {
             return;
         }
 
-        let map_entity = match self.get_map_entity(world_position) {
-            Some(map_entity) => map_entity,
-            None => {
+        let map_entity = self.get_map_entity(world_position).map_or_else(
+            || {
                 let map = Self::gen_map(
-                    &game_context,
+                    game_context,
                     format!(
                         "({}, {}, {})",
                         world_position.position.x,
@@ -52,8 +51,9 @@ impl MapLoader {
 
                 self.add_map_entity(world_position, map_entity);
                 map_entity
-            }
-        };
+            },
+            |map_entity| map_entity,
+        );
 
         for entity in q_current_map.iter() {
             commands.entity(entity).remove::<CurrentMap>();
@@ -79,8 +79,7 @@ impl MapLoader {
             .with(AreaStartingPosition::new(start_x, start_y))
             .generate(&mut game_context.get_rng());
 
-        let map = chain.get_map();
-        map
+        chain.get_map()
     }
 }
 

@@ -8,5 +8,5 @@ pub struct WorldPosition {
 }
 
 impl WorldPosition {
-    pub fn xy(&self) -> IVec2 { IVec2::new(self.position.x, self.position.y) }
+    pub const fn xy(&self) -> IVec2 { IVec2::new(self.position.x, self.position.y) }
 }
