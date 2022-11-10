@@ -48,13 +48,13 @@ pub mod raws {
     pub use systems::*;
 
     mod font_assets;
-    mod game_assets;
     mod raw_plugin;
     pub mod splash_plugin;
+    mod texture_assets;
     pub use font_assets::*;
-    pub use game_assets::*;
     pub use raw_plugin::*;
     pub use splash_plugin::*;
+    pub use texture_assets::*;
 }
 
 pub mod procgen {

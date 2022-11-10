@@ -66,11 +66,13 @@ mod components {
     pub use vision::*;
 
     mod consumable;
-    pub use consumable::*;
     mod equipable;
-    pub use equipable::*;
     mod health;
+    mod tags;
+    pub use consumable::*;
+    pub use equipable::*;
     pub use health::*;
+    pub use tags::*;
 }
 
 mod items {
@@ -160,6 +162,30 @@ mod systems {
     pub use perform_healing::*;
 }
 
+mod player {
+    mod systems {
+        mod player_input;
+        pub use player_input::*;
+    }
+    pub use systems::*;
+
+    mod player_bundle;
+    mod player_plugin;
+    pub use player_bundle::*;
+    pub use player_plugin::*;
+}
+
+mod spawner {
+    mod systems {
+        mod spawn_player;
+        pub use spawn_player::*;
+    }
+    pub use systems::*;
+
+    mod spawner_plugin;
+    pub use spawner_plugin::*;
+}
+
 mod game_context;
 mod game_plugin;
 pub use game_plugin::*; // pub use for main()
@@ -193,6 +219,8 @@ pub mod prelude {
     pub use super::game_context::*;
     pub use super::items::*;
     pub use super::map::*;
+    pub use super::player::*;
+    pub use super::spawner::*;
     //pub use super::game_plugin::*; // only needed by main()
     pub use super::game_state::*;
 
@@ -200,4 +228,7 @@ pub mod prelude {
     pub use iyes_loopless::prelude::*;
     pub use iyes_progress;
     pub use iyes_progress::prelude::*;
+
+    pub use leafwing_input_manager::prelude::*;
+    pub use leafwing_input_manager::Actionlike;
 }

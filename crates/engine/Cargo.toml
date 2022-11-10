@@ -59,13 +59,13 @@ features = [
 ]
 version = "0.8"
 
-# [dependencies.iyes_loopless]
-# features = ["states"]
-# version  = "0.8"
+[dependencies.iyes_loopless]
+features = ["states"]
+version  = "0.8"
 
-# [dependencies.iyes_progress]
-# features = ["assets", "iyes_loopless"]
-# version  = "0.6"
+[dependencies.iyes_progress]
+features = ["assets", "iyes_loopless"]
+version  = "0.6"
 
 ######################################
 ##########    Tilemaps    ############

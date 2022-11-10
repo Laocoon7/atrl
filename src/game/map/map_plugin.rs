@@ -9,6 +9,7 @@ enum MapSystem {
 }
 
 pub struct MapPlugin<T> {
+    pub state_construct: T,
     pub state_running: T,
 }
 
@@ -16,8 +17,8 @@ impl<T: StateNext> Plugin for MapPlugin<T> {
     fn build(&self, app: &mut App) {
         app.init_resource::<MapLoader>()
             .init_resource::<TileLoader>()
-            .add_enter_system(self.state_running.clone(), create_renderer)
-            .add_enter_system(self.state_running.clone(), load_first_map)
+            .add_enter_system(self.state_construct.clone(), create_renderer)
+            .add_enter_system(self.state_construct.clone(), load_first_map)
             .add_system_set_to_stage(
                 CoreStage::Last,
                 ConditionSet::new()

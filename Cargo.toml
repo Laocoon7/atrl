@@ -75,10 +75,10 @@ git      = "https://github.com/NiklasEi/bevy_asset_loader"
 features = ["states"]
 git      = "https://github.com/banana-studios/banana_bevy_utils"
 
-[dependencies.iyes_loopless]
-features = ["states"]
-version  = "0.8"
-
-[dependencies.iyes_progress]
-features = ["assets", "iyes_loopless"]
-version  = "0.6"
+######################################
+############    Input    #############
+######################################
+[dependencies.leafwing-input-manager]
+# features = ["egui"]
+features = []
+git      = "https://github.com/leafwing-studios/leafwing-input-manager"

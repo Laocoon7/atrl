@@ -4,5 +4,7 @@ use crate::game::prelude::*;
     Inspectable, Component, Serialize, Deserialize, Default, Clone, Copy, PartialEq, Eq, Hash, Debug,
 )]
 pub struct LocalPosition {
-    position: UVec2,
+    pub position: IVec2,
 }
+
+impl_new!(LocalPosition, position: IVec2);
