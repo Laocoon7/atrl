@@ -1,5 +1,5 @@
 [package]
-authors     = ["Laocoon <laocoon7@gmail.com>"]
+authors     = ["Laocoon <laocoon7@gmail.com>", "BigBanana <lecoqjacob@gmail.com>"]
 description = "Away Team Roguelike Game"
 edition     = "2021"
 homepage    = "https://github.com/Laocoon7/atrl"
