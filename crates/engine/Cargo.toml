@@ -21,7 +21,7 @@ release = ["bevy_embedded_assets"]
 # Parallelism
 parallel = ["rayon"]
 
-# Debbuing
+# Debugging
 debug-graph        = ["bevy_mod_debugdump"]
 debug_asset_server = ["bevy/debug_asset_server"]
 
