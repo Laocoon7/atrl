@@ -79,7 +79,6 @@ fn distance2d_diagonal(start: impl Point2d, end: impl Point2d) -> f32 {
 
 #[cfg(test)]
 mod tests {
-    use crate::prelude::*;
     use crate::DistanceAlg;
 
     #[test]

@@ -1,3 +1,5 @@
+use atrl_engine::bevy_math::Vec3Swizzles;
+
 use crate::game::prelude::*;
 
 #[derive(
@@ -8,5 +10,5 @@ pub struct WorldPosition {
 }
 
 impl WorldPosition {
-    pub const fn xy(&self) -> IVec2 { IVec2::new(self.position.x, self.position.y) }
+    pub fn xy(&self) -> IVec2 { self.position.xy() }
 }
