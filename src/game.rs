@@ -196,11 +196,18 @@ pub mod prelude {
     pub use atrl_engine::{bevy_utils::HashMap, *};
     pub use atrl_utils::*;
 
-    // Bevy Plugins
     pub use banana_bevy_utils::prelude::*;
     pub use banana_bevy_utils::{state::*, switch_in_game_state};
+
+    // Bevy Plugins
     pub use bevy_inspector_egui::prelude::*; // For derive(Inspectable)
+    pub use leafwing_input_manager::prelude::*; // Input
+    pub use leafwing_input_manager::Actionlike; // Input
+
+    pub use iyes_loopless;
     pub use iyes_loopless::prelude::*;
+    pub use iyes_progress;
+    pub use iyes_progress::prelude::*;
 
     // Serialization
     pub use ron;
@@ -223,12 +230,4 @@ pub mod prelude {
     pub use super::spawner::*;
     //pub use super::game_plugin::*; // only needed by main()
     pub use super::game_state::*;
-
-    pub use iyes_loopless;
-    pub use iyes_loopless::prelude::*;
-    pub use iyes_progress;
-    pub use iyes_progress::prelude::*;
-
-    pub use leafwing_input_manager::prelude::*;
-    pub use leafwing_input_manager::Actionlike;
 }

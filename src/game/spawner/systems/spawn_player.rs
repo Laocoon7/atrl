@@ -20,7 +20,7 @@ pub fn spawn_player(mut commands: Commands, texture_assets: Res<TextureAssets>) 
             ai: AIComponent::human(),
             sprite: SpriteSheetBundle {
                 sprite: TextureAtlasSprite {
-                    color: Color::YELLOW,
+                    color: Color::PINK,
                     index: from_cp437('@'),
                     custom_size: Some(Vec2::ONE),
                     ..Default::default()

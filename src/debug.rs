@@ -1,5 +1,6 @@
 use crate::prelude::*;
 use bevy::diagnostic::{Diagnostics, EntityCountDiagnosticsPlugin, FrameTimeDiagnosticsPlugin};
+use bevy_inspector_egui::widgets::InspectorQuerySingle;
 
 const DEBUG_UI_STAGE: &str = "debug_ui_stage";
 
@@ -25,6 +26,12 @@ fn set_debug_title(
     }
 }
 
+#[derive(Inspectable, Default)]
+struct PlayerData {
+    #[inspectable(despawnable = false)]
+    player: InspectorQuerySingle<Entity, With<Player>>,
+}
+
 pub struct DebugPlugin;
 impl Plugin for DebugPlugin {
     fn build(&self, app: &mut App) {
@@ -38,7 +45,8 @@ impl Plugin for DebugPlugin {
             app.add_plugin(FrameTimeDiagnosticsPlugin).add_plugin(EntityCountDiagnosticsPlugin);
 
             // Inspector Egui
-            app.add_plugin(WorldInspectorPlugin::new())
+            app.add_plugin(InspectorPlugin::<PlayerData>::new())
+                .add_plugin(WorldInspectorPlugin::new())
                 .register_inspectable::<Equipable>()
                 .register_inspectable::<Health>()
                 .register_inspectable::<MovementType>()

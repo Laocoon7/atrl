@@ -8,7 +8,7 @@ pub struct AIComponent {
 impl_new!(AIComponent, ai_type: AIType);
 
 impl AIComponent {
-    pub fn human() -> Self { Self { ai_type: AIType::Human } }
-    pub fn scared() -> Self { Self { ai_type: AIType::Scared } }
-    pub fn aggressive() -> Self { Self { ai_type: AIType::Aggressive } }
+    pub const fn human() -> Self { Self { ai_type: AIType::Human } }
+    pub const fn scared() -> Self { Self { ai_type: AIType::Scared } }
+    pub const fn aggressive() -> Self { Self { ai_type: AIType::Aggressive } }
 }
