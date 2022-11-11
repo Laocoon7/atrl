@@ -196,9 +196,6 @@ pub mod prelude {
     pub use atrl_engine::{bevy_utils::HashMap, *};
     pub use atrl_utils::*;
 
-    pub use banana_bevy_utils::prelude::*;
-    pub use banana_bevy_utils::{state::*, switch_in_game_state};
-
     // Bevy Plugins
     pub use bevy_inspector_egui::prelude::*; // For derive(Inspectable)
     pub use leafwing_input_manager::prelude::*; // Input

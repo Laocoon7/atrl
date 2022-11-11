@@ -17,6 +17,9 @@ pub use bevy::transform as bevy_transform;
 pub use bevy::utils as bevy_utils;
 pub use bevy::window as bevy_window;
 
+pub use banana_bevy_utils::prelude::*;
+pub use banana_bevy_utils::{impl_default, impl_new, insert_resource, switch_in_game_state};
+
 // States
 pub use iyes_loopless;
 pub use iyes_loopless::prelude::*;

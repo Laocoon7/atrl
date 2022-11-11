@@ -196,7 +196,6 @@ version = "0.1.0"
 dependencies = [
  "atrl-engine",
  "atrl-utils",
- "banana_bevy_utils",
  "bevy_asset_loader",
  "colored",
  "embed-resource",
@@ -216,6 +215,7 @@ dependencies = [
 name = "atrl-engine"
 version = "0.1.0"
 dependencies = [
+ "banana_bevy_utils",
  "bevy 0.8.1",
  "bevy-inspector-egui",
  "bevy_common_assets 0.3.0 (git+https://github.com/NiklasEi/bevy_common_assets)",

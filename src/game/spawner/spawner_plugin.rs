@@ -1,6 +1,5 @@
 use super::spawn_player;
-use atrl_engine::{AppLooplessStateExt, Plugin};
-use banana_bevy_utils::state::StateNext;
+use atrl_engine::{AppLooplessStateExt, Plugin, StateNext};
 
 pub struct SpawnerPlugin<T> {
     pub state_running: T,

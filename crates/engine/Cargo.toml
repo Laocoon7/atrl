@@ -67,6 +67,10 @@ version  = "0.8"
 features = ["assets", "iyes_loopless"]
 version  = "0.6"
 
+[dependencies.banana_bevy_utils]
+features = ["states"]
+git      = "https://github.com/banana-studios/banana_bevy_utils"
+
 ######################################
 ##########    Tilemaps    ############
 ######################################
