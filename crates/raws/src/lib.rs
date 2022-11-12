@@ -27,10 +27,10 @@ pub mod prelude {
     pub(crate) use import::*;
 
     mod export {
-        pub use super::super::font_assets::*;
-        pub use super::super::raw_plugin::*;
-        pub use super::super::splash_plugin::*;
-        pub use super::super::texture_assets::*;
+        pub use crate::font_assets::*;
+        pub use crate::raw_plugin::*;
+        pub use crate::splash_plugin::*;
+        pub use crate::texture_assets::*;
     }
     pub use export::*;
 }

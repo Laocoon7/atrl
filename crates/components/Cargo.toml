@@ -1,0 +1,15 @@
+[package]
+categories  = ["games", "game-common"]
+description = "Away Team Roguelike Game Utils"
+edition     = "2021"
+license     = "BlueOak-1.0.0"
+name        = "atrl-components"
+publish     = false
+readme      = "../README.md"
+repository  = "https://github.com/Laocoon7/atrl"
+version     = "0.1.0"
+
+[dependencies]
+banana_bevy_utils = { workspace = true }
+bevy              = { workspace = true }
+serde             = { workspace = true }

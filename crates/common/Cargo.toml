@@ -10,6 +10,8 @@ repository  = "https://github.com/Laocoon7/atrl"
 version     = "0.1.0"
 
 [dependencies]
+atrl-components = { path = "../components" }
+
 banana_bevy_utils = { workspace = true }
 bevy              = { workspace = true }
 iyes_loopless     = { workspace = true }
