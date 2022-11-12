@@ -1,4 +1,4 @@
-use crate::prelude::*;
+use crate::game::prelude::*;
 
 pub struct GamePlugin<T> {
     /// Asset loading happens in this state. When it finishes it transitions to

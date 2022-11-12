@@ -1,7 +1,4 @@
-use crate::{
-    prelude::*,
-    procgen::{InitialMapArchitect, MapArchitect, MapBuilder},
-};
+use crate::game::prelude::*;
 use std::marker::PhantomData;
 
 pub struct RoomMapArchitect<S: Size2d> {

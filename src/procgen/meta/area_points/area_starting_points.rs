@@ -1,8 +1,4 @@
-use crate::{
-    game::prelude::*,
-    procgen::{MapArchitect, MapBuilder},
-};
-use atrl_utils::{DistanceAlg, Random, Size2d};
+use crate::game::prelude::*;
 
 pub enum XStart {
     Left,

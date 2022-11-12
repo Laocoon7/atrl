@@ -1,4 +1,4 @@
-use crate::prelude::*;
+use crate::game::prelude::*;
 
 #[derive(Inspectable, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Debug)]
 pub enum MovementType {

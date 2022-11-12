@@ -1,4 +1,4 @@
-use super::*;
+use crate::internal::*;
 use crate::prelude::*;
 use serde::{Deserialize, Serialize};
 use std::ops::{BitAnd, BitAndAssign, BitOr, BitOrAssign};

@@ -1,7 +1,4 @@
-use crate::{
-    prelude::*,
-    procgen::{MapArchitect, MapBuilder},
-};
+use crate::game::prelude::*;
 
 pub struct CullUnreachable<S> {
     phantom: std::marker::PhantomData<S>,

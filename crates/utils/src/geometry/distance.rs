@@ -1,6 +1,6 @@
 use std::ops::Sub;
 
-use crate::Point2d;
+use crate::prelude::*;
 
 /// Enumeration of available 2D Distance algorithms
 #[allow(clippy::module_name_repetitions)]
@@ -79,7 +79,7 @@ fn distance2d_diagonal(start: impl Point2d, end: impl Point2d) -> f32 {
 
 #[cfg(test)]
 mod tests {
-    use crate::DistanceAlg;
+    use crate::prelude::*;
 
     #[test]
     fn test_pythagoras_distance() {

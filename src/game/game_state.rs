@@ -1,4 +1,5 @@
-use crate::prelude::*;
+use crate::game::prelude::*;
+
 pub type CurrentGameState = CurrentState<GameState>;
 
 #[derive(Default, Clone, Copy, PartialEq, Eq, Hash, Debug)]
@@ -27,9 +28,9 @@ pub enum GameState {
     InGame,
     Quit,
 
-    UiStates(UiStates),
-    AssetLoadStates(AssetLoadStates),
-    ConstructStates(ConstructStates),
+    Ui(UiStates),
+    AssetLoad(AssetLoadStates),
+    Construct(ConstructStates),
 }
 
 /**
@@ -51,27 +52,27 @@ pub enum GameState {
 impl StateNext for GameState {
     fn next(&self) -> Option<Self> {
         match self {
-            Self::Initializing => Some(Self::AssetLoadStates(AssetLoadStates::Load)),
+            Self::Initializing => Some(Self::AssetLoad(AssetLoadStates::Load)),
 
             // Assets
-            Self::AssetLoadStates(asset_state) => match asset_state {
-                AssetLoadStates::Load => Some(Self::ConstructStates(ConstructStates::MapGen)),
+            Self::AssetLoad(asset_state) => match asset_state {
+                AssetLoadStates::Load => Some(Self::Construct(ConstructStates::MapGen)),
                 AssetLoadStates::LoadFailure => Some(Self::Quit),
             },
 
             // Construct
-            Self::ConstructStates(construct_state) => match construct_state {
+            Self::Construct(construct_state) => match construct_state {
                 // TODO: Fix this and set mapgen => MainMenu
                 ConstructStates::MapGen => Some(Self::InGame),
                 // ConstructStates::MapGen => Some(Self::UiStates(UiStates::MainMenu)),
             },
 
             // UI
-            Self::UiStates(ui_state) => match ui_state {
+            Self::Ui(ui_state) => match ui_state {
                 UiStates::MainMenu => Some(Self::InGame),
             },
 
-            Self::InGame => Some(Self::UiStates(UiStates::MainMenu)),
+            Self::InGame => Some(Self::Ui(UiStates::MainMenu)),
             Self::Quit => None,
         }
     }

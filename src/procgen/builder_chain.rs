@@ -1,5 +1,4 @@
-use super::MapBuilder;
-use crate::prelude::*;
+use crate::game::prelude::*;
 
 ////////////////////////////////////////////////////////////////////////////////
 // TileMap Builder Traits

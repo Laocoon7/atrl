@@ -1,7 +1,4 @@
-use crate::{
-    prelude::*,
-    procgen::{InitialMapArchitect, MapArchitect, MapBuilder},
-};
+use crate::game::prelude::*;
 use smart_default::SmartDefault;
 
 const MAX_ITERATIONS: std::ops::Range<u32> = 5..15;

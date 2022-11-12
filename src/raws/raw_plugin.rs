@@ -1,4 +1,4 @@
-use crate::prelude::*;
+use crate::game::prelude::*;
 use bevy_asset_loader::prelude::*;
 
 pub struct RawPlugin<T> {

@@ -1,4 +1,4 @@
-use crate::prelude::*;
+use crate::internal::*;
 
 pub struct Segment {
     pub point1: IVec2,

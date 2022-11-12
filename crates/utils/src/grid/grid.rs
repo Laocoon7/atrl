@@ -1,4 +1,5 @@
-use crate::{prelude::*, Point2d, PointIterRowMajor, Size2d};
+use crate::internal::*;
+use crate::prelude::*;
 use std::{
     ops::{Index, IndexMut},
     slice,

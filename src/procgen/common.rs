@@ -1,5 +1,4 @@
-use super::{XStart, YStart};
-use atrl_utils::Random;
+use crate::game::prelude::*;
 
 pub fn random_start_position(rng: &mut Random) -> (XStart, YStart) {
     let xroll = rng.prng.roll_dice(1, 3);

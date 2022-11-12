@@ -1,5 +1,5 @@
 use crate::game::components::*;
-use crate::prelude::*;
+use crate::game::prelude::*;
 
 #[derive(Inspectable, Component, Debug)]
 pub struct Movement {

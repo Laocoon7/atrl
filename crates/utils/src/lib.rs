@@ -1,38 +1,32 @@
 #![allow(clippy::module_inception)]
 
-mod cp437;
-pub use cp437::*;
-
-mod range;
-pub use range::*;
-
 mod direction {
     mod bitmap;
-    mod cardinal;
-    mod direction;
-    mod iter;
-    mod ordinal;
-    mod table;
-
     pub use bitmap::*;
+    mod cardinal;
     pub use cardinal::*;
+    mod direction;
     pub use direction::*;
+    mod iter;
     pub use iter::*;
+    mod ordinal;
     pub use ordinal::*;
+    mod table;
     pub use table::*;
 }
-pub use direction::*;
 
 mod grid {
     mod axis;
-    mod grid;
-    mod grid_arithmetic;
-
     pub use axis::*;
+    mod grid;
     pub use grid::*;
-    pub use grid_arithmetic::*;
+    mod point_iter;
+    pub use point_iter::*;
+    mod point2d;
+    pub use point2d::*;
+    mod size2d;
+    pub use size2d::*;
 }
-pub use grid::*;
 
 mod random {
     mod noise;
@@ -44,7 +38,6 @@ mod random {
     mod random;
     pub use random::*;
 }
-pub use random::*;
 
 mod geometry {
     mod distance;
@@ -68,9 +61,21 @@ mod geometry {
     }
     pub use shapes::*;
 }
-pub use geometry::*;
 
-pub(crate) mod prelude {
+mod cp437;
+
+mod range;
+
+pub(crate) mod internal {
     pub use atrl_engine::*;
     pub use serde::{Deserialize, Serialize};
+}
+
+pub mod prelude {
+    pub use super::cp437::*;
+    pub use super::direction::*;
+    pub use super::geometry::*;
+    pub use super::grid::*;
+    pub use super::random::*;
+    pub use super::range::*;
 }

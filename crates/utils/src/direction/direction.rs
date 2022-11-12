@@ -1,5 +1,5 @@
-use super::*;
-use crate::{prelude::*, Point2d};
+use crate::internal::*;
+use crate::prelude::*;
 use rand::{distributions::Standard, prelude::Distribution, Rng};
 use serde::{Deserialize, Serialize};
 

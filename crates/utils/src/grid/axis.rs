@@ -1,4 +1,5 @@
-use crate::{prelude::*, DimensionTooLargeForSize, Point2d, Size2d};
+use crate::internal::*;
+use crate::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Copy, Hash, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]

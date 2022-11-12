@@ -2,11 +2,6 @@
 #![allow(clippy::type_complexity)] // Bevy can have complex queries, so we shush clippy
 #![allow(clippy::too_many_arguments)] // Bevy has a lot of arguments, so we shush clippy
 
-use game::prelude::{
-    *,
-    {AssetLoadStates::*, ConstructStates::*, GameState, UiStates::*},
-};
-
 use atrl_engine::{
     bevy::render::texture::ImageSettings,
     bevy_window::{PresentMode, WindowResizeConstraints},
@@ -36,55 +31,28 @@ mod debug;
 use debug::*;
 
 mod game;
-use game::*;
+use game::prelude::*;
 
 pub mod raws {
     mod systems {
         mod check_loaded_assets;
-        mod splash;
         pub use check_loaded_assets::*;
+        mod splash;
         pub use splash::*;
     }
     pub use systems::*;
 
     mod font_assets;
-    mod raw_plugin;
-    pub mod splash_plugin;
-    mod texture_assets;
     pub use font_assets::*;
+    mod raw_plugin;
     pub use raw_plugin::*;
+    pub mod splash_plugin;
     pub use splash_plugin::*;
+    mod texture_assets;
     pub use texture_assets::*;
 }
 
-pub mod procgen {
-    mod builder_chain;
-    mod common;
-    mod map_builder;
-    mod procgen_plugin;
-
-    mod builders {
-        mod cellular_automata;
-        mod rooms;
-        pub use cellular_automata::*;
-        pub use rooms::*;
-    }
-    pub use builders::*;
-
-    mod meta {
-        mod area_points;
-        mod cull_unreachable;
-        pub use area_points::*;
-        pub use cull_unreachable::*;
-    }
-    pub use meta::*;
-
-    pub use builder_chain::*;
-    pub use builders::*;
-    pub use common::*;
-    pub use map_builder::*;
-    pub use procgen_plugin::*;
-}
+mod procgen;
 
 fn main() {
     let mut app = App::new();
@@ -115,14 +83,14 @@ fn main() {
 
     // asset loading
     app.add_plugin(RawPlugin {
-        state_asset_load: GameState::AssetLoadStates(Load),
-        state_asset_load_failure: GameState::AssetLoadStates(LoadFailure),
+        state_asset_load: GameState::AssetLoad(Load),
+        state_asset_load_failure: GameState::AssetLoad(LoadFailure),
     });
 
     // game related
     app.add_plugin(GamePlugin {
-        state_construct: GameState::ConstructStates(MapGen),
-        state_main_menu: GameState::UiStates(MainMenu),
+        state_construct: GameState::Construct(MapGen),
+        state_main_menu: GameState::Ui(MainMenu),
         state_running: GameState::InGame,
     });
 

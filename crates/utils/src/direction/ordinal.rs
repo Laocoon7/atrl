@@ -1,5 +1,5 @@
-use super::*;
-use crate::{prelude::*, Point2d};
+use crate::internal::*;
+use crate::prelude::*;
 use serde::{Deserialize, Serialize};
 
 pub const NUM_ORDINAL_DIRECTIONS: usize = 4;

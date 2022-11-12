@@ -66,12 +66,12 @@ mod components {
     pub use vision::*;
 
     mod consumable;
-    mod equipable;
-    mod health;
-    mod tags;
     pub use consumable::*;
+    mod equipable;
     pub use equipable::*;
+    mod health;
     pub use health::*;
+    mod tags;
     pub use tags::*;
 }
 
@@ -170,8 +170,8 @@ mod player {
     pub use systems::*;
 
     mod player_bundle;
-    mod player_plugin;
     pub use player_bundle::*;
+    mod player_plugin;
     pub use player_plugin::*;
 }
 
@@ -188,13 +188,12 @@ mod spawner {
 
 mod game_context;
 mod game_plugin;
-pub use game_plugin::*; // pub use for main()
 mod game_state;
 
 pub mod prelude {
     // Bevy
     pub use atrl_engine::{bevy_utils::HashMap, *};
-    pub use atrl_utils::*;
+    pub use atrl_utils::prelude::*;
 
     // Bevy Plugins
     pub use bevy_inspector_egui::prelude::*; // For derive(Inspectable)
@@ -220,11 +219,15 @@ pub mod prelude {
     pub use super::actors::*;
     pub use super::camera::*;
     pub use super::components::*;
-    pub use super::game_context::*;
     pub use super::items::*;
     pub use super::map::*;
     pub use super::player::*;
     pub use super::spawner::*;
-    //pub use super::game_plugin::*; // only needed by main()
+
+    pub use super::game_context::*;
+    pub use super::game_plugin::*;
+    pub use super::game_state::AssetLoadStates::*;
+    pub use super::game_state::ConstructStates::*;
+    pub use super::game_state::UiStates::*;
     pub use super::game_state::*;
 }

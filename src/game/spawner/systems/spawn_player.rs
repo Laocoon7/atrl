@@ -1,7 +1,5 @@
-use crate::{
-    app_settings::{GRID_HEIGHT, GRID_WIDTH},
-    game::prelude::*,
-};
+use crate::app_settings::*;
+use crate::game::prelude::*;
 use atrl_engine::bevy::prelude::*;
 use leafwing_input_manager::InputManagerBundle;
 
