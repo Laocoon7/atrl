@@ -63,12 +63,14 @@ mod geometry {
 }
 
 mod cp437;
-
+mod game_state;
 mod range;
 
 pub mod prelude {
     mod import {
+        pub use banana_bevy_utils::prelude::*;
         pub use bevy::{prelude::*, utils::HashSet};
+        pub use iyes_loopless::prelude::CurrentState;
         pub use noise::{NoiseFn, Perlin};
         pub use rand::{distributions::Standard, prelude::*};
         pub use rand_pcg::Pcg64;
@@ -84,6 +86,7 @@ pub mod prelude {
     mod export {
         pub use super::super::cp437::*;
         pub use super::super::direction::*;
+        pub use super::super::game_state::*;
         pub use super::super::geometry::*;
         pub use super::super::grid::*;
         pub use super::super::random::*;

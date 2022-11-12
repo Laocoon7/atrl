@@ -5,7 +5,6 @@
 pub mod app_settings;
 pub mod game;
 pub mod procgen;
-pub mod raws;
 
 pub(crate) mod prelude;
 use crate::prelude::*;

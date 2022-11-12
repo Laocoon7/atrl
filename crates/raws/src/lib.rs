@@ -1,0 +1,36 @@
+mod systems {
+    mod check_loaded_assets;
+    mod splash;
+    pub use check_loaded_assets::*;
+    pub use splash::*;
+}
+
+mod font_assets;
+mod raw_plugin;
+mod splash_plugin;
+mod texture_assets;
+
+pub mod prelude {
+    pub mod internal {
+        pub use crate::systems::*;
+    }
+
+    mod import {
+        pub use atrl_common::prelude::*;
+        pub use banana_bevy_utils::prelude::*;
+        pub use bevy::prelude::*;
+        pub use bevy_asset_loader::prelude::*;
+        pub use iyes_loopless::prelude::*;
+        pub use iyes_progress::prelude::*;
+        pub use smart_default::SmartDefault;
+    }
+    pub(crate) use import::*;
+
+    mod export {
+        pub use super::super::font_assets::*;
+        pub use super::super::raw_plugin::*;
+        pub use super::super::splash_plugin::*;
+        pub use super::super::texture_assets::*;
+    }
+    pub use export::*;
+}

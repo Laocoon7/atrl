@@ -17,39 +17,34 @@ exclude    = ["assets/", "tools/", ".github/", "crates/"]
 keywords   = ["game", "ascii", "roguelike"]
 resolver   = "2"
 
-
 #################################
 #########       Workspaces
 #################################
 [workspace]
-members = [
-    "tools/ci",
-    "tools/spancmp",
-    "./crates/*"
-]
+members = ["tools/ci", "tools/spancmp", "./crates/*"]
 
 #################################
 #########       Features
 #################################
 [features]
 # configuration for release builds
-release             = ["bevy_embedded_assets"]
+release = ["bevy_embedded_assets"]
 
 # default configurations
-default             = ["dev"]
+default = ["dev"]
 
 # configuration for debugging information
-debug               = ["bevy-inspector-egui", "colored", "debug-graph", "debug_asset_server", "trace"]
+debug = ["bevy-inspector-egui", "colored", "debug-graph", "debug_asset_server", "trace"]
 
 # default configuration while developing
-dev                 = ["bevy/filesystem_watcher", "bevy/dynamic"]
+dev = ["bevy/filesystem_watcher", "bevy/dynamic"]
 
 # Parallelism
-parallel            = ["rayon"]
+parallel = ["rayon"]
 
 # Debugging
-debug-graph         = ["bevy_mod_debugdump"]
-debug_asset_server  = ["bevy/debug_asset_server"]
+debug-graph        = ["bevy_mod_debugdump"]
+debug_asset_server = ["bevy/debug_asset_server"]
 
 # Tracing
 trace        = ["bevy/trace"]
@@ -70,17 +65,16 @@ opt-level = 3
 # Optimizations for WASM
 [profile.release]
 codegen-units = 1
-lto         = true
-opt-level   = 'z'
-panic       = 'abort'
+lto           = true
+opt-level     = 'z'
+panic         = 'abort'
 
 ################################
 #########       Internal Crate Dependencies
 ################################
 [dependencies]
-atrl-states   = { path = "crates/states" }
-atrl-utils   = { path = "crates/utils" }
-
+atrl-common = { path = "crates/common" }
+atrl-raws   = { path = "crates/raws" }
 
 ######################################
 #########       Bevy
@@ -103,7 +97,9 @@ features = [
   "bevy_ui",
 
   # File formats
-  "png", "jpeg", "bmp",
+  "png",
+  "jpeg",
+  "bmp",
 
   # Serialization
   "serialize",
@@ -140,7 +136,7 @@ version = "0.8"
 
 [workspace.dependencies.serde]
 features = ["derive"]
-version = "1"
+version  = "1"
 
 ######################################
 #########       States
@@ -157,7 +153,6 @@ version  = "0.6"
 features = ["states"]
 git      = "https://github.com/banana-studios/banana_bevy_utils"
 
-
 ######################################
 #########       Random
 ######################################
@@ -169,14 +164,14 @@ version = "0.8"
 
 [workspace.dependencies.rand_pcg]
 features = ["serde1"]
-version = "0.3"
+version  = "0.3"
 
 [workspace.dependencies.rand_seeder]
 version = "0.2"
 
 [workspace.dependencies.xxhash-rust]
 features = ["xxh3", "const_xxh3"]
-version = "0.8"
+version  = "0.8"
 
 ######################################
 #########       UI
@@ -211,12 +206,7 @@ version = "0.6"
 
 [workspace.dependencies.strum]
 features = ["derive"]
-version = "0.24"
-
-
-
-
-
+version  = "0.24"
 
 ######################################
 ######################################
@@ -241,16 +231,16 @@ optional = true
 #########       Debug
 ######################################
 [dependencies.bevy-inspector-egui]
-version = "0.13"
 optional = true
+version  = "0.13"
 
 [dependencies.bevy_mod_debugdump]
 git      = "https://github.com/jakobhellermann/bevy_mod_debugdump"
 optional = true
 
 [dependencies.colored]
-version = "2"
 optional = true
+version  = "2"
 
 ######################################
 #########       Parallel
