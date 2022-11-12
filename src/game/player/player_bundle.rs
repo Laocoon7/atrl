@@ -1,5 +1,5 @@
-use crate::game::prelude::*;
-use leafwing_input_manager::prelude::*;
+use crate::game::prelude::internal::*;
+use crate::prelude::*;
 
 #[derive(Bundle)]
 pub struct PlayerBundle {

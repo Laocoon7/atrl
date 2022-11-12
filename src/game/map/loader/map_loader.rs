@@ -1,5 +1,5 @@
-use crate::app_settings::*;
-use crate::game::prelude::*;
+use crate::game::prelude::internal::*;
+use crate::prelude::*;
 
 pub struct MapLoader {
     pub maps: HashMap<WorldPosition, Entity>,

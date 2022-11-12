@@ -117,6 +117,7 @@ mod map {
         mod update_map_tiles;
         pub use update_map_tiles::*;
     }
+    pub use systems::*;
 
     mod tiles {
         mod loader {
@@ -151,6 +152,13 @@ mod map {
     pub use terrain_type::*;
 }
 
+mod player {
+    mod player_bundle;
+    pub use player_bundle::*;
+    mod player_plugin;
+    pub use player_plugin::*;
+}
+
 mod systems {
     mod apply_damage;
     pub use apply_damage::*;
@@ -160,74 +168,47 @@ mod systems {
     pub use move_actors::*;
     mod perform_healing;
     pub use perform_healing::*;
-}
-
-mod player {
-    mod systems {
-        mod player_input;
-        pub use player_input::*;
-    }
-    pub use systems::*;
-
-    mod player_bundle;
-    pub use player_bundle::*;
-    mod player_plugin;
-    pub use player_plugin::*;
+    mod player_input;
+    pub use player_input::*;
+    mod spawn_player;
+    pub use spawn_player::*;
 }
 
 mod spawner {
-    mod systems {
-        mod spawn_player;
-        pub use spawn_player::*;
-    }
-    pub use systems::*;
-
     mod spawner_plugin;
     pub use spawner_plugin::*;
 }
 
 mod game_context;
 mod game_plugin;
-mod game_state;
 
 pub mod prelude {
-    // Bevy
-    pub use atrl_engine::{bevy_utils::HashMap, *};
-    pub use atrl_utils::prelude::*;
+    // Files inside of atrl::game *may*
+    // use crate::game::prelude::internal::*;
+    // Files outside of atrl::game should only
+    // access raws from crate::prelude::*;
+    pub mod internal {
+        pub use super::super::abilities::*;
+        pub use super::super::actors::*;
+        pub use super::super::camera::*;
+        pub use super::super::components::*;
+        pub use super::super::items::*;
+        pub use super::super::map::*;
+        pub use super::super::player::*;
+        pub use super::super::spawner::*;
+        pub use super::super::systems::*;
 
-    // Bevy Plugins
-    pub use bevy_inspector_egui::prelude::*; // For derive(Inspectable)
-    pub use leafwing_input_manager::prelude::*; // Input
-    pub use leafwing_input_manager::Actionlike; // Input
+        pub use super::super::game_context::*;
+        pub use super::super::game_plugin::*;
+    }
 
-    pub use iyes_loopless;
-    pub use iyes_loopless::prelude::*;
-    pub use iyes_progress;
-    pub use iyes_progress::prelude::*;
+    pub mod external {
+        pub use super::super::actors::*;
+        pub use super::super::camera::*;
+        pub use super::super::components::*;
+        pub use super::super::map::*;
 
-    // Serialization
-    pub use ron;
-    pub use serde::{Deserialize, Serialize};
-    pub use serde_json;
-
-    // Our external Crates
-    pub use crate::procgen::*;
-    pub use crate::raws::*;
-
+        pub use super::super::game_plugin::*;
+    }
     // local
-    pub use super::abilities::*;
-    pub use super::actors::*;
-    pub use super::camera::*;
-    pub use super::components::*;
-    pub use super::items::*;
-    pub use super::map::*;
-    pub use super::player::*;
-    pub use super::spawner::*;
-
-    pub use super::game_context::*;
-    pub use super::game_plugin::*;
-    pub use super::game_state::AssetLoadStates::*;
-    pub use super::game_state::ConstructStates::*;
-    pub use super::game_state::UiStates::*;
-    pub use super::game_state::*;
 }

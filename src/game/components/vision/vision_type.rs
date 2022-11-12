@@ -1,6 +1,7 @@
-use crate::game::prelude::*;
+use crate::prelude::*;
 
-#[derive(Inspectable, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Debug)]
+#[cfg_attr(feature = "debug", derive(Inspectable))]
+#[derive(Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Debug)]
 pub enum VisionType {
     Blind = 0,
     BlackAndWhite,

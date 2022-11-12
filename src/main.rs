@@ -2,25 +2,18 @@
 #![allow(clippy::type_complexity)] // Bevy can have complex queries, so we shush clippy
 #![allow(clippy::too_many_arguments)] // Bevy has a lot of arguments, so we shush clippy
 
-use atrl_engine::{
-    bevy::render::texture::ImageSettings,
-    bevy_window::{PresentMode, WindowResizeConstraints},
-};
-
 pub mod app_settings;
-use app_settings::*;
+pub mod game;
+pub mod procgen;
+pub mod raws;
+
+pub(crate) mod prelude;
+use crate::prelude::*;
 
 #[cfg(feature = "debug")]
 mod debug;
 #[cfg(feature = "debug")]
 use debug::*;
-
-mod game;
-use game::prelude::*;
-
-mod raws;
-
-mod procgen;
 
 fn main() {
     let mut app = App::new();

@@ -1,4 +1,4 @@
-use crate::internal::*;
+use crate::prelude::*;
 
 pub struct Polygon {
     pub points: Vec<IVec2>,

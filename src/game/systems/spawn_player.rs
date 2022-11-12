@@ -1,7 +1,5 @@
-use crate::app_settings::*;
-use crate::game::prelude::*;
-use atrl_engine::bevy::prelude::*;
-use leafwing_input_manager::InputManagerBundle;
+use crate::game::prelude::internal::*;
+use crate::prelude::*;
 
 pub fn spawn_player(mut commands: Commands, texture_assets: Res<TextureAssets>) {
     info!("Spawning player!");

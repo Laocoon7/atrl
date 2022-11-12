@@ -27,3 +27,23 @@ mod map_builder;
 pub use map_builder::*;
 mod procgen_plugin;
 pub use procgen_plugin::*;
+
+pub mod prelude {
+    // Files inside of atrl::procgen *may*
+    // use crate::procgen::prelude::internal::*;
+    // Files outside of atrl::procgen should only
+    // access procgen from crate::prelude::*;
+    pub mod internal {
+        pub use super::super::builder_chain::*;
+        pub use super::super::builders::*;
+        pub use super::super::common::*;
+        pub use super::super::map_builder::*;
+        pub use super::super::meta::*;
+        pub use super::super::procgen_plugin::*;
+    }
+
+    // No pub use here, explicit folder for procgen internal data
+    pub mod external {
+        pub use super::super::builder_chain::*;
+    }
+}

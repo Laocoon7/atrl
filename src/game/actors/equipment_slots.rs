@@ -1,6 +1,8 @@
-use crate::game::prelude::*;
+#[cfg(feature = "debug")]
+use crate::prelude::*;
 
-#[derive(Inspectable, Default, Debug)]
+#[cfg_attr(feature = "debug", derive(Inspectable))]
+#[derive(Default, Debug)]
 pub enum EquipmentSlot {
     #[default]
     Head,

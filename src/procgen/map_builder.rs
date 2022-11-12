@@ -1,4 +1,5 @@
-use crate::game::prelude::*;
+use crate::prelude::*;
+pub use crate::procgen::prelude::internal::*;
 
 ////////////////////////////////////////////////////////////////////////////////
 // MapBuilder - Container to hold the state of the map being constructed

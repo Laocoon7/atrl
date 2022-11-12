@@ -194,47 +194,52 @@ checksum = "73b5e5f48b927f04e952dedc932f31995a65a0bf65ec971c74436e51bf6e970d"
 name = "atrl"
 version = "0.1.0"
 dependencies = [
- "atrl-engine",
+ "atrl-states",
  "atrl-utils",
- "bevy_asset_loader",
- "colored",
- "embed-resource",
- "leafwing-input-manager",
- "num-derive",
- "num-traits",
- "once_cell",
- "parking_lot 0.12.1",
- "ron 0.8.0",
- "serde",
- "serde_json",
- "smart-default",
- "strum",
-]
-
-[[package]]
-name = "atrl-engine"
-version = "0.1.0"
-dependencies = [
  "banana_bevy_utils",
  "bevy 0.8.1",
  "bevy-inspector-egui",
+ "bevy_asset_loader",
  "bevy_common_assets 0.3.0 (git+https://github.com/NiklasEi/bevy_common_assets)",
- "bevy_ecs_tilemap",
  "bevy_egui 0.16.1 (git+https://github.com/mvlabat/bevy_egui)",
  "bevy_embedded_assets",
  "bevy_mod_debugdump",
  "bevy_tweening",
  "big-brain",
+ "colored",
+ "embed-resource",
  "iyes_loopless",
  "iyes_progress",
+ "leafwing-input-manager",
+ "noise",
+ "num-derive",
+ "num-traits",
+ "once_cell",
+ "parking_lot 0.12.1",
+ "rand 0.8.5",
+ "rand_pcg",
+ "rand_seeder",
  "rayon",
+ "ron 0.8.0",
+ "serde",
+ "smart-default",
+ "strum",
+ "xxhash-rust",
+]
+
+[[package]]
+name = "atrl-states"
+version = "0.1.0"
+dependencies = [
+ "banana_bevy_utils",
+ "iyes_loopless",
 ]
 
 [[package]]
 name = "atrl-utils"
 version = "0.1.0"
 dependencies = [
- "atrl-engine",
+ "bevy 0.8.1",
  "noise",
  "parking_lot 0.12.1",
  "rand 0.8.5",
@@ -631,16 +636,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
-]
-
-[[package]]
-name = "bevy_ecs_tilemap"
-version = "0.8.0"
-source = "git+https://github.com/StarArawn/bevy_ecs_tilemap#2d8c64222318dec88bbb0e3e99f96f88878641cd"
-dependencies = [
- "bevy 0.8.1",
- "log",
- "regex",
 ]
 
 [[package]]
@@ -2506,6 +2501,7 @@ dependencies = [
  "bytemuck",
  "byteorder",
  "color_quant",
+ "jpeg-decoder 0.2.6",
  "num-rational 0.4.1",
  "num-traits",
  "png 0.17.7",
@@ -2641,6 +2637,12 @@ name = "jpeg-decoder"
 version = "0.1.22"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "229d53d58899083193af11e15917b5640cd40b29ff475a1fe4ef725deb02d0f2"
+
+[[package]]
+name = "jpeg-decoder"
+version = "0.2.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9478aa10f73e7528198d75109c8be5cd7d15fb530238040148d5f9a22d4c5b3b"
 
 [[package]]
 name = "js-sys"
@@ -4039,7 +4041,7 @@ version = "0.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9a53f4706d65497df0c4349241deddf35f84cee19c87ed86ea8ca590f4464437"
 dependencies = [
- "jpeg-decoder",
+ "jpeg-decoder 0.1.22",
  "miniz_oxide 0.4.4",
  "weezl",
 ]

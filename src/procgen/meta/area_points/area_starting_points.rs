@@ -1,4 +1,5 @@
-use crate::game::prelude::*;
+use crate::prelude::*;
+pub use crate::procgen::prelude::internal::*;
 
 pub enum XStart {
     Left,

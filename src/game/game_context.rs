@@ -1,6 +1,5 @@
-use crate::game::prelude::*;
-use once_cell::sync::Lazy;
-use parking_lot::{Mutex, MutexGuard};
+use crate::game::prelude::internal::*;
+use crate::prelude::*;
 
 pub struct GameContext {
     pub random: Lazy<Mutex<Random>>,

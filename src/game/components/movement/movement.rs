@@ -1,7 +1,8 @@
 use crate::game::components::*;
-use crate::game::prelude::*;
+use crate::prelude::*;
 
-#[derive(Inspectable, Component, Debug)]
+#[cfg_attr(feature = "debug", derive(Inspectable))]
+#[derive(Component, Debug)]
 pub struct Movement {
     pub movement_types: Vec<MovementType>,
 }

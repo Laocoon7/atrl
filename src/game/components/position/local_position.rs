@@ -1,8 +1,7 @@
-use crate::game::prelude::*;
+use crate::prelude::*;
 
-#[derive(
-    Inspectable, Component, Serialize, Deserialize, Default, Clone, Copy, PartialEq, Eq, Hash, Debug,
-)]
+#[cfg_attr(feature = "debug", derive(Inspectable))]
+#[derive(Component, Serialize, Deserialize, Default, Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct LocalPosition {
     pub position: IVec2,
 }

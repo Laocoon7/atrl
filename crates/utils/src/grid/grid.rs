@@ -1,9 +1,9 @@
-use crate::internal::*;
-use crate::prelude::*;
 use std::{
     ops::{Index, IndexMut},
     slice,
 };
+
+use crate::prelude::*;
 
 #[allow(dead_code)]
 pub type GridIter<'a, T> = slice::Iter<'a, T>;

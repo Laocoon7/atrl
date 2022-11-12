@@ -1,4 +1,5 @@
-use crate::game::prelude::*;
+use crate::prelude::*;
+use crate::raws::prelude::internal::*;
 
 pub fn check_progress(
     mut commands: Commands,

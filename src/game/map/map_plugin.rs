@@ -1,5 +1,5 @@
-use super::systems::*;
-use crate::game::prelude::*;
+use crate::game::prelude::internal::*;
+use crate::prelude::*;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, SystemLabel)]
 enum MapSystem {

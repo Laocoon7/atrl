@@ -1,4 +1,5 @@
-use crate::game::prelude::*;
+use crate::game::prelude::internal::*;
+use crate::prelude::*;
 
 pub fn change_map_theme(
     mut commands: Commands,

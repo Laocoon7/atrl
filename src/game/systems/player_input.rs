@@ -1,4 +1,5 @@
-use crate::game::prelude::*;
+use crate::game::prelude::internal::*;
+use crate::prelude::*;
 
 pub fn player_input(
     mut query: Query<(&mut LocalPosition, &ActionState<PlayerAction>), With<Player>>,

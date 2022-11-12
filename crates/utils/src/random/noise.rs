@@ -1,11 +1,6 @@
 use std::fmt::{self, Debug};
 
-use noise::{NoiseFn, Perlin};
-use serde::{
-    de::{self, Deserializer, MapAccess, SeqAccess, Visitor},
-    ser::SerializeStruct,
-    Deserialize, Serialize,
-};
+use crate::prelude::*;
 
 pub struct Noise {
     seed: u32,

@@ -1,4 +1,5 @@
-use crate::game::prelude::*;
+use crate::game::prelude::internal::*;
+use crate::prelude::*;
 
 // This is the list of "things in the game I want to be able to do based on input"
 #[derive(Actionlike, PartialEq, Eq, Clone, Copy, Hash, Debug)]
@@ -29,7 +30,7 @@ pub struct PlayerPlugin<T> {
 }
 
 impl<T: StateNext> Plugin for PlayerPlugin<T> {
-    fn build(&self, app: &mut atrl_engine::App) {
+    fn build(&self, app: &mut App) {
         app.add_plugin(InputManagerPlugin::<PlayerAction>::default()).add_system_set(
             ConditionSet::new()
                 .run_in_state(self.state_running.clone())

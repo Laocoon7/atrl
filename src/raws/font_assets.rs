@@ -1,5 +1,4 @@
-use crate::game::prelude::*;
-use bevy_asset_loader::prelude::*;
+use crate::prelude::*;
 
 #[derive(AssetCollection)]
 pub struct FontAssets {

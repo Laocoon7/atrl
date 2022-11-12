@@ -1,4 +1,5 @@
-use crate::game::prelude::*;
+use crate::game::prelude::internal::*;
+use crate::prelude::*;
 
 #[derive(Deserialize)]
 pub struct TextureAtlasTemplate {

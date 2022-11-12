@@ -1,4 +1,4 @@
-use crate::internal::*;
+use crate::prelude::*;
 
 pub struct Circle {
     pub center: IVec2,

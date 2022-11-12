@@ -1,4 +1,4 @@
-use crate::game::prelude::*;
+use crate::game::prelude::internal::*;
 
 pub struct ChangeTheme {
     pub terrain_theme_name: Option<String>,

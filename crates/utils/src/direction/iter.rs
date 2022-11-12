@@ -1,7 +1,7 @@
-use crate::internal::*;
-use crate::prelude::*;
 use std::mem;
 use std::ops::Range;
+
+use crate::prelude::*;
 
 #[macro_export]
 macro_rules! make_direction_iter {

@@ -1,4 +1,4 @@
-use crate::internal::*;
+use crate::prelude::*;
 
 pub struct Line {
     pub point1: IVec2,

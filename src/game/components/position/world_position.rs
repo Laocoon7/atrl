@@ -1,10 +1,7 @@
-use atrl_engine::bevy_math::Vec3Swizzles;
+use crate::prelude::*;
 
-use crate::game::prelude::*;
-
-#[derive(
-    Inspectable, Component, Serialize, Deserialize, Default, Clone, Copy, PartialEq, Eq, Hash, Debug,
-)]
+#[cfg_attr(feature = "debug", derive(Inspectable))]
+#[derive(Component, Serialize, Deserialize, Default, Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct WorldPosition {
     pub position: IVec3,
 }

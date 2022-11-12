@@ -10,15 +10,15 @@ repository  = "https://github.com/Laocoon7/atrl"
 version     = "0.1.0"
 
 [dependencies]
-atrl-engine = { path = "../engine" }
-parking_lot = "0.12"
-serde       = { version = "1", features = ["derive"] }
+bevy        = {workspace = true}
+parking_lot = {workspace = true}
+serde       = {workspace = true}
 
 ######################################
 ############    Random    ############
 ######################################
-noise       = "0.8"
-rand        = "0.8"
-rand_pcg    = { version = "0.3", features = ["serde1"] }
-rand_seeder = "0.2"
-xxhash-rust = { version = "0.8", features = ["xxh3", "const_xxh3"] }
+noise       = {workspace = true}
+rand        = {workspace = true}
+rand_pcg    = {workspace = true}
+rand_seeder = {workspace = true}
+xxhash-rust = {workspace = true}

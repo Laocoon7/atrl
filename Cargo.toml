@@ -1,3 +1,6 @@
+#################################
+#########       Package
+#################################
 [package]
 authors     = ["Laocoon <laocoon7@gmail.com>", "BigBanana <lecoqjacob@gmail.com>"]
 description = "Away Team Roguelike Game"
@@ -10,12 +13,52 @@ repository  = "https://github.com/Laocoon7/atrl"
 version     = "0.1.0"
 #license-file = "LICENSE"
 categories = ["games"]
-exclude    = ["assets/", "tools/", ".github/", "crates/engine", "crates/utils"]
+exclude    = ["assets/", "tools/", ".github/", "crates/"]
 keywords   = ["game", "ascii", "roguelike"]
 resolver   = "2"
 
+
+#################################
+#########       Workspaces
+#################################
+[workspace]
+members = [
+    "tools/ci",
+    "tools/spancmp",
+    "./crates/*"
+]
+
+#################################
+#########       Features
+#################################
+[features]
+# configuration for release builds
+release             = ["bevy_embedded_assets"]
+
+# default configurations
+default             = ["dev"]
+
+# configuration for debugging information
+debug               = ["bevy-inspector-egui", "colored", "debug-graph", "debug_asset_server", "trace"]
+
+# default configuration while developing
+dev                 = ["bevy/filesystem_watcher", "bevy/dynamic"]
+
+# Parallelism
+parallel            = ["rayon"]
+
+# Debugging
+debug-graph         = ["bevy_mod_debugdump"]
+debug_asset_server  = ["bevy/debug_asset_server"]
+
+# Tracing
+trace        = ["bevy/trace"]
+trace_chrome = ["bevy/trace_chrome"]
+trace_tracy  = ["bevy/trace_tracy"]
+wgpu_trace   = ["bevy/wgpu_trace"]
+
 ################################
-#########    Optimizations    ########
+#########       Optimizations
 ################################
 
 [profile.dev]
@@ -27,56 +70,235 @@ opt-level = 3
 # Optimizations for WASM
 [profile.release]
 codegen-units = 1
-lto           = true
-opt-level     = 'z'
-panic         = 'abort'
+lto         = true
+opt-level   = 'z'
+panic       = 'abort'
 
-#################################
-###########    Workspaces    #########
-#################################
-
-[workspace]
-members = ["tools/ci", "tools/spancmp", "crates/*"]
-
-[features]
-debug   = ["colored"]
-default = ["dev"]
-dev     = ["atrl-engine/dev"]
-release = ["atrl-engine/release"]
-
+################################
+#########       Internal Crate Dependencies
+################################
 [dependencies]
-atrl-engine = { path = "crates/engine" }
-atrl-utils  = { path = "crates/utils" }
+atrl-states   = { path = "crates/states" }
+atrl-utils   = { path = "crates/utils" }
 
-###############################
-#########   Serialization   #########
-###############################
-ron        = "0.8"
-serde      = { version = "1", features = ["derive"] }
-serde_json = "1"
 
-#################################
-###########    Utility    ############
-#################################
+######################################
+#########       Bevy
+######################################
+[workspace.dependencies.bevy]
+default-features = false
+features = [
+  "bevy_asset",
+  "bevy_winit",
+  "png",
+  "x11",
+  "bevy_scene",
+  "wayland",
+  "bevy_core_pipeline",
 
-colored       = { version = "2", optional = true }
-num-derive    = "0.3"
-num-traits    = "0.2"
-once_cell     = "1"
-parking_lot   = "0.12"
-smart-default = { version = "0.6" }
-strum         = { version = "0.24", features = ["derive"] }
+  # Render
+  "bevy_render",
+  "bevy_sprite",
+  "bevy_text",
+  "bevy_ui",
 
-[dependencies.bevy_asset_loader]
+  # File formats
+  "png", "jpeg", "bmp",
+
+  # Serialization
+  "serialize",
+]
+version = "0.8"
+
+######################################
+#########       Assets
+######################################
+[workspace.dependencies.bevy_asset_loader]
 features = ["stageless", "2d", "standard_dynamic_assets", "progress_tracking_stageless"]
 git      = "https://github.com/NiklasEi/bevy_asset_loader"
 
+[workspace.dependencies.bevy_common_assets]
+features = ["ron", "toml", "json"]
+git      = "https://github.com/NiklasEi/bevy_common_assets"
+
+[workspace.dependencies.bevy_tweening]
+features = ["bevy_asset"]
+git      = "https://github.com/djeedai/bevy_tweening"
+
 ######################################
-##############    Input    ###############
+#########       Input
 ######################################
-[dependencies.leafwing-input-manager]
+[workspace.dependencies.leafwing-input-manager]
 # features = ["egui"]
 git = "https://github.com/leafwing-studios/leafwing-input-manager"
 
+###############################
+#########       Serialization   
+###############################
+[workspace.dependencies.ron]
+version = "0.8"
+
+[workspace.dependencies.serde]
+features = ["derive"]
+version = "1"
+
+######################################
+#########       States
+######################################
+[workspace.dependencies.iyes_loopless]
+features = ["states"]
+version  = "0.8"
+
+[workspace.dependencies.iyes_progress]
+features = ["assets", "iyes_loopless"]
+version  = "0.6"
+
+[workspace.dependencies.banana_bevy_utils]
+features = ["states"]
+git      = "https://github.com/banana-studios/banana_bevy_utils"
+
+
+######################################
+#########       Random
+######################################
+[workspace.dependencies.noise]
+version = "0.8"
+
+[workspace.dependencies.rand]
+version = "0.8"
+
+[workspace.dependencies.rand_pcg]
+features = ["serde1"]
+version = "0.3"
+
+[workspace.dependencies.rand_seeder]
+version = "0.2"
+
+[workspace.dependencies.xxhash-rust]
+features = ["xxh3", "const_xxh3"]
+version = "0.8"
+
+######################################
+#########       UI
+######################################
+[workspace.dependencies.bevy_egui]
+git = "https://github.com/mvlabat/bevy_egui"
+
+######################################
+#########       Utility
+######################################
+
+[workspace.dependencies.big-brain]
+git = "https://github.com/zkat/big-brain"
+
+[workspace.dependencies.num-derive]
+version = "0.3"
+
+[workspace.dependencies.num-traits]
+version = "0.2"
+
+[workspace.dependencies.once_cell]
+version = "1"
+
+[workspace.dependencies.parking_lot]
+version = "0.12"
+
+[workspace.dependencies.smart-default]
+version = "0.6"
+
+[workspace.dependencies.strum]
+features = ["derive"]
+version = "0.24"
+
+
+
+
+
+
+######################################
+######################################
+#########       Package/Optional Dependencies
+######################################
+######################################
+
+######################################
+#########       Build Dependencies
+######################################
 [build-dependencies]
 embed-resource = "1.4"
+
+######################################
+#########       Release
+######################################
+[dependencies.bevy_embedded_assets]
+git      = "https://github.com/vleue/bevy_embedded_assets"
+optional = true
+
+######################################
+#########       Debug
+######################################
+[dependencies.bevy-inspector-egui]
+version = "0.13"
+optional = true
+
+[dependencies.bevy_mod_debugdump]
+git      = "https://github.com/jakobhellermann/bevy_mod_debugdump"
+optional = true
+
+[dependencies.colored]
+version = "2"
+optional = true
+
+######################################
+#########       Parallel
+######################################
+[dependencies.rayon]
+git      = "https://github.com/rayon-rs/rayon"
+optional = true
+
+[dependencies.bevy]
+workspace = true
+[dependencies.bevy_asset_loader]
+workspace = true
+[dependencies.bevy_common_assets]
+workspace = true
+[dependencies.bevy_tweening]
+workspace = true
+[dependencies.leafwing-input-manager]
+workspace = true
+[dependencies.ron]
+workspace = true
+[dependencies.serde]
+workspace = true
+[dependencies.iyes_loopless]
+workspace = true
+[dependencies.iyes_progress]
+workspace = true
+[dependencies.banana_bevy_utils]
+workspace = true
+[dependencies.noise]
+workspace = true
+[dependencies.rand]
+workspace = true
+[dependencies.rand_pcg]
+workspace = true
+[dependencies.rand_seeder]
+workspace = true
+[dependencies.xxhash-rust]
+workspace = true
+[dependencies.bevy_egui]
+workspace = true
+[dependencies.big-brain]
+workspace = true
+[dependencies.num-derive]
+workspace = true
+[dependencies.num-traits]
+workspace = true
+[dependencies.once_cell]
+workspace = true
+[dependencies.parking_lot]
+workspace = true
+[dependencies.smart-default]
+workspace = true
+[dependencies.strum]
+workspace = true

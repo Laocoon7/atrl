@@ -1,5 +1,5 @@
-use crate::game::prelude::*;
-use smart_default::SmartDefault;
+use crate::prelude::*;
+use crate::raws::prelude::internal::*;
 
 #[derive(SmartDefault)]
 pub struct SplashPlugin<T: std::default::Default> {
@@ -9,7 +9,7 @@ pub struct SplashPlugin<T: std::default::Default> {
 }
 
 impl<T: StateNext + std::default::Default> Plugin for SplashPlugin<T> {
-    fn build(&self, app: &mut atrl_engine::App) {
+    fn build(&self, app: &mut App) {
         let loading_time = self.loading_time;
 
         app.add_enter_system(

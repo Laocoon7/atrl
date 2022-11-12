@@ -1,5 +1,4 @@
-use crate::app_settings::*;
-use crate::game::prelude::*;
+use crate::prelude::*;
 
 use bevy::render::camera::{ScalingMode, WindowOrigin};
 

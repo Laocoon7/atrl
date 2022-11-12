@@ -1,6 +1,7 @@
-use crate::game::prelude::*;
+use crate::prelude::*;
 
-#[derive(Inspectable, Component)]
+#[cfg_attr(feature = "debug", derive(Inspectable))]
+#[derive(Component)]
 pub struct Equipable {
     pub location: EquipmentSlot,
     pub available_locations: Vec<EquipmentSlot>,

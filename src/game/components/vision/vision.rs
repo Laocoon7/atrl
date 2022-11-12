@@ -1,7 +1,8 @@
 use crate::game::components::*;
-use crate::game::prelude::*;
+use crate::prelude::*;
 
-#[derive(Inspectable, Component, Debug)]
+#[cfg_attr(feature = "debug", derive(Inspectable))]
+#[derive(Component, Debug)]
 pub struct Vision {
     pub vision_types: Vec<VisionType>,
 }

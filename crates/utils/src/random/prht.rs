@@ -1,11 +1,6 @@
 use std::fmt::{self, Debug};
 
-use serde::{
-    de::{self, Deserializer, MapAccess, SeqAccess, Visitor},
-    ser::SerializeStruct,
-    Deserialize, Serialize,
-};
-use xxhash_rust::xxh3::*;
+use crate::prelude::*;
 
 pub struct Prht {
     seed: u64,

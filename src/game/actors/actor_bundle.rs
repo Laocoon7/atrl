@@ -1,4 +1,4 @@
-use crate::game::prelude::*;
+use crate::prelude::*;
 
 #[derive(Bundle)]
 pub struct ActorBundle {
