@@ -1,7 +1,5 @@
 use crate::prelude::*;
 
-enum MapSystem {}
-
 pub struct MapPlugin<T> {
     pub state_construct: T,
     pub state_running: T,

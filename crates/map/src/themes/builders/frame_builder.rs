@@ -1,5 +1,6 @@
 use crate::prelude::*;
 
+#[derive(Default)]
 pub struct FrameBuilder {
     pub tileset_name: Option<String>,
 
@@ -25,17 +26,20 @@ impl FrameBuilder {
         }
     }
 
+    #[must_use]
     pub fn set_tileset_name(&mut self, tileset_name: &str) -> &mut Self {
         self.tileset_name = Some(tileset_name.to_string());
         self
     }
 
+    #[must_use]
     pub fn set_xy<X: Into<usize>, Y: Into<usize>>(&mut self, xy: (X, Y)) -> &mut Self {
         self.xy = Some((xy.0.into(), xy.1.into()));
         self.index = None;
         self
     }
 
+    #[must_use]
     pub fn set_index<I: Into<usize>>(&mut self, index: I) -> &mut Self {
         self.index = Some(index.into());
         self.xy = None;

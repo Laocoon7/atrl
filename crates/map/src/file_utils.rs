@@ -32,10 +32,10 @@ pub fn write<Path: Into<PathBuf>>(path: Path, value: &str) -> Result<()> {
             #[cfg(feature = "debug")]
             debug!("Writing to file: {:?}", path);
             match std::fs::write(path, value) {
-                Ok(_) => return Ok(()),
-                Err(e) => return Err(MyError::Io(e)),
+                Ok(_) => Ok(()),
+                Err(e) => Err(MyError::Io(e)),
             }
         }
-        Err(e) => return Err(MyError::Io(e)),
+        Err(e) => Err(MyError::Io(e)),
     }
 }

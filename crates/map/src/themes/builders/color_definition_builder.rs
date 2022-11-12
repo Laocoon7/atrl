@@ -1,5 +1,6 @@
 use crate::prelude::*;
 
+#[derive(Default)]
 pub struct ColorDefinitionBuilder {
     pub r: Option<u8>,
     pub g: Option<u8>,

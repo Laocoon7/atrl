@@ -1,10 +1,9 @@
 use crate::prelude::*;
 
+#[derive(Default)]
 pub struct AnimationBuilder {
     pub tile_type: Option<u16>,
-
     pub frames_per_second: Option<f32>,
-
     pub frames: Vec<Frame>,
 }
 

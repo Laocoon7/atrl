@@ -11,13 +11,11 @@ impl<'a> MapContext<'a> {
 
     pub fn set_theme(&mut self, theme_name: &str) -> &mut Self {
         self.actions.push(RenderAction::SetTheme(theme_name.to_string()));
-
         self
     }
 
     pub fn set_tile<T: Into<u16>>(&mut self, index: impl Point2d, tile_type: T) -> &mut Self {
         self.actions.push(RenderAction::SetTile(index.as_uvec2(), tile_type.into()));
-
         self
     }
 

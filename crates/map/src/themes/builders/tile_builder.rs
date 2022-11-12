@@ -1,5 +1,6 @@
 use crate::prelude::*;
 
+#[derive(Default)]
 pub struct TileBuilder {
     pub tileset_name: Option<String>,
 
@@ -29,16 +30,19 @@ impl TileBuilder {
         }
     }
 
+    #[must_use]
     pub fn set_tileset_name(&mut self, tileset_name: &str) -> &mut Self {
         self.tileset_name = Some(tileset_name.to_string());
         self
     }
 
+    #[must_use]
     pub fn set_tile_type<T: Into<u16>>(&mut self, tile_type: T) -> &mut Self {
         self.tile_type = Some(tile_type.into());
         self
     }
 
+    #[must_use]
     pub fn set_xy<X: Into<usize>, Y: Into<usize>>(&mut self, xy: (X, Y)) -> &mut Self {
         self.xy = Some((xy.0.into(), xy.1.into()));
         self.index = None;

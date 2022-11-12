@@ -1,5 +1,6 @@
 use crate::prelude::*;
 
+#[derive(Default)]
 pub struct TilesetBuilder {
     pub file: Option<PathBuf>,
     pub name: Option<String>,
@@ -48,11 +49,13 @@ impl TilesetBuilder {
         }
     }
 
+    #[must_use]
     pub fn set_file<Path: Into<PathBuf>>(&mut self, file: Path) -> &mut Self {
         self.file = Some(file.into());
         self
     }
 
+    #[must_use]
     pub fn set_name(&mut self, name: &str) -> &mut Self {
         self.name = Some(name.to_string());
         self
@@ -73,22 +76,26 @@ impl TilesetBuilder {
         self
     }
 
+    #[must_use]
     pub fn set_tile_width(&mut self, tile_width: f32) -> &mut Self {
         self.tile_width = Some(tile_width);
         self
     }
 
+    #[must_use]
     pub fn set_tile_height(&mut self, tile_height: f32) -> &mut Self {
         self.tile_height = Some(tile_height);
         self
     }
 
+    #[must_use]
     pub fn set_columns<U: Into<usize>>(&mut self, columns: U) -> &mut Self {
         let columns = columns.into();
         self.columns = Some(columns);
         self
     }
 
+    #[must_use]
     pub fn set_rows<U: Into<usize>>(&mut self, rows: U) -> &mut Self {
         let rows = rows.into();
         self.rows = Some(rows);
@@ -158,23 +165,11 @@ impl TilesetBuilder {
             None => return Err(MyError::BuilderError("Tileset".to_string(), "rows".to_string())),
         };
 
-        let padding_x = match self.padding_x {
-            Some(u) => u,
-            None => 0.0,
-        };
-        let padding_y = match self.padding_y {
-            Some(u) => u,
-            None => 0.0,
-        };
+        let padding_x = self.padding_x.unwrap_or(0.0);
+        let padding_y = self.padding_y.unwrap_or(0.0);
 
-        let offset_x = match self.offset_x {
-            Some(u) => u,
-            None => 0.0,
-        };
-        let offset_y = match self.offset_y {
-            Some(u) => u,
-            None => 0.0,
-        };
+        let offset_x = self.offset_x.unwrap_or(0.0);
+        let offset_y = self.offset_y.unwrap_or(0.0);
 
         Ok(Tileset {
             file,

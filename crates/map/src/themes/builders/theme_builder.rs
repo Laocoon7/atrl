@@ -1,5 +1,6 @@
 use crate::prelude::*;
 
+#[derive(Default)]
 pub struct ThemeBuilder {
     pub name: Option<String>,
     pub theme_type: Option<u8>,
@@ -17,11 +18,13 @@ impl ThemeBuilder {
         Self { name: None, theme_type: None, tiles: Vec::new(), animations: Vec::new() }
     }
 
+    #[must_use]
     pub fn set_name(&mut self, name: &str) -> &mut Self {
         self.name = Some(name.to_string());
         self
     }
 
+    #[must_use]
     pub fn set_theme_type<T: Into<u8>>(&mut self, theme_type: T) -> &mut Self {
         self.theme_type = Some(theme_type.into());
         self

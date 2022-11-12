@@ -28,12 +28,12 @@ impl ForegroundTile {
             0
         };
 
-        match theme_server.get_tileset(&tile.tileset_name) {
-            Some((handle, _tileset)) => {
-                Some(Self { texture_atlas: handle.clone(), index, color, bg_color })
-            }
-            None => None,
-        }
+        theme_server.get_tileset(&tile.tileset_name).map(|(handle, _tileset)| Self {
+            texture_atlas: handle.clone(),
+            index,
+            color,
+            bg_color,
+        })
     }
 
     pub fn from_frame(frame: &Frame, theme_server: &ThemeServer, map_width: usize) -> Option<Self> {
@@ -55,11 +55,11 @@ impl ForegroundTile {
             0
         };
 
-        match theme_server.get_tileset(&frame.tileset_name) {
-            Some((handle, tileset)) => {
-                Some(Self { texture_atlas: handle.clone(), index, color, bg_color })
-            }
-            None => None,
-        }
+        theme_server.get_tileset(&frame.tileset_name).map(|(handle, tileset)| Self {
+            texture_atlas: handle.clone(),
+            index,
+            color,
+            bg_color,
+        })
     }
 }

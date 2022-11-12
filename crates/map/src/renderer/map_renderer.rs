@@ -5,8 +5,8 @@ use crate::prelude::*;
 #[derive(Component)]
 pub struct MapRenderer {
     pub(crate) size: UVec2,
-    pub(crate) entities: HashMap<u16, Grid<Option<Entity>>>,
     pub(crate) actions: Vec<Vec<RenderAction>>,
+    pub(crate) entities: HashMap<u16, Grid<Option<Entity>>>,
 }
 
 impl MapRenderer {
@@ -19,6 +19,7 @@ impl MapRenderer {
 
         // background
         self.entities.insert(layer - 1, Grid::new_copy(self.size, None));
+
         // foreground
         self.entities.insert(layer, Grid::new_copy(self.size, None));
 
@@ -34,23 +35,25 @@ impl MapRenderer {
     pub(crate) fn clear_actions(&mut self) { self.actions.clear(); }
 
     pub(crate) fn get_entity(&self, layer: u16, index: impl Point2d) -> Option<Entity> {
-        if let Some(grid) = self.entities.get(&layer) {
-            if let Some(entity_option) = grid.get(index) {
-                if let Some(entity) = entity_option {
-                    return Some(entity.clone());
-                }
-            }
+        match self.entities.get(&layer) {
+            Some(grid) => match grid.get(index) {
+                Some(entity_option) => entity_option.as_ref().copied(),
+                None => None,
+            },
+            None => None,
         }
-        None
     }
 
     pub(crate) fn get_entities(&self, index: impl Point2d) -> Vec<Entity> {
         let mut entities = Vec::new();
-        for ((_layer, grid)) in &self.entities {
-            if let Some(entity_option) = grid.get(index) {
-                if let Some(entity) = entity_option {
-                    entities.push(entity.clone());
+        for (_layer, grid) in &self.entities {
+            match grid.get(index) {
+                Some(entity_option) => {
+                    if let Some(entity) = entity_option {
+                        entities.push(*entity);
+                    }
                 }
+                None => todo!(),
             }
         }
         entities

@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-#[derive(Component)]
+#[derive(Component, Clone)]
 pub struct AnimatedTile {
     pub current_index: usize,
     pub frames_per_second: f32,
@@ -27,7 +27,7 @@ impl AnimatedTile {
             }
         }
         if let Some(first_tile) = first_tile {
-            if foreground_tiles.len() > 0 {
+            if !foreground_tiles.is_empty() {
                 return Some((
                     Self {
                         current_index: 0,
