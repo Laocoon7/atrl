@@ -191,6 +191,9 @@ git = "https://github.com/mvlabat/bevy_egui"
 [workspace.dependencies.big-brain]
 git = "https://github.com/zkat/big-brain"
 
+[workspace.dependencies.thiserror]
+version = "1"
+
 [workspace.dependencies.num-derive]
 version = "0.3"
 
