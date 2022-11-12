@@ -244,6 +244,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "atrl-map"
+version = "0.1.0"
+dependencies = [
+ "atrl-common",
+ "bevy 0.8.1",
+ "ron 0.8.0",
+ "serde",
+ "thiserror",
+]
+
+[[package]]
 name = "atrl-raws"
 version = "0.1.0"
 dependencies = [
