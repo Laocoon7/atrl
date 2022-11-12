@@ -1,4 +1,4 @@
-use crate::prelude::*;
+use crate::game::prelude::*;
 use bevy::diagnostic::{Diagnostics, EntityCountDiagnosticsPlugin, FrameTimeDiagnosticsPlugin};
 use bevy_inspector_egui::widgets::InspectorQuerySingle;
 
