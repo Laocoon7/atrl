@@ -73,8 +73,9 @@ panic         = 'abort'
 #########       Internal Crate Dependencies
 ################################
 [dependencies]
-atrl-common = { path = "crates/common" }
-atrl-raws   = { path = "crates/raws" }
+atrl-common     = { path = "crates/common" }
+atrl-components = { path = "crates/components" }
+atrl-raws       = { path = "crates/raws" }
 
 ######################################
 #########       Bevy

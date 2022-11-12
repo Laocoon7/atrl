@@ -11,9 +11,10 @@ mod splash_plugin;
 mod texture_assets;
 
 pub mod prelude {
-    pub mod internal {
+    mod internal {
         pub use crate::systems::*;
     }
+    pub(crate) use internal::*;
 
     mod import {
         pub use atrl_common::prelude::*;
@@ -27,10 +28,10 @@ pub mod prelude {
     pub(crate) use import::*;
 
     mod export {
-        pub use super::super::font_assets::*;
-        pub use super::super::raw_plugin::*;
-        pub use super::super::splash_plugin::*;
-        pub use super::super::texture_assets::*;
+        pub use crate::font_assets::*;
+        pub use crate::raw_plugin::*;
+        pub use crate::splash_plugin::*;
+        pub use crate::texture_assets::*;
     }
     pub use export::*;
 }

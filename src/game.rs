@@ -33,48 +33,6 @@ mod camera {
     pub use main_camera::*;
 }
 
-mod components {
-    mod ai_component {
-        mod ai_component;
-        pub use ai_component::*;
-        mod ai_type;
-        pub use ai_type::*;
-    }
-    pub use ai_component::*;
-    mod movement {
-        mod movement_type;
-        pub use movement_type::*;
-        mod movement;
-        pub use movement::*;
-    }
-    pub use movement::*;
-
-    mod position {
-        mod local_position;
-        pub use local_position::*;
-        mod world_position;
-        pub use world_position::*;
-    }
-    pub use position::*;
-
-    mod vision {
-        mod vision_type;
-        pub use vision_type::*;
-        mod vision;
-        pub use vision::*;
-    }
-    pub use vision::*;
-
-    mod consumable;
-    pub use consumable::*;
-    mod equipable;
-    pub use equipable::*;
-    mod health;
-    pub use health::*;
-    mod tags;
-    pub use tags::*;
-}
-
 mod items {
     mod item_bundle;
     pub use item_bundle::*;
@@ -191,7 +149,6 @@ pub mod prelude {
         pub use super::super::abilities::*;
         pub use super::super::actors::*;
         pub use super::super::camera::*;
-        pub use super::super::components::*;
         pub use super::super::items::*;
         pub use super::super::map::*;
         pub use super::super::player::*;
@@ -205,10 +162,8 @@ pub mod prelude {
     pub mod external {
         pub use super::super::actors::*;
         pub use super::super::camera::*;
-        pub use super::super::components::*;
-        pub use super::super::map::*;
-
         pub use super::super::game_plugin::*;
+        pub use super::super::map::*;
     }
     // local
 }

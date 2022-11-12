@@ -64,13 +64,16 @@ mod geometry {
 
 mod cp437;
 mod game_state;
+mod interlop;
 mod range;
 
 pub mod prelude {
     mod import {
+        pub use atrl_components::prelude::*;
         pub use banana_bevy_utils::prelude::*;
         pub use bevy::{prelude::*, utils::HashSet};
         pub use iyes_loopless::prelude::CurrentState;
+
         pub use noise::{NoiseFn, Perlin};
         pub use rand::{distributions::Standard, prelude::*};
         pub use rand_pcg::Pcg64;
@@ -84,13 +87,14 @@ pub mod prelude {
     pub(crate) use import::*;
 
     mod export {
-        pub use super::super::cp437::*;
-        pub use super::super::direction::*;
-        pub use super::super::game_state::*;
-        pub use super::super::geometry::*;
-        pub use super::super::grid::*;
-        pub use super::super::random::*;
-        pub use super::super::range::*;
+        pub use crate::cp437::*;
+        pub use crate::direction::*;
+        pub use crate::game_state::*;
+        pub use crate::geometry::*;
+        pub use crate::grid::*;
+        pub use crate::interlop::*;
+        pub use crate::random::*;
+        pub use crate::range::*;
     }
     pub use export::*;
 }
