@@ -24,7 +24,7 @@ impl MapRenderer {
                             index: 0,
                             color: Color::WHITE,
                             custom_size: Some(Vec2::ONE),
-                            anchor: bevy::sprite::Anchor::BottomLeft,
+                            anchor: bevy::sprite::Anchor::Center,
                             ..Default::default()
                         },
                         transform: Transform::from_xyz(index.x as f32, index.y as f32, 1.0),
@@ -43,7 +43,7 @@ impl MapRenderer {
                             index: 0,
                             color: Color::WHITE,
                             custom_size: Some(Vec2::ONE),
-                            anchor: bevy::sprite::Anchor::BottomLeft,
+                            anchor: bevy::sprite::Anchor::Center,
                             ..Default::default()
                         },
                         transform: Transform::from_xyz(index.x as f32, index.y as f32, 1.0),
@@ -62,7 +62,7 @@ impl MapRenderer {
                             index: 0,
                             color: Color::WHITE,
                             custom_size: Some(Vec2::ONE),
-                            anchor: bevy::sprite::Anchor::BottomLeft,
+                            anchor: bevy::sprite::Anchor::Center,
                             ..Default::default()
                         },
                         transform: Transform::from_xyz(index.x as f32, index.y as f32, 1.0),
@@ -81,7 +81,7 @@ impl MapRenderer {
                         sprite: Sprite {
                             color: Color::BLACK,
                             custom_size: Some(Vec2::ONE),
-                            anchor: bevy::sprite::Anchor::BottomLeft,
+                            anchor: bevy::sprite::Anchor::Center,
                             ..Default::default()
                         },
                         transform: Transform::from_xyz(index.x as f32, index.y as f32, 1.0),
@@ -99,7 +99,7 @@ impl MapRenderer {
                         sprite: Sprite {
                             color: Color::NONE,
                             custom_size: Some(Vec2::ONE),
-                            anchor: bevy::sprite::Anchor::BottomLeft,
+                            anchor: bevy::sprite::Anchor::Center,
                             ..Default::default()
                         },
                         transform: Transform::from_xyz(index.x as f32, index.y as f32, 1.0),
@@ -117,7 +117,7 @@ impl MapRenderer {
                         sprite: Sprite {
                             color: Color::NONE,
                             custom_size: Some(Vec2::ONE),
-                            anchor: bevy::sprite::Anchor::BottomLeft,
+                            anchor: bevy::sprite::Anchor::Center,
                             ..Default::default()
                         },
                         transform: Transform::from_xyz(index.x as f32, index.y as f32, 1.0),
