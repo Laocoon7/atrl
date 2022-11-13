@@ -14,7 +14,12 @@ pub struct MapRenderer {
 
 #[allow(dead_code)]
 impl MapRenderer {
-    pub fn build(size: impl Size2d, game_assets: &Res<TextureAssets>, commands: &mut Commands) {
+    pub fn build(
+        size: impl Size2d,
+        white_pixel: &Res<WhitePixel>,
+        game_assets: &Res<TextureAssets>,
+        commands: &mut Commands,
+    ) {
         let terrain_entities = Grid::new_fn(size, |index| {
             commands
                 .spawn(RenderTileBundle {
@@ -77,7 +82,7 @@ impl MapRenderer {
             commands
                 .spawn(RenderTileBundleSprite {
                     sprite_bundle: SpriteBundle {
-                        texture: game_assets.white_pixel.clone(),
+                        texture: white_pixel.handle.clone(),
                         sprite: Sprite {
                             color: Color::BLACK,
                             custom_size: Some(Vec2::ONE),
@@ -95,7 +100,7 @@ impl MapRenderer {
             commands
                 .spawn(RenderTileBundleSprite {
                     sprite_bundle: SpriteBundle {
-                        texture: game_assets.white_pixel.clone(),
+                        texture: white_pixel.handle.clone(),
                         sprite: Sprite {
                             color: Color::NONE,
                             custom_size: Some(Vec2::ONE),
@@ -113,7 +118,7 @@ impl MapRenderer {
             commands
                 .spawn(RenderTileBundleSprite {
                     sprite_bundle: SpriteBundle {
-                        texture: game_assets.white_pixel.clone(),
+                        texture: white_pixel.handle.clone(),
                         sprite: Sprite {
                             color: Color::NONE,
                             custom_size: Some(Vec2::ONE),
