@@ -5,7 +5,7 @@ pub fn load_first_map(
     mut commands: Commands,
     game_context: Res<GameContext>,
     mut map_loader: ResMut<MapLoader>,
-    mut state: ResMut<CurrentGameState>,
+    state: Res<CurrentGameState>,
     q_current_map: Query<Entity, With<CurrentMap>>,
 ) {
     map_loader.change_map(

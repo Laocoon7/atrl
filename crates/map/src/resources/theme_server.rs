@@ -1,5 +1,6 @@
 pub use crate::prelude::*;
 
+#[derive(Resource)]
 pub struct ThemeServer {
     pub tilesets: HashMap<String, (Handle<TextureAtlas>, Tileset)>,
     pub themes: HashMap<String, Theme>,

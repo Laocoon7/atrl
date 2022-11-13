@@ -1,7 +1,7 @@
 use crate::game::prelude::internal::*;
 use crate::prelude::*;
 
-#[derive(Component)]
+#[derive(Resource)]
 pub struct MapRenderer {
     pub size: UVec2,
     pub terrain_entities: Grid<Entity>,
@@ -17,7 +17,7 @@ impl MapRenderer {
     pub fn build(size: impl Size2d, game_assets: &Res<TextureAssets>, commands: &mut Commands) {
         let terrain_entities = Grid::new_fn(size, |index| {
             commands
-                .spawn_bundle(RenderTileBundle {
+                .spawn(RenderTileBundle {
                     sprite_sheet_bundle: SpriteSheetBundle {
                         texture_atlas: game_assets.terminal8x8_atlas.clone(),
                         sprite: TextureAtlasSprite {
@@ -36,7 +36,7 @@ impl MapRenderer {
         });
         let feature_entities = Grid::new_fn(size, |index| {
             commands
-                .spawn_bundle(RenderTileBundle {
+                .spawn(RenderTileBundle {
                     sprite_sheet_bundle: SpriteSheetBundle {
                         texture_atlas: game_assets.terminal8x8_atlas.clone(),
                         sprite: TextureAtlasSprite {
@@ -55,7 +55,7 @@ impl MapRenderer {
         });
         let item_entities = Grid::new_fn(size, |index| {
             commands
-                .spawn_bundle(RenderTileBundle {
+                .spawn(RenderTileBundle {
                     sprite_sheet_bundle: SpriteSheetBundle {
                         texture_atlas: game_assets.terminal8x8_atlas.clone(),
                         sprite: TextureAtlasSprite {
@@ -75,7 +75,7 @@ impl MapRenderer {
 
         let terrain_background_entities = Grid::new_fn(size, |index| {
             commands
-                .spawn_bundle(RenderTileBundleSprite {
+                .spawn(RenderTileBundleSprite {
                     sprite_bundle: SpriteBundle {
                         texture: game_assets.white_pixel.clone(),
                         sprite: Sprite {
@@ -93,7 +93,7 @@ impl MapRenderer {
         });
         let feature_background_entities = Grid::new_fn(size, |index| {
             commands
-                .spawn_bundle(RenderTileBundleSprite {
+                .spawn(RenderTileBundleSprite {
                     sprite_bundle: SpriteBundle {
                         texture: game_assets.white_pixel.clone(),
                         sprite: Sprite {
@@ -111,7 +111,7 @@ impl MapRenderer {
         });
         let item_background_entities = Grid::new_fn(size, |index| {
             commands
-                .spawn_bundle(RenderTileBundleSprite {
+                .spawn(RenderTileBundleSprite {
                     sprite_bundle: SpriteBundle {
                         texture: game_assets.white_pixel.clone(),
                         sprite: Sprite {

@@ -1,6 +1,7 @@
 use crate::game::prelude::internal::*;
 use crate::prelude::*;
 
+#[derive(Resource)]
 pub struct MapLoader {
     pub maps: HashMap<WorldPosition, Entity>,
 }
@@ -46,7 +47,7 @@ impl MapLoader {
                     .as_str(),
                     world_position,
                 );
-                let map_entity = commands.spawn().insert(map).insert(CurrentMap).id();
+                let map_entity = commands.spawn((map, CurrentMap)).id();
                 commands.init_resource::<ChangeTheme>();
 
                 self.add_map_entity(world_position, map_entity);

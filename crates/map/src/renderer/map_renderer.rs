@@ -26,7 +26,7 @@ impl MapRenderer {
         self
     }
 
-    pub fn finalize(self, commands: &mut Commands) { commands.spawn().insert(self); }
+    pub fn finalize(self, commands: &mut Commands) { commands.spawn(self); }
 
     pub fn get_context(&mut self) -> MapContext { MapContext::new(self) }
 

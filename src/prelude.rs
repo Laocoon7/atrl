@@ -7,7 +7,6 @@ mod import {
         ecs::system::SystemState,
         math::Vec3Swizzles,
         prelude::*,
-        render::texture::ImageSettings,
         utils::{HashMap, HashSet},
         window::{PresentMode, WindowDescriptor, WindowResizeConstraints},
     };

@@ -4,7 +4,7 @@ use crate::prelude::*;
 pub fn spawn_player(mut commands: Commands, texture_assets: Res<TextureAssets>) {
     info!("Spawning player!");
 
-    commands.spawn_bundle(PlayerBundle {
+    commands.spawn(PlayerBundle {
         player: Player,
         actor: ActorBundle {
             name: Name::new("Bob the Builder"),

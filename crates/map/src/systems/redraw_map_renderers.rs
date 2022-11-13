@@ -66,12 +66,10 @@ pub fn redraw_map_renderers(
                                         None => {
                                             // spawn entity
                                             let entity = commands
-                                                .spawn_bundle(
-                                                    ForegroundTileBundle::from_foreground_tile(
-                                                        foreground_tile,
-                                                        index.as_vec2().extend(layer as f32),
-                                                    ),
-                                                )
+                                                .spawn(ForegroundTileBundle::from_foreground_tile(
+                                                    foreground_tile,
+                                                    index.as_vec2().extend(layer as f32),
+                                                ))
                                                 .id();
                                             add_entities.push((layer, *index, Some(entity)));
                                         }
@@ -112,8 +110,7 @@ pub fn redraw_map_renderers(
                                                             index.as_vec2().extend(layer as f32),
                                                         )
                                                     {
-                                                        let entity =
-                                                            commands.spawn_bundle(bundle).id();
+                                                        let entity = commands.spawn(bundle).id();
                                                         add_entities.push((
                                                             layer,
                                                             *index,
@@ -139,7 +136,7 @@ pub fn redraw_map_renderers(
                                 None => {
                                     if background_color.a() > 0.0 {
                                         let entity = commands
-                                            .spawn_bundle(BackgroundTileBundle::from_color(
+                                            .spawn(BackgroundTileBundle::from_color(
                                                 &white_pixel.0,
                                                 background_color,
                                                 index.as_vec2().extend((layer - 1) as f32),

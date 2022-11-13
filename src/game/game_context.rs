@@ -1,5 +1,6 @@
 use crate::prelude::*;
 
+#[derive(Resource)]
 pub struct GameContext {
     pub random: Lazy<Mutex<Random>>,
     pub world_bounds: Rectangle,

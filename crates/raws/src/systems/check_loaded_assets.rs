@@ -2,8 +2,8 @@ use crate::prelude::*;
 
 pub fn check_progress(
     mut commands: Commands,
+    state: Res<CurrentGameState>,
     splash_timer: Res<SplashTimer>,
-    mut state: ResMut<CurrentGameState>,
     progress_counter: Option<Res<ProgressCounter>>,
 ) {
     if let Some(progress_counter) = progress_counter {

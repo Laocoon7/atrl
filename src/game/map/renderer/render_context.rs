@@ -41,6 +41,6 @@ impl<'a> RenderContext<'a> {
     }
 
     pub fn finalize(self, commands: &mut Commands) {
-        commands.spawn().insert(RenderActions { actions: self.actions });
+        commands.spawn(RenderActions { actions: self.actions });
     }
 }

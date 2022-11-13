@@ -6,6 +6,7 @@ const TERRAIN_DIR: &str = "assets/tilesets/terrain/";
 const FEATURE_DIR: &str = "assets/tilesets/features/";
 const ITEM_DIR: &str = "assets/tilesets/items/";
 
+#[derive(Resource)]
 pub struct TileLoader {
     pub terrain_themes: HashMap<String, Theme>,
     pub feature_themes: HashMap<String, Theme>,
@@ -154,13 +155,13 @@ fn load_themes(
                 texture_atlas.offset_y.unwrap_or(0.0),
             );
 
-            let texture_atlas_handle = atlases.add(TextureAtlas::from_grid_with_padding(
+            let texture_atlas_handle = atlases.add(TextureAtlas::from_grid(
                 image_handle,
                 Vec2::new(texture_atlas.tile_width, texture_atlas.tile_height),
                 texture_atlas.columns,
                 texture_atlas.rows,
-                padding,
-                offset,
+                Some(padding),
+                Some(offset),
             ));
 
             atlas_handle = Some(texture_atlas_handle);

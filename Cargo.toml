@@ -105,14 +105,15 @@ features = [
   # Serialization
   "serialize",
 ]
-version = "0.8"
+version = "0.9"
 
 ######################################
 #########       Assets
 ######################################
 [workspace.dependencies.bevy_asset_loader]
-features = ["stageless", "2d", "standard_dynamic_assets", "progress_tracking_stageless"]
-git      = "https://github.com/NiklasEi/bevy_asset_loader"
+features = ["stageless", "2d", "progress_tracking_stageless"]
+git      = "https://github.com/banana-studios/bevy_asset_loader"
+# git      = "https://github.com/NiklasEi/bevy_asset_loader"
 
 [workspace.dependencies.bevy_common_assets]
 features = ["ron", "toml", "json"]
@@ -127,7 +128,8 @@ git      = "https://github.com/djeedai/bevy_tweening"
 ######################################
 [workspace.dependencies.leafwing-input-manager]
 # features = ["egui"]
-git = "https://github.com/leafwing-studios/leafwing-input-manager"
+git = "https://github.com/banana-studios/leafwing-input-manager"
+# git = "https://github.com/leafwing-studios/leafwing-input-manager"
 
 ###############################
 #########       Serialization   
@@ -144,11 +146,13 @@ version  = "1"
 ######################################
 [workspace.dependencies.iyes_loopless]
 features = ["states"]
-version  = "0.8"
+# version  = "0.8"
+git = "https://github.com/banana-studios/iyes_loopless"
 
 [workspace.dependencies.iyes_progress]
-features = ["assets", "iyes_loopless"]
-version  = "0.6"
+features = ["assets"]
+# version  = "0.6"
+git = "https://github.com/banana-studios/iyes_progress"
 
 [workspace.dependencies.banana_bevy_utils]
 features = ["states"]
@@ -179,6 +183,9 @@ version  = "0.8"
 ######################################
 [workspace.dependencies.bevy_egui]
 git = "https://github.com/mvlabat/bevy_egui"
+
+[workspace.dependencies.kayak_ui]
+git = "https://github.com/StarArawn/kayak_ui"
 
 ######################################
 #########       Utility

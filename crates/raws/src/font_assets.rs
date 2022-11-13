@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-#[derive(AssetCollection)]
+#[derive(Resource, AssetCollection)]
 pub struct FontAssets {
     #[asset(path = "fonts/JuliaMono/JuliaMono-Regular.ttf")]
     pub julia_mono: Handle<Font>,

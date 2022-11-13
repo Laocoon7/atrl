@@ -16,5 +16,5 @@ pub fn spawn_main_camera(mut commands: Commands) {
         },
         ..Default::default()
     };
-    commands.spawn_bundle(camera).insert(MainCamera);
+    commands.spawn((camera, MainCamera));
 }

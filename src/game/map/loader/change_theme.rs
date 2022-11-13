@@ -1,5 +1,7 @@
 use crate::game::prelude::internal::*;
+use bevy::prelude::Resource;
 
+#[derive(Resource)]
 pub struct ChangeTheme {
     pub terrain_theme_name: Option<String>,
     pub feature_theme_name: Option<String>,
