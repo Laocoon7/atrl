@@ -21,7 +21,7 @@ impl ColorDefinitionBuilder {
     /// `.set_rgba()`
     pub fn new() -> Self { Self { r: None, g: None, b: None, a: None } }
 
-    pub fn set_rgb(&mut self, r: u8, g: u8, b: u8) -> &mut Self {
+    pub fn set_rgb(mut self, r: u8, g: u8, b: u8) -> Self {
         self.r = Some(r);
         self.g = Some(g);
         self.b = Some(b);
@@ -29,7 +29,7 @@ impl ColorDefinitionBuilder {
         self
     }
 
-    pub fn set_rgba(&mut self, r: u8, g: u8, b: u8, a: u8) -> &mut Self {
+    pub fn set_rgba(mut self, r: u8, g: u8, b: u8, a: u8) -> Self {
         self.r = Some(r);
         self.g = Some(g);
         self.b = Some(b);
@@ -37,22 +37,22 @@ impl ColorDefinitionBuilder {
         self
     }
 
-    pub fn set_r(&mut self, r: u8) -> &mut Self {
+    pub fn set_r(mut self, r: u8) -> Self {
         self.r = Some(r);
         self
     }
 
-    pub fn set_g(&mut self, g: u8) -> &mut Self {
+    pub fn set_g(mut self, g: u8) -> Self {
         self.g = Some(g);
         self
     }
 
-    pub fn set_b(&mut self, b: u8) -> &mut Self {
+    pub fn set_b(mut self, b: u8) -> Self {
         self.b = Some(b);
         self
     }
 
-    pub fn set_a(&mut self, a: u8) -> &mut Self {
+    pub fn set_a(mut self, a: u8) -> Self {
         self.a = Some(a);
         self
     }

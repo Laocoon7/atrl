@@ -3,7 +3,7 @@ use crate::prelude::*;
 #[derive(Default)]
 pub struct AnimationBuilder {
     pub tile_type: Option<u16>,
-    pub frames_per_second: Option<f32>,
+    pub frames_per_second: Option<f64>,
     pub frames: Vec<Frame>,
 }
 
@@ -14,17 +14,17 @@ impl AnimationBuilder {
     /// `.frames_per_second()`
     pub fn new() -> Self { Self { tile_type: None, frames_per_second: None, frames: Vec::new() } }
 
-    pub fn set_tile_type<T: Into<u16>>(&mut self, tile_type: T) -> &mut Self {
+    pub fn set_tile_type<T: Into<u16>>(mut self, tile_type: T) -> Self {
         self.tile_type = Some(tile_type.into());
         self
     }
 
-    pub fn set_frames_per_second<F: Into<f32>>(&mut self, frames_per_second: F) -> &mut Self {
+    pub fn set_frames_per_second<F: Into<f64>>(mut self, frames_per_second: F) -> Self {
         self.frames_per_second = Some(frames_per_second.into());
         self
     }
 
-    pub fn add_frame(&mut self, frame: Frame) -> &mut Self {
+    pub fn add_frame(mut self, frame: Frame) -> Self {
         self.frames.push(frame);
         self
     }

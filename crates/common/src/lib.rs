@@ -69,6 +69,8 @@ mod file_utils;
 mod game_state;
 mod interlop;
 mod range;
+mod theme_type;
+mod tile_type;
 mod white_pixel;
 
 pub mod prelude {
@@ -108,6 +110,8 @@ pub mod prelude {
         pub use crate::interlop::*;
         pub use crate::random::*;
         pub use crate::range::*;
+        pub use crate::theme_type::*;
+        pub use crate::tile_type::*;
         pub use crate::white_pixel::*;
     }
     pub use export::*;

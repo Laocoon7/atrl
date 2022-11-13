@@ -50,74 +50,74 @@ impl TilesetBuilder {
     }
 
     #[must_use]
-    pub fn set_file<Path: Into<PathBuf>>(&mut self, file: Path) -> &mut Self {
+    pub fn set_file<Path: Into<PathBuf>>(mut self, file: Path) -> Self {
         self.file = Some(file.into());
         self
     }
 
     #[must_use]
-    pub fn set_name(&mut self, name: &str) -> &mut Self {
+    pub fn set_name(mut self, name: &str) -> Self {
         self.name = Some(name.to_string());
         self
     }
 
-    pub fn set_image_handle(&mut self, image_handle: &Handle<Image>) -> &mut Self {
+    pub fn set_image_handle(mut self, image_handle: &Handle<Image>) -> Self {
         self.image_handle = Some(image_handle.clone());
         self
     }
 
-    pub fn set_image_width(&mut self, image_width: f32) -> &mut Self {
+    pub fn set_image_width(mut self, image_width: f32) -> Self {
         self.image_width = Some(image_width);
         self
     }
 
-    pub fn set_image_height(&mut self, image_height: f32) -> &mut Self {
+    pub fn set_image_height(mut self, image_height: f32) -> Self {
         self.image_height = Some(image_height);
         self
     }
 
     #[must_use]
-    pub fn set_tile_width(&mut self, tile_width: f32) -> &mut Self {
+    pub fn set_tile_width(mut self, tile_width: f32) -> Self {
         self.tile_width = Some(tile_width);
         self
     }
 
     #[must_use]
-    pub fn set_tile_height(&mut self, tile_height: f32) -> &mut Self {
+    pub fn set_tile_height(mut self, tile_height: f32) -> Self {
         self.tile_height = Some(tile_height);
         self
     }
 
     #[must_use]
-    pub fn set_columns<U: Into<usize>>(&mut self, columns: U) -> &mut Self {
+    pub fn set_columns<U: Into<usize>>(mut self, columns: U) -> Self {
         let columns = columns.into();
         self.columns = Some(columns);
         self
     }
 
     #[must_use]
-    pub fn set_rows<U: Into<usize>>(&mut self, rows: U) -> &mut Self {
+    pub fn set_rows<U: Into<usize>>(mut self, rows: U) -> Self {
         let rows = rows.into();
         self.rows = Some(rows);
         self
     }
 
-    pub fn set_padding_x(&mut self, padding_x: f32) -> &mut Self {
+    pub fn set_padding_x(mut self, padding_x: f32) -> Self {
         self.padding_x = Some(padding_x);
         self
     }
 
-    pub fn set_padding_y(&mut self, padding_y: f32) -> &mut Self {
+    pub fn set_padding_y(mut self, padding_y: f32) -> Self {
         self.padding_y = Some(padding_y);
         self
     }
 
-    pub fn set_offset_x(&mut self, offset_x: f32) -> &mut Self {
+    pub fn set_offset_x(mut self, offset_x: f32) -> Self {
         self.offset_x = Some(offset_x);
         self
     }
 
-    pub fn set_offset_y(&mut self, offset_y: f32) -> &mut Self {
+    pub fn set_offset_y(mut self, offset_y: f32) -> Self {
         self.offset_y = Some(offset_y);
         self
     }

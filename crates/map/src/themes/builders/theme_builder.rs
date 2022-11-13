@@ -19,23 +19,23 @@ impl ThemeBuilder {
     }
 
     #[must_use]
-    pub fn set_name(&mut self, name: &str) -> &mut Self {
+    pub fn set_name(mut self, name: &str) -> Self {
         self.name = Some(name.to_string());
         self
     }
 
     #[must_use]
-    pub fn set_theme_type<T: Into<u8>>(&mut self, theme_type: T) -> &mut Self {
+    pub fn set_theme_type<T: Into<u8>>(mut self, theme_type: T) -> Self {
         self.theme_type = Some(theme_type.into());
         self
     }
 
-    pub fn add_tile(&mut self, tile: Tile) -> &mut Self {
+    pub fn add_tile(mut self, tile: Tile) -> Self {
         self.tiles.push(tile);
         self
     }
 
-    pub fn add_animation(&mut self, animation: Animation) -> &mut Self {
+    pub fn add_animation(mut self, animation: Animation) -> Self {
         self.animations.push(animation);
         self
     }
@@ -57,5 +57,29 @@ impl ThemeBuilder {
         let animations = self.animations;
 
         Ok(Theme { name, theme_type, tiles, animations })
+    }
+}
+
+impl ThemeBuilder {
+    pub fn add_terminal_terrain(self, tileset: &Tileset) -> Self {
+        self
+        .add_tile(tileset.get_tile_builder(0, TileType::Empty).build().unwrap())
+        .add_tile(tileset.get_tile_builder(from_cp437('.'), TileType::Floor).build().unwrap())
+        .add_tile(tileset.get_tile_builder(from_cp437('#'), TileType::Wall).build().unwrap())
+    }
+
+    pub fn add_terminal_features(self, tileset: &Tileset) -> Self {
+
+        self
+    }
+
+    pub fn add_terminal_items(self, tileset: &Tileset) -> Self {
+
+        self
+    }
+
+    pub fn add_terminal_actors(self, tileset: &Tileset) -> Self {
+
+        self
     }
 }

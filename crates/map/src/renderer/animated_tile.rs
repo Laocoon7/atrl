@@ -3,7 +3,7 @@ use crate::prelude::*;
 #[derive(Component, Clone)]
 pub struct AnimatedTile {
     pub current_index: usize,
-    pub frames_per_second: f32,
+    pub frames_per_second: f64,
     pub elapsed_time: f64,
     pub foreground_tiles: Vec<ForegroundTile>,
 }

@@ -31,36 +31,36 @@ impl TileBuilder {
     }
 
     #[must_use]
-    pub fn set_tileset_name(&mut self, tileset_name: &str) -> &mut Self {
+    pub fn set_tileset_name(mut self, tileset_name: &str) -> Self {
         self.tileset_name = Some(tileset_name.to_string());
         self
     }
 
     #[must_use]
-    pub fn set_tile_type<T: Into<u16>>(&mut self, tile_type: T) -> &mut Self {
+    pub fn set_tile_type<T: Into<u16>>(mut self, tile_type: T) -> Self {
         self.tile_type = Some(tile_type.into());
         self
     }
 
     #[must_use]
-    pub fn set_xy<X: Into<usize>, Y: Into<usize>>(&mut self, xy: (X, Y)) -> &mut Self {
+    pub fn set_xy<X: Into<usize>, Y: Into<usize>>(mut self, xy: (X, Y)) -> Self {
         self.xy = Some((xy.0.into(), xy.1.into()));
         self.index = None;
         self
     }
 
-    pub fn set_index<I: Into<usize>>(&mut self, index: I) -> &mut Self {
+    pub fn set_index<I: Into<usize>>(mut self, index: I) -> Self {
         self.index = Some(index.into());
         self.xy = None;
         self
     }
 
-    pub fn set_foreground_color(&mut self, color_definition: ColorDefinition) -> &mut Self {
+    pub fn set_foreground_color(mut self, color_definition: ColorDefinition) -> Self {
         self.foreground_color = Some(color_definition);
         self
     }
 
-    pub fn set_background_color(&mut self, color_definition: ColorDefinition) -> &mut Self {
+    pub fn set_background_color(mut self, color_definition: ColorDefinition) -> Self {
         self.background_color = Some(color_definition);
         self
     }
