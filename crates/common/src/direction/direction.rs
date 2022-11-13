@@ -49,16 +49,21 @@ impl GridDirection {
         }
     }
 
+    // TODO(FIX): Normal direction coord is N: -1, S: 1, E: 1, W: -1
+    // Bevy Transform uses N: 1, S: -1, E: 1, W: -1
     pub fn coord(self) -> IVec2 {
         match self {
-            GridDirection::North => IVec2::new(0, -1),
-            GridDirection::NorthEast => IVec2::new(1, -1),
+            GridDirection::North => IVec2::new(0, 1),
+            GridDirection::NorthEast => IVec2::new(1, 1),
+
             GridDirection::East => IVec2::new(1, 0),
-            GridDirection::SouthEast => IVec2::new(1, 1),
-            GridDirection::South => IVec2::new(0, 1),
-            GridDirection::SouthWest => IVec2::new(-1, 1),
+            GridDirection::SouthEast => IVec2::new(1, -1),
+
+            GridDirection::South => IVec2::new(0, -1),
+            GridDirection::SouthWest => IVec2::new(-1, -1),
+
             GridDirection::West => IVec2::new(-1, 0),
-            GridDirection::NorthWest => IVec2::new(-1, -1),
+            GridDirection::NorthWest => IVec2::new(-1, 1),
         }
     }
 
@@ -201,14 +206,14 @@ impl From<GridDirection> for [i32; 2] {
     fn from(d: GridDirection) -> [i32; 2] {
         use self::GridDirection::*;
         match d {
-            North => [0, -1],
+            North => [0, 1],
             East => [1, 0],
-            South => [0, 1],
+            South => [0, -1],
             West => [-1, 0],
-            NorthWest => [-1, -1],
-            NorthEast => [1, -1],
-            SouthEast => [1, 1],
-            SouthWest => [-1, 1],
+            NorthWest => [-1, 1],
+            NorthEast => [1, 1],
+            SouthEast => [1, -1],
+            SouthWest => [-1, -1],
         }
     }
 }
@@ -216,14 +221,14 @@ impl From<GridDirection> for (i32, i32) {
     fn from(d: GridDirection) -> (i32, i32) {
         use self::GridDirection::*;
         match d {
-            North => (0, -1),
+            North => (0, 1),
             East => (1, 0),
-            South => (0, 1),
+            South => (0, -1),
             West => (-1, 0),
-            NorthWest => (-1, -1),
-            NorthEast => (1, -1),
-            SouthEast => (1, 1),
-            SouthWest => (-1, 1),
+            NorthWest => (-1, 1),
+            NorthEast => (1, 1),
+            SouthEast => (1, -1),
+            SouthWest => (-1, -1),
         }
     }
 }

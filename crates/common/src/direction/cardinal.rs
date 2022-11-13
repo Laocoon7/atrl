@@ -46,9 +46,9 @@ impl CardinalDirection {
 
     pub fn coord(self) -> IVec2 {
         match self {
-            CardinalDirection::North => IVec2::new(0, -1),
+            CardinalDirection::North => IVec2::new(0, 1),
             CardinalDirection::East => IVec2::new(1, 0),
-            CardinalDirection::South => IVec2::new(0, 1),
+            CardinalDirection::South => IVec2::new(0, -1),
             CardinalDirection::West => IVec2::new(-1, 0),
         }
     }
@@ -123,9 +123,9 @@ impl CardinalDirection {
 
     pub fn axis_and_sign(self) -> (GridAxis, i32) {
         match self {
-            CardinalDirection::North => (GridAxis::Y, -1),
+            CardinalDirection::North => (GridAxis::Y, 1),
             CardinalDirection::East => (GridAxis::X, 1),
-            CardinalDirection::South => (GridAxis::Y, 1),
+            CardinalDirection::South => (GridAxis::Y, -1),
             CardinalDirection::West => (GridAxis::X, -1),
         }
     }
@@ -144,9 +144,9 @@ impl From<CardinalDirection> for [i32; 2] {
         use self::CardinalDirection::*;
         match c {
             East => [1, 0],
-            South => [0, 1],
+            South => [0, -1],
             West => [-1, 0],
-            North => [0, -1],
+            North => [0, 1],
         }
     }
 }
@@ -155,9 +155,9 @@ impl From<CardinalDirection> for (i32, i32) {
         use self::CardinalDirection::*;
         match c {
             East => (1, 0),
-            South => (0, 1),
+            South => (0, -1),
             West => (-1, 0),
-            North => (0, -1),
+            North => (0, 1),
         }
     }
 }

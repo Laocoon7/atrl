@@ -44,6 +44,7 @@ fn main() {
 
     // set entry state
     app.add_loopless_state(GameState::default());
+    app.insert_resource(TurnState::AwaitingInput);
 
     // asset loading
     app.add_plugin(RawPlugin {
@@ -53,9 +54,9 @@ fn main() {
 
     // game related
     app.add_plugin(GamePlugin {
-        state_construct: GameState::Construct(MapGen),
-        state_main_menu: GameState::Ui(MainMenu),
         state_running: GameState::InGame,
+        state_main_menu: GameState::Ui(MainMenu),
+        state_construct: GameState::Construct(MapGen),
     });
 
     // `AppState::Initializing` is a buffer state to allow bevy plugins to initialize

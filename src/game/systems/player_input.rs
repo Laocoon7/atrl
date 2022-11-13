@@ -1,19 +1,22 @@
 use crate::game::prelude::internal::*;
 use crate::prelude::*;
+use atrl_common::prelude::AtrlPosition2;
 
 pub fn player_input(
+    state: Res<TurnState>,
     mut commands: Commands,
-    state: Res<CurrentGameState>,
-    mut query: Query<(&mut LocalPosition, &ActionState<PlayerAction>), With<Player>>,
+    mut query: Query<(&mut Transform, &ActionState<PlayerAction>), With<Player>>,
 ) {
-    let (mut player_pos, action_state) = query.single_mut();
+    let (mut position, action_state) = query.single_mut();
 
     for input_direction in PlayerAction::DIRECTIONS {
         if action_state.just_pressed(input_direction) {
             if let Some(direction) = input_direction.direction() {
-                println!("Player moved {:?}", direction);
-                let destination = player_pos.position + direction.coord();
-                player_pos.position = destination;
+                let mut position_vec = position.get();
+                position_vec += direction.coord().as_vec2().normalize();
+                position.set_value(position_vec);
+
+                println!("Player moved to {:?} {:?}", direction, direction.coord().as_vec2());
 
                 state.set_next(&mut commands);
             }

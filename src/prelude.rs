@@ -42,9 +42,10 @@ mod import {
     #[cfg(feature = "parallel")]
     pub use rayon::prelude::*;
 
-    pub use atrl_common::prelude::AssetLoadStates::*;
-    pub use atrl_common::prelude::ConstructStates::*;
-    pub use atrl_common::prelude::UiStates::*;
+    pub use atrl_common::prelude::AssetLoadState::*;
+    pub use atrl_common::prelude::ConstructState::*;
+    pub use atrl_common::prelude::TurnState::*;
+    pub use atrl_common::prelude::UiState::*;
     pub use atrl_common::prelude::*;
     pub use atrl_components::prelude::*;
     pub use atrl_raws::prelude::*;

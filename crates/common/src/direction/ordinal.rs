@@ -46,10 +46,10 @@ impl OrdinalDirection {
 
     pub fn coord(self) -> IVec2 {
         match self {
-            OrdinalDirection::NorthEast => IVec2::new(1, -1),
-            OrdinalDirection::SouthEast => IVec2::new(1, 1),
-            OrdinalDirection::SouthWest => IVec2::new(-1, 1),
-            OrdinalDirection::NorthWest => IVec2::new(-1, -1),
+            OrdinalDirection::NorthEast => IVec2::new(1, 1),
+            OrdinalDirection::SouthEast => IVec2::new(1, -1),
+            OrdinalDirection::SouthWest => IVec2::new(-1, -1),
+            OrdinalDirection::NorthWest => IVec2::new(-1, 1),
         }
     }
 
@@ -157,10 +157,10 @@ impl From<OrdinalDirection> for [i32; 2] {
     fn from(o: OrdinalDirection) -> [i32; 2] {
         use self::OrdinalDirection::*;
         match o {
-            NorthWest => [-1, -1],
-            NorthEast => [1, -1],
-            SouthEast => [1, 1],
-            SouthWest => [-1, 1],
+            NorthWest => [-1, 1],
+            NorthEast => [1, 1],
+            SouthEast => [1, -1],
+            SouthWest => [-1, -1],
         }
     }
 }
@@ -168,10 +168,10 @@ impl From<OrdinalDirection> for (i32, i32) {
     fn from(o: OrdinalDirection) -> (i32, i32) {
         use self::OrdinalDirection::*;
         match o {
-            NorthWest => (-1, -1),
-            NorthEast => (1, -1),
-            SouthEast => (1, 1),
-            SouthWest => (-1, 1),
+            NorthWest => (-1, 1),
+            NorthEast => (1, 1),
+            SouthEast => (1, -1),
+            SouthWest => (-1, -1),
         }
     }
 }

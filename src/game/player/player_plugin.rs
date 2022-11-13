@@ -19,8 +19,8 @@ impl PlayerAction {
         match self {
             Self::Up => Some(GridDirection::North),
             Self::Down => Some(GridDirection::South),
-            Self::Left => Some(GridDirection::East),
-            Self::Right => Some(GridDirection::West),
+            Self::Left => Some(GridDirection::West),
+            Self::Right => Some(GridDirection::East),
         }
     }
 }
@@ -36,6 +36,11 @@ impl<T: StateNext> Plugin for PlayerPlugin<T> {
                 .run_in_state(self.state_running.clone())
                 .with_system(player_input)
                 .into(),
+        );
+
+        // TODO: Remove this once states are working for player / AI
+        app.add_system(
+            insert_resource!(TurnState::AwaitingInput).run_if_resource_equals(TurnState::Ticking),
         );
     }
 }
