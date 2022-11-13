@@ -137,7 +137,7 @@ pub fn redraw_map_renderers(
                                     if background_color.a() > 0.0 {
                                         let entity = commands
                                             .spawn(BackgroundTileBundle::from_color(
-                                                &white_pixel.0,
+                                                &white_pixel.handle,
                                                 background_color,
                                                 index.as_vec2().extend((layer - 1) as f32),
                                             ))
