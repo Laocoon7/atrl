@@ -9,7 +9,11 @@ pub struct AnimatedTileBundle {
 }
 
 impl AnimatedTileBundle {
-    pub fn from_animation(animated_tile: AnimatedTile, background_entity: Entity, position: Vec3) -> Option<Self> {
+    pub fn from_animation(
+        animated_tile: AnimatedTile,
+        background_entity: Entity,
+        position: Vec3,
+    ) -> Option<Self> {
         animated_tile.get_current_foreground_tile().map(|foreground_tile| Self {
             sprite_sheet_bundle: SpriteSheetBundle {
                 sprite: TextureAtlasSprite {

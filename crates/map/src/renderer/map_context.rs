@@ -24,8 +24,23 @@ impl<'a> MapContext<'a> {
         self
     }
 
-    pub(crate) fn set_raw(&mut self, foreground_entity: &Entity, texture_atlas_handle: &Handle<TextureAtlas>, index: usize, foreground_color: &Color, background_entity: &Entity, background_color: &Color) -> &mut Self {
-        self.actions.push(RenderAction::SetRaw(foreground_entity.clone(), texture_atlas_handle.clone(), index, foreground_color.clone(), background_entity.clone(), background_color.clone()));
+    pub(crate) fn set_raw(
+        &mut self,
+        foreground_entity: &Entity,
+        texture_atlas_handle: &Handle<TextureAtlas>,
+        index: usize,
+        foreground_color: &Color,
+        background_entity: &Entity,
+        background_color: &Color,
+    ) -> &mut Self {
+        self.actions.push(RenderAction::SetRaw(
+            foreground_entity.clone(),
+            texture_atlas_handle.clone(),
+            index,
+            foreground_color.clone(),
+            background_entity.clone(),
+            background_color.clone(),
+        ));
         self
     }
 

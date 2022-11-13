@@ -9,7 +9,11 @@ pub struct ForegroundTileBundle {
 }
 
 impl ForegroundTileBundle {
-    pub fn from_foreground_tile(foreground_tile: ForegroundTile, background_entity: Entity, position: Vec3) -> Self {
+    pub fn from_foreground_tile(
+        foreground_tile: ForegroundTile,
+        background_entity: Entity,
+        position: Vec3,
+    ) -> Self {
         Self {
             sprite_sheet_bundle: SpriteSheetBundle {
                 sprite: TextureAtlasSprite {

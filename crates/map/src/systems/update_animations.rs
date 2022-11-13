@@ -20,7 +20,10 @@ pub fn update_animations(
                     let foreground_entity = map_renderer.get_entity(*layer, (x, y));
                     let background_entity = map_renderer.get_entity(layer - 1, (x, y));
                     if foreground_entity.is_some() && background_entity.is_some() {
-                        entities.push((foreground_entity.unwrap().clone(), background_entity.unwrap().clone()));
+                        entities.push((
+                            foreground_entity.unwrap().clone(),
+                            background_entity.unwrap().clone(),
+                        ));
                     }
                 }
             }
@@ -36,14 +39,14 @@ pub fn update_animations(
                     let index = frame.index;
                     let foreground_color = &frame.color;
                     let background_color = &frame.bg_color;
-    
+
                     map_context.set_raw(
                         &foreground_entity,
                         texture_atlas_handle,
                         index,
                         foreground_color,
                         &background_entity,
-                        background_color
+                        background_color,
                     );
                 }
             }
@@ -53,14 +56,15 @@ pub fn update_animations(
     }
 }
 
-
 /// Calculates the current frame after `elapsed_time_64` seconds
 /// Adjusts `tile` accordingly.
 /// returns `true` if `tile.current_index` changed
 /// otherwise returns `false`
 fn calc_current_frame(tile: &mut AnimatedTile, elapsed_time_64: f64) -> bool {
     tile.elapsed_time += elapsed_time_64;
-    let current_index = (tile.frames_per_second as f64 * tile.elapsed_time % tile.foreground_tiles.len() as f64).floor() as usize;
+    let current_index = (tile.frames_per_second as f64 * tile.elapsed_time
+        % tile.foreground_tiles.len() as f64)
+        .floor() as usize;
     if tile.current_index != current_index {
         tile.current_index = current_index;
         true

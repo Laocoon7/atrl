@@ -7,11 +7,21 @@ pub fn redraw_map_renderers(
     white_pixel: Res<WhitePixel>,
     mut tiles: ParamSet<(
         Query<
-            (&mut Handle<TextureAtlas>, &mut TextureAtlasSprite, &mut ForegroundTile, &BackgroundEntityHolder),
+            (
+                &mut Handle<TextureAtlas>,
+                &mut TextureAtlasSprite,
+                &mut ForegroundTile,
+                &BackgroundEntityHolder,
+            ),
             Without<AnimatedTile>,
         >,
         Query<
-            (&mut Handle<TextureAtlas>, &mut TextureAtlasSprite, &mut AnimatedTile, &BackgroundEntityHolder),
+            (
+                &mut Handle<TextureAtlas>,
+                &mut TextureAtlasSprite,
+                &mut AnimatedTile,
+                &BackgroundEntityHolder,
+            ),
             Without<ForegroundTile>,
         >,
         Query<&mut Sprite, With<BackgroundTile>>,
@@ -28,7 +38,7 @@ pub fn redraw_map_renderers(
                     if let Some(theme) = theme_server.get_theme(theme_name) {
                         selected_theme = Some(theme);
                     }
-                },
+                }
                 RenderAction::SetTile(index, tile_type) => {
                     if let Some(theme) = selected_theme {
                         let layer = MapRenderer::layer_id_to_foreground_layer(theme.theme_type);
@@ -59,13 +69,14 @@ pub fn redraw_map_renderers(
                                             mut handle,
                                             mut sprite,
                                             mut old_tile,
-                                            background_entity_holder
+                                            background_entity_holder,
                                         )) = tiles.p0().get_mut(entity)
                                         {
                                             *handle = foreground_tile.texture_atlas.clone();
                                             sprite.index = foreground_tile.index;
                                             *old_tile = foreground_tile;
-                                            background_entity = Some(background_entity_holder.entity.clone());
+                                            background_entity =
+                                                Some(background_entity_holder.entity.clone());
                                         } else {
                                             error!("ForegroundTile: Entity missing components");
                                         }
@@ -73,7 +84,13 @@ pub fn redraw_map_renderers(
                                     None => {
                                         // spawn entity
                                         let position = index.as_vec2().extend(layer as f32);
-                                        let bg_entity = commands.spawn(BackgroundTileBundle::from_color(&white_pixel.handle, Color::NONE, position)).id();
+                                        let bg_entity = commands
+                                            .spawn(BackgroundTileBundle::from_color(
+                                                &white_pixel.handle,
+                                                Color::NONE,
+                                                position,
+                                            ))
+                                            .id();
                                         background_entity = Some(bg_entity.clone());
                                         let entity = commands
                                             .spawn(ForegroundTileBundle::from_foreground_tile(
@@ -105,21 +122,31 @@ pub fn redraw_map_renderers(
                                                     mut handle,
                                                     mut sprite,
                                                     mut old_tile,
-                                                    background_entity_holder
+                                                    background_entity_holder,
                                                 )) = tiles.p1().get_mut(entity)
                                                 {
                                                     *handle = first_tile.texture_atlas.clone();
                                                     sprite.index = first_tile.index;
                                                     *old_tile = animated_tile;
-                                                    background_entity = Some(background_entity_holder.entity.clone());
+                                                    background_entity = Some(
+                                                        background_entity_holder.entity.clone(),
+                                                    );
                                                 } else {
-                                                    error!("AnimatedTile: Entity missing components");
+                                                    error!(
+                                                        "AnimatedTile: Entity missing components"
+                                                    );
                                                 }
                                             }
                                             None => {
                                                 // spawn entity
                                                 let position = index.as_vec2().extend(layer as f32);
-                                                let bg_entity = commands.spawn(BackgroundTileBundle::from_color(&white_pixel.handle, Color::NONE, position)).id();
+                                                let bg_entity = commands
+                                                    .spawn(BackgroundTileBundle::from_color(
+                                                        &white_pixel.handle,
+                                                        Color::NONE,
+                                                        position,
+                                                    ))
+                                                    .id();
                                                 background_entity = Some(bg_entity.clone());
 
                                                 if let Some(bundle) =
@@ -135,7 +162,11 @@ pub fn redraw_map_renderers(
                                                         *index,
                                                         Some(entity),
                                                     ));
-                                                    add_entities.push((layer - 1, *index, Some(bg_entity)));
+                                                    add_entities.push((
+                                                        layer - 1,
+                                                        *index,
+                                                        Some(bg_entity),
+                                                    ));
                                                 }
                                             }
                                         }
@@ -151,29 +182,30 @@ pub fn redraw_map_renderers(
                             }
                         }
                     }
-                },
+                }
                 RenderAction::ClearTile(index) => {
                     remove_indexes.push(*index);
                     for entity in map_renderer.get_entities(*index) {
                         commands.entity(entity).despawn_recursive();
                     }
-                },
-                RenderAction::SetRaw(foreground_entity, texture_atlas_handle, index, foreground_color, background_entity, background_color) => {
-                    if let Ok((
-                        mut handle,
-                        mut sprite,
-                        mut _old_tile,
-                        _background_entity
-                    )) = tiles.p0().get_mut(foreground_entity.clone()) {
+                }
+                RenderAction::SetRaw(
+                    foreground_entity,
+                    texture_atlas_handle,
+                    index,
+                    foreground_color,
+                    background_entity,
+                    background_color,
+                ) => {
+                    if let Ok((mut handle, mut sprite, mut _old_tile, _background_entity)) =
+                        tiles.p0().get_mut(foreground_entity.clone())
+                    {
                         *handle = texture_atlas_handle.clone();
                         sprite.index = *index;
                         sprite.color = *foreground_color;
-                    } else if let Ok((
-                        mut handle,
-                        mut sprite,
-                        mut _old_tile,
-                        _background_entity
-                    )) = tiles.p1().get_mut(foreground_entity.clone()) {
+                    } else if let Ok((mut handle, mut sprite, mut _old_tile, _background_entity)) =
+                        tiles.p1().get_mut(foreground_entity.clone())
+                    {
                         *handle = texture_atlas_handle.clone();
                         sprite.index = *index;
                         sprite.color = *foreground_color;
@@ -182,7 +214,7 @@ pub fn redraw_map_renderers(
                     if let Ok(mut sprite) = tiles.p2().get_mut(background_entity.clone()) {
                         sprite.color = *background_color;
                     }
-                },
+                }
             }
         }
         map_renderer.clear_actions();

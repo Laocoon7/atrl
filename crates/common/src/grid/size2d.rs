@@ -10,7 +10,9 @@ pub const MAX_SIZE: UVec2 = UVec2 { x: MAX_SIZE_FIELD, y: MAX_SIZE_FIELD };
 #[derive(Debug)]
 pub struct DimensionTooLargeForSize;
 
-pub(crate) const fn check_size_limit(value: u32) -> core::result::Result<(), DimensionTooLargeForSize> {
+pub(crate) const fn check_size_limit(
+    value: u32,
+) -> core::result::Result<(), DimensionTooLargeForSize> {
     if value >= MAX_SIZE_FIELD {
         Err(DimensionTooLargeForSize)
     } else {

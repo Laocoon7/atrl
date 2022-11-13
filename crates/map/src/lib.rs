@@ -80,8 +80,8 @@ mod macros {
 
 pub mod prelude {
     mod internal {
-        pub use bevy::prelude::*;
         pub use bevy::ecs::{bundle, schedule::StateData};
+        pub use bevy::prelude::*;
         pub use bevy::sprite::Anchor::*;
         pub use bevy::utils::HashMap;
 
