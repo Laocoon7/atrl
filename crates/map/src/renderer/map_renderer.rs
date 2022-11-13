@@ -5,7 +5,7 @@ use crate::prelude::*;
 #[derive(Component)]
 pub struct MapRenderer {
     pub(crate) size: UVec2,
-    pub(crate) actions: Vec<Vec<RenderAction>>,
+    pub(crate) actions: Vec<RenderAction>,
     pub(crate) entities: HashMap<u16, Grid<Option<Entity>>>,
 }
 
@@ -30,7 +30,11 @@ impl MapRenderer {
 
     pub fn get_context(&mut self) -> MapContext { MapContext::new(self) }
 
-    pub(crate) fn add_actions(&mut self, actions: Vec<RenderAction>) { self.actions.push(actions); }
+    pub(crate) fn add_actions(&mut self, actions: Vec<RenderAction>) {
+        for action in actions {
+            self.actions.push(action);
+        }
+    }
 
     pub(crate) fn clear_actions(&mut self) { self.actions.clear(); }
 

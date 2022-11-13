@@ -65,9 +65,9 @@ mod geometry {
 mod common_plugin;
 mod cp437;
 mod game_state;
-mod white_pixel;
 mod interlop;
 mod range;
+mod white_pixel;
 
 pub mod prelude {
     mod import {
@@ -76,12 +76,8 @@ pub mod prelude {
         pub use bevy::{
             ecs::system::SystemState,
             prelude::*,
-            render::render_resource::{
-                Extent3d,
-                TextureDimension,
-                TextureFormat,
-            },
-            utils::HashSet
+            render::render_resource::{Extent3d, TextureDimension, TextureFormat},
+            utils::HashSet,
         };
         pub use iyes_loopless::prelude::CurrentState;
 
@@ -105,9 +101,9 @@ pub mod prelude {
         pub use crate::geometry::*;
         pub use crate::grid::*;
         pub use crate::interlop::*;
-        pub use crate::white_pixel::*;
         pub use crate::random::*;
         pub use crate::range::*;
+        pub use crate::white_pixel::*;
     }
     pub use export::*;
 }

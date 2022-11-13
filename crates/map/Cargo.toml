@@ -6,8 +6,10 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-atrl-common = {path = "../common"}
-bevy        = {workspace = true}
-ron         = {workspace = true}
-serde       = {workspace = true}
-thiserror   = {workspace = true}
+atrl-common         = {path = "../common"}
+bevy                = {workspace = true}
+banana_bevy_utils   = {workspace = true}
+iyes_loopless       = {workspace = true}
+ron                 = {workspace = true}
+serde               = {workspace = true}
+thiserror           = {workspace = true}

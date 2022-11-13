@@ -13,3 +13,7 @@ impl ThemeServer {
         self.tilesets.get(tileset_name)
     }
 }
+
+impl Default for ThemeServer {
+    fn default() -> Self { Self { tilesets: HashMap::new(), themes: HashMap::new() } }
+}

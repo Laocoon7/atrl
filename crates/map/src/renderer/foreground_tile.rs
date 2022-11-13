@@ -55,7 +55,7 @@ impl ForegroundTile {
             0
         };
 
-        theme_server.get_tileset(&frame.tileset_name).map(|(handle, tileset)| Self {
+        theme_server.get_tileset(&frame.tileset_name).map(|(handle, _tileset)| Self {
             texture_atlas: handle.clone(),
             index,
             color,

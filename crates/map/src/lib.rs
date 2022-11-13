@@ -5,6 +5,8 @@ mod renderer {
     pub use animated_tile::*;
     mod animation_tile_bundle;
     pub use animation_tile_bundle::*;
+    mod background_entity_holder;
+    pub use background_entity_holder::*;
     mod background_tile;
     pub use background_tile::*;
     mod background_tile_bundle;
@@ -19,8 +21,6 @@ mod renderer {
     pub use map_renderer::*;
     mod render_actions;
     pub use render_actions::*;
-    mod white_pixel;
-    pub use white_pixel::*;
 }
 
 mod resources {
@@ -29,8 +29,12 @@ mod resources {
 }
 
 mod systems {
+    mod load_themes_into_theme_server;
+    pub use load_themes_into_theme_server::*;
     mod redraw_map_renderers;
     pub use redraw_map_renderers::*;
+    mod update_animations;
+    pub use update_animations::*;
 }
 
 mod themes {
@@ -68,10 +72,9 @@ mod themes {
     pub use tileset::*;
 }
 
-mod map_plugin;
-
 mod error;
 mod file_utils;
+mod map_plugin;
 
 mod macros {
     pub use super::impl_serialized_object_for;
@@ -85,6 +88,10 @@ pub mod prelude {
         pub use bevy::prelude::*;
         pub use bevy::sprite::Anchor::*;
         pub use bevy::utils::HashMap;
+
+        pub use banana_bevy_utils::prelude::*;
+
+        pub use iyes_loopless::prelude::*;
 
         pub use ron::ser::{to_string_pretty, to_writer_pretty, PrettyConfig};
         pub use serde::{Deserialize, Serialize};

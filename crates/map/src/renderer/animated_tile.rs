@@ -4,7 +4,7 @@ use crate::prelude::*;
 pub struct AnimatedTile {
     pub current_index: usize,
     pub frames_per_second: f32,
-    pub elapsed_time: f32,
+    pub elapsed_time: f64,
     pub foreground_tiles: Vec<ForegroundTile>,
 }
 

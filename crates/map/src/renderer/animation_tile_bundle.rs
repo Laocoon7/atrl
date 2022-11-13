@@ -5,10 +5,11 @@ pub struct AnimatedTileBundle {
     #[bundle]
     pub sprite_sheet_bundle: SpriteSheetBundle,
     pub animated_tile: AnimatedTile,
+    pub background_tile: BackgroundEntityHolder,
 }
 
 impl AnimatedTileBundle {
-    pub fn from_animation(animated_tile: AnimatedTile, position: Vec3) -> Option<Self> {
+    pub fn from_animation(animated_tile: AnimatedTile, background_entity: Entity, position: Vec3) -> Option<Self> {
         animated_tile.get_current_foreground_tile().map(|foreground_tile| Self {
             sprite_sheet_bundle: SpriteSheetBundle {
                 sprite: TextureAtlasSprite {
@@ -23,6 +24,7 @@ impl AnimatedTileBundle {
                 ..Default::default()
             },
             animated_tile: animated_tile.clone(),
+            background_tile: BackgroundEntityHolder { entity: background_entity },
         })
     }
 }
