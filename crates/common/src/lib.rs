@@ -64,6 +64,8 @@ mod geometry {
 
 mod common_plugin;
 mod cp437;
+mod error;
+mod file_utils;
 mod game_state;
 mod interlop;
 mod range;
@@ -89,6 +91,7 @@ pub mod prelude {
             ser::SerializeStruct,
             Deserialize, Serialize,
         };
+        pub use thiserror::Error;
         pub use xxhash_rust::xxh3::*;
     }
     pub(crate) use import::*;
@@ -97,6 +100,8 @@ pub mod prelude {
         pub use crate::common_plugin::*;
         pub use crate::cp437::*;
         pub use crate::direction::*;
+        pub use crate::error::*;
+        pub use crate::file_utils::*;
         pub use crate::game_state::*;
         pub use crate::geometry::*;
         pub use crate::grid::*;

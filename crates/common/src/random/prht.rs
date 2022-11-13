@@ -29,7 +29,7 @@ impl Prht {
 }
 
 impl Serialize for Prht {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where
         S: serde::Serializer,
     {
@@ -40,7 +40,7 @@ impl Serialize for Prht {
 }
 
 impl<'de> Deserialize<'de> for Prht {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where
         D: Deserializer<'de>,
     {
@@ -79,7 +79,7 @@ impl<'de> Deserialize<'de> for Prht {
                 formatter.write_str("struct Prht")
             }
 
-            fn visit_seq<A>(self, mut seq: A) -> Result<Self::Value, A::Error>
+            fn visit_seq<A>(self, mut seq: A) -> core::result::Result<Self::Value, A::Error>
             where
                 A: SeqAccess<'de>,
             {
@@ -88,7 +88,7 @@ impl<'de> Deserialize<'de> for Prht {
                 Ok(Prht::new(seed))
             }
 
-            fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
+            fn visit_map<A>(self, mut map: A) -> core::result::Result<Self::Value, A::Error>
             where
                 A: MapAccess<'de>,
             {

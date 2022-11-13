@@ -72,8 +72,6 @@ mod themes {
     pub use tileset::*;
 }
 
-mod error;
-mod file_utils;
 mod map_plugin;
 
 mod macros {
@@ -82,10 +80,8 @@ mod macros {
 
 pub mod prelude {
     mod internal {
-        pub use std::path::{Path, PathBuf};
-
-        pub use bevy::ecs::{bundle, schedule::StateData};
         pub use bevy::prelude::*;
+        pub use bevy::ecs::{bundle, schedule::StateData};
         pub use bevy::sprite::Anchor::*;
         pub use bevy::utils::HashMap;
 
@@ -103,16 +99,11 @@ pub mod prelude {
         pub use super::super::resources::*;
         pub use super::super::systems::*;
 
-        pub use super::super::error::*;
-        pub use super::super::file_utils::*;
         pub use super::super::macros::*;
     }
     pub(crate) use internal::*;
 
     mod external {
-        pub type Result<T> = std::result::Result<T, super::super::error::MyError>;
-        pub use super::super::error::MyError;
-
         pub use super::super::renderer::MapContext;
         pub use super::super::renderer::MapRenderer;
 

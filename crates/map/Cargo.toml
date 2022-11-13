@@ -12,4 +12,3 @@ banana_bevy_utils   = {workspace = true}
 iyes_loopless       = {workspace = true}
 ron                 = {workspace = true}
 serde               = {workspace = true}
-thiserror           = {workspace = true}

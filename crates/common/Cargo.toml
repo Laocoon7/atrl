@@ -12,17 +12,18 @@ version     = "0.1.0"
 [dependencies]
 atrl-components = { path = "../components" }
 
-banana_bevy_utils = { workspace = true }
-bevy              = { workspace = true }
-iyes_loopless     = { workspace = true }
-parking_lot       = { workspace = true }
-serde             = { workspace = true }
+banana_bevy_utils   = {workspace = true}
+bevy                = {workspace = true}
+iyes_loopless       = {workspace = true}
+parking_lot         = {workspace = true}
+serde               = {workspace = true}
+thiserror           = {workspace = true}
 
 ######################################
 ############    Random    ############
 ######################################
-noise       = { workspace = true }
-rand        = { workspace = true }
-rand_pcg    = { workspace = true }
-rand_seeder = { workspace = true }
-xxhash-rust = { workspace = true }
+noise           = {workspace = true}
+rand            = {workspace = true}
+rand_pcg        = {workspace = true}
+rand_seeder     = {workspace = true}
+xxhash-rust     = {workspace = true}

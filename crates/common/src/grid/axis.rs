@@ -27,7 +27,7 @@ impl GridAxis {
         self,
         this_axis: u32,
         other_axis: u32,
-    ) -> Result<UVec2, DimensionTooLargeForSize> {
+    ) -> core::result::Result<UVec2, DimensionTooLargeForSize> {
         match self {
             GridAxis::X => UVec2::try_new(this_axis, other_axis),
             GridAxis::Y => UVec2::try_new(other_axis, this_axis),

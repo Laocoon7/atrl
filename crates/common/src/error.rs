@@ -1,4 +1,6 @@
-use thiserror::Error;
+use crate::prelude::*;
+
+pub type Result<T> = std::result::Result<T, MyError>;
 
 #[derive(Error, Debug)]
 pub enum MyError {

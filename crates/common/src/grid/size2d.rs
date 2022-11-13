@@ -10,7 +10,7 @@ pub const MAX_SIZE: UVec2 = UVec2 { x: MAX_SIZE_FIELD, y: MAX_SIZE_FIELD };
 #[derive(Debug)]
 pub struct DimensionTooLargeForSize;
 
-pub(crate) const fn check_size_limit(value: u32) -> Result<(), DimensionTooLargeForSize> {
+pub(crate) const fn check_size_limit(value: u32) -> core::result::Result<(), DimensionTooLargeForSize> {
     if value >= MAX_SIZE_FIELD {
         Err(DimensionTooLargeForSize)
     } else {
@@ -20,7 +20,7 @@ pub(crate) const fn check_size_limit(value: u32) -> Result<(), DimensionTooLarge
 
 /// A trait for types representing a 2d size.
 pub trait Size2d: Clone + Copy {
-    fn try_new(width: u32, height: u32) -> Result<UVec2, DimensionTooLargeForSize> {
+    fn try_new(width: u32, height: u32) -> core::result::Result<UVec2, DimensionTooLargeForSize> {
         check_size_limit(width)?;
         check_size_limit(height)?;
         Ok(UVec2 { x: width, y: height })

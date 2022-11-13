@@ -252,6 +252,7 @@ dependencies = [
  "rand_pcg",
  "rand_seeder",
  "serde",
+ "thiserror",
  "xxhash-rust",
 ]
 
@@ -274,7 +275,6 @@ dependencies = [
  "iyes_loopless",
  "ron 0.8.0",
  "serde",
- "thiserror",
 ]
 
 [[package]]
