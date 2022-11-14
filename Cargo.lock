@@ -5071,7 +5071,7 @@ dependencies = [
 name = "spancmp"
 version = "0.1.0"
 dependencies = [
- "bevy_utils 0.8.1",
+ "bevy_utils 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "clap",
  "lazy_static",
  "regex",
