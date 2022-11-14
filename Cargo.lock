@@ -1297,12 +1297,12 @@ dependencies = [
 
 [[package]]
 name = "bevy_mod_debugdump"
-version = "0.5.0"
-source = "git+https://github.com/jakobhellermann/bevy_mod_debugdump#a1c25adacd1bacb14ff11074b4bfe7556e0484cd"
+version = "0.6.0"
+source = "git+https://github.com/jakobhellermann/bevy_mod_debugdump#141d22854cee3af70d3e9d55d3cb71bd22c24a2c"
 dependencies = [
- "bevy_app 0.8.1",
- "bevy_ecs 0.8.1",
- "bevy_render 0.8.1",
+ "bevy_app 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bevy_ecs 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bevy_render 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pretty-type-name",
 ]
 
@@ -5643,7 +5643,7 @@ dependencies = [
  "js-sys",
  "log",
  "naga 0.9.0",
- "parking_lot 0.12.1",
+ "parking_lot 0.11.2",
  "raw-window-handle 0.4.3",
  "smallvec",
  "wasm-bindgen",
@@ -5664,7 +5664,7 @@ dependencies = [
  "js-sys",
  "log",
  "naga 0.10.0",
- "parking_lot 0.12.1",
+ "parking_lot 0.11.2",
  "raw-window-handle 0.5.0",
  "serde",
  "smallvec",
@@ -5692,7 +5692,7 @@ dependencies = [
  "fxhash",
  "log",
  "naga 0.9.0",
- "parking_lot 0.12.1",
+ "parking_lot 0.11.2",
  "profiling",
  "raw-window-handle 0.4.3",
  "smallvec",
@@ -5716,7 +5716,7 @@ dependencies = [
  "fxhash",
  "log",
  "naga 0.10.0",
- "parking_lot 0.12.1",
+ "parking_lot 0.11.2",
  "profiling",
  "raw-window-handle 0.5.0",
  "ron 0.8.0",
@@ -5755,7 +5755,7 @@ dependencies = [
  "metal",
  "naga 0.9.0",
  "objc",
- "parking_lot 0.12.1",
+ "parking_lot 0.11.2",
  "profiling",
  "range-alloc",
  "raw-window-handle 0.4.3",
@@ -5793,7 +5793,7 @@ dependencies = [
  "metal",
  "naga 0.10.0",
  "objc",
- "parking_lot 0.12.1",
+ "parking_lot 0.11.2",
  "profiling",
  "range-alloc",
  "raw-window-handle 0.5.0",
