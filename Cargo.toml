@@ -34,7 +34,14 @@ release = ["bevy_embedded_assets"]
 default = ["dev"]
 
 # configuration for debugging information
-debug = ["bevy-inspector-egui", "colored", "debug-graph", "debug_asset_server", "trace"]
+debug = [
+  "bevy-inspector-egui",
+  "colored",
+  "debug-graph",
+  "debug_asset_server",
+  "trace",
+  "atrl-components/debug",
+]
 
 # default configuration while developing
 dev = ["bevy/filesystem_watcher", "bevy/dynamic"]
@@ -117,7 +124,7 @@ git      = "https://github.com/banana-studios/bevy_asset_loader"
 
 [workspace.dependencies.bevy_common_assets]
 features = ["ron", "toml", "json"]
-git      = "https://github.com/NiklasEi/bevy_common_assets"
+version  = "0.4.0"
 
 [workspace.dependencies.bevy_tweening]
 features = ["bevy_asset"]
@@ -128,8 +135,7 @@ git      = "https://github.com/djeedai/bevy_tweening"
 ######################################
 [workspace.dependencies.leafwing-input-manager]
 # features = ["egui"]
-git = "https://github.com/banana-studios/leafwing-input-manager"
-# git = "https://github.com/leafwing-studios/leafwing-input-manager"
+version = "0.7.0"
 
 ###############################
 #########       Serialization   
@@ -179,13 +185,23 @@ features = ["xxh3", "const_xxh3"]
 version  = "0.8"
 
 ######################################
+#########       Tilemap
+######################################
+[workspace.dependencies.bevy_ecs_tilemap]
+features = ["2d"]
+version  = "0.9"
+
+######################################
 #########       UI
 ######################################
 [workspace.dependencies.bevy_egui]
 git = "https://github.com/mvlabat/bevy_egui"
 
 [workspace.dependencies.kayak_ui]
-git = "https://github.com/StarArawn/kayak_ui"
+version = "0.1"
+
+[workspace.dependencies.kayak_font]
+version = "0.1"
 
 ######################################
 #########       Utility
@@ -193,6 +209,9 @@ git = "https://github.com/StarArawn/kayak_ui"
 
 [workspace.dependencies.big-brain]
 git = "https://github.com/zkat/big-brain"
+
+[workspace.dependencies.anyhow]
+version = "1"
 
 [workspace.dependencies.thiserror]
 version = "1"
@@ -240,7 +259,7 @@ optional = true
 ######################################
 [dependencies.bevy-inspector-egui]
 optional = true
-version  = "0.13"
+version  = "0.14"
 
 [dependencies.bevy_mod_debugdump]
 git      = "https://github.com/jakobhellermann/bevy_mod_debugdump"
@@ -302,4 +321,8 @@ workspace = true
 [dependencies.smart-default]
 workspace = true
 [dependencies.strum]
+workspace = true
+[dependencies.kayak_ui]
+workspace = true
+[dependencies.kayak_font]
 workspace = true

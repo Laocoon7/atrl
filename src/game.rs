@@ -111,6 +111,12 @@ mod map {
 }
 
 mod player {
+    mod systems {
+        mod player_input;
+        pub use player_input::*;
+    }
+    pub use systems::*;
+
     mod player_bundle;
     pub use player_bundle::*;
     mod player_plugin;
@@ -126,8 +132,6 @@ mod systems {
     pub use move_actors::*;
     mod perform_healing;
     pub use perform_healing::*;
-    mod player_input;
-    pub use player_input::*;
     mod spawn_player;
     pub use spawn_player::*;
 }
@@ -135,6 +139,48 @@ mod systems {
 mod spawner {
     mod spawner_plugin;
     pub use spawner_plugin::*;
+}
+
+mod ui {
+    mod systems {
+        mod setup_kayak_ui;
+        mod spawn_ui_camera;
+        pub use setup_kayak_ui::*;
+        pub use spawn_ui_camera::*;
+    }
+    pub use systems::*;
+
+    mod main_menu {
+        mod systems {
+            mod setup_main_menu;
+            pub use setup_main_menu::*;
+        }
+        pub use systems::*;
+
+        mod main_menu_plugin;
+        pub use main_menu_plugin::*;
+    }
+    pub use main_menu::*;
+
+    mod widgets {
+        mod systems {
+            mod menu_button_render;
+            mod menu_render;
+            pub use menu_button_render::*;
+            pub use menu_render::*;
+        }
+        pub use systems::*;
+
+        mod menu;
+        mod menu_button;
+
+        pub use menu::*;
+        pub use menu_button::*;
+    }
+    pub use widgets::*;
+
+    mod ui_plugin;
+    pub use ui_plugin::*;
 }
 
 mod game_context;
@@ -154,6 +200,7 @@ pub mod prelude {
         pub use super::super::player::*;
         pub use super::super::spawner::*;
         pub use super::super::systems::*;
+        pub use super::super::ui::*;
 
         pub use super::super::game_context::*;
         pub use super::super::game_plugin::*;

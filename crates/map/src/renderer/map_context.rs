@@ -34,12 +34,12 @@ impl<'a> MapContext<'a> {
         background_color: &Color,
     ) -> &mut Self {
         self.actions.push(RenderAction::SetRaw(
-            foreground_entity.clone(),
+            *foreground_entity,
             texture_atlas_handle.clone(),
             index,
-            foreground_color.clone(),
-            background_entity.clone(),
-            background_color.clone(),
+            *foreground_color,
+            *background_entity,
+            *background_color,
         ));
         self
     }

@@ -36,10 +36,12 @@ mod tags;
 
 pub mod prelude {
     mod import {
-        // pub use atrl_common::prelude::*;
         pub use banana_bevy_utils::prelude::*;
         pub use bevy::prelude::*;
         pub use serde::{Deserialize, Serialize};
+
+        #[cfg(feature = "debug")]
+        pub use bevy_inspector_egui::prelude::Inspectable;
     }
     pub(crate) use import::*;
 

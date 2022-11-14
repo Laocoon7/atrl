@@ -2,7 +2,7 @@ use crate::prelude::*;
 
 #[derive(SmartDefault)]
 pub struct SplashPlugin<T: std::default::Default> {
-    #[default(0.5)]
+    #[default(1.0)]
     pub loading_time: f32,
     pub state_asset_load: T,
 }

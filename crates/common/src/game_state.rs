@@ -65,20 +65,18 @@ impl StateNext for GameState {
 
             // Assets
             Self::AssetLoad(asset_state) => match asset_state {
-                AssetLoadState::Load => Some(Self::Construct(ConstructState::MapGen)),
+                AssetLoadState::Load => Some(Self::Ui(UiState::MainMenu)),
                 AssetLoadState::LoadFailure => Some(Self::Quit),
-            },
-
-            // Construct
-            Self::Construct(construct_state) => match construct_state {
-                // TODO: Fix this and set mapgen => MainMenu
-                ConstructState::MapGen => Some(Self::InGame),
-                // ConstructState::MapGen => Some(Self::UiState(UiState::MainMenu)),
             },
 
             // UI
             Self::Ui(ui_state) => match ui_state {
-                UiState::MainMenu => Some(Self::InGame),
+                UiState::MainMenu => Some(Self::Construct(ConstructState::MapGen)),
+            },
+
+            // Construct
+            Self::Construct(construct_state) => match construct_state {
+                ConstructState::MapGen => Some(Self::InGame),
             },
         }
     }

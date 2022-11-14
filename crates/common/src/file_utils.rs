@@ -53,23 +53,21 @@ pub fn get_files_with_extensions(path: &str, extensions: Vec<&str>) -> Result<Ve
     let mut ret = Vec::new();
     println!("{}", path);
     let paths = std::fs::read_dir(path)?;
-    for dir_entry in paths {
-        if let Ok(dir) = dir_entry {
-            let path = dir.path();
-            println!("{:?}", path);
-            if let Some(ext) = path.extension() {
-                let mut found = false;
-                for extension in &extensions {
-                    if ext == *extension {
-                        found = true;
-                        break;
-                    }
+    for dir_entry in paths.flatten() {
+        let path = dir_entry.path();
+        println!("{:?}", path);
+        if let Some(ext) = path.extension() {
+            let mut found = false;
+            for extension in &extensions {
+                if ext == *extension {
+                    found = true;
+                    break;
                 }
-                if found {
-                    if let Some(file_name) = path.file_name() {
-                        if let Some(path_name) = file_name.to_str() {
-                            ret.push(path_name.to_string());
-                        }
+            }
+            if found {
+                if let Some(file_name) = path.file_name() {
+                    if let Some(path_name) = file_name.to_str() {
+                        ret.push(path_name.to_string());
                     }
                 }
             }
@@ -80,9 +78,5 @@ pub fn get_files_with_extensions(path: &str, extensions: Vec<&str>) -> Result<Ve
 
 pub fn strip_extension(path: &str) -> Option<String> {
     let path = Path::new(path);
-    if let Some(p) = path.with_extension("").to_str() {
-        Some(p.to_string())
-    } else {
-        None
-    }
+    path.with_extension("").to_str().map(|p| p.to_string())
 }

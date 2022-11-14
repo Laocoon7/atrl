@@ -1,5 +1,6 @@
 use crate::prelude::*;
 
+#[allow(clippy::type_complexity)]
 pub fn redraw_map_renderers(
     mut commands: Commands,
     mut q_map_renderer: Query<&mut MapRenderer>,
@@ -76,7 +77,7 @@ pub fn redraw_map_renderers(
                                             sprite.index = foreground_tile.index;
                                             *old_tile = foreground_tile;
                                             background_entity =
-                                                Some(background_entity_holder.entity.clone());
+                                                Some(background_entity_holder.entity);
                                         } else {
                                             error!("ForegroundTile: Entity missing components");
                                         }
@@ -91,7 +92,7 @@ pub fn redraw_map_renderers(
                                                 position,
                                             ))
                                             .id();
-                                        background_entity = Some(bg_entity.clone());
+                                        background_entity = Some(bg_entity);
                                         let entity = commands
                                             .spawn(ForegroundTileBundle::from_foreground_tile(
                                                 foreground_tile,
@@ -128,9 +129,8 @@ pub fn redraw_map_renderers(
                                                     *handle = first_tile.texture_atlas.clone();
                                                     sprite.index = first_tile.index;
                                                     *old_tile = animated_tile;
-                                                    background_entity = Some(
-                                                        background_entity_holder.entity.clone(),
-                                                    );
+                                                    background_entity =
+                                                        Some(background_entity_holder.entity);
                                                 } else {
                                                     error!(
                                                         "AnimatedTile: Entity missing components"
@@ -147,7 +147,7 @@ pub fn redraw_map_renderers(
                                                         position,
                                                     ))
                                                     .id();
-                                                background_entity = Some(bg_entity.clone());
+                                                background_entity = Some(bg_entity);
 
                                                 if let Some(bundle) =
                                                     AnimatedTileBundle::from_animation(
@@ -198,20 +198,20 @@ pub fn redraw_map_renderers(
                     background_color,
                 ) => {
                     if let Ok((mut handle, mut sprite, mut _old_tile, _background_entity)) =
-                        tiles.p0().get_mut(foreground_entity.clone())
+                        tiles.p0().get_mut(*foreground_entity)
                     {
                         *handle = texture_atlas_handle.clone();
                         sprite.index = *index;
                         sprite.color = *foreground_color;
                     } else if let Ok((mut handle, mut sprite, mut _old_tile, _background_entity)) =
-                        tiles.p1().get_mut(foreground_entity.clone())
+                        tiles.p1().get_mut(*foreground_entity)
                     {
                         *handle = texture_atlas_handle.clone();
                         sprite.index = *index;
                         sprite.color = *foreground_color;
                     }
 
-                    if let Ok(mut sprite) = tiles.p2().get_mut(background_entity.clone()) {
+                    if let Ok(mut sprite) = tiles.p2().get_mut(*background_entity) {
                         sprite.color = *background_color;
                     }
                 }

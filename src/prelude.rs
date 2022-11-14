@@ -20,6 +20,9 @@ mod import {
     pub use iyes_loopless::prelude::*;
     pub use iyes_progress::prelude::*;
 
+    pub use kayak_ui::prelude::*;
+    pub use kayak_ui::widgets::*;
+
     pub use banana_bevy_utils::prelude::*;
 
     pub use rand::prelude::*;

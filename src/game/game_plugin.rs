@@ -24,6 +24,7 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
             //     state_running: self.state_running.clone(),
             // })
             .add_plugin(SpawnerPlugin { state_running: self.state_running.clone() })
-            .add_plugin(PlayerPlugin { state_running: self.state_running.clone() });
+            .add_plugin(PlayerPlugin { state_running: self.state_running.clone() })
+            .add_plugin(UiPlugin { state_main_menu: self.state_main_menu.clone() });
     }
 }

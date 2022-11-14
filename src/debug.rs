@@ -1,6 +1,7 @@
 use crate::prelude::*;
 use bevy::diagnostic::{Diagnostics, EntityCountDiagnosticsPlugin, FrameTimeDiagnosticsPlugin};
-use bevy_inspector_egui::widgets::InspectorQuerySingle;
+use bevy::log::LogPlugin;
+use bevy_inspector_egui::widgets::*;
 
 const DEBUG_UI_STAGE: &str = "debug_ui_stage";
 
@@ -26,7 +27,7 @@ fn set_debug_title(
     }
 }
 
-#[derive(Inspectable, Default)]
+#[derive(Inspectable, Resource,Default)]
 struct PlayerData {
     #[inspectable(despawnable = false)]
     player: InspectorQuerySingle<Entity, With<Player>>,
@@ -36,7 +37,7 @@ pub struct DebugPlugin;
 impl Plugin for DebugPlugin {
     fn build(&self, app: &mut App) {
         if cfg!(debug_assertions) {
-            app.insert_resource(bevy::log::LogSettings {
+            app.add_plugin(LogPlugin { 
                 level: bevy::log::Level::INFO,
                 filter: "gfx_backend_metal=warn,wgpu_core=warn, bevy_render=info,lain=debug,bevy_render::render_resource::pipeline_cache=debug".to_string(),
             });
@@ -61,9 +62,9 @@ impl Plugin for DebugPlugin {
                     .with_system_set(SystemSet::new().with_system(set_debug_title)),
             );
         } else {
-            app.insert_resource(bevy::log::LogSettings {
-                level: bevy::log::Level::WARN,
-                ..Default::default()
+            app.add_plugin(LogPlugin { 
+                level: bevy::log::Level::WARN, 
+                ..Default::default() 
             });
         }
     }

@@ -20,10 +20,7 @@ pub fn update_animations(
                     let foreground_entity = map_renderer.get_entity(*layer, (x, y));
                     let background_entity = map_renderer.get_entity(layer - 1, (x, y));
                     if foreground_entity.is_some() && background_entity.is_some() {
-                        entities.push((
-                            foreground_entity.unwrap().clone(),
-                            background_entity.unwrap().clone(),
-                        ));
+                        entities.push((foreground_entity.unwrap(), background_entity.unwrap()));
                     }
                 }
             }
@@ -32,7 +29,7 @@ pub fn update_animations(
         let mut map_context = map_renderer.get_context();
 
         for (foreground_entity, background_entity) in entities {
-            if let Ok(mut tile) = q_animated_tiles.get_mut(foreground_entity.clone()) {
+            if let Ok(mut tile) = q_animated_tiles.get_mut(foreground_entity) {
                 if calc_current_frame(&mut tile, elapsed_time_64) {
                     let frame = &tile.foreground_tiles[tile.current_index];
                     let texture_atlas_handle = &frame.texture_atlas;
@@ -62,7 +59,7 @@ pub fn update_animations(
 /// otherwise returns `false`
 fn calc_current_frame(tile: &mut AnimatedTile, elapsed_time_64: f64) -> bool {
     tile.elapsed_time += elapsed_time_64;
-    let current_index = (tile.frames_per_second as f64 * tile.elapsed_time
+    let current_index = (tile.frames_per_second * tile.elapsed_time
         % tile.foreground_tiles.len() as f64)
         .floor() as usize;
     if tile.current_index != current_index {
