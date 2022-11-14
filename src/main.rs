@@ -16,8 +16,9 @@ use debug::*;
 
 fn main() {
     let mut app = App::new();
+
     // Default Plugins
-    app.add_plugins(default_plugins()).insert_resource(ClearColor(Color::BLACK));
+    default_plugins(&mut app).insert_resource(ClearColor(Color::BLACK));
 
     // anything we don't need in release versions
     #[cfg(feature = "debug")]
@@ -52,8 +53,8 @@ fn main() {
     app.run();
 }
 
-fn default_plugins() -> bevy::app::PluginGroupBuilder {
-    DefaultPlugins
+fn default_plugins(app: &mut App) -> &mut App {
+    let defaults = DefaultPlugins
         .set(WindowPlugin {
             window: WindowDescriptor {
                 title: APP_NAME.to_string(),
@@ -71,5 +72,12 @@ fn default_plugins() -> bevy::app::PluginGroupBuilder {
         })
         .set(ImagePlugin::default_nearest())
         .build()
-        .disable::<bevy::log::LogPlugin>()
+        .disable::<bevy::log::LogPlugin>();
+
+    app.add_plugins(defaults);
+
+    #[cfg(not(feature = "debug"))]
+    app.add_plugin(bevy::log::LogPlugin { level: bevy::log::Level::WARN, ..Default::default() });
+
+    app
 }
