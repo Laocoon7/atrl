@@ -13,11 +13,14 @@ impl<T: StateNext + std::default::Default> Plugin for SplashPlugin<T> {
 
         app.add_enter_system(
             self.state_asset_load.clone(),
-            move |commands: Commands, asset_server: Res<AssetServer>| {
-                setup_splash(loading_time, commands, asset_server)
+            move |commands: Commands,
+                  asset_server: Res<AssetServer>,
+                  ctx: Query<(Entity, &mut KayakRootContext)>| {
+                setup_splash(loading_time, commands, asset_server, ctx)
             },
         )
         .add_system(countdown.run_in_state(self.state_asset_load.clone()))
-        .add_exit_system(self.state_asset_load.clone(), despawn_with_recursive::<OnSplashScreen>);
+        .add_exit_system(self.state_asset_load.clone(), remove_from_all::<KayakRootContext>)
+        .add_exit_system(self.state_asset_load.clone(), despawn_with_recursive::<KStyle>);
     }
 }

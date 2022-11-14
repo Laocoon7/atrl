@@ -142,14 +142,6 @@ mod spawner {
 }
 
 mod ui {
-    mod systems {
-        mod setup_kayak_ui;
-        mod spawn_ui_camera;
-        pub use setup_kayak_ui::*;
-        pub use spawn_ui_camera::*;
-    }
-    pub use systems::*;
-
     mod main_menu {
         mod systems {
             mod setup_main_menu;

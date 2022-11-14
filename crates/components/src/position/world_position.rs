@@ -1,8 +1,10 @@
 use crate::prelude::*;
 use bevy::math::Vec3Swizzles;
 
-#[cfg_attr(feature = "debug", derive(Inspectable))]
-#[derive(Component, Serialize, Deserialize, Default, Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(
+    Reflect, Component, Serialize, Deserialize, Default, Clone, Copy, PartialEq, Eq, Hash, Debug,
+)]
+#[reflect(Component)]
 pub struct WorldPosition {
     pub position: IVec3,
 }

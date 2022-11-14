@@ -40,7 +40,7 @@ pub mod prelude {
         pub use bevy::prelude::*;
         pub use serde::{Deserialize, Serialize};
 
-        #[cfg(feature = "debug")]
+        // #[cfg(feature = "debug")]
         pub use bevy_inspector_egui::prelude::Inspectable;
     }
     pub(crate) use import::*;

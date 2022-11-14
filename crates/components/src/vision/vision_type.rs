@@ -1,7 +1,6 @@
 use crate::prelude::*;
 
-#[cfg_attr(feature = "debug", derive(Inspectable))]
-#[derive(Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Reflect, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Debug)]
 pub enum VisionType {
     Blind = 0,
     BlackAndWhite,

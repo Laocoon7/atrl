@@ -31,7 +31,7 @@ members = ["tools/ci", "tools/spancmp", "./crates/*"]
 release = ["bevy_embedded_assets"]
 
 # default configurations
-default = ["dev"]
+default = ["dev", "debug"]
 
 # configuration for debugging information
 debug = [
@@ -112,15 +112,16 @@ features = [
   # Serialization
   "serialize",
 ]
+git = "https://github.com/bevyengine/bevy"
 version = "0.9"
 
 ######################################
 #########       Assets
 ######################################
 [workspace.dependencies.bevy_asset_loader]
+branch   = "bevy_main"
 features = ["stageless", "2d", "progress_tracking_stageless"]
 git      = "https://github.com/banana-studios/bevy_asset_loader"
-# git      = "https://github.com/NiklasEi/bevy_asset_loader"
 
 [workspace.dependencies.bevy_common_assets]
 features = ["ron", "toml", "json"]
@@ -135,6 +136,8 @@ git      = "https://github.com/djeedai/bevy_tweening"
 ######################################
 [workspace.dependencies.leafwing-input-manager]
 # features = ["egui"]
+branch  = "bevy_main"
+git     = "https://github.com/banana-studios/leafwing-input-manager"
 version = "0.7.0"
 
 ###############################
@@ -151,16 +154,17 @@ version  = "1"
 #########       States
 ######################################
 [workspace.dependencies.iyes_loopless]
+branch   = "bevy_main"
 features = ["states"]
-# version  = "0.8"
-git = "https://github.com/banana-studios/iyes_loopless"
+git      = "https://github.com/banana-studios/iyes_loopless"
 
 [workspace.dependencies.iyes_progress]
+branch   = "bevy_main"
 features = ["assets"]
-# version  = "0.6"
-git = "https://github.com/banana-studios/iyes_progress"
+git      = "https://github.com/banana-studios/iyes_progress"
 
 [workspace.dependencies.banana_bevy_utils]
+branch   = "bevy_main"
 features = ["states"]
 git      = "https://github.com/banana-studios/banana_bevy_utils"
 
@@ -198,10 +202,12 @@ version  = "0.9"
 git = "https://github.com/mvlabat/bevy_egui"
 
 [workspace.dependencies.kayak_ui]
-version = "0.1"
+branch = "multi-context"
+git    = "https://github.com/StarArawn/kayak_ui"
 
 [workspace.dependencies.kayak_font]
-version = "0.1"
+branch = "multi-context"
+git    = "https://github.com/StarArawn/kayak_ui"
 
 ######################################
 #########       Utility
@@ -258,8 +264,9 @@ optional = true
 #########       Debug
 ######################################
 [dependencies.bevy-inspector-egui]
+branch   = "rework"
+git      = "https://github.com/banana-studios/bevy-inspector-egui"
 optional = true
-version  = "0.14"
 
 [dependencies.bevy_mod_debugdump]
 git      = "https://github.com/jakobhellermann/bevy_mod_debugdump"
