@@ -19,17 +19,28 @@ impl PlayerBundle {
         let mut input_map = InputMap::default();
 
         // Movement
-        input_map.insert(KeyCode::Up, Up);
-        input_map.insert(GamepadButtonType::DPadUp, Up);
+        input_map // ArrowKeys
+            .insert(KeyCode::Up, North)
+            .insert(GamepadButtonType::DPadUp, North)
+            .insert(KeyCode::Down, South)
+            .insert(GamepadButtonType::DPadDown, South)
+            .insert(KeyCode::Left, West)
+            .insert(GamepadButtonType::DPadLeft, West)
+            .insert(KeyCode::Right, East)
+            .insert(GamepadButtonType::DPadRight, East);
 
-        input_map.insert(KeyCode::Down, Down);
-        input_map.insert(GamepadButtonType::DPadDown, Down);
+        input_map // Numpad
+            .insert(KeyCode::Numpad7, NorthWest)
+            .insert(KeyCode::Numpad8, North)
+            .insert(KeyCode::Numpad9, NorthEast)
+            .insert(KeyCode::Numpad6, East)
+            .insert(KeyCode::Numpad3, SouthEast)
+            .insert(KeyCode::Numpad2, South)
+            .insert(KeyCode::Numpad1, SouthWest)
+            .insert(KeyCode::Numpad4, West);
 
-        input_map.insert(KeyCode::Left, Left);
-        input_map.insert(GamepadButtonType::DPadLeft, Left);
-
-        input_map.insert(KeyCode::Right, Right);
-        input_map.insert(GamepadButtonType::DPadRight, Right);
+        input_map // Waiting
+            .insert(KeyCode::Numpad5, Wait);
 
         input_map
     }

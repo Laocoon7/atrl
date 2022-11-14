@@ -13,7 +13,7 @@ pub fn player_input(
         if action_state.just_pressed(input_direction) {
             if let Some(direction) = input_direction.direction() {
                 let mut position_vec = position.get();
-                position_vec += direction.coord().as_vec2().normalize();
+                position_vec += direction.coord().as_vec2();
                 position.set_value(position_vec);
 
                 println!("Player moved to {:?} {:?}", direction, direction.coord().as_vec2());

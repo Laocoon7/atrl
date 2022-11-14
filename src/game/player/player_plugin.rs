@@ -5,22 +5,42 @@ use crate::prelude::*;
 #[derive(Actionlike, PartialEq, Eq, Clone, Copy, Hash, Debug)]
 pub enum PlayerAction {
     // Movement
-    Up,
-    Down,
-    Left,
-    Right,
+    NorthWest,
+    North,
+    NorthEast,
+    East,
+    SouthEast,
+    South,
+    SouthWest,
+    West,
+
+    Wait,
 }
 
 impl PlayerAction {
     // Lists like this can be very useful for quickly matching subsets of actions
-    pub const DIRECTIONS: [Self; 4] = [Self::Up, Self::Down, Self::Left, Self::Right];
+    pub const DIRECTIONS: [Self; 8] = [
+        Self::NorthWest,
+        Self::North,
+        Self::NorthEast,
+        Self::East,
+        Self::SouthEast,
+        Self::South,
+        Self::SouthWest,
+        Self::West,
+    ];
 
     pub const fn direction(self) -> Option<GridDirection> {
         match self {
-            Self::Up => Some(GridDirection::North),
-            Self::Down => Some(GridDirection::South),
-            Self::Left => Some(GridDirection::West),
-            Self::Right => Some(GridDirection::East),
+            Self::NorthWest => Some(GridDirection::NorthWest),
+            Self::North => Some(GridDirection::North),
+            Self::NorthEast => Some(GridDirection::NorthEast),
+            Self::East => Some(GridDirection::East),
+            Self::SouthEast => Some(GridDirection::SouthEast),
+            Self::South => Some(GridDirection::South),
+            Self::SouthWest => Some(GridDirection::SouthWest),
+            Self::West => Some(GridDirection::West),
+            _ => None,
         }
     }
 }
