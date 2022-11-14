@@ -6,7 +6,5 @@ pub enum TileType {
 }
 
 impl From<TileType> for u16 {
-    fn from(value: TileType) -> Self {
-        value as u16
-    }
+    fn from(value: TileType) -> Self { value as u16 }
 }

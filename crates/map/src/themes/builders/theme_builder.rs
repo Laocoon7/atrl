@@ -62,24 +62,14 @@ impl ThemeBuilder {
 
 impl ThemeBuilder {
     pub fn add_terminal_terrain(self, tileset: &Tileset) -> Self {
-        self
-        .add_tile(tileset.get_tile_builder(0, TileType::Empty).build().unwrap())
-        .add_tile(tileset.get_tile_builder(from_cp437('.'), TileType::Floor).build().unwrap())
-        .add_tile(tileset.get_tile_builder(from_cp437('#'), TileType::Wall).build().unwrap())
+        self.add_tile(tileset.get_tile_builder(0, TileType::Empty).build().unwrap())
+            .add_tile(tileset.get_tile_builder(from_cp437('.'), TileType::Floor).build().unwrap())
+            .add_tile(tileset.get_tile_builder(from_cp437('#'), TileType::Wall).build().unwrap())
     }
 
-    pub fn add_terminal_features(self, tileset: &Tileset) -> Self {
+    pub fn add_terminal_features(self, tileset: &Tileset) -> Self { self }
 
-        self
-    }
+    pub fn add_terminal_items(self, tileset: &Tileset) -> Self { self }
 
-    pub fn add_terminal_items(self, tileset: &Tileset) -> Self {
-
-        self
-    }
-
-    pub fn add_terminal_actors(self, tileset: &Tileset) -> Self {
-
-        self
-    }
+    pub fn add_terminal_actors(self, tileset: &Tileset) -> Self { self }
 }

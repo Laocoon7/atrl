@@ -7,7 +7,5 @@ pub enum ThemeType {
 }
 
 impl From<ThemeType> for u8 {
-    fn from(value: ThemeType) -> Self {
-        value as u8
-    }
+    fn from(value: ThemeType) -> Self { value as u8 }
 }

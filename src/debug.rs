@@ -27,7 +27,7 @@ fn set_debug_title(
     }
 }
 
-#[derive(Inspectable, Resource,Default)]
+#[derive(Inspectable, Resource, Default)]
 struct PlayerData {
     #[inspectable(despawnable = false)]
     player: InspectorQuerySingle<Entity, With<Player>>,
@@ -37,7 +37,7 @@ pub struct DebugPlugin;
 impl Plugin for DebugPlugin {
     fn build(&self, app: &mut App) {
         if cfg!(debug_assertions) {
-            app.add_plugin(LogPlugin { 
+            app.add_plugin(LogPlugin {
                 level: bevy::log::Level::INFO,
                 filter: "gfx_backend_metal=warn,wgpu_core=warn, bevy_render=info,lain=debug,bevy_render::render_resource::pipeline_cache=debug".to_string(),
             });
@@ -62,10 +62,7 @@ impl Plugin for DebugPlugin {
                     .with_system_set(SystemSet::new().with_system(set_debug_title)),
             );
         } else {
-            app.add_plugin(LogPlugin { 
-                level: bevy::log::Level::WARN, 
-                ..Default::default() 
-            });
+            app.add_plugin(LogPlugin { level: bevy::log::Level::WARN, ..Default::default() });
         }
     }
 }
