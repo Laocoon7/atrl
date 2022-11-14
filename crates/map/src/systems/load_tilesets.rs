@@ -15,7 +15,6 @@ pub(crate) fn load_tilesets(
             for file in files {
                 let p = tilesets_path.join(&file);
                 if p == default_file {
-                    println!("Continue");
                     continue;
                 }
 

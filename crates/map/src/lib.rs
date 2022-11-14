@@ -1,6 +1,14 @@
+mod functions {
+    mod create_tilemap;
+    pub use create_tilemap::*;
+}
+
 mod systems {
     mod load_tilesets;
     pub use load_tilesets::*;
+
+    mod test_display;
+    pub use test_display::*;
 }
 
 mod loaded_tilesets;
@@ -28,6 +36,7 @@ pub mod prelude {
     pub(crate) use internal::*;
 
     mod external {
+        pub use super::super::functions::*;
         pub use super::super::loaded_tilesets::*;
         pub use super::super::map_plugin::*;
         pub use super::super::paths::*;

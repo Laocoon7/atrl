@@ -149,7 +149,7 @@ version = "0.7.0"
 #########       Map Rendering
 ######################################
 [workspace.dependencies.bevy_ecs_tilemap]
-features = ["atlas"]
+features = []
 version  = "0.9"
 
 [workspace.dependencies.bevy_tileset]
