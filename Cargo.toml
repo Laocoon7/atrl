@@ -38,7 +38,7 @@ debug = [
   "bevy-inspector-egui",
   "colored",
   "debug-graph",
-  "debug_asset_server",
+  # "debug_asset_server",
   "trace",
   "atrl-components/debug",
 ]

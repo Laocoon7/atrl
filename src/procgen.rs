@@ -25,8 +25,6 @@ mod common;
 pub use common::*;
 mod map_builder;
 pub use map_builder::*;
-mod procgen_plugin;
-pub use procgen_plugin::*;
 
 pub mod prelude {
     // Files inside of atrl::procgen *may*
@@ -39,7 +37,6 @@ pub mod prelude {
         pub use super::super::common::*;
         pub use super::super::map_builder::*;
         pub use super::super::meta::*;
-        pub use super::super::procgen_plugin::*;
     }
 
     // No pub use here, explicit folder for procgen internal data
