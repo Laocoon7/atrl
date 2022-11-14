@@ -1,0 +1,10 @@
+(
+    name: Some("terminal8x8"),
+    id: 0,
+    tiles: {
+        0: "./terminal8x8/empty.ron",
+        1: "./terminal8x8/floor.ron",
+        2: "./terminal8x8/wall.ron",
+        3: "./terminal8x8/water.ron",
+    }
+)

@@ -59,6 +59,5 @@ impl Plugin for DebugPlugin {
             DEBUG_UI_STAGE,
             SystemStage::parallel().with_system_set(SystemSet::new().with_system(set_debug_title)),
         );
-
     }
 }

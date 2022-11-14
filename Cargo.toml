@@ -28,7 +28,11 @@ members = ["tools/ci", "tools/spancmp", "./crates/*"]
 #################################
 [features]
 # configuration for release builds
-release = ["bevy_embedded_assets"]
+release = [
+  "bevy_embedded_assets",
+  "atrl-common/release",
+  "atrl-map/release",
+]
 
 # default configurations
 default = ["dev"]
@@ -40,7 +44,10 @@ debug = [
   "debug-graph",
   # "debug_asset_server",
   "trace",
+  "bevy_tile_atlas/debug",
+  "atrl-common/debug",
   "atrl-components/debug",
+  "atrl-map/debug",
 ]
 
 # default configuration while developing
@@ -82,6 +89,7 @@ panic         = 'abort'
 [dependencies]
 atrl-common     = { path = "crates/common" }
 atrl-components = { path = "crates/components" }
+atrl-map        = { path = "crates/map" }
 atrl-raws       = { path = "crates/raws" }
 
 ######################################
@@ -137,6 +145,21 @@ git      = "https://github.com/djeedai/bevy_tweening"
 # features = ["egui"]
 version = "0.7.0"
 
+######################################
+#########       Map Rendering
+######################################
+[workspace.dependencies.bevy_ecs_tilemap]
+features = ["atlas"]
+version  = "0.9"
+
+[workspace.dependencies.bevy_tileset]
+features = ["auto-tile"]
+version = "0.6"
+
+[workspace.dependencies.bevy_tile_atlas]
+default-features = false
+version = "0.5"
+
 ###############################
 #########       Serialization   
 ###############################
@@ -183,13 +206,6 @@ version = "0.2"
 [workspace.dependencies.xxhash-rust]
 features = ["xxh3", "const_xxh3"]
 version  = "0.8"
-
-######################################
-#########       Tilemap
-######################################
-[workspace.dependencies.bevy_ecs_tilemap]
-features = ["2d"]
-version  = "0.9"
 
 ######################################
 #########       UI
@@ -285,6 +301,12 @@ workspace = true
 [dependencies.bevy_tweening]
 workspace = true
 [dependencies.leafwing-input-manager]
+workspace = true
+[dependencies.bevy_ecs_tilemap]
+workspace = true
+[dependencies.bevy_tileset]
+workspace = true
+[dependencies.bevy_tile_atlas]
 workspace = true
 [dependencies.ron]
 workspace = true

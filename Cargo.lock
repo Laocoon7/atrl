@@ -228,15 +228,19 @@ version = "0.1.0"
 dependencies = [
  "atrl-common",
  "atrl-components",
+ "atrl-map",
  "atrl-raws",
  "banana_bevy_utils",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "bevy-inspector-egui",
  "bevy_asset_loader",
  "bevy_common_assets",
+ "bevy_ecs_tilemap",
  "bevy_egui 0.16.1",
  "bevy_embedded_assets",
  "bevy_mod_debugdump",
+ "bevy_tile_atlas",
+ "bevy_tileset",
  "bevy_tweening",
  "big-brain",
  "colored",
@@ -297,9 +301,10 @@ dependencies = [
  "atrl-common",
  "banana_bevy_utils",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bevy_ecs_tilemap",
+ "bevy_tile_atlas",
+ "bevy_tileset",
  "iyes_loopless",
- "ron 0.8.0",
- "serde",
 ]
 
 [[package]]
@@ -873,6 +878,17 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "bevy_ecs_tilemap"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7ce7f9fa49f364602ac0901d5f181445529b23fb0623e39e791548f8a6e8c2b5"
+dependencies = [
+ "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "log",
+ "regex",
 ]
 
 [[package]]
@@ -1808,6 +1824,60 @@ dependencies = [
  "glyph_brush_layout",
  "serde",
  "thiserror",
+]
+
+[[package]]
+name = "bevy_tile_atlas"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f631f1fe6b74d8a1f00b45c37b2eeee5ea26c413bda25e59077c75fb415fe167"
+dependencies = [
+ "bevy_asset 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bevy_ecs 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bevy_log 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bevy_math 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bevy_render 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bevy_sprite 0.9.0",
+ "bevy_utils 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "thiserror",
+]
+
+[[package]]
+name = "bevy_tileset"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9063bed0be31567830fa1cf8453d035d6346c62c97b81f2fb0c487ab5fd427d5"
+dependencies = [
+ "bevy_tileset_core",
+ "bevy_tileset_tiles",
+]
+
+[[package]]
+name = "bevy_tileset_core"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "803c8074ae5ebc15c1ea07bc1649376f1cd749dc57aced0d5ba5693ec37ac98e"
+dependencies = [
+ "anyhow",
+ "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bevy_tile_atlas",
+ "bevy_tileset_tiles",
+ "futures",
+ "rand 0.8.5",
+ "ron 0.7.1",
+ "serde",
+ "thiserror",
+]
+
+[[package]]
+name = "bevy_tileset_tiles"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "918a9039e34a204b9b56b825cd1a0e37be788666d65ea05a0669cc168588b911"
+dependencies = [
+ "bevy_asset 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bevy_render 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde",
 ]
 
 [[package]]
@@ -2932,10 +3002,46 @@ dependencies = [
 ]
 
 [[package]]
+name = "futures"
+version = "0.3.25"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "38390104763dc37a5145a53c29c63c1290b5d316d6086ec32c293f6736051bb0"
+dependencies = [
+ "futures-channel",
+ "futures-core",
+ "futures-executor",
+ "futures-io",
+ "futures-sink",
+ "futures-task",
+ "futures-util",
+]
+
+[[package]]
+name = "futures-channel"
+version = "0.3.25"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "52ba265a92256105f45b719605a571ffe2d1f0fea3807304b522c1d778f79eed"
+dependencies = [
+ "futures-core",
+ "futures-sink",
+]
+
+[[package]]
 name = "futures-core"
 version = "0.3.25"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "04909a7a7e4633ae6c4a9ab280aeb86da1236243a77b694a49eacd659a4bd3ac"
+
+[[package]]
+name = "futures-executor"
+version = "0.3.25"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7acc85df6714c176ab5edf386123fafe217be88c0840ec11f199441134a074e2"
+dependencies = [
+ "futures-core",
+ "futures-task",
+ "futures-util",
+]
 
 [[package]]
 name = "futures-io"
@@ -2956,6 +3062,47 @@ dependencies = [
  "parking",
  "pin-project-lite",
  "waker-fn",
+]
+
+[[package]]
+name = "futures-macro"
+version = "0.3.25"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bdfb8ce053d86b91919aad980c220b1fb8401a9394410e1c289ed7e66b61835d"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "futures-sink"
+version = "0.3.25"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "39c15cf1a4aa79df40f1bb462fb39676d0ad9e366c2a33b590d7c66f4f81fcf9"
+
+[[package]]
+name = "futures-task"
+version = "0.3.25"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2ffb393ac5d9a6eaa9d3fdf37ae2776656b706e200c8e16b1bdb227f5198e6ea"
+
+[[package]]
+name = "futures-util"
+version = "0.3.25"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "197676987abd2f9cadff84926f410af1c183608d36641465df73ae8211dc65d6"
+dependencies = [
+ "futures-channel",
+ "futures-core",
+ "futures-io",
+ "futures-macro",
+ "futures-sink",
+ "futures-task",
+ "memchr",
+ "pin-project-lite",
+ "pin-utils",
+ "slab",
 ]
 
 [[package]]

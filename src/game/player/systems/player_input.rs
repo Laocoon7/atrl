@@ -1,6 +1,4 @@
-use crate::game::prelude::internal::*;
 use crate::prelude::*;
-use atrl_common::prelude::AtrlPosition2;
 
 pub fn player_input(
     state: Res<TurnState>,

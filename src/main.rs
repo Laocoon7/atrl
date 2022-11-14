@@ -34,9 +34,6 @@ fn main() {
         state_asset_load_failure: GameState::AssetLoad(LoadFailure),
     });
 
-    // common loading
-    app.add_plugin(CommonPlugin);
-
     // game related
     app.add_plugin(GamePlugin {
         state_running: GameState::InGame,

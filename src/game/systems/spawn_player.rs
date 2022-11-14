@@ -1,4 +1,3 @@
-use crate::game::prelude::internal::*;
 use crate::prelude::*;
 
 pub fn spawn_player(mut commands: Commands, texture_assets: Res<TextureAssets>) {

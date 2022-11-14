@@ -4,6 +4,7 @@
 // This includes atrl::crates::*;
 mod import {
     pub use bevy::{
+        app::AppExit,
         ecs::system::SystemState,
         math::Vec3Swizzles,
         prelude::*,
@@ -51,6 +52,7 @@ mod import {
     pub use atrl_common::prelude::UiState::*;
     pub use atrl_common::prelude::*;
     pub use atrl_components::prelude::*;
+    pub use atrl_map::prelude::*;
     pub use atrl_raws::prelude::*;
 }
 pub use import::*;
@@ -59,7 +61,7 @@ pub use import::*;
 mod export {
     pub use crate::app_settings::*;
 
-    pub use crate::game::prelude::external::*;
+    pub use crate::game::prelude::*;
     pub use crate::procgen::prelude::external::*;
 }
 pub use export::*;

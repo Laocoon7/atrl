@@ -1,5 +1,4 @@
-use crate::game::prelude::internal::*;
-use bevy::prelude::Resource;
+use crate::prelude::*;
 
 #[derive(Resource)]
 pub struct ChangeTheme {

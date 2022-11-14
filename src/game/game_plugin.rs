@@ -1,4 +1,3 @@
-use crate::game::prelude::internal::*;
 use crate::prelude::*;
 
 pub struct GamePlugin<T> {
@@ -11,20 +10,23 @@ pub struct GamePlugin<T> {
 
 impl<T: StateNext> Plugin for GamePlugin<T> {
     fn build(&self, app: &mut App) {
-        app.init_resource::<GameContext>()
+        app
+            // common loading
+            .add_plugin(CommonPlugin)
+            // Game Context
+            .init_resource::<GameContext>()
+            // Create Camera
             .add_plugin(CameraPlugin)
+            // Map Rendering
             .add_plugin(MapPlugin {
                 state_running: self.state_running.clone(),
                 state_construct: self.state_construct.clone(),
             })
-            // TODO: Should this be removed?
-            // @Laocoon7
-            // .add_plugin(ProcgenPlugin {
-            //     state_construct: self.state_construct.clone(),
-            //     state_running: self.state_running.clone(),
-            // })
+            // UI
+            .add_plugin(UiPlugin { state_main_menu: self.state_main_menu.clone() })
+            // Spawner
             .add_plugin(SpawnerPlugin { state_running: self.state_running.clone() })
-            .add_plugin(PlayerPlugin { state_running: self.state_running.clone() })
-            .add_plugin(UiPlugin { state_main_menu: self.state_main_menu.clone() });
+            // Player
+            .add_plugin(PlayerPlugin { state_running: self.state_running.clone() });
     }
 }

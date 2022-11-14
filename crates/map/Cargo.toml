@@ -3,12 +3,15 @@ name = "atrl-map"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[features]
+debug = []
+release = []
 
 [dependencies]
 atrl-common         = {path = "../common"}
 bevy                = {workspace = true}
 banana_bevy_utils   = {workspace = true}
 iyes_loopless       = {workspace = true}
-ron                 = {workspace = true}
-serde               = {workspace = true}
+bevy_ecs_tilemap    = {workspace = true}
+bevy_tileset        = {workspace = true}
+bevy_tile_atlas     = {workspace = true}

@@ -1,4 +1,3 @@
-use crate::game::prelude::internal::*;
 use crate::prelude::*;
 
 pub const DEFAULT_TERRAIN_THEME_NAME: &str = "terminal8x8";

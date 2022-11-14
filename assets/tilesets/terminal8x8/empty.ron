@@ -1,0 +1,4 @@
+(
+    name: "empty",
+    tile: Standard("tilesets/terminal8x8/0.png")
+)

@@ -5,7 +5,7 @@ pub use std::{
 
 use crate::prelude::*;
 
-pub fn read<Path: Into<PathBuf>>(path: Path) -> Result<String> {
+pub fn read_str<Path: Into<PathBuf>>(path: Path) -> Result<String> {
     let path: PathBuf = path.into();
     match std::fs::read_to_string(path) {
         Ok(s) => Ok(s),
@@ -13,7 +13,7 @@ pub fn read<Path: Into<PathBuf>>(path: Path) -> Result<String> {
     }
 }
 
-pub fn write<Path: Into<PathBuf>>(path: Path, value: &str) -> Result<()> {
+pub fn write_str<Path: Into<PathBuf>>(path: Path, value: &str) -> Result<()> {
     let path: PathBuf = path.into();
     let path_string = match path.to_str() {
         Some(s) => s.to_string(),
@@ -45,17 +45,36 @@ pub fn write<Path: Into<PathBuf>>(path: Path, value: &str) -> Result<()> {
     }
 }
 
-pub fn get_files_with_extension(path: &str, extension: &str) -> Result<Vec<String>> {
+pub fn get_files_with_extension<Path: Into<PathBuf>>(
+    path: Path,
+    extension: &str,
+) -> Result<Vec<String>> {
     get_files_with_extensions(path, vec![extension])
 }
 
-pub fn get_files_with_extensions(path: &str, extensions: Vec<&str>) -> Result<Vec<String>> {
+pub fn get_files_with_extensions<Path: Into<PathBuf>>(
+    path: Path,
+    extensions: Vec<&str>,
+) -> Result<Vec<String>> {
     let mut ret = Vec::new();
-    println!("{}", path);
-    let paths = std::fs::read_dir(path)?;
+    let path: PathBuf = path.into();
+    let paths = std::fs::read_dir(&path)?;
+    //#[cfg(feature = "debug")]
+    {
+        let mut extension_names = String::new();
+        let mut first = true;
+        for extension in &extensions {
+            if first {
+                extension_names = format!("{}", extension);
+                first = false;
+            } else {
+                extension_names = format!("{}, {}", extension_names, extension);
+            }
+        }
+        info!("Looking for {{{}}} files in {:?}", extension_names, path);
+    }
     for dir_entry in paths.flatten() {
         let path = dir_entry.path();
-        println!("{:?}", path);
         if let Some(ext) = path.extension() {
             let mut found = false;
             for extension in &extensions {
@@ -72,6 +91,20 @@ pub fn get_files_with_extensions(path: &str, extensions: Vec<&str>) -> Result<Ve
                 }
             }
         }
+    }
+    //#[cfg(feature = "debug")]
+    {
+        let mut found_names = String::new();
+        let mut first = true;
+        for file in &ret {
+            if first {
+                found_names = format!("\t{}", file);
+                first = false;
+            } else {
+                found_names = format!("{}\n\t{}", found_names, file);
+            }
+        }
+        info!("Found {{\n{}\n}}", found_names);
     }
     Ok(ret)
 }

@@ -102,8 +102,8 @@ mod map {
     pub use item_type::*;
     mod map_layer;
     pub use map_layer::*;
-    mod map_plugin;
-    pub use map_plugin::*;
+    //mod map_plugin;
+    //pub use map_plugin::*;
     mod map;
     pub use map::*;
     mod terrain_type;
@@ -187,11 +187,7 @@ mod game_context;
 mod game_plugin;
 
 pub mod prelude {
-    // Files inside of atrl::game *may*
-    // use crate::game::prelude::internal::*;
-    // Files outside of atrl::game should only
-    // access raws from crate::prelude::*;
-    pub mod internal {
+    mod internal {
         pub use super::super::abilities::*;
         pub use super::super::actors::*;
         pub use super::super::camera::*;
@@ -205,12 +201,14 @@ pub mod prelude {
         pub use super::super::game_context::*;
         pub use super::super::game_plugin::*;
     }
+    pub(crate) use internal::*;
 
-    pub mod external {
+    mod external {
         pub use super::super::actors::*;
         pub use super::super::camera::*;
         pub use super::super::game_plugin::*;
         pub use super::super::map::*;
     }
+    pub use external::*;
     // local
 }

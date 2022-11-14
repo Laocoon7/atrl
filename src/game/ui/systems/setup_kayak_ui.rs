@@ -1,6 +1,4 @@
-use crate::game::prelude::internal::*;
 use crate::prelude::*;
-use bevy::app::AppExit;
 
 pub fn setup_kayak_ui(
     mut commands: Commands,
