@@ -2062,10 +2062,10 @@ dependencies = [
 
 [[package]]
 name = "big-brain"
-version = "0.14.0"
-source = "git+https://github.com/zkat/big-brain#4486af1db83fc4fdf50acd2eacfa7d96e64501f3"
+version = "0.15.0"
+source = "git+https://github.com/zkat/big-brain#fec56c9496ea33578eff4a88b9389fc7a25a5168"
 dependencies = [
- "bevy 0.8.1",
+ "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -5643,7 +5643,7 @@ dependencies = [
  "js-sys",
  "log",
  "naga 0.9.0",
- "parking_lot 0.12.1",
+ "parking_lot 0.11.2",
  "raw-window-handle 0.4.3",
  "smallvec",
  "wasm-bindgen",
@@ -5664,7 +5664,7 @@ dependencies = [
  "js-sys",
  "log",
  "naga 0.10.0",
- "parking_lot 0.12.1",
+ "parking_lot 0.11.2",
  "raw-window-handle 0.5.0",
  "serde",
  "smallvec",
@@ -5692,7 +5692,7 @@ dependencies = [
  "fxhash",
  "log",
  "naga 0.9.0",
- "parking_lot 0.12.1",
+ "parking_lot 0.11.2",
  "profiling",
  "raw-window-handle 0.4.3",
  "smallvec",
@@ -5716,7 +5716,7 @@ dependencies = [
  "fxhash",
  "log",
  "naga 0.10.0",
- "parking_lot 0.12.1",
+ "parking_lot 0.11.2",
  "profiling",
  "raw-window-handle 0.5.0",
  "ron 0.8.0",
@@ -5755,7 +5755,7 @@ dependencies = [
  "metal",
  "naga 0.9.0",
  "objc",
- "parking_lot 0.12.1",
+ "parking_lot 0.11.2",
  "profiling",
  "range-alloc",
  "raw-window-handle 0.4.3",
@@ -5793,7 +5793,7 @@ dependencies = [
  "metal",
  "naga 0.10.0",
  "objc",
- "parking_lot 0.12.1",
+ "parking_lot 0.11.2",
  "profiling",
  "range-alloc",
  "raw-window-handle 0.5.0",
