@@ -1,6 +1,7 @@
 use crate::prelude::*;
 
 #[derive(
+    Reflect,
     Debug,
     Default,
     FromPrimitive,

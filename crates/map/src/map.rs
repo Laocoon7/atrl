@@ -61,4 +61,49 @@ impl Map {
             update_all: true,
         }
     }
+
+    pub fn can_move_through(&self, index: impl Point2d, movement_component: &Movement) -> bool {
+        let terrain = match self.terrain_types.get(index) {
+            Some(t) => t.allowed_movement(),
+            None => MovementType::None as u8, // block any out of map stuff???
+        };
+
+        let feature = match self.feature_types.get(index) {
+            Some(f) => f.allowed_movement(),
+            None => MovementType::Any as u8,
+        };
+
+        println!(
+            "T: {:?}, F: {:?}, M:{:?}, A:{:?}",
+            terrain,
+            feature,
+            movement_component.movement_types,
+            (terrain & feature & (movement_component.movement_types as u8))
+        );
+
+        (terrain & feature & (movement_component.movement_types as u8)) != 0
+    }
+
+    pub fn can_see_through(&self, index: impl Point2d, vision_component: &Vision) -> bool {
+        let terrain = match self.terrain_types.get(index) {
+            Some(t) => t.vision_penetrates(),
+            None => VisionType::Any as u8,
+        };
+
+        let feature = match self.feature_types.get(index) {
+            Some(f) => f.vision_penetrates(),
+            None => VisionType::Any as u8,
+        };
+
+        (terrain & feature & (vision_component.vision_types as u8)) != 0
+    }
+
+    pub fn can_see_feature(&self, index: impl Point2d, vision_component: &Vision) -> bool {
+        let feature = match self.feature_types.get(index) {
+            Some(f) => f.allowed_vision(),
+            None => VisionType::None as u8,
+        };
+
+        (feature & (vision_component.vision_types as u8)) != 0
+    }
 }

@@ -5,6 +5,14 @@ pub fn spawn_player(mut commands: Commands, texture_assets: Res<TextureAssets>) 
 
     commands.spawn(PlayerBundle {
         player: Player,
+
+        world_position: WorldPosition { position: IVec3 { x: 0, y: 0, z: 0 } },
+
+        movement_component: Movement {
+            movement_types: (MovementType::Walk as u8) | (MovementType::Swim as u8),
+        },
+        vision_component: Vision { vision_types: (VisionType::Colored as u8) },
+
         actor: ActorBundle {
             name: Name::new("Bob the Builder"),
             position: LocalPosition::new(IVec2::new(

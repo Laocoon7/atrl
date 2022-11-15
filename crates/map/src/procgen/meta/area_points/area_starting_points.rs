@@ -44,7 +44,7 @@ impl<S: Size2d> AreaStartingPosition<S> {
 
         let mut available_floors: Vec<(IVec2, f32)> = Vec::new();
         for (idx, tile) in builder.terrain_grid.iter().enumerate() {
-            if tile.allowed_movement().contains(&MovementType::Walk) {
+            if (tile.allowed_movement() & (MovementType::Walk as u8)) != 0 {
                 if let Some(pt) = builder.terrain_grid.index_to_pt(idx) {
                     available_floors.push((
                         pt,

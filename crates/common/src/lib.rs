@@ -177,6 +177,9 @@ pub mod prelude {
             render::render_resource::{Extent3d, TextureDimension, TextureFormat},
             utils::HashSet,
         };
+
+        pub use bitvec::prelude::*;
+
         pub use iyes_loopless::prelude::CurrentState;
 
         pub use leafwing_input_manager::{action_state::ActionState, prelude::*};

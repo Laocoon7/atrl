@@ -252,6 +252,9 @@ git = "https://github.com/zkat/big-brain"
 [workspace.dependencies.anyhow]
 version = "1"
 
+[workspace.dependencies.bitvec]
+version = "1.0.1"
+
 [workspace.dependencies.thiserror]
 version = "1"
 

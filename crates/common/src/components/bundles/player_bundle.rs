@@ -3,7 +3,9 @@ use crate::prelude::*;
 #[derive(Bundle)]
 pub struct PlayerBundle {
     pub player: Player,
-
+    pub world_position: WorldPosition,
+    pub movement_component: Movement,
+    pub vision_component: Vision,
     #[bundle]
     pub actor: ActorBundle,
     #[bundle]

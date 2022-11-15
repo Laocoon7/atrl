@@ -4,6 +4,7 @@ use num_derive::{FromPrimitive, ToPrimitive};
 use num_traits::ToPrimitive;
 
 #[derive(
+    Reflect,
     Debug,
     Default,
     FromPrimitive,
@@ -20,66 +21,46 @@ use num_traits::ToPrimitive;
 pub enum TerrainType {
     #[default]
     None,
-    Wall,
     Floor,
+    Wall,
     Water,
 }
 
 impl TerrainType {
     /// Movement is allowed if MovementComponent allows any of these types
-    pub fn allowed_movement(&self) -> Vec<MovementType> {
+    pub fn allowed_movement(&self) -> u8 {
         match self {
-            Self::None => vec![],
-            Self::Wall => vec![MovementType::Fly, MovementType::Phase],
+            Self::None => (MovementType::None) as u8,
+            Self::Wall => (MovementType::Fly as u8) | (MovementType::Phase as u8),
             Self::Floor => {
-                vec![MovementType::Walk, MovementType::Run, MovementType::Fly, MovementType::Phase]
+                (MovementType::Walk as u8)
+                    | (MovementType::Run as u8)
+                    | (MovementType::Fly as u8)
+                    | (MovementType::Phase as u8)
             }
-            Self::Water => vec![MovementType::Swim, MovementType::Fly, MovementType::Phase],
+            Self::Water => {
+                (MovementType::Swim as u8) | (MovementType::Fly as u8) | (MovementType::Phase as u8)
+            }
         }
     }
 
-    /// The tile is visible to these vision types (but not necessarily explored)
-    pub fn allowed_vision(&self) -> Vec<VisionType> {
+    /// The tile is opaque except to these vision types
+    pub fn vision_penetrates(&self) -> u8 {
         match self {
-            Self::None => vec![],
-            Self::Wall => vec![
-                VisionType::BlackAndWhite,
-                VisionType::Colored,
-                VisionType::Infared,
-                VisionType::XRay,
-            ],
-            Self::Floor => vec![
-                VisionType::BlackAndWhite,
-                VisionType::Colored,
-                VisionType::Infared,
-                VisionType::XRay,
-            ],
-            Self::Water => vec![
-                VisionType::BlackAndWhite,
-                VisionType::Colored,
-                VisionType::Infared,
-                VisionType::XRay,
-            ],
-        }
-    }
-
-    /// The tile is considered opaque unless VisionComponent includes one of these types
-    pub fn vision_penetrates(&self) -> Vec<VisionType> {
-        match self {
-            Self::None => vec![],
-            Self::Wall => vec![VisionType::XRay],
-            Self::Floor => vec![
-                VisionType::BlackAndWhite,
-                VisionType::Colored,
-                VisionType::Infared,
-                VisionType::XRay,
-            ],
-            Self::Water => vec![
-                VisionType::BlackAndWhite,
-                VisionType::Colored,
-                VisionType::Infared,
-                VisionType::XRay,
-            ],
+            Self::None => VisionType::None as u8,
+            Self::Wall => VisionType::XRay as u8,
+            Self::Floor => {
+                (VisionType::BlackAndWhite as u8)
+                    | (VisionType::Colored as u8)
+                    | (VisionType::Infared as u8)
+                    | (VisionType::XRay as u8)
+            }
+            Self::Water => {
+                (VisionType::BlackAndWhite as u8)
+                    | (VisionType::Colored as u8)
+                    | (VisionType::Infared as u8)
+                    | (VisionType::XRay as u8)
+            }
         }
     }
 }

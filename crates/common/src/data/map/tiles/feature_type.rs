@@ -1,6 +1,7 @@
 use crate::prelude::*;
 
 #[derive(
+    Reflect,
     Debug,
     Default,
     FromPrimitive,
@@ -25,78 +26,90 @@ pub enum FeatureType {
 
 impl FeatureType {
     /// Movement is allowed if MovementComponent allows any of these types
-    pub fn allowed_movement(&self) -> Vec<MovementType> {
+    pub fn allowed_movement(&self) -> u8 {
         match self {
-            Self::None => vec![],
+            Self::None => MovementType::Any as u8,
             Self::StairsDown => {
-                vec![MovementType::Walk, MovementType::Run, MovementType::Fly, MovementType::Phase]
+                (MovementType::Walk as u8)
+                    | (MovementType::Run as u8)
+                    | (MovementType::Fly as u8)
+                    | (MovementType::Phase as u8)
             }
             Self::StairsUp => {
-                vec![MovementType::Walk, MovementType::Run, MovementType::Fly, MovementType::Phase]
+                (MovementType::Walk as u8)
+                    | (MovementType::Run as u8)
+                    | (MovementType::Fly as u8)
+                    | (MovementType::Phase as u8)
             }
             Self::DoorClosed => {
-                vec![MovementType::Walk, MovementType::Run, MovementType::Fly, MovementType::Phase]
+                (MovementType::Walk as u8)
+                    | (MovementType::Run as u8)
+                    | (MovementType::Fly as u8)
+                    | (MovementType::Phase as u8)
             }
             Self::DoorOpen => {
-                vec![MovementType::Walk, MovementType::Run, MovementType::Fly, MovementType::Phase]
+                (MovementType::Walk as u8)
+                    | (MovementType::Run as u8)
+                    | (MovementType::Fly as u8)
+                    | (MovementType::Phase as u8)
             }
         }
     }
 
     /// The tile is visible to these vision types (but not necessarily explored)
-    pub fn allowed_vision(&self) -> Vec<VisionType> {
+    pub fn allowed_vision(&self) -> u8 {
         match self {
-            Self::None => vec![],
-            Self::StairsDown => vec![
-                VisionType::BlackAndWhite,
-                VisionType::Colored,
-                VisionType::Infared,
-                VisionType::XRay,
-            ],
-            Self::StairsUp => vec![
-                VisionType::BlackAndWhite,
-                VisionType::Colored,
-                VisionType::Infared,
-                VisionType::XRay,
-            ],
-            Self::DoorClosed => vec![
-                VisionType::BlackAndWhite,
-                VisionType::Colored,
-                VisionType::Infared,
-                VisionType::XRay,
-            ],
-            Self::DoorOpen => vec![
-                VisionType::BlackAndWhite,
-                VisionType::Colored,
-                VisionType::Infared,
-                VisionType::XRay,
-            ],
+            Self::None => VisionType::None as u8,
+            Self::StairsDown => {
+                (VisionType::BlackAndWhite as u8)
+                    | (VisionType::Colored as u8)
+                    | (VisionType::Infared as u8)
+                    | (VisionType::XRay as u8)
+            }
+            Self::StairsUp => {
+                (VisionType::BlackAndWhite as u8)
+                    | (VisionType::Colored as u8)
+                    | (VisionType::Infared as u8)
+                    | (VisionType::XRay as u8)
+            }
+            Self::DoorClosed => {
+                (VisionType::BlackAndWhite as u8)
+                    | (VisionType::Colored as u8)
+                    | (VisionType::Infared as u8)
+                    | (VisionType::XRay as u8)
+            }
+            Self::DoorOpen => {
+                (VisionType::BlackAndWhite as u8)
+                    | (VisionType::Colored as u8)
+                    | (VisionType::Infared as u8)
+                    | (VisionType::XRay as u8)
+            }
         }
     }
 
     /// The tile is considered opaque unless VisionComponent includes one of these types
-    pub fn vision_penetrates(&self) -> Vec<VisionType> {
+    pub fn vision_penetrates(&self) -> u8 {
         match self {
-            Self::None => vec![],
-            Self::StairsDown => vec![
-                VisionType::BlackAndWhite,
-                VisionType::Colored,
-                VisionType::Infared,
-                VisionType::XRay,
-            ],
-            Self::StairsUp => vec![
-                VisionType::BlackAndWhite,
-                VisionType::Colored,
-                VisionType::Infared,
-                VisionType::XRay,
-            ],
-            Self::DoorClosed => vec![VisionType::XRay],
-            Self::DoorOpen => vec![
-                VisionType::BlackAndWhite,
-                VisionType::Colored,
-                VisionType::Infared,
-                VisionType::XRay,
-            ],
+            Self::None => VisionType::None as u8,
+            Self::StairsDown => {
+                (VisionType::BlackAndWhite as u8)
+                    | (VisionType::Colored as u8)
+                    | (VisionType::Infared as u8)
+                    | (VisionType::XRay as u8)
+            }
+            Self::StairsUp => {
+                (VisionType::BlackAndWhite as u8)
+                    | (VisionType::Colored as u8)
+                    | (VisionType::Infared as u8)
+                    | (VisionType::XRay as u8)
+            }
+            Self::DoorClosed => VisionType::XRay as u8,
+            Self::DoorOpen => {
+                (VisionType::BlackAndWhite as u8)
+                    | (VisionType::Colored as u8)
+                    | (VisionType::Infared as u8)
+                    | (VisionType::XRay as u8)
+            }
         }
     }
 }

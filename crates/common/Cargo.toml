@@ -17,6 +17,7 @@ release = []
 [dependencies]
 banana_bevy_utils      = { workspace = true }
 bevy                   = { workspace = true }
+bitvec                 = { workspace = true }
 iyes_loopless          = { workspace = true }
 leafwing-input-manager = { workspace = true }
 num-derive             = { workspace = true }
