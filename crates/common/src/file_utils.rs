@@ -65,7 +65,7 @@ pub fn get_files_with_extensions<Path: Into<PathBuf>>(
         let mut first = true;
         for extension in &extensions {
             if first {
-                extension_names = format!("{}", extension);
+                extension_names = extension.to_string();
                 first = false;
             } else {
                 extension_names = format!("{}, {}", extension_names, extension);

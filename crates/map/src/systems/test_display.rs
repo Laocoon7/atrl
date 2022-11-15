@@ -13,7 +13,6 @@ pub(crate) fn build_map(
 ) {
     if let Some(tileset) = tilesets.get_by_id(&0) {
         create_tilemap(&mut commands, [80, 45], tileset, &array_texture_loader);
-
         state.set_next(&mut commands);
     }
 }
