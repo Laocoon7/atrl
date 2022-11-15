@@ -12,7 +12,7 @@ impl<T: StateNext> Plugin for UiPlugin<T> {
     fn build(&self, app: &mut App) {
         app.add_plugin(KayakContextPlugin)
             .add_plugin(KayakWidgets)
-            .add_startup_system(spawn_component!((UICameraBundle::default(), UICamera)))
-            .add_plugin(MainMenuPlugin { state_main_menu: self.state_main_menu.clone() });
+            .add_startup_system(spawn_component!((UICameraBundle::default(), UICamera)));
+        // .add_plugin(MainMenuPlugin { state_main_menu: self.state_main_menu.clone() });
     }
 }

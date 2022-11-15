@@ -1,11 +1,9 @@
 use crate::prelude::*;
 
-#[derive(Component)]
+#[derive(Reflect, Component)]
 pub struct AIComponent {
     ai_type: AIType,
 }
-
-impl_new!(AIComponent, ai_type: AIType);
 
 impl AIComponent {
     pub const fn human() -> Self { Self { ai_type: AIType::Human } }

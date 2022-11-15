@@ -1,4 +1,5 @@
 use crate::prelude::*;
 
-#[derive(Component)]
+#[derive(Reflect, Default, Component)]
+#[reflect(Component)]
 pub struct Player;

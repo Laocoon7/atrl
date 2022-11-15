@@ -4,5 +4,6 @@ use crate::prelude::*;
 #[reflect(Component)]
 pub struct Equipable {
     pub location: EquipmentSlot,
-    // pub available_locations: Vec<EquipmentSlot>,
+    #[reflect(ignore)]
+    pub available_locations: Vec<EquipmentSlot>,
 }

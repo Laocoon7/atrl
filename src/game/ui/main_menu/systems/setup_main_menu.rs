@@ -95,9 +95,9 @@ pub fn setup_main_menu(
                     <KImageBundle
                         image={KImage(logo_image)}
                         styles={KStyle {
-                            width: Units::Pixels(310.0).into(),
-                            height: Units::Pixels(78.0).into(),
-                            bottom: Units::Stretch(1.0).into(),
+                            // width: Units::Pixels(310.0).into(),
+                            // height: Units::Pixels(78.0).into(),
+                            // bottom: Units::Stretch(1.0).into(),
                             ..KStyle::default()
                         }}
                     />
