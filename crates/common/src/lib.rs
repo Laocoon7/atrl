@@ -1,17 +1,25 @@
 #![allow(clippy::module_inception)]
+#![allow(clippy::type_complexity)] // Bevy can have complex queries, so we shush clippy
+#![allow(clippy::too_many_arguments)] // Bevy has a lot of arguments, so we shush clippy
+
 mod components {
+    pub use bevy::{
+        prelude::{Component, ReflectComponent},
+        reflect::Reflect,
+    };
+
     mod ai_component {
         mod ai_component;
-        pub use ai_component::*;
         mod ai_type;
+        pub use ai_component::*;
         pub use ai_type::*;
     }
     pub use ai_component::*;
 
     mod bundles {
         mod actor_bundle;
-        pub use actor_bundle::*;
         mod player_bundle;
+        pub use actor_bundle::*;
         pub use player_bundle::*;
     }
     pub use bundles::*;
@@ -24,8 +32,8 @@ mod components {
 
     mod position {
         mod local_position;
-        pub use local_position::*;
         mod world_position;
+        pub use local_position::*;
         pub use world_position::*;
     }
     pub use position::*;
@@ -37,12 +45,12 @@ mod components {
     pub use vision::*;
 
     mod consumable;
-    pub use consumable::*;
     mod equipable;
-    pub use equipable::*;
     mod health;
-    pub use health::*;
     mod tags;
+    pub use consumable::*;
+    pub use equipable::*;
+    pub use health::*;
     pub use tags::*;
 }
 
@@ -190,9 +198,6 @@ pub mod prelude {
         };
         pub use thiserror::Error;
         pub use xxhash_rust::xxh3::*;
-
-        #[cfg(feature = "debug")]
-        pub use bevy_inspector_egui::prelude::*;
     }
     pub(crate) use import::*;
 

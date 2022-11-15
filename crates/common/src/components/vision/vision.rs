@@ -1,7 +1,7 @@
 use crate::prelude::*;
 
-#[cfg_attr(feature = "debug", derive(Inspectable))]
-#[derive(Component, Debug)]
+#[derive(Reflect, Component, Debug, Default)]
+#[reflect(Component)]
 pub struct Vision {
-    pub vision_types: Vec<VisionType>,
+    // pub vision_types: Vec<VisionType>,
 }

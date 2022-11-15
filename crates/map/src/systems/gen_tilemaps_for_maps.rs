@@ -7,7 +7,7 @@ pub(crate) fn gen_tilemaps_for_maps(
     mut q_map: Query<&mut Map, Without<TilemapType>>,
 ) {
     // Get Maps without Tilemaps
-    for (mut map) in q_map.iter_mut() {
+    for mut map in q_map.iter_mut() {
         if map.terrain_storage_entity.is_some()
             || map.feature_storage_entity.is_some()
             || map.item_storage_entity.is_some()

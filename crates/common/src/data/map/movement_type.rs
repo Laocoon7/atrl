@@ -1,16 +1,12 @@
-use crate::prelude::*;
+use crate::prelude::{Deserialize, Reflect, Serialize};
 
-#[cfg_attr(feature = "debug", derive(Inspectable))]
-#[derive(Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Reflect, Default, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Debug)]
 pub enum MovementType {
+    #[default]
     None = 0,
     Walk,
     Run,
     Swim,
     Fly,
     Phase,
-}
-
-impl Default for MovementType {
-    fn default() -> Self { Self::None }
 }

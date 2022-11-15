@@ -25,7 +25,7 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
             .init_resource::<GameContext>()
             // Create Camera
             .add_plugin(
-                CameraPlugin::new().add_camera(
+                CameraPlugin::new(self.state_running.clone()).add_camera(
                     CameraSettings::new_dimensions(GRID_WIDTH as f32, GRID_HEIGHT as f32)
                         .with_id(CameraId::Map)
                         .with_position(Vec2::ZERO),

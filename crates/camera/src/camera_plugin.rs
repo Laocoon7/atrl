@@ -1,11 +1,12 @@
 use crate::prelude::*;
 
-pub struct CameraPlugin {
+pub struct CameraPlugin<T> {
+    state_running: T,
     camera_settings: Vec<CameraSettings>,
 }
 
-impl CameraPlugin {
-    pub fn new() -> Self { Self { camera_settings: Vec::new() } }
+impl<T: StateNext> CameraPlugin<T> {
+    pub fn new(state_running: T) -> Self { Self { camera_settings: Vec::new(), state_running } }
 
     pub fn add_camera(mut self, settings: CameraSettings) -> Self {
         self.camera_settings.push(settings);
@@ -13,9 +14,9 @@ impl CameraPlugin {
     }
 }
 
-impl Plugin for CameraPlugin {
+impl<T: StateNext> Plugin for CameraPlugin<T> {
     fn build(&self, app: &mut App) {
-        let camera_settings = if self.camera_settings.len() == 0 {
+        let camera_settings = if self.camera_settings.is_empty() {
             #[cfg(feature = "debug")]
             warn!("CameraPlugin has no settings added. Using default camera settings.");
             vec![CameraSettings::default()]
@@ -29,10 +30,12 @@ impl Plugin for CameraPlugin {
         let camera_settings_resource = CameraSettingsResource::new(camera_settings);
         app.insert_resource(camera_settings_resource);
 
-        app.add_startup_system(spawn_cameras);
+        app.add_enter_system(self.state_running.clone(), spawn_cameras);
     }
 }
 
-impl Default for CameraPlugin {
-    fn default() -> Self { Self { camera_settings: vec![CameraSettings::default()] } }
+impl<T: StateNext + std::default::Default> Default for CameraPlugin<T> {
+    fn default() -> Self {
+        Self { camera_settings: vec![CameraSettings::default()], state_running: T::default() }
+    }
 }

@@ -12,6 +12,7 @@ pub struct DimensionTooLargeForSize;
 const fn check_size(value: u32) -> bool { value <= MAX_SIZE }
 
 /// A trait for types representing a 2d size.
+#[allow(clippy::new_ret_no_self)]
 pub trait Size2d: Clone + Copy {
     // Safely create a new UVec2
     fn new_try(width: u32, height: u32) -> Option<UVec2> {

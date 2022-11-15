@@ -16,6 +16,7 @@ mod cameras;
 
 pub mod prelude {
     mod imports {
+        pub use banana_bevy_utils::prelude::*;
         pub use bevy::{
             core_pipeline::clear_color::ClearColorConfig,
             ecs::system::SystemParam,
@@ -23,6 +24,7 @@ pub mod prelude {
             render::camera::{RenderTarget, ScalingMode, Viewport, WindowOrigin},
             utils::HashMap,
         };
+        pub use iyes_loopless::prelude::*;
     }
     pub(crate) use imports::*;
 

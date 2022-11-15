@@ -13,6 +13,6 @@ pub struct TextureAssets {
     pub button_hover: Handle<Image>,
     #[asset(path = "images/ui/button.png")]
     pub button: Handle<Image>,
-    #[asset(path = "images/ui/logo.png")]
+    #[asset(path = "images/ui/atrl_logo.png")]
     pub logo: Handle<Image>,
 }

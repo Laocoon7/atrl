@@ -15,7 +15,6 @@ pub fn check_progress(
         if (progress_perc >= 1.0 && splash_timer.finished())
             || (force_continue && splash_timer.finished())
         {
-            info!("Assets loaded and splash timer complete!");
             state.set_next(&mut commands);
         }
     }

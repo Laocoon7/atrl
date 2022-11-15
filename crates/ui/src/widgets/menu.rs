@@ -6,14 +6,14 @@ pub struct MenuWidget;
 impl Widget for MenuWidget {}
 
 #[derive(Bundle)]
-pub struct MainMenuBundle {
+pub struct MenuBundle {
     pub styles: KStyle,
     pub children: KChildren,
     pub menu: MenuWidget,
     pub widget_name: WidgetName,
 }
 
-impl Default for MainMenuBundle {
+impl Default for MenuBundle {
     fn default() -> Self {
         Self {
             menu: Default::default(),

@@ -1,15 +1,11 @@
-use crate::prelude::*;
+use crate::prelude::{Deserialize, Reflect, Serialize};
 
-#[cfg_attr(feature = "debug", derive(Inspectable))]
-#[derive(Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Reflect, Default, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Debug)]
 pub enum VisionType {
+    #[default]
     Blind = 0,
     BlackAndWhite,
     Colored,
     Infared,
     XRay,
-}
-
-impl Default for VisionType {
-    fn default() -> Self { Self::Blind }
 }

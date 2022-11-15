@@ -1,3 +1,5 @@
+#![feature(iter_collect_into)]
+
 mod systems {
     mod check_loaded_assets;
     mod splash;
@@ -23,6 +25,8 @@ pub mod prelude {
         pub use bevy_asset_loader::prelude::*;
         pub use iyes_loopless::prelude::*;
         pub use iyes_progress::prelude::*;
+        pub use kayak_ui::prelude::*;
+        pub use kayak_ui::widgets::*;
         pub use smart_default::SmartDefault;
     }
     pub(crate) use import::*;

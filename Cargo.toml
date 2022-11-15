@@ -39,7 +39,7 @@ release = [
 ]
 
 # default configurations
-default = ["dev"]
+default = ["dev", "debug"]
 
 # configuration for debugging information
 debug = [
@@ -102,19 +102,19 @@ panic         = 'abort'
 #########       Internal Crate Dependencies
 ################################
 [workspace.dependencies]
-atrl-camera     = { path = "crates/camera" }
-atrl-common     = { path = "crates/common" }
-atrl-game       = { path = "crates/game" }
-atrl-map        = { path = "crates/map" }
-atrl-raws       = { path = "crates/raws" }
-atrl-ui         = { path = "crates/ui" }
+atrl-camera = { path = "crates/camera" }
+atrl-common = { path = "crates/common" }
+atrl-game   = { path = "crates/game" }
+atrl-map    = { path = "crates/map" }
+atrl-raws   = { path = "crates/raws" }
+atrl-ui     = { path = "crates/ui" }
 [dependencies]
-atrl-camera     = {workspace = true}
-atrl-common     = {workspace = true}
-atrl-game       = {workspace = true}
-atrl-map        = {workspace = true}
-atrl-raws       = {workspace = true}
-atrl-ui         = {workspace = true}
+atrl-camera = { workspace = true }
+atrl-common = { workspace = true }
+atrl-game   = { workspace = true }
+atrl-map    = { workspace = true }
+atrl-raws   = { workspace = true }
+atrl-ui     = { workspace = true }
 
 ######################################
 #########       Bevy
@@ -124,6 +124,7 @@ default-features = false
 features = [
   "bevy_asset",
   "bevy_winit",
+  "png",
   "x11",
   "bevy_scene",
   "wayland",
@@ -151,7 +152,6 @@ version = "0.9"
 [workspace.dependencies.bevy_asset_loader]
 features = ["stageless", "2d", "progress_tracking_stageless"]
 git      = "https://github.com/banana-studios/bevy_asset_loader"
-# git      = "https://github.com/NiklasEi/bevy_asset_loader"
 
 [workspace.dependencies.bevy_common_assets]
 features = ["ron", "toml", "json"]
@@ -177,7 +177,11 @@ version  = "0.9"
 
 [workspace.dependencies.bevy_tileset]
 features = ["auto-tile"]
-version = "0.6"
+version  = "0.6"
+
+[workspace.dependencies.bevy_tile_atlas]
+default-features = false
+version          = "0.5"
 
 ###############################
 #########       Serialization   
@@ -194,13 +198,11 @@ version  = "1"
 ######################################
 [workspace.dependencies.iyes_loopless]
 features = ["states"]
-# version  = "0.8"
-git = "https://github.com/banana-studios/iyes_loopless"
+git      = "https://github.com/banana-studios/iyes_loopless"
 
 [workspace.dependencies.iyes_progress]
 features = ["assets"]
-# version  = "0.6"
-git = "https://github.com/banana-studios/iyes_progress"
+git      = "https://github.com/banana-studios/iyes_progress"
 
 [workspace.dependencies.banana_bevy_utils]
 features = ["states"]
@@ -230,13 +232,15 @@ version  = "0.8"
 #########       UI
 ######################################
 [workspace.dependencies.bevy_egui]
-git = "https://github.com/mvlabat/bevy_egui"
+version = "0.17"
 
 [workspace.dependencies.kayak_ui]
-version = "0.1"
+branch = "multi-context"
+git    = "https://github.com/StarArawn/kayak_ui"
 
 [workspace.dependencies.kayak_font]
-version = "0.1"
+branch = "multi-context"
+git    = "https://github.com/StarArawn/kayak_ui"
 
 ######################################
 #########       Utility
@@ -293,8 +297,9 @@ optional = true
 #########       Debug
 ######################################
 [dependencies.bevy-inspector-egui]
+branch   = "rework"
+git      = "https://github.com/jakobhellermann/bevy-inspector-egui"
 optional = true
-version  = "0.14"
 
 [dependencies.bevy_mod_debugdump]
 git      = "https://github.com/jakobhellermann/bevy_mod_debugdump"
