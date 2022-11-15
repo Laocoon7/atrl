@@ -41,7 +41,15 @@ mod import {
     pub use smart_default::SmartDefault;
 
     #[cfg(feature = "debug")]
-    pub use bevy_inspector_egui::prelude::*;
+    mod egui {
+        pub use bevy_inspector_egui::bevy_egui::EguiPlugin;
+        pub use bevy_inspector_egui::bevy_inspector::hierarchy::SelectedEntities;
+        pub use bevy_inspector_egui::egui;
+        pub use bevy_inspector_egui::prelude::*;
+        pub use bevy_inspector_egui::{quick::*, DefaultInspectorConfigPlugin};
+    }
+    #[cfg(feature = "debug")]
+    pub use {crate::debug::*, egui::*};
 
     #[cfg(feature = "parallel")]
     pub use rayon::prelude::*;

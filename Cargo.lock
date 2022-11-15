@@ -226,7 +226,6 @@ dependencies = [
  "bevy_asset_loader",
  "bevy_common_assets",
  "bevy_ecs_tilemap",
- "bevy_egui",
  "bevy_embedded_assets",
  "bevy_mod_debugdump",
  "bevy_tileset",

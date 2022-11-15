@@ -5,10 +5,23 @@
 pub(crate) mod prelude;
 use crate::prelude::*;
 
-#[cfg(feature = "debug")]
-mod debug;
-#[cfg(feature = "debug")]
-use debug::*;
+// #[cfg(feature = "debug")]
+// mod debug;
+// #[cfg(feature = "debug")]
+// use debug::*;
+
+pub(crate) mod debug {
+    mod systems {
+        mod inspector_ui;
+        mod window_title;
+        pub use inspector_ui::*;
+        pub use window_title::*;
+    }
+    pub use systems::*;
+
+    mod debug_plugin;
+    pub use debug_plugin::*;
+}
 
 fn main() {
     let mut app = App::new();
@@ -18,7 +31,7 @@ fn main() {
 
     // anything we don't need in release versions
     #[cfg(feature = "debug")]
-    app.add_plugin(DebugPlugin);
+    app.add_plugin(debug::DebugPlugin);
 
     // game related
     app.add_plugin(GamePlugin {
