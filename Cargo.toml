@@ -86,11 +86,18 @@ panic         = 'abort'
 ################################
 #########       Internal Crate Dependencies
 ################################
-[dependencies]
+[workspace.dependencies]
+atrl-camera     = { path = "crates/camera" }
 atrl-common     = { path = "crates/common" }
 atrl-components = { path = "crates/components" }
 atrl-map        = { path = "crates/map" }
 atrl-raws       = { path = "crates/raws" }
+[dependencies]
+atrl-camera     = {workspace = true}
+atrl-common     = {workspace = true}
+atrl-components = {workspace = true}
+atrl-map        = {workspace = true}
+atrl-raws       = {workspace = true}
 
 ######################################
 #########       Bevy

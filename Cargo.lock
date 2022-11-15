@@ -226,6 +226,7 @@ checksum = "73b5e5f48b927f04e952dedc932f31995a65a0bf65ec971c74436e51bf6e970d"
 name = "atrl"
 version = "0.1.0"
 dependencies = [
+ "atrl-camera",
  "atrl-common",
  "atrl-components",
  "atrl-map",
@@ -267,10 +268,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "atrl-camera"
+version = "0.1.0"
+dependencies = [
+ "atrl-common",
+ "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "atrl-common"
 version = "0.1.0"
 dependencies = [
- "atrl-components",
  "banana_bevy_utils",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "iyes_loopless",
@@ -288,6 +296,7 @@ dependencies = [
 name = "atrl-components"
 version = "0.1.0"
 dependencies = [
+ "atrl-common",
  "banana_bevy_utils",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "bevy-inspector-egui",

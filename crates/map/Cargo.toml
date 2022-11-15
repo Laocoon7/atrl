@@ -8,7 +8,7 @@ debug = []
 release = []
 
 [dependencies]
-atrl-common         = {path = "../common"}
+atrl-common         = {workspace = true}
 bevy                = {workspace = true}
 banana_bevy_utils   = {workspace = true}
 iyes_loopless       = {workspace = true}

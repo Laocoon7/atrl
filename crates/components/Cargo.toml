@@ -13,9 +13,10 @@ version     = "0.1.0"
 debug = ["bevy-inspector-egui"]
 
 [dependencies]
-banana_bevy_utils = { workspace = true }
-bevy              = { workspace = true }
-serde             = { workspace = true }
+atrl-common         = {workspace = true}
+banana_bevy_utils   = {workspace = true}
+bevy                = {workspace = true}
+serde               = {workspace = true}
 
 [dependencies.bevy-inspector-egui]
 optional = true

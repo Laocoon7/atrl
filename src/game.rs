@@ -22,17 +22,6 @@ mod actors {
     pub use timing::*;
 }
 
-mod camera {
-    mod systems {
-        mod spawn_main_camera;
-        pub use spawn_main_camera::*;
-    }
-    mod camera_plugin;
-    pub use camera_plugin::*;
-    mod main_camera;
-    pub use main_camera::*;
-}
-
 mod items {
     mod item_bundle;
     pub use item_bundle::*;
@@ -126,6 +115,8 @@ mod player {
 mod systems {
     mod apply_damage;
     pub use apply_damage::*;
+    mod draw_map;
+    pub use draw_map::*;
     mod input;
     pub use input::*;
     mod move_actors;
@@ -190,7 +181,6 @@ pub mod prelude {
     mod internal {
         pub use super::super::abilities::*;
         pub use super::super::actors::*;
-        pub use super::super::camera::*;
         pub use super::super::items::*;
         pub use super::super::map::*;
         pub use super::super::player::*;
@@ -205,7 +195,6 @@ pub mod prelude {
 
     mod external {
         pub use super::super::actors::*;
-        pub use super::super::camera::*;
         pub use super::super::game_plugin::*;
         pub use super::super::map::*;
     }

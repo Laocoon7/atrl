@@ -36,6 +36,7 @@ mod tags;
 
 pub mod prelude {
     mod import {
+        pub use atrl_common::prelude::*;
         pub use banana_bevy_utils::prelude::*;
         pub use bevy::prelude::*;
         pub use serde::{Deserialize, Serialize};

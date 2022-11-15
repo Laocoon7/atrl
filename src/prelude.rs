@@ -46,6 +46,7 @@ mod import {
     #[cfg(feature = "parallel")]
     pub use rayon::prelude::*;
 
+    pub use atrl_camera::prelude::*;
     pub use atrl_common::prelude::AssetLoadState::*;
     pub use atrl_common::prelude::ConstructState::*;
     pub use atrl_common::prelude::TurnState::*;
@@ -59,8 +60,6 @@ pub use import::*;
 
 // Push out from here.
 mod export {
-    pub use crate::app_settings::*;
-
     pub use crate::game::prelude::*;
     pub use crate::procgen::prelude::external::*;
 }

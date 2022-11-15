@@ -14,7 +14,7 @@ debug = []
 release = []
 
 [dependencies]
-atrl-components = { path = "../components" }
+#atrl-components = { path = "../components" }
 
 banana_bevy_utils   = {workspace = true}
 bevy                = {workspace = true}

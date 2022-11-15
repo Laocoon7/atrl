@@ -62,6 +62,7 @@ mod geometry {
     pub use shapes::*;
 }
 
+mod app_settings;
 mod common_plugin;
 mod cp437;
 mod error;
@@ -75,7 +76,6 @@ mod white_pixel;
 
 pub mod prelude {
     mod import {
-        pub use atrl_components::prelude::*;
         pub use banana_bevy_utils::prelude::*;
         pub use bevy::{
             ecs::system::SystemState,
@@ -99,6 +99,7 @@ pub mod prelude {
     pub(crate) use import::*;
 
     mod export {
+        pub use crate::app_settings::*;
         pub use crate::common_plugin::*;
         pub use crate::cp437::*;
         pub use crate::direction::*;

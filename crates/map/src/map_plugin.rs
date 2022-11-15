@@ -18,20 +18,17 @@ impl<T: StateNext> Plugin for MapPlugin<T> {
             .add_plugin(TilemapPlugin)
             // bevy_tileset
             .add_plugin(TilesetPlugin::default())
+            // Holder for Handle<Tileset>'s so they don't get unloaded
             .init_resource::<LoadedTilesets>()
+            // Loads the tilesets
             .add_enter_system(self.state_construct.clone(), load_tilesets)
+            //
+            // call create_tilemap and set next stage (this must run multiple times to ensure
+            // tilesets are loaded)
             .add_system_set(
                 ConditionSet::new()
                     .run_in_state(self.state_construct.clone())
                     .with_system(build_map)
-                    .into(),
-            )
-            .add_enter_system(self.state_running.clone(), set_tile_custom_size)
-            .add_system_set_to_stage(
-                CoreStage::Last,
-                ConditionSet::new()
-                    .run_in_state(self.state_running.clone())
-                    .with_system(test_display)
                     .into(),
             );
     }

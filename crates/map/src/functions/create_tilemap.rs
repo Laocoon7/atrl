@@ -17,7 +17,7 @@ pub fn create_tilemap(
                 .spawn(TileBundle {
                     position: tile_pos,
                     tilemap_id: TilemapId(tilemap_entity),
-                    texture_index: TileTextureIndex(0),
+                    texture_index: TileTextureIndex(1),
                     ..Default::default()
                 })
                 .id();
@@ -29,14 +29,23 @@ pub fn create_tilemap(
     let grid_size = tile_size.into();
     let map_type = TilemapType::Square;
 
+    // scale the map by the tile_size so that
+    // 1 Transform unit = 1 tile.
+    // shift the map by 1/2 a tile in both x / y
+    let transform = Transform {
+        translation: Vec3 { x: 0.5, y: 0.5, z: 0.0 },
+        scale: Vec3 { x: 1.0 / tile_size.x, y: 1.0 / tile_size.y, z: 1.0 },
+        ..Default::default()
+    };
+
     commands.entity(tilemap_entity).insert(TilemapBundle {
         tile_size,
         grid_size,
         map_type,
         size: tilemap_size,
         storage: tile_storage,
+        transform,
         texture: TilemapTexture::Single(tileset.texture().clone()),
-        transform: get_tilemap_center_transform(&tilemap_size, &grid_size, &map_type, 0.0),
         ..Default::default()
     });
 

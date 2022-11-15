@@ -33,14 +33,6 @@ pub trait AtrlPosition2: Component {
     fn set_value(&mut self, pos: Self::Position);
 }
 
-impl AtrlPosition2 for LocalPosition {
-    type Position = IVec2;
-
-    fn get(&self) -> Self::Position { self.position }
-
-    fn set_value(&mut self, pos: Self::Position) { self.position = pos }
-}
-
 impl AtrlPosition2 for Transform {
     type Position = Vec2;
 
