@@ -1,20 +1,10 @@
-use crate::prelude::*;
+use bevy::reflect::FromReflect;
+
+use crate::prelude::{Deserialize, Reflect, Serialize};
 
 #[derive(
-    Reflect,
-    Debug,
-    Default,
-    FromPrimitive,
-    ToPrimitive,
-    Clone,
-    Copy,
-    Hash,
-    PartialEq,
-    Eq,
-    Serialize,
-    Deserialize,
+    Reflect, FromReflect, Default, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Debug,
 )]
-#[repr(u8)] // This must match with movement component
 pub enum MovementType {
     #[default]
     None = 0,

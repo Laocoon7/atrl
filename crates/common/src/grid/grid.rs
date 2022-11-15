@@ -1,9 +1,13 @@
+use crate::prelude::*;
 use std::{
     ops::{Index, IndexMut},
     slice,
 };
 
-use crate::prelude::*;
+/// EXPERIMENTAL: This is a new API that is not yet stable. It may change or be removed.
+///
+/// https://github.com/rust-lang/rust/issues/41517
+pub trait GridParam = Sync + Send + 'static + FromReflect;
 
 #[allow(dead_code)]
 pub type GridIter<'a, T> = slice::Iter<'a, T>;
@@ -11,14 +15,14 @@ pub type GridIterMut<'a, T> = slice::IterMut<'a, T>;
 pub type GridRows<'a, T> = slice::Chunks<'a, T>;
 pub type GridRowsMut<'a, T> = slice::ChunksMut<'a, T>;
 
-#[derive(Serialize, Deserialize, Default, Debug, Clone, Hash, PartialEq, Eq)]
-pub struct Grid<T> {
+#[derive(Serialize, Deserialize, Reflect, Default, Debug, Clone, Hash, PartialEq, Eq)]
+pub struct Grid<T: GridParam> {
     pub size: UVec2,
     pub cells: Vec<T>,
 }
 
 #[allow(dead_code)]
-impl<T: Clone> Grid<T> {
+impl<T: Clone + GridParam> Grid<T> {
     pub fn new_clone(size: impl Size2d, value: T) -> Self {
         let count = size.count();
         let mut cells = Vec::with_capacity(count);
@@ -28,7 +32,7 @@ impl<T: Clone> Grid<T> {
 }
 
 #[allow(dead_code)]
-impl<T: Copy> Grid<T> {
+impl<T: Copy + GridParam> Grid<T> {
     pub fn new_copy(size: impl Size2d, value: T) -> Self {
         let count = size.count();
         let mut cells = Vec::with_capacity(count);
@@ -38,7 +42,7 @@ impl<T: Copy> Grid<T> {
 }
 
 #[allow(dead_code)]
-impl<T: Default> Grid<T> {
+impl<T: Default + GridParam> Grid<T> {
     pub fn new_default(size: impl Size2d) -> Self {
         let count = size.count();
         let mut cells = Vec::new();
@@ -48,7 +52,7 @@ impl<T: Default> Grid<T> {
 }
 
 #[allow(dead_code)]
-impl<T> Grid<T> {
+impl<T: GridParam> Grid<T> {
     #[inline(always)]
     pub fn new_fn<F>(size: impl Size2d, mut f: F) -> Self
     where
@@ -183,7 +187,7 @@ impl<T> Grid<T> {
 // Row / Column Iterators
 ///////////////////////////////////////////////////////////////////////////
 
-impl<T> Grid<T> {
+impl<T: GridParam> Grid<T> {
     #[inline]
     pub fn rows(&self) -> GridRows<T> { self.cells.chunks(self.size.width() as usize) }
 
@@ -252,26 +256,26 @@ impl<T> Grid<T> {
 // Indexing
 ///////////////////////////////////////////////////////////////////////////
 
-impl<T: Copy> Index<usize> for Grid<T> {
+impl<T: Copy + GridParam> Index<usize> for Grid<T> {
     type Output = T;
 
     #[inline]
     fn index(&self, index: usize) -> &T { &self.cells[index] }
 }
 
-impl<T: Copy> std::ops::IndexMut<usize> for Grid<T> {
+impl<T: Copy + GridParam> std::ops::IndexMut<usize> for Grid<T> {
     #[inline]
     fn index_mut(&mut self, index: usize) -> &mut Self::Output { &mut self.cells[index] }
 }
 
-impl<T: Copy, P: Point2d> Index<P> for Grid<T> {
+impl<T: Copy + GridParam, P: Point2d> Index<P> for Grid<T> {
     type Output = T;
 
     #[inline]
     fn index(&self, index: P) -> &T { self.get_unchecked(index) }
 }
 
-impl<T: Copy, P: Point2d> IndexMut<P> for Grid<T> {
+impl<T: Copy + GridParam, P: Point2d> IndexMut<P> for Grid<T> {
     #[inline]
     fn index_mut(&mut self, index: P) -> &mut Self::Output { self.get_mut_unchecked(index) }
 }

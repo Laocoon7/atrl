@@ -2,6 +2,7 @@ use crate::prelude::*;
 
 #[derive(
     Reflect,
+    FromReflect,
     Debug,
     Default,
     FromPrimitive,
