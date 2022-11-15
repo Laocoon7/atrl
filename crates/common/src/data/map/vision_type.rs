@@ -1,6 +1,10 @@
+use bevy::reflect::FromReflect;
+
 use crate::prelude::{Deserialize, Reflect, Serialize};
 
-#[derive(Reflect, Default, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(
+    Reflect, FromReflect, Default, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Debug,
+)]
 pub enum VisionType {
     #[default]
     Blind = 0,

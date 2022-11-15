@@ -102,12 +102,14 @@ panic         = 'abort'
 #########       Internal Crate Dependencies
 ################################
 [workspace.dependencies]
-atrl-camera = { path = "crates/camera" }
-atrl-common = { path = "crates/common" }
-atrl-game   = { path = "crates/game" }
-atrl-map    = { path = "crates/map" }
-atrl-raws   = { path = "crates/raws" }
-atrl-ui     = { path = "crates/ui" }
+atrl-camera   = { path = "crates/camera" }
+atrl-common   = { path = "crates/common" }
+atrl-game     = { path = "crates/game" }
+atrl-map      = { path = "crates/map" }
+atrl-raws     = { path = "crates/raws" }
+atrl-saveload = { path = "crates/saveload" }
+atrl-ui       = { path = "crates/ui" }
+
 [dependencies]
 atrl-camera = { workspace = true }
 atrl-common = { workspace = true }

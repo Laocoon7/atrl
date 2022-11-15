@@ -14,6 +14,8 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
             // set entry state
             .add_loopless_state(GameState::default())
             .insert_resource(TurnState::AwaitingInput)
+            // SaveLoad
+            .add_plugin(SaveLoadPlugin)
             // asset loading
             .add_plugin(RawPlugin {
                 state_asset_load: GameState::AssetLoad(Load),

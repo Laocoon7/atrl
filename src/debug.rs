@@ -39,13 +39,7 @@ impl Plugin for DebugPlugin {
         app.add_plugin(FrameTimeDiagnosticsPlugin).add_plugin(EntityCountDiagnosticsPlugin);
 
         // Inspector Egui
-        app.add_plugin(WorldInspectorPlugin)
-            .register_type::<Equipable>()
-            .register_type::<Health>()
-            .register_type::<MovementType>()
-            .register_type::<LocalPosition>()
-            .register_type::<WorldPosition>()
-            .register_type::<VisionType>();
+        app.add_plugin(WorldInspectorPlugin);
 
         app.add_stage_after(
             CoreStage::PostUpdate,

@@ -20,7 +20,7 @@ pub(crate) fn load_first_map(
     .with(AreaStartingPosition::new(start_x, start_y))
     .generate(&mut game_context.get_rng());
 
-    commands.spawn(chain.get_map());
+    commands.spawn((chain.get_map(), Name::new("TileMap")));
 
     state.set_next(&mut commands);
 }

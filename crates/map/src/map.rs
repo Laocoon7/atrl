@@ -1,6 +1,7 @@
 use crate::prelude::*;
 
-#[derive(Component)]
+#[derive(Reflect, Component, Default)]
+#[reflect(Component)]
 pub struct Map {
     pub size: UVec2,
     pub world_position: WorldPosition,

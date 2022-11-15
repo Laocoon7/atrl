@@ -4,6 +4,8 @@ use num_derive::{FromPrimitive, ToPrimitive};
 use num_traits::ToPrimitive;
 
 #[derive(
+    Reflect,
+    FromReflect,
     Debug,
     Default,
     FromPrimitive,
