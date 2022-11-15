@@ -6,7 +6,7 @@ pub(crate) fn update_tilemaps(
     mut q_tiles: Query<&mut TileTextureIndex>,
 ) {
     for mut map in q_map.iter_mut() {
-        if !map.update_all && map.update_tiles.len() == 0 {
+        if !map.update_all && map.update_tiles.is_empty() {
             continue;
         }
 
@@ -83,7 +83,7 @@ pub(crate) fn update_tilemaps(
 
             map.update_all = false;
         } else {
-            let mut positions = std::mem::replace(&mut map.update_tiles, Vec::new());
+            let mut positions = std::mem::take(&mut map.update_tiles);
             for position in positions.drain(..) {
                 let tile_pos = TilePos::new(position.x, position.y);
                 if let Some(entity) = terrain_storage.get(&tile_pos) {

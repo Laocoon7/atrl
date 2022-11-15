@@ -1,7 +1,6 @@
 use crate::prelude::*;
 
 pub(crate) fn load_tilesets(
-    mut commands: Commands,
     asset_server: Res<AssetServer>,
     mut loaded_tilesets: ResMut<LoadedTilesets>,
     _state: Res<CurrentGameState>,
