@@ -1,6 +1,6 @@
 #[repr(u8)]
 pub enum MapLayer {
-    Terrain,
+    Terrain = 1,
     Features,
     Items,
     Actors,

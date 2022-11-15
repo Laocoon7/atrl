@@ -29,7 +29,7 @@ pub fn add_tilemap_to_entity<ZLevel: Into<f32>>(
                 .spawn(TileBundle {
                     position: tile_pos,
                     tilemap_id: TilemapId(tilemap_entity),
-                    texture_index: TileTextureIndex(2),
+                    texture_index: TileTextureIndex(0),
                     ..Default::default()
                 })
                 .id();
