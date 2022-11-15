@@ -1,0 +1,10 @@
+(
+    name: Some("dcss_terrain"),
+    id: 1,
+    tiles: {
+        0: "./dcss/ron/empty.ron",
+        1: "./dcss/ron/floor.ron",
+        2: "./dcss/ron/wall.ron",
+        3: "./dcss/ron/water.ron",
+    }
+)

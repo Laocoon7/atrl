@@ -17,6 +17,7 @@ pub(crate) fn gen_tilemaps_for_maps(
 
         // create the Tilemaps for each layer
         if let Some(tileset) = tilesets.get_by_id(&map.terrain_tileset_id) {
+            info!("Tileset found! TilesetId: {}", &map.terrain_tileset_id);
             let tilemap_entity = commands.spawn_empty().id();
             map.terrain_storage_entity = Some(tilemap_entity);
             add_tilemap_to_entity(
@@ -32,6 +33,7 @@ pub(crate) fn gen_tilemaps_for_maps(
         }
 
         if let Some(tileset) = tilesets.get_by_id(&map.feature_tileset_id) {
+            info!("Tileset found! TilesetId: {}", &map.terrain_tileset_id);
             let tilemap_entity = commands.spawn_empty().id();
             map.feature_storage_entity = Some(tilemap_entity);
             add_tilemap_to_entity(
@@ -47,6 +49,7 @@ pub(crate) fn gen_tilemaps_for_maps(
         }
 
         if let Some(tileset) = tilesets.get_by_id(&map.item_tileset_id) {
+            info!("Tileset found! TilesetId: {}", &map.terrain_tileset_id);
             let tilemap_entity = commands.spawn_empty().id();
             map.item_storage_entity = Some(tilemap_entity);
             add_tilemap_to_entity(

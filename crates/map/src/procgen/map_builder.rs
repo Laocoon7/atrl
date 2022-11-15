@@ -45,7 +45,7 @@ impl<S: Size2d> From<MapBuilder<S>> for Map {
             builder.terrain_grid,
             Grid::new_copy(builder.size, FeatureType::None),
             Grid::new_clone(builder.size, Vec::new()),
-            0,
+            1,
             0,
             0,
         )
