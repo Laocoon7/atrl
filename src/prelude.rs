@@ -58,9 +58,3 @@ mod import {
     pub use atrl_ui::prelude::*;
 }
 pub use import::*;
-
-// Push out from here.
-mod export {
-    pub use crate::procgen::prelude::external::*;
-}
-pub use export::*;

@@ -1,5 +1,4 @@
 use crate::prelude::*;
-pub use crate::procgen::prelude::internal::*;
 
 ////////////////////////////////////////////////////////////////////////////////
 // MapBuilder - Container to hold the state of the map being constructed
@@ -46,6 +45,9 @@ impl<S: Size2d> From<MapBuilder<S>> for Map {
             builder.terrain_grid,
             Grid::new_copy(builder.size, FeatureType::None),
             Grid::new_clone(builder.size, Vec::new()),
+            0,
+            0,
+            0,
         )
     }
 }

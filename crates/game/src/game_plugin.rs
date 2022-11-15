@@ -41,14 +41,6 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
                 GameState::default(),
                 switch_in_game_state!(GameState::default().next().unwrap()),
             )
-            // Copy Map to Map Renderer
-            .add_system_set_to_stage(
-                CoreStage::Last,
-                ConditionSet::new()
-                    .run_in_state(self.state_running.clone())
-                    .with_system(draw_map)
-                    .into(),
-            )
             // UI
             .add_plugin(UiPlugin { state_main_menu: self.state_main_menu.clone() })
             // Spawner

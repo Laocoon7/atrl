@@ -1,5 +1,4 @@
 use crate::prelude::*;
-pub use crate::procgen::prelude::internal::*;
 
 pub struct CullUnreachable<S> {
     phantom: std::marker::PhantomData<S>,

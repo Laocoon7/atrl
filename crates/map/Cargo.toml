@@ -15,4 +15,4 @@ banana_bevy_utils   = {workspace = true}
 iyes_loopless       = {workspace = true}
 bevy_ecs_tilemap    = {workspace = true}
 bevy_tileset        = {workspace = true}
-bevy_tile_atlas     = {workspace = true}
+smart-default       = {workspace = true}

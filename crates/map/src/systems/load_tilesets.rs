@@ -1,8 +1,10 @@
 use crate::prelude::*;
 
 pub(crate) fn load_tilesets(
+    mut commands: Commands,
     asset_server: Res<AssetServer>,
     mut loaded_tilesets: ResMut<LoadedTilesets>,
+    _state: Res<CurrentGameState>,
 ) {
     let base_path = FileAssetIo::get_base_path();
     let asset_path = base_path.join(ASSETS_PATH);

@@ -16,7 +16,7 @@ use num_traits::ToPrimitive;
     Serialize,
     Deserialize,
 )]
-#[repr(u8)]
+#[repr(u32)]
 pub enum TerrainType {
     #[default]
     None,
@@ -84,14 +84,8 @@ impl TerrainType {
     }
 }
 
-impl From<TerrainType> for u8 {
+impl From<TerrainType> for u32 {
     fn from(value: TerrainType) -> Self {
-        ToPrimitive::to_u8(&value).expect("Failed to convert `TerrainType` to u8")
-    }
-}
-
-impl From<TerrainType> for u64 {
-    fn from(value: TerrainType) -> Self {
-        ToPrimitive::to_u64(&value).expect("Failed to convert `TerrainType` to u64")
+        ToPrimitive::to_u32(&value).expect("Failed to convert `TerrainType` to u32")
     }
 }

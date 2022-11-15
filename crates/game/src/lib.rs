@@ -1,10 +1,5 @@
 #![allow(clippy::module_inception)]
 
-mod map {
-    mod map;
-    pub use map::*;
-}
-
 mod player {
     mod player_plugin;
     pub use player_plugin::*;
@@ -13,8 +8,6 @@ mod player {
 mod systems {
     mod apply_damage;
     pub use apply_damage::*;
-    mod draw_map;
-    pub use draw_map::*;
     mod input;
     pub use input::*;
     mod move_actors;
@@ -32,7 +25,6 @@ mod spawner {
     pub use spawner_plugin::*;
 }
 
-mod game_context;
 mod game_plugin;
 
 pub mod prelude {
@@ -44,13 +36,12 @@ pub mod prelude {
 
         pub use banana_bevy_utils::prelude::*;
 
+        pub use bevy_ecs_tilemap::prelude::*;
+        pub use bevy_tileset::prelude::*;
+
         pub use leafwing_input_manager::{action_state::ActionState, prelude::*};
 
         pub use iyes_loopless::prelude::*;
-
-        pub use once_cell::sync::Lazy;
-
-        pub use parking_lot::{Mutex, MutexGuard};
 
         pub use atrl_camera::prelude::*;
         pub use atrl_common::prelude::AssetLoadState::*;
@@ -64,11 +55,9 @@ pub mod prelude {
     }
     pub(crate) use import::*;
 
-    pub use crate::map::*;
     pub use crate::player::*;
     pub use crate::spawner::*;
     pub use crate::systems::*;
 
-    pub use crate::game_context::*;
     pub use crate::game_plugin::*;
 }

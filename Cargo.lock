@@ -241,7 +241,6 @@ dependencies = [
  "bevy_egui 0.16.1",
  "bevy_embedded_assets",
  "bevy_mod_debugdump",
- "bevy_tile_atlas",
  "bevy_tileset",
  "bevy_tweening",
  "big-brain",
@@ -287,6 +286,7 @@ dependencies = [
  "noise",
  "num-derive",
  "num-traits",
+ "once_cell",
  "parking_lot 0.12.1",
  "rand 0.8.5",
  "rand_pcg",
@@ -308,10 +308,10 @@ dependencies = [
  "banana_bevy_utils",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "bevy-inspector-egui",
+ "bevy_ecs_tilemap",
+ "bevy_tileset",
  "iyes_loopless",
  "leafwing-input-manager",
- "once_cell",
- "parking_lot 0.12.1",
 ]
 
 [[package]]
@@ -322,9 +322,9 @@ dependencies = [
  "banana_bevy_utils",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "bevy_ecs_tilemap",
- "bevy_tile_atlas",
  "bevy_tileset",
  "iyes_loopless",
+ "smart-default",
 ]
 
 [[package]]

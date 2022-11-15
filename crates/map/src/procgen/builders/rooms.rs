@@ -1,7 +1,6 @@
 use std::marker::PhantomData;
 
 use crate::prelude::*;
-pub use crate::procgen::prelude::internal::*;
 
 pub struct RoomMapArchitect<S: Size2d> {
     phantom: PhantomData<S>,

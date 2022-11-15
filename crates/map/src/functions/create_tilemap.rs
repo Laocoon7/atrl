@@ -1,13 +1,25 @@
 use crate::prelude::*;
 
-pub fn create_tilemap(
+pub fn create_tilemap<ZLevel: Into<f32>>(
     commands: &mut Commands,
     size: impl Size2d,
+    z_level: ZLevel,
+    tileset: &Tileset,
+    array_texture_loader: &Res<ArrayTextureLoader>,
+) {
+    let tilemap_entity = commands.spawn_empty().id();
+    add_tilemap_to_entity(commands, tilemap_entity, size, z_level, tileset, array_texture_loader);
+}
+
+pub fn add_tilemap_to_entity<ZLevel: Into<f32>>(
+    commands: &mut Commands,
+    tilemap_entity: Entity,
+    size: impl Size2d,
+    z_level: ZLevel,
     tileset: &Tileset,
     array_texture_loader: &Res<ArrayTextureLoader>,
 ) {
     let tilemap_size = TilemapSize { x: size.width(), y: size.height() };
-    let tilemap_entity = commands.spawn_empty().id();
     let mut tile_storage = TileStorage::empty(tilemap_size);
 
     for y in 0..tilemap_size.y {
@@ -17,7 +29,7 @@ pub fn create_tilemap(
                 .spawn(TileBundle {
                     position: tile_pos,
                     tilemap_id: TilemapId(tilemap_entity),
-                    texture_index: TileTextureIndex(1),
+                    texture_index: TileTextureIndex(2),
                     ..Default::default()
                 })
                 .id();
@@ -34,7 +46,7 @@ pub fn create_tilemap(
     // shift the map by 1/2 a tile in both x / y
     let transform = Transform {
         translation: Vec3 { x: 0.5, y: 0.5, z: 0.0 },
-        scale: Vec3 { x: 1.0 / tile_size.x, y: 1.0 / tile_size.y, z: 1.0 },
+        scale: Vec3 { x: 1.0 / tile_size.x, y: 1.0 / tile_size.y, z: z_level.into() },
         ..Default::default()
     };
 

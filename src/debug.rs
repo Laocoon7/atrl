@@ -33,6 +33,12 @@ struct PlayerData {
     player: InspectorQuerySingle<Entity, With<Player>>,
 }
 
+#[derive(Inspectable, Resource, Default)]
+struct MapData {
+    #[inspectable(despawnable = false)]
+    map: InspectorQuerySingle<Entity, With<Map>>,
+}
+
 pub struct DebugPlugin;
 impl Plugin for DebugPlugin {
     fn build(&self, app: &mut App) {
@@ -46,6 +52,7 @@ impl Plugin for DebugPlugin {
 
         // Inspector Egui
         app.add_plugin(InspectorPlugin::<PlayerData>::new())
+            .add_plugin(InspectorPlugin::<MapData>::new())
             .add_plugin(WorldInspectorPlugin::new())
             .register_inspectable::<Equipable>()
             .register_inspectable::<Health>()

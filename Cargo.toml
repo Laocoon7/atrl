@@ -48,7 +48,6 @@ debug = [
   "debug-graph",
   # "debug_asset_server",
   "trace",
-  "bevy_tile_atlas/debug",
   "atrl-camera/debug",
   "atrl-common/debug",
   "atrl-game/debug",
@@ -179,10 +178,6 @@ version  = "0.9"
 [workspace.dependencies.bevy_tileset]
 features = ["auto-tile"]
 version = "0.6"
-
-[workspace.dependencies.bevy_tile_atlas]
-default-features = false
-version = "0.5"
 
 ###############################
 #########       Serialization   
@@ -329,8 +324,6 @@ workspace = true
 [dependencies.bevy_ecs_tilemap]
 workspace = true
 [dependencies.bevy_tileset]
-workspace = true
-[dependencies.bevy_tile_atlas]
 workspace = true
 [dependencies.ron]
 workspace = true

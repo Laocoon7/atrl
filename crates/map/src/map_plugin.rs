@@ -22,13 +22,18 @@ impl<T: StateNext> Plugin for MapPlugin<T> {
             .init_resource::<LoadedTilesets>()
             // Loads the tilesets
             .add_enter_system(self.state_construct.clone(), load_tilesets)
-            //
-            // call create_tilemap and set next stage (this must run multiple times to ensure
-            // tilesets are loaded)
+            .add_enter_system(self.state_construct.clone(), load_first_map)
             .add_system_set(
                 ConditionSet::new()
-                    .run_in_state(self.state_construct.clone())
-                    .with_system(build_map)
+                    .run_in_state(self.state_running.clone())
+                    .with_system(gen_tilemaps_for_maps)
+                    .into(),
+            )
+            .add_system_set_to_stage(
+                CoreStage::Last,
+                ConditionSet::new()
+                    .run_in_state(self.state_running.clone())
+                    .with_system(update_tilemaps)
                     .into(),
             );
     }

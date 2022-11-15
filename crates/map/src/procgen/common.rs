@@ -1,5 +1,4 @@
 use crate::prelude::*;
-pub use crate::procgen::prelude::internal::*;
 
 pub fn random_start_position(rng: &mut Random) -> (XStart, YStart) {
     let xroll = rng.prng.roll_dice(1, 3);

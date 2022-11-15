@@ -11,10 +11,11 @@ release = []
 [dependencies]
 banana_bevy_utils       = {workspace = true}
 bevy                    = {workspace = true}
+bevy_ecs_tilemap        = {workspace = true}
+bevy_tileset            = {workspace = true}
 iyes_loopless           = {workspace = true}
 leafwing-input-manager  = {workspace = true}
-once_cell               = {workspace = true}
-parking_lot             = {workspace = true}
+
 
 atrl-common             = {workspace = true}
 atrl-camera             = {workspace = true}

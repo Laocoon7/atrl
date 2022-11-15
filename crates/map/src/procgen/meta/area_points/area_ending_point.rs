@@ -1,5 +1,4 @@
 use crate::prelude::*;
-pub use crate::procgen::prelude::internal::*;
 
 #[allow(dead_code)]
 pub enum XEnd {

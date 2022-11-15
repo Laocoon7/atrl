@@ -13,7 +13,7 @@ use crate::prelude::*;
     Serialize,
     Deserialize,
 )]
-#[repr(u8)]
+#[repr(u32)]
 pub enum FeatureType {
     #[default]
     None,
@@ -101,9 +101,9 @@ impl FeatureType {
     }
 }
 
-impl From<FeatureType> for u8 {
+impl From<FeatureType> for u32 {
     fn from(value: FeatureType) -> Self {
-        ToPrimitive::to_u8(&value).expect("Failed to convert `TerrainType` to u8")
+        ToPrimitive::to_u32(&value).expect("Failed to convert `FeatureType` to u32")
     }
 }
 

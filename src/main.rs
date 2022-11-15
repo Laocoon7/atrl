@@ -2,8 +2,6 @@
 #![allow(clippy::type_complexity)] // Bevy can have complex queries, so we shush clippy
 #![allow(clippy::too_many_arguments)] // Bevy has a lot of arguments, so we shush clippy
 
-pub mod procgen;
-
 pub(crate) mod prelude;
 use crate::prelude::*;
 

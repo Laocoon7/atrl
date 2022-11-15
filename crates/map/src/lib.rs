@@ -7,15 +7,52 @@ mod functions {
     pub use create_tilemap::*;
 }
 
+mod procgen {
+    mod builders {
+        mod cellular_automata;
+        pub use cellular_automata::*;
+        mod rooms;
+        pub use rooms::*;
+    }
+    pub use builders::*;
+
+    mod meta {
+        mod area_points {
+            mod area_ending_point;
+            pub use area_ending_point::*;
+            mod area_starting_points;
+            pub use area_starting_points::*;
+        }
+        pub use area_points::*;
+        mod cull_unreachable;
+        pub use cull_unreachable::*;
+    }
+    pub use meta::*;
+
+    mod builder_chain;
+    pub use builder_chain::*;
+    mod common;
+    pub use common::*;
+    mod map_builder;
+    pub use map_builder::*;
+}
+
 mod systems {
     mod load_tilesets;
     pub use load_tilesets::*;
 
-    mod test_display;
-    pub use test_display::*;
+    mod gen_tilemaps_for_maps;
+    pub use gen_tilemaps_for_maps::*;
+
+    mod load_first_map;
+    pub use load_first_map::*;
+
+    mod update_tilemaps;
+    pub use update_tilemaps::*;
 }
 
 mod loaded_tilesets;
+mod map;
 mod map_plugin;
 mod paths;
 
@@ -32,19 +69,23 @@ pub mod prelude {
         pub use iyes_loopless::prelude::*;
 
         pub use bevy_ecs_tilemap::prelude::*;
-        pub use bevy_tile_atlas::*;
         pub use bevy_tileset::prelude::*;
+
+        pub use smart_default::SmartDefault;
 
         pub use atrl_common::prelude::*;
     }
     pub(crate) use internal::*;
 
     mod external {
-        pub use super::super::functions::*;
-        pub use super::super::loaded_tilesets::*;
-        pub use super::super::map_plugin::*;
-        pub use super::super::paths::*;
-        pub use super::super::systems::*;
+        pub use crate::functions::*;
+        pub use crate::procgen::*;
+        pub use crate::systems::*;
+
+        pub use crate::loaded_tilesets::*;
+        pub use crate::map::*;
+        pub use crate::map_plugin::*;
+        pub use crate::paths::*;
     }
     pub use external::*;
 }
