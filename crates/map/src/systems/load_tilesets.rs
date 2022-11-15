@@ -13,7 +13,7 @@ pub(crate) fn load_tilesets(
     match get_files_with_extension(&tilesets_path, RON_EXT) {
         Ok(files) => {
             for file in files {
-                let p = tilesets_path.join(&file);
+                let p = tilesets_path.join(file);
                 if p == default_file {
                     continue;
                 }
@@ -22,6 +22,6 @@ pub(crate) fn load_tilesets(
                 loaded_tilesets.other_handles.push(handle);
             }
         }
-        Err(e) => error!("{}", e),
+        Err(e) => error!("Error loading tileset: {}", e),
     }
 }
