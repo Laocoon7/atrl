@@ -15,7 +15,7 @@ impl CameraPlugin {
 
 impl Plugin for CameraPlugin {
     fn build(&self, app: &mut App) {
-        let camera_settings = if self.camera_settings.len() == 0 {
+        let camera_settings = if self.camera_settings.is_empty() {
             #[cfg(feature = "debug")]
             warn!("CameraPlugin has no settings added. Using default camera settings.");
             vec![CameraSettings::default()]

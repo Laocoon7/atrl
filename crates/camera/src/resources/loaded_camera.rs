@@ -10,10 +10,5 @@ impl LoadedCameras {
 
     pub(crate) fn add(&mut self, id: u8, entity: Entity) { self.cameras.insert(id, entity); }
 
-    pub(crate) fn get(&self, id: u8) -> Option<Entity> {
-        match self.cameras.get(&id) {
-            Some(e) => Some(*e),
-            None => None,
-        }
-    }
+    pub(crate) fn get(&self, id: u8) -> Option<Entity> { self.cameras.get(&id).copied() }
 }
