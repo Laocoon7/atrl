@@ -1,8 +1,6 @@
-#[cfg(feature = "debug")]
-use crate::prelude::*;
+use bevy::reflect::Reflect;
 
-#[cfg_attr(feature = "debug", derive(Inspectable))]
-#[derive(Default, Debug)]
+#[derive(Reflect, Default, Debug)]
 pub enum EquipmentSlot {
     #[default]
     Head,

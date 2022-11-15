@@ -19,13 +19,13 @@ impl Default for MenuButtonBundle {
     fn default() -> Self {
         Self {
             button: Default::default(),
-            on_event: OnEvent::default(),
-            widget_name: MenuButton::default().get_name(),
             styles: KStyle {
                 bottom: Units::Pixels(20.0).into(),
                 cursor: KCursorIcon(CursorIcon::Hand).into(),
                 ..Default::default()
             },
+            on_event: OnEvent::default(),
+            widget_name: MenuButton::default().get_name(),
         }
     }
 }

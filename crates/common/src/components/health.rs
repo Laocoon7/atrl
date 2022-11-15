@@ -1,7 +1,7 @@
 use crate::prelude::*;
 
-#[cfg_attr(feature = "debug", derive(Inspectable))]
-#[derive(Component)]
+#[derive(Reflect, Component, Default)]
+#[reflect(Component)]
 pub struct Health {
     current_hp: i32,
     max_hp: i32,

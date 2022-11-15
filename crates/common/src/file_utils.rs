@@ -5,7 +5,7 @@ pub use std::{
 
 use crate::prelude::*;
 
-pub fn read_str<Path: Into<PathBuf>>(path: Path) -> Result<String> {
+pub fn read_str<Path: Into<PathBuf>>(path: Path) -> AtrlResult<String> {
     let path: PathBuf = path.into();
     match std::fs::read_to_string(path) {
         Ok(s) => Ok(s),
@@ -13,7 +13,7 @@ pub fn read_str<Path: Into<PathBuf>>(path: Path) -> Result<String> {
     }
 }
 
-pub fn write_str<Path: Into<PathBuf>>(path: Path, value: &str) -> Result<()> {
+pub fn write_str<Path: Into<PathBuf>>(path: Path, value: &str) -> AtrlResult<()> {
     let path: PathBuf = path.into();
     let path_string = match path.to_str() {
         Some(s) => s.to_string(),
@@ -48,14 +48,14 @@ pub fn write_str<Path: Into<PathBuf>>(path: Path, value: &str) -> Result<()> {
 pub fn get_files_with_extension<Path: Into<PathBuf>>(
     path: Path,
     extension: &str,
-) -> Result<Vec<String>> {
+) -> AtrlResult<Vec<String>> {
     get_files_with_extensions(path, vec![extension])
 }
 
 pub fn get_files_with_extensions<Path: Into<PathBuf>>(
     path: Path,
     extensions: Vec<&str>,
-) -> Result<Vec<String>> {
+) -> AtrlResult<Vec<String>> {
     let mut ret = Vec::new();
     let path: PathBuf = path.into();
     let paths = std::fs::read_dir(&path)?;

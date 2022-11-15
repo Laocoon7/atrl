@@ -1,7 +1,7 @@
 use crate::prelude::*;
 use bevy::diagnostic::{Diagnostics, EntityCountDiagnosticsPlugin, FrameTimeDiagnosticsPlugin};
 use bevy::log::LogPlugin;
-use bevy_inspector_egui::widgets::*;
+use bevy_inspector_egui::quick::*;
 
 const DEBUG_UI_STAGE: &str = "debug_ui_stage";
 
@@ -27,18 +27,6 @@ fn set_debug_title(
     }
 }
 
-#[derive(Inspectable, Resource, Default)]
-struct PlayerData {
-    #[inspectable(despawnable = false)]
-    player: InspectorQuerySingle<Entity, With<Player>>,
-}
-
-#[derive(Inspectable, Resource, Default)]
-struct MapData {
-    #[inspectable(despawnable = false)]
-    map: InspectorQuerySingle<Entity, With<Map>>,
-}
-
 pub struct DebugPlugin;
 impl Plugin for DebugPlugin {
     fn build(&self, app: &mut App) {
@@ -51,15 +39,13 @@ impl Plugin for DebugPlugin {
         app.add_plugin(FrameTimeDiagnosticsPlugin).add_plugin(EntityCountDiagnosticsPlugin);
 
         // Inspector Egui
-        app.add_plugin(InspectorPlugin::<PlayerData>::new())
-            .add_plugin(InspectorPlugin::<MapData>::new())
-            .add_plugin(WorldInspectorPlugin::new())
-            .register_inspectable::<Equipable>()
-            .register_inspectable::<Health>()
-            .register_inspectable::<MovementType>()
-            .register_inspectable::<LocalPosition>()
-            .register_inspectable::<WorldPosition>()
-            .register_inspectable::<VisionType>();
+        app.add_plugin(WorldInspectorPlugin)
+            .register_type::<Equipable>()
+            .register_type::<Health>()
+            .register_type::<MovementType>()
+            .register_type::<LocalPosition>()
+            .register_type::<WorldPosition>()
+            .register_type::<VisionType>();
 
         app.add_stage_after(
             CoreStage::PostUpdate,

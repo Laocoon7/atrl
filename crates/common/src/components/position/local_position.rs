@@ -1,7 +1,9 @@
 use crate::prelude::*;
 
-#[cfg_attr(feature = "debug", derive(Inspectable))]
-#[derive(Component, Serialize, Deserialize, Default, Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(
+    Reflect, Component, Serialize, Deserialize, Default, Clone, Copy, PartialEq, Eq, Hash, Debug,
+)]
+#[reflect(Component)]
 pub struct LocalPosition {
     pub position: IVec2,
 }

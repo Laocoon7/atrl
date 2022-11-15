@@ -10,8 +10,8 @@ repository  = "https://github.com/Laocoon7/atrl"
 version     = "0.1.0"
 
 [features]
-dev = []
-debug = []
+debug   = []
+dev     = []
 release = []
 
 [dependencies]
@@ -21,4 +21,5 @@ bevy              = { workspace = true }
 bevy_asset_loader = { workspace = true }
 iyes_loopless     = { workspace = true }
 iyes_progress     = { workspace = true }
+kayak_ui          = { workspace = true }
 smart-default     = { workspace = true }

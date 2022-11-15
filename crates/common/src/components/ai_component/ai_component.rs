@@ -1,6 +1,7 @@
 use crate::prelude::*;
 
-#[derive(Component)]
+#[derive(Reflect, Component, Default)]
+#[reflect(Component)]
 pub struct AIComponent {
     ai_type: AIType,
 }
