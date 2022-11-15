@@ -30,8 +30,12 @@ members = ["tools/ci", "tools/spancmp", "./crates/*"]
 # configuration for release builds
 release = [
   "bevy_embedded_assets",
+  "atrl-camera/release",
   "atrl-common/release",
+  "atrl-game/release",
   "atrl-map/release",
+  "atrl-raws/release",
+  "atrl-ui/release",
 ]
 
 # default configurations
@@ -45,13 +49,25 @@ debug = [
   # "debug_asset_server",
   "trace",
   "bevy_tile_atlas/debug",
+  "atrl-camera/debug",
   "atrl-common/debug",
-  "atrl-components/debug",
+  "atrl-game/debug",
   "atrl-map/debug",
+  "atrl-raws/debug",
+  "atrl-ui/debug",
 ]
 
 # default configuration while developing
-dev = ["bevy/filesystem_watcher", "bevy/dynamic"]
+dev = [
+  "bevy/filesystem_watcher",
+  "bevy/dynamic",
+  "atrl-camera/dev",
+  "atrl-common/dev",
+  "atrl-game/dev",
+  "atrl-map/dev",
+  "atrl-raws/dev",
+  "atrl-ui/dev",
+]
 
 # Parallelism
 parallel = ["rayon"]
@@ -89,15 +105,17 @@ panic         = 'abort'
 [workspace.dependencies]
 atrl-camera     = { path = "crates/camera" }
 atrl-common     = { path = "crates/common" }
-atrl-components = { path = "crates/components" }
+atrl-game       = { path = "crates/game" }
 atrl-map        = { path = "crates/map" }
 atrl-raws       = { path = "crates/raws" }
+atrl-ui         = { path = "crates/ui" }
 [dependencies]
 atrl-camera     = {workspace = true}
 atrl-common     = {workspace = true}
-atrl-components = {workspace = true}
+atrl-game       = {workspace = true}
 atrl-map        = {workspace = true}
 atrl-raws       = {workspace = true}
+atrl-ui         = {workspace = true}
 
 ######################################
 #########       Bevy
@@ -107,7 +125,6 @@ default-features = false
 features = [
   "bevy_asset",
   "bevy_winit",
-  "png",
   "x11",
   "bevy_scene",
   "wayland",
@@ -351,7 +368,7 @@ workspace = true
 workspace = true
 [dependencies.strum]
 workspace = true
-[dependencies.kayak_ui]
-workspace = true
 [dependencies.kayak_font]
+workspace = true
+[dependencies.kayak_ui]
 workspace = true

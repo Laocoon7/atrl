@@ -10,18 +10,20 @@ repository  = "https://github.com/Laocoon7/atrl"
 version     = "0.1.0"
 
 [features]
-debug = []
+debug = ["bevy-inspector-egui"]
+dev = []
 release = []
 
 [dependencies]
-#atrl-components = { path = "../components" }
-
-banana_bevy_utils   = {workspace = true}
-bevy                = {workspace = true}
-iyes_loopless       = {workspace = true}
-parking_lot         = {workspace = true}
-serde               = {workspace = true}
-thiserror           = {workspace = true}
+banana_bevy_utils       = {workspace = true}
+bevy                    = {workspace = true}
+iyes_loopless           = {workspace = true}
+leafwing-input-manager  = {workspace = true}
+num-derive              = {workspace = true}
+num-traits              = {workspace = true}
+parking_lot             = {workspace = true}
+serde                   = {workspace = true}
+thiserror               = {workspace = true}
 
 #################################
 #########       Random
@@ -31,3 +33,7 @@ rand            = {workspace = true}
 rand_pcg        = {workspace = true}
 rand_seeder     = {workspace = true}
 xxhash-rust     = {workspace = true}
+
+[dependencies.bevy-inspector-egui]
+optional = true
+version  = "0.14"

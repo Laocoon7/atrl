@@ -228,9 +228,10 @@ version = "0.1.0"
 dependencies = [
  "atrl-camera",
  "atrl-common",
- "atrl-components",
+ "atrl-game",
  "atrl-map",
  "atrl-raws",
+ "atrl-ui",
  "banana_bevy_utils",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "bevy-inspector-egui",
@@ -271,7 +272,6 @@ dependencies = [
 name = "atrl-camera"
 version = "0.1.0"
 dependencies = [
- "atrl-common",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -281,8 +281,12 @@ version = "0.1.0"
 dependencies = [
  "banana_bevy_utils",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bevy-inspector-egui",
  "iyes_loopless",
+ "leafwing-input-manager",
  "noise",
+ "num-derive",
+ "num-traits",
  "parking_lot 0.12.1",
  "rand 0.8.5",
  "rand_pcg",
@@ -293,14 +297,21 @@ dependencies = [
 ]
 
 [[package]]
-name = "atrl-components"
+name = "atrl-game"
 version = "0.1.0"
 dependencies = [
+ "atrl-camera",
  "atrl-common",
+ "atrl-map",
+ "atrl-raws",
+ "atrl-ui",
  "banana_bevy_utils",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "bevy-inspector-egui",
- "serde",
+ "iyes_loopless",
+ "leafwing-input-manager",
+ "once_cell",
+ "parking_lot 0.12.1",
 ]
 
 [[package]]
@@ -327,6 +338,19 @@ dependencies = [
  "iyes_loopless",
  "iyes_progress",
  "smart-default",
+]
+
+[[package]]
+name = "atrl-ui"
+version = "0.1.0"
+dependencies = [
+ "atrl-common",
+ "atrl-raws",
+ "banana_bevy_utils",
+ "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "iyes_loopless",
+ "kayak_font",
+ "kayak_ui",
 ]
 
 [[package]]

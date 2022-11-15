@@ -1,4 +1,93 @@
 #![allow(clippy::module_inception)]
+mod components {
+    mod ai_component {
+        mod ai_component;
+        pub use ai_component::*;
+        mod ai_type;
+        pub use ai_type::*;
+    }
+    pub use ai_component::*;
+
+    mod bundles {
+        mod actor_bundle;
+        pub use actor_bundle::*;
+        mod player_bundle;
+        pub use player_bundle::*;
+    }
+    pub use bundles::*;
+
+    mod movement {
+        mod movement;
+        pub use movement::*;
+    }
+    pub use movement::*;
+
+    mod position {
+        mod local_position;
+        pub use local_position::*;
+        mod world_position;
+        pub use world_position::*;
+    }
+    pub use position::*;
+
+    mod vision {
+        mod vision;
+        pub use vision::*;
+    }
+    pub use vision::*;
+
+    mod consumable;
+    pub use consumable::*;
+    mod equipable;
+    pub use equipable::*;
+    mod health;
+    pub use health::*;
+    mod tags;
+    pub use tags::*;
+}
+
+mod data {
+    mod actors {
+        mod class_type;
+        pub use class_type::*;
+        mod equipment_slot;
+        pub use equipment_slot::*;
+        mod player_action;
+        pub use player_action::*;
+        mod race_type;
+        pub use race_type::*;
+    }
+    pub use actors::*;
+
+    mod camera {
+        mod camera_id;
+        pub use camera_id::*;
+    }
+    pub use camera::*;
+
+    mod map {
+        mod tiles {
+            mod feature_type;
+            pub use feature_type::*;
+            mod item_type;
+            pub use item_type::*;
+            mod terrain_type;
+            pub use terrain_type::*;
+        }
+        pub use tiles::*;
+
+        mod map_layer;
+        pub use map_layer::*;
+        mod movement_type;
+        pub use movement_type::*;
+        mod vision_type;
+        pub use vision_type::*;
+    }
+    pub use map::*;
+
+    mod game_state;
+    pub use game_state::*;
+}
 
 mod direction {
     mod bitmap;
@@ -20,8 +109,6 @@ mod grid {
     pub use axis::*;
     mod grid;
     pub use grid::*;
-    mod point_iter;
-    pub use point_iter::*;
     mod point2d;
     pub use point2d::*;
     mod size2d;
@@ -67,11 +154,8 @@ mod common_plugin;
 mod cp437;
 mod error;
 mod file_utils;
-mod game_state;
 mod interlop;
 mod range;
-mod theme_type;
-mod tile_type;
 mod white_pixel;
 
 pub mod prelude {
@@ -85,6 +169,11 @@ pub mod prelude {
         };
         pub use iyes_loopless::prelude::CurrentState;
 
+        pub use leafwing_input_manager::{action_state::ActionState, prelude::*};
+
+        pub use num_derive::*;
+        pub use num_traits::*;
+
         pub use noise::{NoiseFn, Perlin};
         pub use rand::{distributions::Standard, prelude::*};
         pub use rand_pcg::Pcg64;
@@ -95,24 +184,27 @@ pub mod prelude {
         };
         pub use thiserror::Error;
         pub use xxhash_rust::xxh3::*;
+
+        #[cfg(feature = "debug")]
+        pub use bevy_inspector_egui::prelude::*;
     }
     pub(crate) use import::*;
 
     mod export {
+        pub use crate::components::*;
+        pub use crate::data::*;
+        pub use crate::direction::*;
+        pub use crate::geometry::*;
+        pub use crate::grid::*;
+        pub use crate::random::*;
+
         pub use crate::app_settings::*;
         pub use crate::common_plugin::*;
         pub use crate::cp437::*;
-        pub use crate::direction::*;
         pub use crate::error::*;
         pub use crate::file_utils::*;
-        pub use crate::game_state::*;
-        pub use crate::geometry::*;
-        pub use crate::grid::*;
         pub use crate::interlop::*;
-        pub use crate::random::*;
         pub use crate::range::*;
-        pub use crate::theme_type::*;
-        pub use crate::tile_type::*;
         pub use crate::white_pixel::*;
     }
     pub use export::*;

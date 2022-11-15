@@ -1,0 +1,29 @@
+[package]
+name = "atrl-game"
+version = "0.1.0"
+edition = "2021"
+
+[features]
+debug = ["bevy-inspector-egui"]
+dev = []
+release = []
+
+[dependencies]
+banana_bevy_utils       = {workspace = true}
+bevy                    = {workspace = true}
+iyes_loopless           = {workspace = true}
+leafwing-input-manager  = {workspace = true}
+once_cell               = {workspace = true}
+parking_lot             = {workspace = true}
+
+atrl-common             = {workspace = true}
+atrl-camera             = {workspace = true}
+atrl-map                = {workspace = true}
+atrl-raws               = {workspace = true}
+atrl-ui                 = {workspace = true}
+
+
+
+[dependencies.bevy-inspector-egui]
+optional = true
+version  = "0.14"

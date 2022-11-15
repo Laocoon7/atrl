@@ -52,15 +52,15 @@ mod import {
     pub use atrl_common::prelude::TurnState::*;
     pub use atrl_common::prelude::UiState::*;
     pub use atrl_common::prelude::*;
-    pub use atrl_components::prelude::*;
+    pub use atrl_game::prelude::*;
     pub use atrl_map::prelude::*;
     pub use atrl_raws::prelude::*;
+    pub use atrl_ui::prelude::*;
 }
 pub use import::*;
 
 // Push out from here.
 mod export {
-    pub use crate::game::prelude::*;
     pub use crate::procgen::prelude::external::*;
 }
 pub use export::*;

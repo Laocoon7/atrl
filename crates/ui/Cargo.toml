@@ -1,0 +1,19 @@
+[package]
+name = "atrl-ui"
+version = "0.1.0"
+edition = "2021"
+
+[features]
+release = []
+dev = []
+debug = []
+
+[dependencies]
+bevy                    = {workspace = true}
+banana_bevy_utils       = {workspace = true}
+iyes_loopless           = {workspace = true}
+kayak_font              = {workspace = true}
+kayak_ui                = {workspace = true}
+
+atrl-common             = {workspace = true}
+atrl-raws               = {workspace = true}

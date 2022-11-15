@@ -23,14 +23,10 @@ impl GridAxis {
         }
     }
 
-    pub fn try_new_size(
-        self,
-        this_axis: u32,
-        other_axis: u32,
-    ) -> core::result::Result<UVec2, DimensionTooLargeForSize> {
+    pub fn try_new_size(self, this_axis: u32, other_axis: u32) -> Option<UVec2> {
         match self {
-            GridAxis::X => UVec2::try_new(this_axis, other_axis),
-            GridAxis::Y => UVec2::try_new(other_axis, this_axis),
+            GridAxis::X => UVec2::new_try(this_axis, other_axis),
+            GridAxis::Y => UVec2::new_try(other_axis, this_axis),
         }
     }
 
