@@ -8,15 +8,25 @@ use crate::prelude::*;
 #[cfg(feature = "debug")]
 pub(crate) mod debug {
     mod systems {
-        mod inspector_ui;
+        mod camera_viewport;
+        mod show_ui;
+        mod user_input;
         mod window_title;
-        pub use inspector_ui::*;
+        pub use camera_viewport::*;
+        pub use show_ui::*;
+        pub use user_input::*;
         pub use window_title::*;
     }
     pub use systems::*;
 
+    mod debug_egui_plugin;
     mod debug_plugin;
+    mod tab_viewer;
+    mod ui_state;
+    pub use debug_egui_plugin::*;
     pub use debug_plugin::*;
+    pub use tab_viewer::*;
+    pub use ui_state::*;
 }
 
 fn main() {

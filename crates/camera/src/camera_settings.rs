@@ -9,13 +9,13 @@ pub struct CameraSettings {
 
     pub(crate) id: Option<u8>,
 
-    pub(crate) viewport: Option<Viewport>,
-    pub(crate) render_target: Option<RenderTarget>,
-    pub(crate) position: Option<Vec2>,
-    pub(crate) window_origin: WindowOrigin,
-    pub(crate) scaling_mode: ScalingMode,
     pub(crate) scale: f32,
+    pub(crate) position: Option<Vec2>,
+    pub(crate) scaling_mode: ScalingMode,
     pub(crate) clear_color: Option<Color>,
+    pub(crate) viewport: Option<Viewport>,
+    pub(crate) window_origin: WindowOrigin,
+    pub(crate) render_target: Option<RenderTarget>,
 }
 
 impl CameraSettings {

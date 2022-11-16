@@ -232,6 +232,7 @@ dependencies = [
  "bevy_tweening",
  "big-brain",
  "colored",
+ "egui_dock",
  "embed-resource",
  "iyes_loopless",
  "iyes_progress",
@@ -1563,7 +1564,8 @@ dependencies = [
 [[package]]
 name = "bevy_tweening"
 version = "0.6.0"
-source = "git+https://github.com/djeedai/bevy_tweening#30bc490b03f2c2a81050e99d2bf39fd81e42cd46"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6d38b2abf5518df10c3c32ee57a54b9ba7067f3bd1c137b912e286d573962145"
 dependencies = [
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "interpolation",
@@ -2318,6 +2320,14 @@ dependencies = [
  "ahash 0.8.2",
  "epaint",
  "nohash-hasher",
+]
+
+[[package]]
+name = "egui_dock"
+version = "0.2.1"
+source = "git+https://github.com/Adanos020/egui_dock?rev=041e5f362c281c286a63edeef2f7d02dbd5d62f4#041e5f362c281c286a63edeef2f7d02dbd5d62f4"
+dependencies = [
+ "egui",
 ]
 
 [[package]]

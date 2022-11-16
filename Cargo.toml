@@ -43,6 +43,7 @@ default = ["dev", "debug"]
 
 # configuration for debugging information
 debug = [
+  "egui_dock",
   "bevy-inspector-egui",
   "colored",
   "debug-graph",
@@ -157,11 +158,11 @@ git      = "https://github.com/banana-studios/bevy_asset_loader"
 
 [workspace.dependencies.bevy_common_assets]
 features = ["ron", "toml", "json"]
-version  = "0.4.0"
+version  = "0.4"
 
 [workspace.dependencies.bevy_tweening]
 features = ["bevy_asset"]
-git      = "https://github.com/djeedai/bevy_tweening"
+version  = "0.6"
 
 ######################################
 #########       Input
@@ -305,6 +306,11 @@ optional = true
 branch   = "rework"
 git      = "https://github.com/jakobhellermann/bevy-inspector-egui"
 optional = true
+
+[dependencies.egui_dock]
+git      = "https://github.com/Adanos020/egui_dock"
+optional = true
+rev      = "041e5f362c281c286a63edeef2f7d02dbd5d62f4"
 
 [dependencies.bevy_mod_debugdump]
 git      = "https://github.com/jakobhellermann/bevy_mod_debugdump"
