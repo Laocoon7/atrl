@@ -1,12 +1,14 @@
 use crate::prelude::*;
 
 pub struct CameraPlugin<T> {
-    state_running: T,
     camera_settings: Vec<CameraSettings>,
+    state_running: T,
 }
 
 impl<T: StateNext> CameraPlugin<T> {
-    pub fn new(state_running: T) -> Self { Self { camera_settings: Vec::new(), state_running } }
+    pub fn new(state_running: T, camera_settings: CameraSettings) -> Self {
+        Self { camera_settings: vec![camera_settings], state_running }
+    }
 
     pub fn add_camera(mut self, settings: CameraSettings) -> Self {
         self.camera_settings.push(settings);
@@ -31,11 +33,5 @@ impl<T: StateNext> Plugin for CameraPlugin<T> {
         app.insert_resource(camera_settings_resource);
 
         app.add_startup_system(spawn_cameras);
-    }
-}
-
-impl<T: StateNext + std::default::Default> Default for CameraPlugin<T> {
-    fn default() -> Self {
-        Self { camera_settings: vec![CameraSettings::default()], state_running: T::default() }
     }
 }

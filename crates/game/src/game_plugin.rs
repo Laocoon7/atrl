@@ -26,13 +26,12 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
             // Game Context
             .init_resource::<GameContext>()
             // Create Camera
-            .add_plugin(
-                CameraPlugin::new(self.state_running.clone()).add_camera(
-                    CameraSettings::new_dimensions(GRID_WIDTH as f32, GRID_HEIGHT as f32)
-                        .with_id(CameraId::Map)
-                        .with_position(Vec2::ZERO),
-                ),
-            )
+            .add_plugin(CameraPlugin::new(
+                self.state_running.clone(),
+                CameraSettings::new_dimensions(GRID_WIDTH as f32, GRID_HEIGHT as f32)
+                    .with_id(CameraId::Map)
+                    .with_position(Vec2::ZERO),
+            ))
             // Map Rendering
             .add_plugin(MapPlugin {
                 state_running: self.state_running.clone(),
