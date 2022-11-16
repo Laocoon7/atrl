@@ -1,5 +1,3 @@
-#![feature(iter_collect_into)]
-
 mod systems {
     mod check_loaded_assets;
     mod splash;
