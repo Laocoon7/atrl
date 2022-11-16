@@ -7,8 +7,7 @@ pub(crate) struct LoadedTilesets {
 }
 
 impl LoadedTilesets {
-    pub fn new(tileset_file_paths: &Vec<String>) -> Self {
-        let tileset_file_paths = tileset_file_paths.clone();
-        Self { tileset_folders: tileset_file_paths, handles: Vec::new() }
+    pub fn new(tileset_file_paths: &[String]) -> Self {
+        Self { tileset_folders: tileset_file_paths.to_vec(), handles: Vec::new() }
     }
 }

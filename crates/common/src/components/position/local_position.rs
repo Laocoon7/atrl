@@ -1,19 +1,27 @@
 use crate::prelude::*;
 
 #[derive(
-    Reflect, Component, Serialize, Deserialize, Default, Clone, Copy, PartialEq, Eq, Hash, Debug,
+    Reflect,
+    Component,
+    Serialize,
+    Deserialize,
+    Default,
+    Clone,
+    Copy,
+    PartialEq,
+    Eq,
+    Hash,
+    Debug,
+    Deref,
+    DerefMut,
 )]
 #[reflect(Component)]
-pub struct LocalPosition {
-    pub position: IVec2,
-}
-
-impl_new!(LocalPosition, position: IVec2);
+pub struct LocalPosition(pub IVec2);
 
 impl AtrlPosition2 for LocalPosition {
     type Position = IVec2;
 
-    fn get(&self) -> Self::Position { self.position }
+    fn get(&self) -> Self::Position { **self }
 
-    fn set_value(&mut self, pos: Self::Position) { self.position = pos }
+    fn set_value(&mut self, pos: Self::Position) { **self = pos }
 }

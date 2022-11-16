@@ -17,7 +17,7 @@ pub fn player_input(
                     position_vec += direction.coord().as_vec2();
 
                     for map in q_map.iter() {
-                        if map.world_position.position == world_position.position {
+                        if map.world_position == *world_position {
                             if map.can_move_through(
                                 (position_vec.x, position_vec.y),
                                 movement_component,

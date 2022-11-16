@@ -11,8 +11,8 @@ pub enum AtrlError {
     #[error("Not a string.")]
     NotAString,
 
-    #[error("Invalid world_position {{ {}, {}, {} }}", .0, .1, .2)]
-    InvalidWorldPosition(i32, i32, i32),
+    #[error("Invalid world_position {{ {}, {}, {} }}", .0.x, .0.y, .0.z)]
+    InvalidWorldPosition(IVec3),
 
     #[error(transparent)]
     Io(#[from] std::io::Error),

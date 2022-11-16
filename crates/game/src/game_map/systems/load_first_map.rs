@@ -11,7 +11,7 @@ pub(crate) fn load_first_map(
         &mut commands,
         &mut game_context,
         &tilesets,
-        WorldPosition { position: IVec3 { x: 0, y: 0, z: 0 } },
+        WorldPosition(IVec3::ZERO),
     ) {
         error!("{}", e);
     }

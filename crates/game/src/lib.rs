@@ -53,6 +53,12 @@ mod map_gen {
 }
 
 mod player {
+    mod systems {
+        mod player_input;
+        pub use player_input::*;
+    }
+    pub use systems::*;
+
     mod player_plugin;
     pub use player_plugin::*;
 }
@@ -66,13 +72,15 @@ mod systems {
     pub use move_actors::*;
     mod perform_healing;
     pub use perform_healing::*;
-    mod player_input;
-    pub use player_input::*;
-    mod spawn_player;
-    pub use spawn_player::*;
 }
 
 mod spawner {
+    mod systems {
+        mod spawn_player;
+        pub use spawn_player::*;
+    }
+    pub use systems::*;
+
     mod spawner_plugin;
     pub use spawner_plugin::*;
 }

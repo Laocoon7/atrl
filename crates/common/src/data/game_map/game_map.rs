@@ -88,10 +88,10 @@ impl GameMap {
             terrain,
             feature,
             movement_component.movement_types,
-            (terrain & feature & (movement_component.movement_types as u8))
+            (terrain & feature & movement_component.movement_types)
         );
 
-        (terrain & feature & (movement_component.movement_types as u8)) != 0
+        (terrain & feature & movement_component.movement_types) != 0
     }
 
     pub fn can_see_through(&self, index: impl Point2d, vision_component: &Vision) -> bool {
@@ -105,7 +105,7 @@ impl GameMap {
             None => VisionType::Any as u8,
         };
 
-        (terrain & feature & (vision_component.vision_types as u8)) != 0
+        (terrain & feature & (vision_component.vision_types)) != 0
     }
 
     pub fn can_see_feature(&self, index: impl Point2d, vision_component: &Vision) -> bool {
@@ -114,7 +114,7 @@ impl GameMap {
             None => VisionType::None as u8,
         };
 
-        (feature & (vision_component.vision_types as u8)) != 0
+        (feature & vision_component.vision_types) != 0
     }
 
     pub fn set_terrain_at(&mut self, index: impl Point2d, terrain_type: TerrainType) {
@@ -137,13 +137,7 @@ impl GameMap {
 
     pub fn get_actor(&self, index: impl Point2d) -> Option<Entity> {
         match self.actors.get(index) {
-            Some(e) => {
-                if let Some(e) = e {
-                    Some(e.clone())
-                } else {
-                    None
-                }
-            }
+            Some(e) => e.as_ref().copied(),
             None => None,
         }
     }

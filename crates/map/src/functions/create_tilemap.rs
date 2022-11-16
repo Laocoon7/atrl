@@ -45,7 +45,7 @@ pub fn create_tilemap_on_entity<ZLevel: Into<f32>>(
 
     commands.entity(entity).insert((
         TilemapBundle {
-            texture: TilemapTexture::Single(texture_handle.clone()),
+            texture: TilemapTexture::Single(texture_handle),
             size: tilemap_size,
             tile_size,
             grid_size,

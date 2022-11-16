@@ -55,6 +55,11 @@ mod components {
     pub use tags::*;
 }
 
+mod events {
+    mod event_plugin;
+    pub use event_plugin::*;
+}
+
 mod data {
     mod actors {
         mod class_type;
@@ -212,6 +217,7 @@ pub mod prelude {
         pub use crate::components::*;
         pub use crate::data::*;
         pub use crate::direction::*;
+        pub use crate::events::*;
         pub use crate::geometry::*;
         pub use crate::grid::*;
         pub use crate::random::*;

@@ -1,13 +1,12 @@
 use crate::prelude::*;
 
-pub struct CameraPlugin<T> {
+pub struct CameraPlugin {
     camera_settings: Vec<CameraSettings>,
-    state_running: T,
 }
 
-impl<T: StateNext> CameraPlugin<T> {
-    pub fn new(state_running: T, camera_settings: CameraSettings) -> Self {
-        Self { camera_settings: vec![camera_settings], state_running }
+impl CameraPlugin {
+    pub fn new(camera_settings: CameraSettings) -> Self {
+        Self { camera_settings: vec![camera_settings] }
     }
 
     pub fn add_camera(mut self, settings: CameraSettings) -> Self {
@@ -16,7 +15,7 @@ impl<T: StateNext> CameraPlugin<T> {
     }
 }
 
-impl<T: StateNext> Plugin for CameraPlugin<T> {
+impl Plugin for CameraPlugin {
     fn build(&self, app: &mut App) {
         let camera_settings = if self.camera_settings.is_empty() {
             #[cfg(feature = "debug")]

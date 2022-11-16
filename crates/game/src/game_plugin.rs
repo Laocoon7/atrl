@@ -10,7 +10,7 @@ pub struct GamePlugin<T> {
 
 impl<T: StateNext> Plugin for GamePlugin<T> {
     fn build(&self, app: &mut App) {
-        let mut game_context = GameContext::default();
+        let game_context = GameContext::default();
 
         app
             // set entry state
@@ -27,7 +27,6 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
             .add_plugin(CommonPlugin)
             // Create Camera
             .add_plugin(CameraPlugin::new(
-                self.state_running.clone(),
                 CameraSettings::new_dimensions(GRID_WIDTH as f32, GRID_HEIGHT as f32)
                     .with_id(CameraId::Map)
                     .with_position(Vec2::ZERO),

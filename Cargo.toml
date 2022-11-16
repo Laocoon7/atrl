@@ -361,8 +361,6 @@ workspace = true
 workspace = true
 [dependencies.xxhash-rust]
 workspace = true
-# [dependencies.bevy_egui]
-# workspace = true
 [dependencies.big-brain]
 workspace = true
 [dependencies.num-derive]

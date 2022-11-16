@@ -15,7 +15,7 @@ bevy_ecs_tilemap       = { workspace = true }
 bevy_tileset           = { workspace = true }
 iyes_loopless          = { workspace = true }
 leafwing-input-manager = { workspace = true }
-smart-default           = { workspace = true }
+smart-default          = { workspace = true }
 
 atrl-camera   = { workspace = true }
 atrl-common   = { workspace = true }
