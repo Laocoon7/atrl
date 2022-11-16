@@ -10,6 +10,8 @@ pub struct Map {
     pub feature_types: Grid<FeatureType>,
     pub item_types: Grid<Vec<ItemType>>,
 
+    pub actors: Grid<Option<Entity>>,
+
     pub terrain_tileset_id: u8,
     pub feature_tileset_id: u8,
     pub item_tileset_id: u8,
@@ -18,7 +20,7 @@ pub struct Map {
     pub feature_storage_entity: Option<Entity>,
     pub item_storage_entity: Option<Entity>,
 
-    pub update_tiles: Vec<UVec2>,
+    pub update_tiles: HashSet<UVec2>,
     pub update_all: bool,
 }
 
@@ -47,6 +49,9 @@ impl Map {
             // Items Layer
             item_types,
 
+            // Actors on the map
+            actors: Grid::new_clone(size, None),
+
             // Id for the tileset to use
             terrain_tileset_id: terrain_tileset_id.into(),
             feature_tileset_id: feature_tileset_id.into(),
@@ -58,7 +63,7 @@ impl Map {
             item_storage_entity: None,
 
             // Internal render fields
-            update_tiles: Vec::new(),
+            update_tiles: HashSet::new(),
             update_all: true,
         }
     }
@@ -106,5 +111,49 @@ impl Map {
         };
 
         (feature & (vision_component.vision_types as u8)) != 0
+    }
+
+    pub fn set_terrain_at(&mut self, index: impl Point2d, terrain_type: TerrainType) {
+        self.terrain_types.set(index, terrain_type);
+        self.update_tiles.insert(index.as_uvec2());
+    }
+
+    pub fn set_feature_at(&mut self, index: impl Point2d, feature_type: FeatureType) {
+        self.feature_types.set(index, feature_type);
+        self.update_tiles.insert(index.as_uvec2());
+    }
+
+    pub fn has_actor(&mut self, index: impl Point2d) -> bool { self.actors.get(index).is_some() }
+
+    pub fn add_actor(&mut self, index: impl Point2d, actor: Entity) {
+        self.actors.set(index, Some(actor));
+    }
+
+    pub fn remove_actor(&mut self, index: impl Point2d) {
+        self.actors.set(index, None);
+    }
+
+    pub fn get_actor(&self, index: impl Point2d) -> Option<Entity> {
+        match self.actors.get(index) {
+            Some(e) => {
+                if let Some(e) = e {
+                    Some(e.clone())
+                } else {
+                    None
+                }
+            }
+            None => None,
+        }
+    }
+
+    pub fn move_actor(&mut self, from: impl Point2d, to: impl Point2d) {
+        if self.has_actor(to) {
+            return;
+        }
+
+        if let Some(actor) = self.get_actor(from) {
+            self.remove_actor(from);
+            self.add_actor(to, actor);
+        }
     }
 }

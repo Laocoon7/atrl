@@ -84,7 +84,7 @@ pub(crate) fn update_tilemaps(
             map.update_all = false;
         } else {
             let mut positions = std::mem::take(&mut map.update_tiles);
-            for position in positions.drain(..) {
+            for position in positions.drain() {
                 let tile_pos = TilePos::new(position.x, position.y);
                 if let Some(entity) = terrain_storage.get(&tile_pos) {
                     if let Ok(mut tile_texture_index) = q_tiles.get_mut(entity) {

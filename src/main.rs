@@ -5,11 +5,7 @@
 pub(crate) mod prelude;
 use crate::prelude::*;
 
-// #[cfg(feature = "debug")]
-// mod debug;
-// #[cfg(feature = "debug")]
-// use debug::*;
-
+#[cfg(feature = "debug")]
 pub(crate) mod debug {
     mod systems {
         mod inspector_ui;

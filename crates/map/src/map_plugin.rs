@@ -13,7 +13,7 @@ pub struct MapPlugin<T> {
 
 impl<T: StateNext> Plugin for MapPlugin<T> {
     fn build(&self, app: &mut App) {
-        app
+        app.insert_resource(TilemapRenderSettings { render_chunk_size: UVec2 { x: GRID_WIDTH, y: GRID_HEIGHT } })
             // bevy_ecs_tilemap
             .add_plugin(TilemapPlugin)
             // bevy_tileset

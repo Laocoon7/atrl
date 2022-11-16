@@ -61,9 +61,10 @@ pub fn add_tilemap_to_entity<ZLevel: Into<f32>>(
         ..Default::default()
     });
 
-    array_texture_loader.add(TilemapArrayTexture {
-        texture: TilemapTexture::Single(tileset.texture().clone()),
-        tile_size,
-        ..Default::default()
-    });
+    // Optimization texture loader... probably doesn't belong in tilemap creation
+    //    array_texture_loader.add(TilemapArrayTexture {
+    //        texture: TilemapTexture::Single(tileset.texture().clone()),
+    //        tile_size,
+    //        ..Default::default()
+    //    });
 }

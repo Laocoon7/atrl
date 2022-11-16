@@ -62,7 +62,7 @@ pub mod prelude {
         pub use bevy::ecs::{bundle, schedule::StateData};
         pub use bevy::prelude::*;
         pub use bevy::sprite::Anchor::*;
-        pub use bevy::utils::HashMap;
+        pub use bevy::utils::{HashMap, HashSet};
 
         pub use banana_bevy_utils::prelude::*;
 
