@@ -129,9 +129,7 @@ impl Map {
         self.actors.set(index, Some(actor));
     }
 
-    pub fn remove_actor(&mut self, index: impl Point2d) {
-        self.actors.set(index, None);
-    }
+    pub fn remove_actor(&mut self, index: impl Point2d) { self.actors.set(index, None); }
 
     pub fn get_actor(&self, index: impl Point2d) -> Option<Entity> {
         match self.actors.get(index) {
