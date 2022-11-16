@@ -1,5 +1,27 @@
 #![allow(clippy::module_inception)]
 #![allow(clippy::type_complexity)]
+#![allow(unused_imports)] // TODO: REMOVE ME
+
+mod ai {
+    mod systems {
+        mod scorers {
+            mod can_see_player;
+            pub use can_see_player::*;
+        }
+        pub use scorers::*;
+
+        mod actions {
+            mod wander;
+            pub use wander::*;
+        }
+        pub use actions::*;
+    }
+    pub use systems::*;
+
+    mod ai_plugin;
+    pub use ai_plugin::*;
+}
+pub use ai::*;
 
 mod game_map {
     mod resources {
@@ -10,10 +32,10 @@ mod game_map {
 
     mod systems {
         mod load_first_map;
-        pub use load_first_map::*;
         mod update_tilemaps;
-        pub use update_tilemaps::*;
         mod wait_for_tilesets_to_load;
+        pub use load_first_map::*;
+        pub use update_tilemaps::*;
         pub use wait_for_tilesets_to_load::*;
     }
     pub use systems::*;
@@ -25,8 +47,8 @@ mod game_map {
 mod map_gen {
     mod builders {
         mod cellular_automata;
-        pub use cellular_automata::*;
         mod rooms;
+        pub use cellular_automata::*;
         pub use rooms::*;
     }
     pub use builders::*;
@@ -34,8 +56,8 @@ mod map_gen {
     mod meta {
         mod area_points {
             mod area_ending_point;
-            pub use area_ending_point::*;
             mod area_starting_point;
+            pub use area_ending_point::*;
             pub use area_starting_point::*;
         }
         pub use area_points::*;
@@ -46,10 +68,10 @@ mod map_gen {
     pub use meta::*;
 
     mod builder_chain;
-    pub use builder_chain::*;
     mod common;
-    pub use common::*;
     mod map_builder;
+    pub use builder_chain::*;
+    pub use common::*;
     pub use map_builder::*;
 }
 
@@ -64,17 +86,6 @@ mod player {
     pub use player_plugin::*;
 }
 
-mod systems {
-    mod apply_damage;
-    pub use apply_damage::*;
-    mod input;
-    pub use input::*;
-    mod move_actors;
-    pub use move_actors::*;
-    mod perform_healing;
-    pub use perform_healing::*;
-}
-
 mod spawner {
     mod systems {
         mod spawn_player;
@@ -86,8 +97,17 @@ mod spawner {
     pub use spawner_plugin::*;
 }
 
+mod systems {
+    mod apply_damage;
+    mod move_actors;
+    mod perform_healing;
+    pub use apply_damage::*;
+    pub use move_actors::*;
+    pub use perform_healing::*;
+}
+
+mod ecs_plugin;
 mod game_plugin;
-mod turn_state_plugin;
 
 pub mod prelude {
     mod import {
@@ -107,6 +127,8 @@ pub mod prelude {
 
         pub use smart_default::SmartDefault;
 
+        pub use big_brain::prelude::*;
+
         pub use atrl_camera::prelude::*;
         pub use atrl_common::prelude::AssetLoadState::*;
         pub use atrl_common::prelude::ConstructState::*;
@@ -120,15 +142,13 @@ pub mod prelude {
     }
     pub(crate) use import::*;
 
+    pub use crate::ai::*;
     pub use crate::game_map::*;
     pub use crate::map_gen::*;
     pub use crate::player::*;
     pub use crate::spawner::*;
     pub use crate::systems::*;
 
+    pub use crate::ecs_plugin::*;
     pub use crate::game_plugin::*;
-    pub use crate::turn_state_plugin::*;
 }
-
-//pub use crate::procgen::*;
-//pub use crate::map::*;

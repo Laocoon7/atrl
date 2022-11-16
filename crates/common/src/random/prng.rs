@@ -123,6 +123,14 @@ impl Prng {
     pub fn roll_dice(&mut self, n: u32, dice_type: u32) -> u32 {
         (0..n).map(|_| self.range(1..dice_type + 1)).sum()
     }
+
+    /// Sample a new value, using the given distribution.
+    pub fn sample<D>(&mut self) -> D
+    where
+        rand::distributions::Standard: rand::distributions::Distribution<D>,
+    {
+        self.rng.sample::<D, _>(Standard)
+    }
 }
 
 impl Iterator for Prng {

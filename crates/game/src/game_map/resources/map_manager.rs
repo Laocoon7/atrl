@@ -15,6 +15,8 @@ impl MapManager {
         tilesets: &Tilesets,
         world_position: WorldPosition,
     ) -> AtrlResult<Entity> {
+        println!("MapManager::get_or_generate({:?})", world_position);
+
         if !game_context.is_valid_world_position(world_position) {
             return Err(AtrlError::InvalidWorldPosition(*world_position));
         }

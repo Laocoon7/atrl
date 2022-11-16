@@ -302,6 +302,7 @@ dependencies = [
  "bevy-inspector-egui 0.14.0",
  "bevy_ecs_tilemap",
  "bevy_tileset",
+ "big-brain",
  "iyes_loopless",
  "leafwing-input-manager",
  "smart-default",

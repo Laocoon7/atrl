@@ -47,7 +47,7 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
                 self.state_construct.clone(),
                 self.state_running.clone(),
             ))
-            .add_plugin(TurnStatePlugin {
+            .add_plugin(EcsPlugin {
                 state_running: self.state_running.clone(),
                 turn_state_ticking: TurnState::Ticking,
             })
