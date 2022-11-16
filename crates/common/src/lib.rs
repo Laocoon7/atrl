@@ -144,6 +144,11 @@ mod random {
     pub use random::*;
 }
 
+mod system_params {
+    mod player_param;
+    pub use player_param::*;
+}
+
 mod geometry {
     mod distance;
     pub use distance::*;
@@ -180,7 +185,7 @@ pub mod prelude {
     mod import {
         pub use banana_bevy_utils::prelude::*;
         pub use bevy::{
-            ecs::system::SystemState,
+            ecs::system::{SystemState, SystemParam},
             prelude::*,
             render::render_resource::{Extent3d, TextureDimension, TextureFormat},
             utils::HashSet,
@@ -221,6 +226,7 @@ pub mod prelude {
         pub use crate::geometry::*;
         pub use crate::grid::*;
         pub use crate::random::*;
+        pub use crate::system_params::*;
 
         pub use crate::app_settings::*;
         pub use crate::common_plugin::*;
