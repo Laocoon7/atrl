@@ -281,6 +281,7 @@ dependencies = [
  "rand 0.8.5",
  "rand_pcg",
  "rand_seeder",
+ "ron 0.8.0",
  "serde",
  "thiserror",
  "xxhash-rust",
@@ -303,6 +304,7 @@ dependencies = [
  "bevy_tileset",
  "iyes_loopless",
  "leafwing-input-manager",
+ "smart-default",
 ]
 
 [[package]]
@@ -315,7 +317,6 @@ dependencies = [
  "bevy_ecs_tilemap",
  "bevy_tileset",
  "iyes_loopless",
- "smart-default",
 ]
 
 [[package]]
@@ -337,7 +338,6 @@ name = "atrl-saveload"
 version = "0.1.0"
 dependencies = [
  "atrl-common",
- "atrl-map",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 

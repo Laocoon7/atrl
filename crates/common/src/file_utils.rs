@@ -9,7 +9,7 @@ pub fn read_str<Path: Into<PathBuf>>(path: Path) -> AtrlResult<String> {
     let path: PathBuf = path.into();
     match std::fs::read_to_string(path) {
         Ok(s) => Ok(s),
-        Err(e) => Err(MyError::Io(e)),
+        Err(e) => Err(AtrlError::Io(e)),
     }
 }
 
@@ -17,7 +17,7 @@ pub fn write_str<Path: Into<PathBuf>>(path: Path, value: &str) -> AtrlResult<()>
     let path: PathBuf = path.into();
     let path_string = match path.to_str() {
         Some(s) => s.to_string(),
-        None => return Err(MyError::NotAString),
+        None => return Err(AtrlError::NotAString),
     };
 
     match path.try_exists() {
@@ -28,20 +28,20 @@ pub fn write_str<Path: Into<PathBuf>>(path: Path, value: &str) -> AtrlResult<()>
                         #[cfg(feature = "debug")]
                         debug!("Creating directory: {:?}", dir);
                         if let Err(e) = std::fs::create_dir_all(dir) {
-                            return Err(MyError::Io(e));
+                            return Err(AtrlError::Io(e));
                         }
                     }
-                    None => return Err(MyError::NotADir(path_string)),
+                    None => return Err(AtrlError::NotADir(path_string)),
                 };
             }
             #[cfg(feature = "debug")]
             debug!("Writing to file: {:?}", path);
             match std::fs::write(path, value) {
                 Ok(_) => Ok(()),
-                Err(e) => Err(MyError::Io(e)),
+                Err(e) => Err(AtrlError::Io(e)),
             }
         }
-        Err(e) => Err(MyError::Io(e)),
+        Err(e) => Err(AtrlError::Io(e)),
     }
 }
 

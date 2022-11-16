@@ -17,7 +17,7 @@ impl Plugin for SaveLoadPlugin {
             .register_type::<Vision>()
             .register_type::<MovementType>()
             .register_type::<Movement>()
-            .register_type::<Map>()
+            .register_type::<GameMap>()
             // -- Position -- //
             .register_type::<LocalPosition>()
             .register_type::<WorldPosition>();

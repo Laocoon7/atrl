@@ -10,6 +10,8 @@ pub struct GamePlugin<T> {
 
 impl<T: StateNext> Plugin for GamePlugin<T> {
     fn build(&self, app: &mut App) {
+        let mut game_context = GameContext::default();
+
         app
             // set entry state
             .add_loopless_state(GameState::default())
@@ -23,8 +25,6 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
             })
             // common loading
             .add_plugin(CommonPlugin)
-            // Game Context
-            .init_resource::<GameContext>()
             // Create Camera
             .add_plugin(CameraPlugin::new(
                 self.state_running.clone(),
@@ -33,10 +33,23 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
                     .with_position(Vec2::ZERO),
             ))
             // Map Rendering
-            .add_plugin(MapPlugin {
-                state_running: self.state_running.clone(),
-                state_construct: self.state_construct.clone(),
-            })
+            .add_plugin(MapPlugin::new(
+                self.state_construct.clone(),
+                self.state_running.clone(),
+                TilemapSettings {
+                    chunk_size: UVec2::new(GRID_WIDTH, GRID_HEIGHT),
+                    tileset_folders: vec!["tilesets/".to_string()], /* TODO: Error checking with
+                                                                     * asset_server.load_folder()
+                                                                     * then builder pattern
+                                                                     * adding folders */
+                },
+            ))
+            .add_plugin(GameMapPlugin::new(
+                self.state_construct.clone(),
+                self.state_running.clone(),
+            ))
+            // Game Context
+            .insert_resource(game_context)
             // `AppState::Initializing` is a buffer state to allow bevy plugins to initialize
             .add_enter_system(
                 GameState::default(),

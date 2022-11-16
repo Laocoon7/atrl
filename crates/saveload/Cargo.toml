@@ -10,6 +10,5 @@ repository  = "https://github.com/Laocoon7/atrl"
 version     = "0.1.0"
 
 [dependencies]
-atrl-common = { path = "../common" }
-atrl-map    = { path = "../map" }
+atrl-common = { workspace = true }
 bevy        = { workspace = true }

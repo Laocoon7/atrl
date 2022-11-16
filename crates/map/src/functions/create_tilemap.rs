@@ -5,21 +5,27 @@ pub fn create_tilemap<ZLevel: Into<f32>>(
     size: impl Size2d,
     z_level: ZLevel,
     tileset: &Tileset,
-    array_texture_loader: &Res<ArrayTextureLoader>,
-) {
-    let tilemap_entity = commands.spawn_empty().id();
-    add_tilemap_to_entity(commands, tilemap_entity, size, z_level, tileset, array_texture_loader);
+    tile_scale: f32,
+) -> Entity {
+    let entity = commands.spawn_empty().id();
+    create_tilemap_on_entity(commands, entity, size, z_level, tileset, tile_scale);
+    entity
 }
 
-pub fn add_tilemap_to_entity<ZLevel: Into<f32>>(
+pub fn create_tilemap_on_entity<ZLevel: Into<f32>>(
     commands: &mut Commands,
-    tilemap_entity: Entity,
+    entity: Entity,
     size: impl Size2d,
     z_level: ZLevel,
     tileset: &Tileset,
-    array_texture_loader: &Res<ArrayTextureLoader>,
+    tile_scale: f32,
 ) {
+    let texture_handle = tileset.texture().clone();
     let tilemap_size = TilemapSize { x: size.width(), y: size.height() };
+    let tile_size = TilemapTileSize { x: tileset.tile_size().x, y: tileset.tile_size().y };
+    let grid_size = tile_size.into();
+    let map_type = TilemapType::Square;
+
     let mut tile_storage = TileStorage::empty(tilemap_size);
 
     for y in 0..tilemap_size.y {
@@ -28,7 +34,7 @@ pub fn add_tilemap_to_entity<ZLevel: Into<f32>>(
             let tile_entity = commands
                 .spawn(TileBundle {
                     position: tile_pos,
-                    tilemap_id: TilemapId(tilemap_entity),
+                    tilemap_id: TilemapId(entity),
                     texture_index: TileTextureIndex(0),
                     ..Default::default()
                 })
@@ -37,34 +43,25 @@ pub fn add_tilemap_to_entity<ZLevel: Into<f32>>(
         }
     }
 
-    let tile_size = TilemapTileSize { x: tileset.tile_size().x, y: tileset.tile_size().y };
-    let grid_size = tile_size.into();
-    let map_type = TilemapType::Square;
-
-    // scale the map by the tile_size so that
-    // 1 Transform unit = 1 tile.
-    // shift the map by 1/2 a tile in both x / y
-    let transform = Transform {
-        translation: Vec3 { x: 0.5, y: 0.5, z: 0.0 },
-        scale: Vec3 { x: 1.0 / tile_size.x, y: 1.0 / tile_size.y, z: z_level.into() },
-        ..Default::default()
-    };
-
-    commands.entity(tilemap_entity).insert(TilemapBundle {
-        tile_size,
-        grid_size,
-        map_type,
-        size: tilemap_size,
-        storage: tile_storage,
-        transform,
-        texture: TilemapTexture::Single(tileset.texture().clone()),
-        ..Default::default()
-    });
-
-    // Optimization texture loader... probably doesn't belong in tilemap creation
-    //    array_texture_loader.add(TilemapArrayTexture {
-    //        texture: TilemapTexture::Single(tileset.texture().clone()),
-    //        tile_size,
-    //        ..Default::default()
-    //    });
+    commands.entity(entity).insert((
+        TilemapBundle {
+            texture: TilemapTexture::Single(texture_handle.clone()),
+            size: tilemap_size,
+            tile_size,
+            grid_size,
+            map_type,
+            storage: tile_storage,
+            transform: Transform {
+                translation: Vec3 { x: 0.5, y: 0.5, z: 0.5 },
+                scale: Vec3 {
+                    x: tile_scale / tile_size.x,
+                    y: tile_scale / tile_size.y,
+                    z: z_level.into(),
+                },
+                ..Default::default()
+            },
+            ..Default::default()
+        },
+        TilesetIdentity(*tileset.id()),
+    ));
 }

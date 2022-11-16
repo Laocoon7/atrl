@@ -1,4 +1,4 @@
 (
     name: "empty",
-    tile: Standard("tilesets/dcss/misc/todo.png")
+    tile: Standard("tilesets/transparent_32x32.png")
 )

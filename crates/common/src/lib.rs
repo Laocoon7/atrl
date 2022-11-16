@@ -61,10 +61,14 @@ mod data {
         pub use class_type::*;
         mod equipment_slot;
         pub use equipment_slot::*;
+        mod movement_type;
+        pub use movement_type::*;
         mod player_action;
         pub use player_action::*;
         mod race_type;
         pub use race_type::*;
+        mod vision_type;
+        pub use vision_type::*;
     }
     pub use actors::*;
 
@@ -74,7 +78,7 @@ mod data {
     }
     pub use camera::*;
 
-    mod map {
+    mod game_map {
         mod tiles {
             mod feature_type;
             pub use feature_type::*;
@@ -87,12 +91,10 @@ mod data {
 
         mod map_layer;
         pub use map_layer::*;
-        mod movement_type;
-        pub use movement_type::*;
-        mod vision_type;
-        pub use vision_type::*;
+        mod game_map;
+        pub use game_map::*;
     }
-    pub use map::*;
+    pub use game_map::*;
 
     mod game_context;
     pub use game_context::*;
@@ -195,6 +197,7 @@ pub mod prelude {
         pub use noise::{NoiseFn, Perlin};
         pub use rand::{distributions::Standard, prelude::*};
         pub use rand_pcg::Pcg64;
+        pub use ron;
         pub use serde::{
             de::{self, Deserializer, MapAccess, SeqAccess, Visitor},
             ser::SerializeStruct,

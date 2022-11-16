@@ -10,7 +10,6 @@ pub mod prelude {
 
     mod import {
         pub use atrl_common::prelude::*;
-        pub use atrl_map::prelude::Map;
         pub use bevy::prelude::*;
     }
     pub(crate) use import::*;

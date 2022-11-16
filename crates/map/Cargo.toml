@@ -12,7 +12,6 @@ release = []
 atrl-common         = {workspace = true}
 bevy                = {workspace = true}
 banana_bevy_utils   = {workspace = true}
-iyes_loopless       = {workspace = true}
 bevy_ecs_tilemap    = {workspace = true}
 bevy_tileset        = {workspace = true}
-smart-default       = {workspace = true}
+iyes_loopless       = {workspace = true}

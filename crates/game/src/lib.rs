@@ -1,5 +1,57 @@
 #![allow(clippy::module_inception)]
 
+mod game_map {
+    mod resources {
+        mod map_manager;
+        pub use map_manager::*;
+    }
+    pub use resources::*;
+
+    mod systems {
+        mod load_first_map;
+        pub use load_first_map::*;
+        mod update_tilemaps;
+        pub use update_tilemaps::*;
+        mod wait_for_tilesets_to_load;
+        pub use wait_for_tilesets_to_load::*;
+    }
+    pub use systems::*;
+
+    mod game_map_plugin;
+    pub use game_map_plugin::*;
+}
+
+mod map_gen {
+    mod builders {
+        mod cellular_automata;
+        pub use cellular_automata::*;
+        mod rooms;
+        pub use rooms::*;
+    }
+    pub use builders::*;
+
+    mod meta {
+        mod area_points {
+            mod area_ending_point;
+            pub use area_ending_point::*;
+            mod area_starting_point;
+            pub use area_starting_point::*;
+        }
+        pub use area_points::*;
+
+        mod cull_unreachable;
+        pub use cull_unreachable::*;
+    }
+    pub use meta::*;
+
+    mod builder_chain;
+    pub use builder_chain::*;
+    mod common;
+    pub use common::*;
+    mod map_builder;
+    pub use map_builder::*;
+}
+
 mod player {
     mod player_plugin;
     pub use player_plugin::*;
@@ -7,16 +59,16 @@ mod player {
 
 mod systems {
     mod apply_damage;
-    mod input;
-    mod move_actors;
-    mod perform_healing;
-    mod player_input;
-    mod spawn_player;
     pub use apply_damage::*;
+    mod input;
     pub use input::*;
+    mod move_actors;
     pub use move_actors::*;
+    mod perform_healing;
     pub use perform_healing::*;
+    mod player_input;
     pub use player_input::*;
+    mod spawn_player;
     pub use spawn_player::*;
 }
 
@@ -43,6 +95,8 @@ pub mod prelude {
 
         pub use iyes_loopless::prelude::*;
 
+        pub use smart_default::SmartDefault;
+
         pub use atrl_camera::prelude::*;
         pub use atrl_common::prelude::AssetLoadState::*;
         pub use atrl_common::prelude::ConstructState::*;
@@ -56,9 +110,14 @@ pub mod prelude {
     }
     pub(crate) use import::*;
 
+    pub use crate::game_map::*;
+    pub use crate::map_gen::*;
     pub use crate::player::*;
     pub use crate::spawner::*;
     pub use crate::systems::*;
 
     pub use crate::game_plugin::*;
 }
+
+//pub use crate::procgen::*;
+//pub use crate::map::*;

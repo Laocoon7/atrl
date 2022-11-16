@@ -7,7 +7,7 @@ pub fn player_input(
         (&mut Transform, &WorldPosition, &Movement, &ActionState<PlayerAction>),
         With<Player>,
     >,
-    q_map: Query<&Map>,
+    q_map: Query<&GameMap>,
 ) {
     for (mut position, world_position, movement_component, action_state) in query.iter_mut() {
         for input_direction in PlayerAction::DIRECTIONS {
