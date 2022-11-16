@@ -47,6 +47,10 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
                 self.state_construct.clone(),
                 self.state_running.clone(),
             ))
+            .add_plugin(TurnStatePlugin {
+                state_running: self.state_running.clone(),
+                turn_state_ticking: TurnState::Ticking,
+            })
             // Game Context
             .insert_resource(game_context)
             // `AppState::Initializing` is a buffer state to allow bevy plugins to initialize

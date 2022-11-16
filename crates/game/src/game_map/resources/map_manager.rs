@@ -86,20 +86,18 @@ impl MapManager {
         map.item_layer_entity = Some(item_layer);
 
         let map_entity = commands
-            .spawn(map)
-            .insert(Name::new(format!(
-                "Map ({}, {}, {})",
-                world_position.x, world_position.y, world_position.z
-            )))
-            .insert(Transform::default())
-            .insert(GlobalTransform::default())
-            .insert(Visibility::default())
-            .insert(ComputedVisibility::default())
+            .spawn((
+                map,
+                Name::new(format!(
+                    "Map ({}, {}, {})",
+                    world_position.x, world_position.y, world_position.z
+                )),
+                SpatialBundle::default(),
+            ))
+            .add_child(terrain_layer)
+            .add_child(feature_layer)
+            .add_child(item_layer)
             .id();
-
-        commands.entity(map_entity).add_child(terrain_layer);
-        commands.entity(map_entity).add_child(feature_layer);
-        commands.entity(map_entity).add_child(item_layer);
 
         Ok(map_entity)
     }
