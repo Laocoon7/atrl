@@ -1,4 +1,5 @@
 #![allow(clippy::module_inception)]
+#![allow(clippy::type_complexity)]
 
 mod game_map {
     mod resources {
@@ -86,6 +87,7 @@ mod spawner {
 }
 
 mod game_plugin;
+mod turn_state_plugin;
 
 pub mod prelude {
     mod import {
@@ -125,6 +127,7 @@ pub mod prelude {
     pub use crate::systems::*;
 
     pub use crate::game_plugin::*;
+    pub use crate::turn_state_plugin::*;
 }
 
 //pub use crate::procgen::*;

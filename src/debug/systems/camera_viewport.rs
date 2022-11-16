@@ -18,11 +18,9 @@ pub fn set_camera_viewport(
     } else {
         let window = windows.primary();
         let scale_factor = window.scale_factor() * egui_settings.scale_factor;
-        let x_scale_factor = bevy_inspector_egui::egui::Vec2::new(1.15, 1.0);
 
-        let viewport_pos =
-            my_app.viewport_rect.left_top().to_vec2() * x_scale_factor * scale_factor as f32;
-        let viewport_size = my_app.viewport_rect.size() * x_scale_factor * scale_factor as f32;
+        let viewport_pos = my_app.viewport_rect.left_top().to_vec2() * scale_factor as f32;
+        let viewport_size = my_app.viewport_rect.size() * scale_factor as f32;
 
         cam.viewport = Some(Viewport {
             depth: 0.0..1.0,
