@@ -2,6 +2,7 @@ use crate::prelude::*;
 
 #[derive(SystemParam)]
 pub struct PlayerQuery<'w, 's> {
+    pub entity: Query<'w, 's, Entity, With<Player>>,
     pub world_position: Query<'w, 's, &'static mut WorldPosition, With<Player>>,
     pub name: Query<'w, 's, &'static mut Name, With<Player>>,
     pub movement: Query<'w, 's, &'static mut Movement, With<Player>>,
