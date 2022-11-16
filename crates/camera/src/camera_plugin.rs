@@ -30,7 +30,7 @@ impl<T: StateNext> Plugin for CameraPlugin<T> {
         let camera_settings_resource = CameraSettingsResource::new(camera_settings);
         app.insert_resource(camera_settings_resource);
 
-        app.add_enter_system(self.state_running.clone(), spawn_cameras);
+        app.add_startup_system(spawn_cameras);
     }
 }
 

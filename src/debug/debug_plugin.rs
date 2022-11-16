@@ -4,8 +4,6 @@ use bevy::{
     log::LogPlugin,
 };
 
-const DEBUG_UI_STAGE: &str = "debug_ui_stage";
-
 pub struct DebugPlugin;
 impl Plugin for DebugPlugin {
     fn build(&self, app: &mut App) {
@@ -17,21 +15,7 @@ impl Plugin for DebugPlugin {
         // Fps / Entity Tracking
         app.add_plugin(FrameTimeDiagnosticsPlugin).add_plugin(EntityCountDiagnosticsPlugin);
 
-        // Inspector Egui
-        app.add_plugin(DefaultInspectorConfigPlugin).add_plugin(EguiPlugin);
-
-        // // Systems
-        app.add_system(inspector_ui).add_system(set_debug_title);
-
-        // app.add_stage_after(
-        //     CoreStage::PostUpdate,
-        //     DEBUG_UI_STAGE,
-        //     SystemStage::parallel().with_system_set(
-        //         ConditionSet::new()
-        //             // .with_system(set_debug_title)
-        //             .with_system(inspector_ui)
-        //             .into(),
-        //     ),
-        // );
+        // Inspector Egui Plugin
+        app.add_plugin(DebugEguiPlugin);
     }
 }
