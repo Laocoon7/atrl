@@ -28,10 +28,7 @@ impl Rectangle {
     pub fn from_corners(min: impl Point2d, max: impl Point2d) -> Self {
         let min = min.as_ivec2();
         let max = max.as_ivec2();
-        Self {
-            min: min.min(max),
-            max: min.max(max)
-        }
+        Self { min: min.min(max), max: min.max(max) }
     }
 
     /// Rectangle width (max.x - min.x).

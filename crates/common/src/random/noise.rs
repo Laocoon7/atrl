@@ -24,7 +24,14 @@ impl Noise {
     }
 
     /// Value between `min` and `max`
-    pub fn get_map<X: Into<f64>, Y: Into<f64>, Z: Into<f64>, Min: Into<f64>, Max: Into<f64>>(&mut self, x: X, y: Y, z: Z, min: Min, max: Max) -> f64 {
+    pub fn get_map<X: Into<f64>, Y: Into<f64>, Z: Into<f64>, Min: Into<f64>, Max: Into<f64>>(
+        &mut self,
+        x: X,
+        y: Y,
+        z: Z,
+        min: Min,
+        max: Max,
+    ) -> f64 {
         let min = min.into();
         let max = max.into();
         let value = self.get(x, y, z);

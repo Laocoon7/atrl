@@ -45,7 +45,7 @@ impl<S: Size2d> RoomMapArchitect<S> {
             let h = rng.prng.range(MIN_SIZE..=MAX_SIZE);
             let x = rng.prng.roll_dice(1, builder.size.width() - w - 1);
             let y = rng.prng.roll_dice(1, builder.size.height() - h - 1);
-            let new_room = Rectangle::new([x, y], [w, h]);
+            let new_room = Rectangle::new((x, y), [w, h]);
 
             let ok = rooms.iter().all(|room| !new_room.intersects(*room));
             if ok {
