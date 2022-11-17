@@ -1,4 +1,5 @@
 use crate::prelude::*;
+use atrl_macros::impl_as_primative;
 
 #[derive(
     Reflect,
@@ -28,5 +29,9 @@ pub enum VisionType {
 }
 
 impl From<VisionType> for u8 {
-    fn from(value: VisionType) -> Self { value as u8 }
+    fn from(value: VisionType) -> Self {
+        value.to_u8().unwrap()
+    }
 }
+
+impl_as_primative!(VisionType);

@@ -16,6 +16,7 @@ bevy_tileset           = { workspace = true }
 big-brain              = { workspace = true }
 iyes_loopless          = { workspace = true }
 leafwing-input-manager = { workspace = true }
+num-traits             = { workspace = true }
 smart-default          = { workspace = true }
 
 atrl-camera   = { workspace = true }

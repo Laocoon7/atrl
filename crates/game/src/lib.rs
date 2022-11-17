@@ -11,7 +11,9 @@ mod ai {
         pub use scorers::*;
 
         mod actions {
+            mod chase;
             mod wander;
+            pub use chase::*;
             pub use wander::*;
         }
         pub use actions::*;
@@ -88,7 +90,9 @@ mod player {
 
 mod spawner {
     mod systems {
+        mod spawn_ai;
         mod spawn_player;
+        pub use spawn_ai::*;
         pub use spawn_player::*;
     }
     pub use systems::*;
@@ -128,6 +132,8 @@ pub mod prelude {
         pub use smart_default::SmartDefault;
 
         pub use big_brain::prelude::*;
+
+        pub use num_traits::{FromPrimitive, ToPrimitive};
 
         pub use atrl_camera::prelude::*;
         pub use atrl_common::prelude::AssetLoadState::*;

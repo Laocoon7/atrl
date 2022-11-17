@@ -106,6 +106,7 @@ panic         = 'abort'
 atrl-camera   = { path = "crates/camera" }
 atrl-common   = { path = "crates/common" }
 atrl-game     = { path = "crates/game" }
+atrl-macros   = { path = "crates/macros" }
 atrl-map      = { path = "crates/map" }
 atrl-raws     = { path = "crates/raws" }
 atrl-saveload = { path = "crates/saveload" }

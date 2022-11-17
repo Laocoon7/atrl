@@ -43,11 +43,11 @@ pub fn wander_action(
         match *action_state {
             Executing => {}
             Init => {
-                info!("Wander init");
+                println!("Wander init");
                 continue;
             }
             Requested => {
-                info!("{} gonna start wandering!", name);
+                println!("{} gonna start wandering!", name);
                 *action_state = ActionState::Executing;
             }
             ActionState::Success => {

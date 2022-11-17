@@ -87,11 +87,11 @@ impl GameMap {
             "T: {:?}, F: {:?}, M:{:?}, A:{:?}",
             terrain,
             feature,
-            movement_component.movement_types,
-            (terrain & feature & movement_component.movement_types)
+            **movement_component,
+            (terrain & feature & **movement_component)
         );
 
-        (terrain & feature & movement_component.movement_types) != 0
+        (terrain & feature & **movement_component) != 0
     }
 
     pub fn can_see_through(&self, index: impl Point2d, vision_component: &Vision) -> bool {
@@ -105,7 +105,7 @@ impl GameMap {
             None => VisionType::Any as u8,
         };
 
-        (terrain & feature & (vision_component.vision_types)) != 0
+        (terrain & feature & (**vision_component)) != 0
     }
 
     pub fn can_see_feature(&self, index: impl Point2d, vision_component: &Vision) -> bool {
@@ -114,7 +114,7 @@ impl GameMap {
             None => VisionType::None as u8,
         };
 
-        (feature & vision_component.vision_types) != 0
+        (feature & **vision_component) != 0
     }
 
     pub fn set_terrain_at(&mut self, index: impl Point2d, terrain_type: TerrainType) {
@@ -127,13 +127,17 @@ impl GameMap {
         self.update_tiles.insert(index.as_uvec2());
     }
 
-    pub fn has_actor(&mut self, index: impl Point2d) -> bool { self.actors.get(index).is_some() }
+    pub fn has_actor(&mut self, index: impl Point2d) -> bool {
+        self.actors.get(index).is_some()
+    }
 
     pub fn add_actor(&mut self, index: impl Point2d, actor: Entity) {
         self.actors.set(index, Some(actor));
     }
 
-    pub fn remove_actor(&mut self, index: impl Point2d) { self.actors.set(index, None); }
+    pub fn remove_actor(&mut self, index: impl Point2d) {
+        self.actors.set(index, None);
+    }
 
     pub fn get_actor(&self, index: impl Point2d) -> Option<Entity> {
         match self.actors.get(index) {

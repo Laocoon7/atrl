@@ -6,5 +6,6 @@
         1: "./terminal8x8/floor.ron",
         2: "./terminal8x8/wall.ron",
         3: "./terminal8x8/water.ron",
+        4: "./terminal8x8/player.ron"
     }
 )

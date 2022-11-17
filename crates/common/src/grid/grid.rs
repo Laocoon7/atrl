@@ -7,7 +7,9 @@ use std::{
 /// EXPERIMENTAL: This is a new API that is not yet stable. It may change or be removed.
 ///
 /// https://github.com/rust-lang/rust/issues/41517
-pub trait GridParam = Sync + Send + 'static + FromReflect;
+pub trait GridParam: Sync + Send + 'static + FromReflect {}
+
+impl<T: FromReflect> GridParam for T {}
 
 #[allow(dead_code)]
 pub type GridIter<'a, T> = slice::Iter<'a, T>;
@@ -67,22 +69,34 @@ impl<T: GridParam> Grid<T> {
     }
 
     #[inline]
-    pub fn width(&self) -> u32 { self.size.width() }
+    pub fn width(&self) -> u32 {
+        self.size.width()
+    }
 
     #[inline]
-    pub fn height(&self) -> u32 { self.size.height() }
+    pub fn height(&self) -> u32 {
+        self.size.height()
+    }
 
     #[inline]
-    pub fn size(&self) -> UVec2 { self.size }
+    pub fn size(&self) -> UVec2 {
+        self.size
+    }
 
     #[inline]
-    pub fn len(&self) -> usize { self.cells.len() }
+    pub fn len(&self) -> usize {
+        self.cells.len()
+    }
 
     #[inline]
-    pub fn is_empty(&self) -> bool { self.cells.is_empty() }
+    pub fn is_empty(&self) -> bool {
+        self.cells.is_empty()
+    }
 
     /// Tests whether a point is in bounds.
-    pub fn in_bounds(&self, point: impl Point2d) -> bool { point.is_valid(self.size()) }
+    pub fn in_bounds(&self, point: impl Point2d) -> bool {
+        point.is_valid(self.size())
+    }
 
     /// Gets the index corresponding to a coordinate, which is row-wise.
     pub fn get_idx_unchecked(&self, point: impl Point2d) -> usize {
@@ -174,13 +188,19 @@ impl<T: GridParam> Grid<T> {
 
     /// An iterator over all elements in the grid.
     #[inline]
-    pub fn iter(&self) -> GridIter<T> { self.cells.iter() }
+    pub fn iter(&self) -> GridIter<T> {
+        self.cells.iter()
+    }
 
     /// A mutable iterator over all elements in the grid.
     #[inline]
-    pub fn iter_mut(&mut self) -> GridIterMut<T> { self.cells.iter_mut() }
+    pub fn iter_mut(&mut self) -> GridIterMut<T> {
+        self.cells.iter_mut()
+    }
 
-    pub fn point_iter(&self) -> PointIterRowMajor { self.size.iter() }
+    pub fn point_iter(&self) -> PointIterRowMajor {
+        self.size.iter()
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -189,7 +209,9 @@ impl<T: GridParam> Grid<T> {
 
 impl<T: GridParam> Grid<T> {
     #[inline]
-    pub fn rows(&self) -> GridRows<T> { self.cells.chunks(self.size.width() as usize) }
+    pub fn rows(&self) -> GridRows<T> {
+        self.cells.chunks(self.size.width() as usize)
+    }
 
     #[inline]
     pub fn rows_mut(&mut self) -> GridRowsMut<T> {
@@ -197,7 +219,9 @@ impl<T: GridParam> Grid<T> {
     }
 
     #[inline]
-    pub fn cols(&self) -> GridRows<T> { self.cells.chunks(self.size.width() as usize) }
+    pub fn cols(&self) -> GridRows<T> {
+        self.cells.chunks(self.size.width() as usize)
+    }
 
     #[inline]
     pub fn cols_mut(&mut self) -> GridRowsMut<T> {
@@ -260,22 +284,30 @@ impl<T: Copy + GridParam> Index<usize> for Grid<T> {
     type Output = T;
 
     #[inline]
-    fn index(&self, index: usize) -> &T { &self.cells[index] }
+    fn index(&self, index: usize) -> &T {
+        &self.cells[index]
+    }
 }
 
 impl<T: Copy + GridParam> std::ops::IndexMut<usize> for Grid<T> {
     #[inline]
-    fn index_mut(&mut self, index: usize) -> &mut Self::Output { &mut self.cells[index] }
+    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        &mut self.cells[index]
+    }
 }
 
 impl<T: Copy + GridParam, P: Point2d> Index<P> for Grid<T> {
     type Output = T;
 
     #[inline]
-    fn index(&self, index: P) -> &T { self.get_unchecked(index) }
+    fn index(&self, index: P) -> &T {
+        self.get_unchecked(index)
+    }
 }
 
 impl<T: Copy + GridParam, P: Point2d> IndexMut<P> for Grid<T> {
     #[inline]
-    fn index_mut(&mut self, index: P) -> &mut Self::Output { self.get_mut_unchecked(index) }
+    fn index_mut(&mut self, index: P) -> &mut Self::Output {
+        self.get_mut_unchecked(index)
+    }
 }

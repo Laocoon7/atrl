@@ -6,5 +6,6 @@
         1: "./dcss/ron/floor.ron",
         2: "./dcss/ron/wall.ron",
         3: "./dcss/ron/water.ron",
+        4: "./dcss/ron/player.ron",
     }
 )

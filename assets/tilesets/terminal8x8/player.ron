@@ -1,0 +1,4 @@
+(
+    name: "player",
+    tile: Standard("tilesets/terminal8x8/64.png")
+)

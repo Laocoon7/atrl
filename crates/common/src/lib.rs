@@ -1,7 +1,7 @@
 #![allow(clippy::module_inception)]
 #![allow(clippy::type_complexity)] // Bevy can have complex queries, so we shush clippy
 #![allow(clippy::too_many_arguments)] // Bevy has a lot of arguments, so we shush clippy
-#![feature(trait_alias)]
+                                      // #![feature(trait_alias)]
 
 mod components {
     pub use bevy::{
@@ -185,7 +185,7 @@ pub mod prelude {
     mod import {
         pub use banana_bevy_utils::prelude::*;
         pub use bevy::{
-            ecs::system::{SystemState, SystemParam},
+            ecs::system::{SystemParam, SystemState},
             prelude::*,
             render::render_resource::{Extent3d, TextureDimension, TextureFormat},
             utils::HashSet,

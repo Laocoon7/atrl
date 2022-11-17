@@ -1,7 +1,19 @@
 use crate::prelude::*;
+use atrl_macros::impl_as_primative;
 
 #[derive(
-    Reflect, FromReflect, Default, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Debug,
+    Reflect,
+    FromReflect,
+    Default,
+    Serialize,
+    Deserialize,
+    Clone,
+    Copy,
+    PartialEq,
+    Eq,
+    Debug,
+    FromPrimitive,
+    ToPrimitive,
 )]
 pub enum MovementType {
     #[default]
@@ -15,5 +27,15 @@ pub enum MovementType {
 }
 
 impl From<MovementType> for u8 {
-    fn from(value: MovementType) -> Self { value as u8 }
+    fn from(value: MovementType) -> Self {
+        value.to_u8().unwrap()
+    }
 }
+
+impl MovementType {
+    pub fn as_u8(self) -> u8 {
+        self.into()
+    }
+}
+
+impl_as_primative!(MovementType);
