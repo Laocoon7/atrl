@@ -32,22 +32,30 @@ impl Rectangle {
     /// Rectangle width (max.x - min.x).
     #[inline]
     #[must_use]
-    pub fn width(&self) -> i32 { self.max.x - self.min.x }
+    pub fn width(&self) -> i32 {
+        self.max.x - self.min.x
+    }
 
     /// Rectangle height (max.y - min.y).
     #[inline]
     #[must_use]
-    pub fn height(&self) -> i32 { self.max.y - self.min.y }
+    pub fn height(&self) -> i32 {
+        self.max.y - self.min.y
+    }
 
     /// Rectangle size.
     #[inline]
     #[must_use]
-    pub fn size(&self) -> IVec2 { self.max - self.min }
+    pub fn size(&self) -> IVec2 {
+        self.max - self.min
+    }
 
     /// The center point of the rectangle.
     #[inline]
     #[must_use]
-    pub fn center(&self) -> IVec2 { (self.min + self.max) / 2 }
+    pub fn center(&self) -> IVec2 {
+        (self.min + self.max) / 2
+    }
 
     /// Check if a point lies within this rectangle, inclusive of its edges.
     #[inline]
@@ -91,7 +99,9 @@ impl Rectangle {
 }
 
 impl Default for Rectangle {
-    fn default() -> Self { Self::new(IVec2::ZERO, IVec2::ONE) }
+    fn default() -> Self {
+        Self::new(IVec2::ZERO, IVec2::ONE)
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -137,11 +147,15 @@ impl IntoIterator for Rectangle {
     type Item = IVec2;
     type IntoIter = RectPointIter;
 
-    fn into_iter(self) -> Self::IntoIter { RectPointIter::new(self.min, self.max) }
+    fn into_iter(self) -> Self::IntoIter {
+        RectPointIter::new(self.min, self.max)
+    }
 }
 
 impl From<Rectangle> for RectPointIter {
-    fn from(rect: Rectangle) -> Self { rect.into_iter() }
+    fn from(rect: Rectangle) -> Self {
+        rect.into_iter()
+    }
 }
 
 use core::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign};
@@ -149,7 +163,9 @@ use core::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAss
 // Neg
 impl Neg for Rectangle {
     type Output = Rectangle;
-    fn neg(self) -> Self::Output { Rectangle { min: -self.min, max: -self.max } }
+    fn neg(self) -> Self::Output {
+        Rectangle { min: -self.min, max: -self.max }
+    }
 }
 
 // Add + Assign
@@ -172,13 +188,17 @@ impl<T> AddAssign<T> for Rectangle
 where
     Rectangle: Add<T, Output = Rectangle>,
 {
-    fn add_assign(&mut self, rhs: T) { *self = *self + rhs; }
+    fn add_assign(&mut self, rhs: T) {
+        *self = *self + rhs;
+    }
 }
 
 // Sub + Assign
 impl Sub<Rectangle> for Rectangle {
     type Output = Self;
-    fn sub(self, rhs: Rectangle) -> Self::Output { self + -rhs }
+    fn sub(self, rhs: Rectangle) -> Self::Output {
+        self + -rhs
+    }
 }
 
 impl<P: Point2d> Sub<P> for Rectangle {
@@ -193,7 +213,9 @@ impl<T> SubAssign<T> for Rectangle
 where
     Rectangle: Sub<T, Output = Rectangle>,
 {
-    fn sub_assign(&mut self, rhs: T) { *self = *self - rhs; }
+    fn sub_assign(&mut self, rhs: T) {
+        *self = *self - rhs;
+    }
 }
 
 // Mul + MulAssign
@@ -216,7 +238,9 @@ impl<T> MulAssign<T> for Rectangle
 where
     Rectangle: Mul<T, Output = Rectangle>,
 {
-    fn mul_assign(&mut self, rhs: T) { *self = *self * rhs; }
+    fn mul_assign(&mut self, rhs: T) {
+        *self = *self * rhs;
+    }
 }
 
 // Div + DivAssign
@@ -240,5 +264,7 @@ impl<T> DivAssign<T> for Rectangle
 where
     Rectangle: Div<T, Output = Rectangle>,
 {
-    fn div_assign(&mut self, rhs: T) { *self = *self / rhs; }
+    fn div_assign(&mut self, rhs: T) {
+        *self = *self / rhs;
+    }
 }

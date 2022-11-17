@@ -4,5 +4,7 @@ pub enum CameraId {
 }
 
 impl From<CameraId> for u8 {
-    fn from(cam: CameraId) -> Self { cam as u8 }
+    fn from(cam: CameraId) -> Self {
+        cam as u8
+    }
 }

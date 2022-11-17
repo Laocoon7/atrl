@@ -13,5 +13,7 @@ impl Triangle {
 }
 
 impl Default for Triangle {
-    fn default() -> Self { Self::new(IVec2::ZERO, IVec2::new(1, 0), IVec2::new(0, 1)) }
+    fn default() -> Self {
+        Self::new(IVec2::ZERO, IVec2::new(1, 0), IVec2::new(0, 1))
+    }
 }

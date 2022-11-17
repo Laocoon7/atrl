@@ -19,9 +19,13 @@ pub struct AreaStartingPosition<S> {
 }
 
 impl<S: Size2d> MapArchitect<S> for AreaStartingPosition<S> {
-    fn generate(&mut self, builder: &mut MapBuilder<S>) { self.build(builder); }
+    fn generate(&mut self, builder: &mut MapBuilder<S>) {
+        self.build(builder);
+    }
 
-    fn name(&self) -> &str { "AreaStartingPosition" }
+    fn name(&self) -> &str {
+        "AreaStartingPosition"
+    }
 }
 
 impl<S: Size2d> AreaStartingPosition<S> {

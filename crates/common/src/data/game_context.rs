@@ -25,5 +25,7 @@ impl GameContext {
         self.world_bounds.contains(world_position.xy())
     }
 
-    pub fn get_random(&self) -> MutexGuard<Random> { self.random.lock() }
+    pub fn get_random(&self) -> MutexGuard<Random> {
+        self.random.lock()
+    }
 }

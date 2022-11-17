@@ -6,5 +6,7 @@ pub(crate) struct CameraSettingsResource {
 }
 
 impl CameraSettingsResource {
-    pub fn new(settings: Vec<CameraSettings>) -> Self { Self { settings } }
+    pub fn new(settings: Vec<CameraSettings>) -> Self {
+        Self { settings }
+    }
 }

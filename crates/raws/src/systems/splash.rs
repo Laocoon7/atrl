@@ -43,4 +43,6 @@ pub fn setup_splash(
     }
 }
 
-pub fn countdown(time: Res<Time>, mut timer: ResMut<SplashTimer>) { timer.tick(time.delta()); }
+pub fn countdown(time: Res<Time>, mut timer: ResMut<SplashTimer>) {
+    timer.tick(time.delta());
+}

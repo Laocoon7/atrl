@@ -148,9 +148,13 @@ impl OrdinalDirection {
         a.direction().bitmap() | b.direction().bitmap()
     }
 
-    pub const fn all() -> OrdinalDirectionIter { OrdinalDirectionIter::new() }
+    pub const fn all() -> OrdinalDirectionIter {
+        OrdinalDirectionIter::new()
+    }
 
-    pub const fn all_directions() -> DirectionOrdinalIter { DirectionOrdinalIter::new() }
+    pub const fn all_directions() -> DirectionOrdinalIter {
+        DirectionOrdinalIter::new()
+    }
 }
 
 impl From<OrdinalDirection> for [i32; 2] {

@@ -6,9 +6,15 @@ pub struct LoadedCameras {
 }
 
 impl LoadedCameras {
-    pub(crate) fn new() -> Self { Self { cameras: HashMap::new() } }
+    pub(crate) fn new() -> Self {
+        Self { cameras: HashMap::new() }
+    }
 
-    pub(crate) fn add(&mut self, id: u8, entity: Entity) { self.cameras.insert(id, entity); }
+    pub(crate) fn add(&mut self, id: u8, entity: Entity) {
+        self.cameras.insert(id, entity);
+    }
 
-    pub(crate) fn get(&self, id: u8) -> Option<Entity> { self.cameras.get(&id).copied() }
+    pub(crate) fn get(&self, id: u8) -> Option<Entity> {
+        self.cameras.get(&id).copied()
+    }
 }

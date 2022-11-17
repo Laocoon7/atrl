@@ -21,9 +21,13 @@ pub struct AreaEndingPosition<S> {
 }
 
 impl<S: Size2d> MapArchitect<S> for AreaEndingPosition<S> {
-    fn generate(&mut self, builder: &mut MapBuilder<S>) { self.build(builder); }
+    fn generate(&mut self, builder: &mut MapBuilder<S>) {
+        self.build(builder);
+    }
 
-    fn name(&self) -> &str { "AreaEndingPosition" }
+    fn name(&self) -> &str {
+        "AreaEndingPosition"
+    }
 }
 
 impl<S: Size2d> AreaEndingPosition<S> {

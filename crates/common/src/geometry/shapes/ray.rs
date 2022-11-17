@@ -6,9 +6,13 @@ pub struct Ray {
 }
 
 impl Ray {
-    pub fn new(origin: IVec2, direction: IVec2) -> Self { Self { origin, direction } }
+    pub fn new(origin: IVec2, direction: IVec2) -> Self {
+        Self { origin, direction }
+    }
 }
 
 impl Default for Ray {
-    fn default() -> Self { Self::new(IVec2::ZERO, IVec2::new(1, 0)) }
+    fn default() -> Self {
+        Self::new(IVec2::ZERO, IVec2::new(1, 0))
+    }
 }

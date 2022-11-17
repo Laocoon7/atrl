@@ -6,5 +6,7 @@ pub struct Polygon {
 
 #[allow(dead_code)]
 impl Polygon {
-    pub fn new(points: Vec<IVec2>) -> Self { Self { points } }
+    pub fn new(points: Vec<IVec2>) -> Self {
+        Self { points }
+    }
 }

@@ -6,7 +6,9 @@ pub struct MapManager {
 }
 
 impl MapManager {
-    pub fn new() -> Self { Self { loaded_maps: HashMap::new() } }
+    pub fn new() -> Self {
+        Self { loaded_maps: HashMap::new() }
+    }
 
     pub fn get_or_generate(
         &mut self,

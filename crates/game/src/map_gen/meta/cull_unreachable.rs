@@ -8,9 +8,13 @@ impl<S> MapArchitect<S> for CullUnreachable<S>
 where
     S: Size2d,
 {
-    fn generate(&mut self, builder: &mut MapBuilder<S>) { self.build(builder); }
+    fn generate(&mut self, builder: &mut MapBuilder<S>) {
+        self.build(builder);
+    }
 
-    fn name(&self) -> &str { "CullUnreachable" }
+    fn name(&self) -> &str {
+        "CullUnreachable"
+    }
 }
 
 impl<S> CullUnreachable<S>
@@ -18,7 +22,9 @@ where
     S: Size2d,
 {
     #[allow(dead_code)]
-    pub fn new() -> Box<Self> { Box::new(Self { phantom: std::marker::PhantomData }) }
+    pub fn new() -> Box<Self> {
+        Box::new(Self { phantom: std::marker::PhantomData })
+    }
 
     fn build(&mut self, builder: &mut MapBuilder<S>) {
         let mut seen = Grid::new_copy(builder.terrain_grid.size(), false);

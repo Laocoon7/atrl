@@ -42,7 +42,9 @@ impl<S: Size2d> BuilderChain<S> {
         }
     }
 
-    pub fn get_map(self) -> GameMap { GameMap::from(self.map_builder) }
+    pub fn get_map(self) -> GameMap {
+        GameMap::from(self.map_builder)
+    }
 
     pub fn start_with(mut self, starter: Box<dyn InitialMapArchitect<S>>) -> Self {
         match self.starter {

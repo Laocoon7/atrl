@@ -48,7 +48,9 @@ impl SkipperWrapper {
         Self { reader: Rc::new(RefCell::new(reader)) }
     }
 
-    fn skip(&self) { let _ = self.reader.borrow_mut().seek_relative(1); }
+    fn skip(&self) {
+        let _ = self.reader.borrow_mut().seek_relative(1);
+    }
 }
 
 impl Read for SkipperWrapper {

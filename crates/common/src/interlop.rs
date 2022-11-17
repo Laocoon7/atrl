@@ -36,7 +36,9 @@ pub trait AtrlPosition2: Component {
 impl AtrlPosition2 for Transform {
     type Position = Vec2;
 
-    fn get(&self) -> Self::Position { self.translation.truncate() }
+    fn get(&self) -> Self::Position {
+        self.translation.truncate()
+    }
 
     fn set_value(&mut self, pos: Self::Position) {
         self.translation = pos.extend(self.translation.z);

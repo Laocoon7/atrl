@@ -19,7 +19,9 @@ pub struct CameraSettings {
 }
 
 impl CameraSettings {
-    pub fn new() -> Self { Self::default() }
+    pub fn new() -> Self {
+        Self::default()
+    }
 
     pub fn new_dimensions<W: Into<f32>, H: Into<f32>>(width: W, height: H) -> Self {
         let left = 0.0;

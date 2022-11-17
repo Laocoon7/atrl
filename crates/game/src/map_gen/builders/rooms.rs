@@ -7,20 +7,30 @@ pub struct RoomMapArchitect<S: Size2d> {
 }
 
 impl<S: Size2d> InitialMapArchitect<S> for RoomMapArchitect<S> {
-    fn generate(&mut self, builder: &mut MapBuilder<S>) { self.build_rooms(builder); }
+    fn generate(&mut self, builder: &mut MapBuilder<S>) {
+        self.build_rooms(builder);
+    }
 
-    fn name(&self) -> &str { "RoomMapArchitectStarter" }
+    fn name(&self) -> &str {
+        "RoomMapArchitectStarter"
+    }
 }
 
 impl<S: Size2d> MapArchitect<S> for RoomMapArchitect<S> {
-    fn generate(&mut self, builder: &mut MapBuilder<S>) { self.build_rooms(builder); }
+    fn generate(&mut self, builder: &mut MapBuilder<S>) {
+        self.build_rooms(builder);
+    }
 
-    fn name(&self) -> &str { "RoomMapArchitect" }
+    fn name(&self) -> &str {
+        "RoomMapArchitect"
+    }
 }
 
 impl<S: Size2d> RoomMapArchitect<S> {
     #[inline(always)]
-    pub fn new() -> Box<Self> { Box::new(Self { phantom: PhantomData }) }
+    pub fn new() -> Box<Self> {
+        Box::new(Self { phantom: PhantomData })
+    }
 
     fn build_rooms(&mut self, builder: &mut MapBuilder<S>) {
         const MAX_ROOMS: u32 = 25;

@@ -1,8 +1,12 @@
 #[allow(dead_code)]
-pub fn from_cp437(glyph: char) -> usize { glyph as usize }
+pub fn from_cp437(glyph: char) -> usize {
+    glyph as usize
+}
 
 #[allow(dead_code)]
-pub fn to_cp437(index: usize) -> char { CP437_TABLE[index] }
+pub fn to_cp437(index: usize) -> char {
+    CP437_TABLE[index]
+}
 
 #[rustfmt::skip]
 const CP437_TABLE: [char; 256] = [

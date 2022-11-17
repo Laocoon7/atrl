@@ -13,9 +13,13 @@ pub struct CellularAutomataArchitect<S: Size2d> {
 }
 
 impl<S: Size2d> InitialMapArchitect<S> for CellularAutomataArchitect<S> {
-    fn generate(&mut self, builder: &mut MapBuilder<S>) { self.generate(builder); }
+    fn generate(&mut self, builder: &mut MapBuilder<S>) {
+        self.generate(builder);
+    }
 
-    fn name(&self) -> &str { "CellularAutomataArchitectStarter" }
+    fn name(&self) -> &str {
+        "CellularAutomataArchitectStarter"
+    }
 }
 
 impl<S: Size2d> MapArchitect<S> for CellularAutomataArchitect<S> {
@@ -24,12 +28,16 @@ impl<S: Size2d> MapArchitect<S> for CellularAutomataArchitect<S> {
         self.iteration(&mut builder.terrain_grid);
     }
 
-    fn name(&self) -> &str { "CellularAutomataArchitect" }
+    fn name(&self) -> &str {
+        "CellularAutomataArchitect"
+    }
 }
 
 impl<S: Size2d> CellularAutomataArchitect<S> {
     #[inline(always)]
-    pub fn new() -> Box<Self> { Box::default() }
+    pub fn new() -> Box<Self> {
+        Box::default()
+    }
 
     #[allow(dead_code)]
     #[inline]

@@ -130,9 +130,13 @@ impl CardinalDirection {
         }
     }
 
-    pub const fn all() -> CardinalDirectionIter { CardinalDirectionIter::new() }
+    pub const fn all() -> CardinalDirectionIter {
+        CardinalDirectionIter::new()
+    }
 
-    pub const fn all_directions() -> DirectionCardinalIter { DirectionCardinalIter::new() }
+    pub const fn all_directions() -> DirectionCardinalIter {
+        DirectionCardinalIter::new()
+    }
 
     pub fn combine(self, other: Self) -> Option<OrdinalDirection> {
         OrdinalDirection::from_cardinals(self, other)
