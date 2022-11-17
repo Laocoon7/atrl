@@ -4,11 +4,7 @@ use std::{
     slice,
 };
 
-/// EXPERIMENTAL: This is a new API that is not yet stable. It may change or be removed.
-///
-/// https://github.com/rust-lang/rust/issues/41517
 pub trait GridParam: Sync + Send + 'static + FromReflect {}
-
 impl<T: FromReflect> GridParam for T {}
 
 #[allow(dead_code)]
