@@ -16,14 +16,14 @@ pub fn spawn_ai(tilesets: Tilesets, mut commands: Commands, game_context: Res<Ga
         .get_by_id(&tileset_selection)
         .unwrap_or_else(|| panic!("couldn't find tilemap_id: {:?}", tileset_selection));
 
-    // let chase_and_attack = Steps::build().step(ChaseActor::default());
+    let chase_and_attack = Steps::build().step(ChaseActor::default());
 
     // Build the thinker
     let thinker = Thinker::build()
         .label("RandomThinker")
         // We don't do anything unless we're thirsty enough.
         .picker(FirstToScore { threshold: 0.8 })
-        // .when(WinningScorer::build(1.0).push(CanSeePlayer::default()), chase_and_attack)
+        .when(WinningScorer::build(1.0).push(CanSeePlayer::default()), chase_and_attack)
         .otherwise(Wander::default());
 
     commands.spawn((
