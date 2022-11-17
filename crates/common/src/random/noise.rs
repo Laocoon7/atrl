@@ -14,6 +14,7 @@ impl Noise {
         Self { seed, perlin }
     }
 
+    /// Value between -1 and 1
     pub fn get<X: Into<f64>, Y: Into<f64>, Z: Into<f64>>(&mut self, x: X, y: Y, z: Z) -> f64 {
         let x = x.into();
         let y = y.into();
@@ -22,13 +23,14 @@ impl Noise {
         self.perlin.get([x, y, z])
     }
 
+    /// Value between `min` and `max`
     pub fn get_map<X: Into<f64>, Y: Into<f64>, Z: Into<f64>, Min: Into<f64>, Max: Into<f64>>(&mut self, x: X, y: Y, z: Z, min: Min, max: Max) -> f64 {
         let min = min.into();
         let max = max.into();
         let value = self.get(x, y, z);
 
         // min + (value - -1) * (max - min) / (1 - -1)
-        min + (value + 1) * (max - min) * 0.5
+        min + (value + 1.0) * (max - min) * 0.5
     }
 }
 
