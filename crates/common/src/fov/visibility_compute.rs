@@ -223,10 +223,12 @@ pub(crate) fn blocks_light<T: VisibilityMap>(
         }
         _ => {}
     }
+
     let p = IVec2::new(nx, ny);
     if !map.is_in_bounds(p) {
         return true;
     }
+
     map.is_opaque(IVec2::new(nx, ny))
 }
 
@@ -273,6 +275,7 @@ pub(crate) fn set_visible<T: VisibilityMap>(
         }
         _ => {}
     }
+
     let p = IVec2::new(nx, ny);
     if map.is_in_bounds(p) {
         map.set_visible(p);
