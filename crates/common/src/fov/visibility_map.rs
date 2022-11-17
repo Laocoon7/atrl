@@ -4,12 +4,17 @@ use crate::prelude::*;
 pub trait VisibilityMap {
     /// Returns true if the point is opaque.`
     fn is_opaque(&self, p: impl Point2d) -> bool;
+
     /// Returns true if the point is in bounds.
     fn is_in_bounds(&self, p: impl Point2d) -> bool;
+
     /// Set the visibility of a point.
     fn set_visible(&mut self, p: impl Point2d);
+
     /// Returns the distance between two points.
-    fn distance(&self, a: impl Point2d, b: impl Point2d) -> f32;
+    fn distance(&self, a: impl Point2d, b: impl Point2d) -> f32 {
+        a.distance(b)
+    }
 }
 
 impl VisibilityMap for VisibilityMap2d {
@@ -29,10 +34,6 @@ impl VisibilityMap for VisibilityMap2d {
         if self.in_bounds(p) {
             self[p].visible = true;
         }
-    }
-
-    fn distance(&self, a: impl Point2d, b: impl Point2d) -> f32 {
-        a.distance(b)
     }
 }
 
