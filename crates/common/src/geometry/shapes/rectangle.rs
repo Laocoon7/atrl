@@ -1,5 +1,7 @@
 use crate::prelude::*;
 
+// TODO: GO OVER THIS!!!
+
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[repr(C)]
 pub struct Rectangle {
@@ -13,9 +15,9 @@ impl Rectangle {
     /// The two points do not need to be the minimum and/or maximum corners.
     /// They only need to be two opposite corners.
     #[inline]
-    pub fn new(top_corner: impl Size2d, size: impl Size2d) -> Self {
-        let top_corner = top_corner.as_ivec2();
-        Self::from_corners(top_corner, top_corner + size.as_ivec2())
+    pub fn new(min: impl Point2d, size: impl Size2d) -> Self {
+        let min = min.as_ivec2();
+        Self::from_corners(min, min + size.as_ivec2())
     }
 
     /// Create a new rectangle from two corner points.
@@ -23,10 +25,13 @@ impl Rectangle {
     /// The two points do not need to be the minimum and/or maximum corners.
     /// They only need to be two opposite corners.
     #[inline]
-    pub fn from_corners(top_corner: impl Size2d, bottom_corner: impl Size2d) -> Self {
-        let top_corner = top_corner.as_ivec2();
-        let bottom_corner = bottom_corner.as_ivec2();
-        Self { min: top_corner, max: bottom_corner }
+    pub fn from_corners(min: impl Point2d, max: impl Point2d) -> Self {
+        let min = min.as_ivec2();
+        let max = max.as_ivec2();
+        Self {
+            min: min.min(max),
+            max: min.max(max)
+        }
     }
 
     /// Rectangle width (max.x - min.x).
