@@ -1,9 +1,9 @@
 [package]
-categories  = ["games", "game-ui", "user-interface"]
+categories  = ["games", "rendering", "graphical"]
 description = "Away Team Roguelike Game Utils"
 edition     = "2021"
 license     = "BlueOak-1.0.0"
-name        = "atrl-ui"
+name        = "atrl-renderer"
 publish     = false
 readme      = "../README.md"
 repository  = "https://github.com/Laocoon7/atrl"
@@ -15,11 +15,13 @@ dev     = []
 release = []
 
 [dependencies]
-bevy              = { workspace = true }
-iyes_loopless     = { workspace = true }
-kayak_font        = { workspace = true }
-kayak_ui          = { workspace = true }
-
 atrl-common = { workspace = true }
 atrl-data   = { workspace = true }
 atrl-raws   = { workspace = true }
+
+bevy             = { workspace = true }
+bevy_ecs_tilemap = { workspace = true }
+bevy_tileset     = { workspace = true }
+iyes_loopless    = { workspace = true }
+kayak_font       = { workspace = true }
+kayak_ui         = { workspace = true }

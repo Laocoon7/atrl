@@ -23,6 +23,39 @@ mod systems {
     pub(crate) use load_tilesets::*;
 }
 
+mod ui {
+    mod main_menu {
+        mod systems {
+            mod setup_main_menu;
+            pub use setup_main_menu::*;
+        }
+        pub use systems::*;
+
+        mod main_menu_plugin;
+        pub use main_menu_plugin::*;
+    }
+    pub use main_menu::*;
+
+    mod widgets {
+        mod systems {
+            mod menu_button_render;
+            pub use menu_button_render::*;
+            mod menu_render;
+            pub use menu_render::*;
+        }
+        pub use systems::*;
+
+        mod menu_button;
+        pub use menu_button::*;
+        mod menu;
+        pub use menu::*;
+    }
+    pub use widgets::*;
+
+    mod ui_plugin;
+    pub use ui_plugin::*;
+}
+
 mod map_renderer_plugin;
 mod map_renderer_settings;
 
@@ -41,6 +74,12 @@ pub mod prelude {
         pub use iyes_loopless::prelude::*;
 
         pub use atrl_common::prelude::*;
+
+        pub use kayak_ui::prelude::*;
+        pub use kayak_ui::widgets::*;
+
+        pub use atrl_data::prelude::CurrentGameState;
+        pub use atrl_raws::prelude::TextureAssets;
     }
     pub(crate) use imports::*;
 
@@ -48,6 +87,7 @@ pub mod prelude {
     pub use crate::functions::*;
     pub use crate::resources::*;
     pub use crate::systems::*;
+    pub use crate::ui::*;
 
     pub use crate::map_renderer_plugin::*;
     pub use crate::map_renderer_settings::*;

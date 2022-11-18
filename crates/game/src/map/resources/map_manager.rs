@@ -56,7 +56,7 @@ impl MapManager {
             (GRID_WIDTH / 2, GRID_HEIGHT / 2),
             rng,
             MapPassThroughData {
-                world_position: world_position,
+                world_position,
                 random,
 
                 terrain_tileset_id: 0,

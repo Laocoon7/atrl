@@ -15,25 +15,24 @@ dev     = []
 release = []
 
 [dependencies]
-bevy                    = {workspace = true}
-bevy_ecs_tilemap        = {workspace = true}
-bevy_tileset            = {workspace = true}
-big-brain               = {workspace = true}
-iyes_loopless           = {workspace = true}
-leafwing-input-manager  = {workspace = true}
-num-traits              = {workspace = true}
-rand                    = {workspace = true}
-rand_pcg                = {workspace = true}
-smart-default           = {workspace = true}
+bevy                   = { workspace = true }
+bevy_ecs_tilemap       = { workspace = true }
+bevy_tileset           = { workspace = true }
+big-brain              = { workspace = true }
+iyes_loopless          = { workspace = true }
+leafwing-input-manager = { workspace = true }
+num-traits             = { workspace = true }
+rand                   = { workspace = true }
+rand_pcg               = { workspace = true }
+smart-default          = { workspace = true }
 
-atrl-camera             = {workspace = true}
-atrl-common             = {workspace = true}
-atrl-data               = {workspace = true}
-atrl-map-gen            = {workspace = true}
-atrl-map-renderer       = {workspace = true}
-atrl-raws               = {workspace = true}
-atrl-saveload           = {workspace = true}
-atrl-ui                 = {workspace = true}
+atrl-camera   = { workspace = true }
+atrl-common   = { workspace = true }
+atrl-data     = { workspace = true }
+atrl-map-gen  = { workspace = true }
+atrl-raws     = { workspace = true }
+atrl-renderer = { workspace = true }
+atrl-saveload = { workspace = true }
 
 [dependencies.bevy-inspector-egui]
 optional = true

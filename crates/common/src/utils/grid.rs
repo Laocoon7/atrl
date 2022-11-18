@@ -27,6 +27,22 @@ impl<T: Clone + GridParam> Grid<T> {
         cells.resize(count, value);
         Self { cells, size: size.as_uvec2() }
     }
+
+    pub fn blit_clone(
+        &mut self,
+        to: impl Point2d,
+        source: &Grid<T>,
+        from: impl Point2d,
+        size: impl Size2d,
+    ) {
+        for y in 0..size.height() {
+            for x in 0..size.width() {
+                if let Some(val) = source.get((x + from.x() as u32, y + from.y() as u32)) {
+                    self.set((x + to.x() as u32, y + to.y() as u32), val.clone());
+                }
+            }
+        }
+    }
 }
 
 #[allow(dead_code)]
@@ -36,6 +52,22 @@ impl<T: Copy + GridParam> Grid<T> {
         let mut cells = Vec::with_capacity(count);
         cells.resize_with(count, || value);
         Self { cells, size: size.as_uvec2() }
+    }
+
+    pub fn blit_copy(
+        &mut self,
+        to: impl Point2d,
+        source: &Grid<T>,
+        from: impl Point2d,
+        size: impl Size2d,
+    ) {
+        for y in 0..size.height() {
+            for x in 0..size.width() {
+                if let Some(val) = source.get((x + from.x() as u32, y + from.y() as u32)) {
+                    self.set((x + to.x() as u32, y + to.y() as u32), *val);
+                }
+            }
+        }
     }
 }
 
@@ -196,46 +228,6 @@ impl<T: GridParam> Grid<T> {
 
     pub fn point_iter(&self) -> PointIterRowMajor {
         self.size.iter()
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////
-// Blit
-///////////////////////////////////////////////////////////////////////////
-
-impl<T: GridParam + Clone> Grid<T> {
-    pub fn blit_clone(
-        &mut self,
-        to: impl Point2d,
-        source: &Grid<T>,
-        from: impl Point2d,
-        size: impl Size2d,
-    ) {
-        for y in 0..size.height() {
-            for x in 0..size.width() {
-                if let Some(val) = source.get((x + from.x() as u32, y + from.y() as u32)) {
-                    self.set((x + to.x() as u32, y + to.y() as u32), val.clone());
-                }
-            }
-        }
-    }
-}
-
-impl<T: GridParam + Copy> Grid<T> {
-    pub fn blit_copy(
-        &mut self,
-        to: impl Point2d,
-        source: &Grid<T>,
-        from: impl Point2d,
-        size: impl Size2d,
-    ) {
-        for y in 0..size.height() {
-            for x in 0..size.width() {
-                if let Some(val) = source.get((x + from.x() as u32, y + from.y() as u32)) {
-                    self.set((x + to.x() as u32, y + to.y() as u32), *val);
-                }
-            }
-        }
     }
 }
 

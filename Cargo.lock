@@ -219,9 +219,8 @@ dependencies = [
  "atrl-data",
  "atrl-game",
  "atrl-map-gen",
- "atrl-map-renderer",
  "atrl-raws",
- "atrl-ui",
+ "atrl-renderer",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "bevy-inspector-egui 0.15.0-pre.0",
  "bevy_asset_loader",
@@ -313,10 +312,9 @@ dependencies = [
  "atrl-common",
  "atrl-data",
  "atrl-map-gen",
- "atrl-map-renderer",
  "atrl-raws",
+ "atrl-renderer",
  "atrl-saveload",
- "atrl-ui",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "bevy-inspector-egui 0.14.0",
  "bevy_ecs_tilemap",
@@ -345,17 +343,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "atrl-map-renderer"
-version = "0.1.0"
-dependencies = [
- "atrl-common",
- "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "bevy_ecs_tilemap",
- "bevy_tileset",
- "iyes_loopless 0.9.0 (git+https://github.com/banana-studios/iyes_loopless.git)",
-]
-
-[[package]]
 name = "atrl-raws"
 version = "0.1.0"
 dependencies = [
@@ -370,25 +357,27 @@ dependencies = [
 ]
 
 [[package]]
-name = "atrl-saveload"
-version = "0.1.0"
-dependencies = [
- "atrl-common",
- "atrl-data",
- "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
-name = "atrl-ui"
+name = "atrl-renderer"
 version = "0.1.0"
 dependencies = [
  "atrl-common",
  "atrl-data",
  "atrl-raws",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bevy_ecs_tilemap",
+ "bevy_tileset",
  "iyes_loopless 0.9.0 (git+https://github.com/banana-studios/iyes_loopless.git)",
  "kayak_font",
  "kayak_ui",
+]
+
+[[package]]
+name = "atrl-saveload"
+version = "0.1.0"
+dependencies = [
+ "atrl-common",
+ "atrl-data",
+ "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]

@@ -112,10 +112,9 @@ pub mod prelude {
         pub use atrl_data::prelude::UiState::*;
         pub use atrl_data::prelude::*;
         pub use atrl_map_gen::prelude::*;
-        pub use atrl_map_renderer::prelude::*;
         pub use atrl_raws::prelude::*;
+        pub use atrl_renderer::prelude::*;
         pub use atrl_saveload::prelude::*;
-        pub use atrl_ui::prelude::*;
     }
     pub(crate) use import::*;
 

@@ -50,7 +50,7 @@ impl<T> CellularAutomataBuilder<T> {
 impl<T> MapArchitect<T> for CellularAutomataBuilder<T> {
     fn generate(&mut self, data: &mut MapGenData<T>) {
         let rect = match &self.rect {
-            Some(r) => r.clone(),
+            Some(r) => *r,
             None => Rectangle::new((0i32, 0), data.size - UVec2::new(1, 1)),
         };
 

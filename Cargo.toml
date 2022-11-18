@@ -35,9 +35,8 @@ release = [
   "atrl-data/release",
   "atrl-game/release",
   "atrl-map-gen/release",
-  "atrl-map-renderer/release",
+  "atrl-renderer/release",
   "atrl-raws/release",
-  "atrl-ui/release",
 ]
 
 # default configurations
@@ -56,9 +55,8 @@ debug = [
   "atrl-data/debug",
   "atrl-game/debug",
   "atrl-map-gen/debug",
-  "atrl-map-renderer/debug",
+  "atrl-renderer/debug",
   "atrl-raws/debug",
-  "atrl-ui/debug",
 ]
 
 # default configuration while developing
@@ -70,9 +68,8 @@ dev = [
   "atrl-data/dev",
   "atrl-game/dev",
   "atrl-map-gen/dev",
-  "atrl-map-renderer/dev",
+  "atrl-renderer/dev",
   "atrl-raws/dev",
-  "atrl-ui/dev",
 ]
 
 # Parallelism
@@ -109,26 +106,24 @@ panic         = 'abort'
 #########       Internal Crate Dependencies
 ################################
 [workspace.dependencies]
-atrl-camera            = { path = "crates/camera" }
-atrl-common            = { path = "crates/common" }
-atrl-data              = { path = "crates/data" }
-atrl-game              = { path = "crates/game" }
-atrl-macros            = { path = "crates/macros" }
-atrl-map-gen           = { path = "crates/map_gen" }
-atrl-map-renderer      = { path = "crates/map_renderer" }
-atrl-raws              = { path = "crates/raws" }
-atrl-saveload          = { path = "crates/saveload" }
-atrl-ui                = { path = "crates/ui" }
+atrl-camera   = { path = "crates/camera" }
+atrl-common   = { path = "crates/common" }
+atrl-data     = { path = "crates/data" }
+atrl-game     = { path = "crates/game" }
+atrl-macros   = { path = "crates/macros" }
+atrl-map-gen  = { path = "crates/map_gen" }
+atrl-raws     = { path = "crates/raws" }
+atrl-renderer   = { path = "crates/render" }
+atrl-saveload = { path = "crates/saveload" }
 
 [dependencies]
-atrl-camera          = { workspace = true }
-atrl-common          = { workspace = true }
-atrl-data            = { workspace = true }
-atrl-game            = { workspace = true }
-atrl-map-gen         = { workspace = true }
-atrl-map-renderer    = { workspace = true }
-atrl-raws            = { workspace = true }
-atrl-ui              = { workspace = true }
+atrl-camera  = { workspace = true }
+atrl-common  = { workspace = true }
+atrl-data    = { workspace = true }
+atrl-game    = { workspace = true }
+atrl-map-gen = { workspace = true }
+atrl-raws    = { workspace = true }
+atrl-renderer  = { workspace = true }
 
 ######################################
 #########       Bevy
@@ -166,7 +161,7 @@ version = "0.9"
 [workspace.dependencies.bevy_asset_loader]
 features = ["stageless", "2d", "progress_tracking_stageless"]
 git      = "https://github.com/banana-studios/bevy_asset_loader"
-rev       = "a1f6752d2b2ecb4d23b151b143ef53d27af7cca0"
+rev      = "a1f6752d2b2ecb4d23b151b143ef53d27af7cca0"
 
 [workspace.dependencies.bevy_common_assets]
 features = ["ron", "toml", "json"]
@@ -219,7 +214,7 @@ git = "https://github.com/banana-studios/iyes_loopless.git"
 [workspace.dependencies.iyes_progress]
 features = ["assets"]
 git      = "https://github.com/banana-studios/iyes_progress"
-rev       = "1f8726fb2daa87232f751d7ced86432e11a0000c"
+rev      = "1f8726fb2daa87232f751d7ced86432e11a0000c"
 
 ######################################
 #########       Random

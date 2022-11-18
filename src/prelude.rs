@@ -60,8 +60,7 @@ mod import {
     pub use atrl_data::prelude::UiState::*;
     pub use atrl_data::prelude::*;
     pub use atrl_game::prelude::*;
-    pub use atrl_map_renderer::prelude::*;
     pub use atrl_raws::prelude::*;
-    pub use atrl_ui::prelude::*;
+    pub use atrl_renderer::prelude::*;
 }
 pub use import::*;
