@@ -137,18 +137,32 @@ impl MapManager {
         rng: Box<dyn RngCore>,
         user_data: MapPassThroughData,
     ) -> MapGenData<MapPassThroughData> {
-        MapGenerator::new(size, name, starting_position, rng, ScatterBuilder::new(), user_data)
-            .with(CellularAutomataBuilder::new())
-            .with(
-                SetBuilder::new()
-                    .with_rect(Rectangle::new(
-                        starting_position.as_ivec2() - IVec2::new(1, 1),
-                        starting_position.as_ivec2() + IVec2::new(1, 1),
-                    ))
-                    .set_value(0),
-            )
-            .with(FinalizerBuilder::new(1, 2))
-            .generate()
+        if Prng::from_entropy().coin() {
+            MapGenerator::new(size, name, starting_position, rng, ScatterBuilder::new(), user_data)
+                .with(CellularAutomataBuilder::new())
+                .with(FinalizerBuilder::new(1, 2))
+                .with(
+                    SetBuilder::new()
+                        .with_rect(Rectangle::new(
+                            starting_position.as_ivec2() - IVec2::new(1, 1),
+                            starting_position.as_ivec2() + IVec2::new(1, 1),
+                        ))
+                        .set_value(1),
+                )
+                .generate()
+        } else {
+            MapGenerator::new(size, name, starting_position, rng, ScatterBuilder::new(), user_data)
+                .with(FinalizerBuilder::new(1, 4))
+                .with(
+                    SetBuilder::new()
+                        .with_rect(Rectangle::new(
+                            starting_position.as_ivec2() - IVec2::new(1, 1),
+                            starting_position.as_ivec2() + IVec2::new(1, 1),
+                        ))
+                        .set_value(1),
+                )
+                .generate()
+        }
     }
 
     pub fn get_terrain_map_around_point(

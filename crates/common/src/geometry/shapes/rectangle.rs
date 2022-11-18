@@ -170,21 +170,19 @@ impl Default for Rectangle {
 #[derive(Debug, Clone)]
 #[allow(clippy::module_name_repetitions)]
 pub struct RectPointIter {
-    curr: IVec2,
-    size: IVec2,
+    offset: IVec2,
+    max_offset: IVec2,
 
     /// The minimum corner point of the rect.
     pub min: IVec2,
-    /// The maximum corner point of the rect.
-    pub max: IVec2,
 }
 
 impl RectPointIter {
-    pub fn new(min: impl Size2d, max: impl Size2d) -> Self {
+    pub fn new(min: impl Point2d, max: impl Point2d) -> Self {
         let min = min.as_ivec2();
         let max = max.as_ivec2();
         let size = max - min;
-        Self { min, max, size, curr: IVec2::ZERO }
+        Self { min, max_offset: size, offset: IVec2::ZERO }
     }
 }
 
@@ -192,15 +190,15 @@ impl Iterator for RectPointIter {
     type Item = IVec2;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.curr.cmpge(self.max).any() {
+        if self.offset.y > self.max_offset.y {
             return None;
         }
 
-        let p = self.curr;
-        self.curr.x += 1;
-        if self.curr.x == self.size.x {
-            self.curr.x = 0;
-            self.curr.y += 1;
+        let p = self.offset;
+        self.offset.x += 1;
+        if self.offset.x > self.max_offset.x {
+            self.offset.x = 0;
+            self.offset.y += 1;
         }
         Some(self.min + p)
     }

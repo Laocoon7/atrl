@@ -9,6 +9,15 @@ where
         + (source_value - from_range.0) * (to_range.1 - to_range.0) / (from_range.1 - from_range.0)
 }
 
+pub fn map_range_u32(source_value: u32, from_range: (u32, u32), to_range: (u32, u32)) -> u32 {
+    let from_range_x = from_range.0 as i64;
+    let from_range_y = from_range.1 as i64;
+    let to_range_x = to_range.0 as i64;
+    let to_range_y = to_range.1 as i64;
+    let source = source_value as i64;
+    map_range(source, (from_range_x, from_range_y), (to_range_x, to_range_y)) as u32
+}
+
 pub fn get_range_bounds<T: Copy, R: RangeBounds<T>>(
     range: R,
     lower_unbounded: T,

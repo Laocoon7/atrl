@@ -132,13 +132,7 @@ impl From<MapGenData<MapPassThroughData>> for Map {
         for y in 0..data.size.height() {
             for x in 0..data.size.width() {
                 let v = *data.grid.get_unchecked((x, y));
-                match v {
-                    1 => terrain_types.set((x, y), TerrainType::Floor),
-                    2 => terrain_types.set((x, y), TerrainType::Wall),
-                    _ => terrain_types.set((x, y), TerrainType::None),
-                };
-                // FromPrimitive like this instead...
-                //terrain_types.set((x, y), v.into());
+                terrain_types.set((x, y), v.into());
             }
         }
 

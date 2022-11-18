@@ -38,7 +38,8 @@ impl<T> MapArchitect<T> for FinalizerBuilder<T> {
 
         rect.for_each(|v| {
             let value = *data.grid.get_unchecked(v);
-            data.grid.set(v, map_range(value, (0, u32::MAX), (self.min, self.max)));
+            let new_value = map_range_u32(value, (0, u32::MAX), (self.min, self.max));
+            data.grid.set(v, new_value);
         });
     }
 }
