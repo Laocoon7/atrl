@@ -3155,7 +3155,7 @@ checksum = "078e285eafdfb6c4b434e0d31e8cfcb5115b651496faca5749b88fafd4f23bfd"
 [[package]]
 name = "kayak_font"
 version = "0.1.0"
-source = "git+https://github.com/StarArawn/kayak_ui?branch=multi-context#c141fc354ad8b164d386afd2d4004a2ac2b1e8fd"
+source = "git+https://github.com/StarArawn/kayak_ui#54dbd6f0d58891a32e26b2cda6d37ebb170e4a0b"
 dependencies = [
  "anyhow",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -3167,7 +3167,7 @@ dependencies = [
 [[package]]
 name = "kayak_ui"
 version = "0.1.0"
-source = "git+https://github.com/StarArawn/kayak_ui?branch=multi-context#c141fc354ad8b164d386afd2d4004a2ac2b1e8fd"
+source = "git+https://github.com/StarArawn/kayak_ui#54dbd6f0d58891a32e26b2cda6d37ebb170e4a0b"
 dependencies = [
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "bitflags",
@@ -3185,7 +3185,7 @@ dependencies = [
 [[package]]
 name = "kayak_ui_macros"
 version = "0.1.0"
-source = "git+https://github.com/StarArawn/kayak_ui?branch=multi-context#c141fc354ad8b164d386afd2d4004a2ac2b1e8fd"
+source = "git+https://github.com/StarArawn/kayak_ui#54dbd6f0d58891a32e26b2cda6d37ebb170e4a0b"
 dependencies = [
  "find-crate",
  "proc-macro-crate",

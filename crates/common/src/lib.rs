@@ -122,6 +122,16 @@ mod events {
     pub use event_plugin::*;
 }
 
+pub mod fov {
+    mod adams_fov;
+    mod visibility_compute;
+    mod visibility_map;
+
+    pub use adams_fov::*;
+    pub(crate) use visibility_compute::*;
+    pub(crate) use visibility_map::*;
+}
+
 mod geometry {
     mod math {
         mod distance;
@@ -241,10 +251,13 @@ pub mod prelude {
         pub use crate::data::*;
         pub use crate::direction::*;
         pub use crate::events::*;
+        pub use crate::fov::*;
         pub use crate::geometry::*;
         pub use crate::grid::*;
         pub use crate::random::*;
         pub use crate::system_params::*;
+
+        pub use crate::fov;
 
         pub use crate::app_settings::*;
         pub use crate::common_plugin::*;

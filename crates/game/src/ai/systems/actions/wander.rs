@@ -18,63 +18,51 @@ pub struct Wander {
 pub fn wander_action(
     ctx: Res<GameContext>,
     map_q: Query<&GameMap>,
-    mut action_q: Query<(
-        &Name,
-        &Actor,
-        &mut ActionState,
-        &Wander,
-        &mut Transform,
-        &WorldPosition,
-        &Movement,
-    )>,
+    mut action_q: Query<(&Name, &Actor, &mut ActionState, &Wander)>,
+    mut spatial_q: Query<(&mut Transform, &WorldPosition, &Movement)>,
 ) {
     use ActionState::*;
 
-    for (
-        name,
-        Actor(_actor),
-        mut action_state,
-        _wander,
-        mut position,
-        world_pos,
-        movement_component,
-    ) in action_q.iter_mut()
-    {
-        match *action_state {
-            Executing => {}
-            Init => {
-                println!("Wander init");
-                continue;
+    for (name, Actor(actor), mut action_state, _wander) in action_q.iter_mut() {
+        if let Ok((mut position, world_pos, movement_component)) = spatial_q.get_mut(*actor) {
+            match *action_state {
+                Executing => {}
+                Init => {
+                    println!("Wander init");
+                    continue;
+                }
+                Requested => {
+                    println!("{} gonna start wandering!", name);
+                    *action_state = ActionState::Executing;
+                }
+                ActionState::Success => {
+                    println!("Wander success");
+                    continue;
+                }
+                Cancelled => {
+                    println!("Wander cancelled");
+                    *action_state = ActionState::Failure;
+                    continue;
+                }
+                Failure => {
+                    println!("Wander failed");
+                    continue;
+                }
             }
-            Requested => {
-                println!("{} gonna start wandering!", name);
-                *action_state = ActionState::Executing;
-            }
-            ActionState::Success => {
-                println!("Wander success");
-                continue;
-            }
-            Cancelled => {
-                println!("Wander cancelled");
-                *action_state = ActionState::Failure;
-                continue;
-            }
-            Failure => {
-                println!("Wander failed");
-                continue;
-            }
-        }
 
-        if let Some(map) = map_q.iter().find(|map| map.world_position == *world_pos) {
-            let rng = &mut ctx.get_random().prng;
-            let random_direction = rng.sample::<GridDirection>();
+            if let Some(map) = map_q.iter().find(|map| map.world_position == *world_pos) {
+                let rng = &mut ctx.get_random().prng;
+                let random_direction = rng.sample::<GridDirection>();
 
-            let position_vec = position.get();
-            let destination = position_vec + random_direction.coord().as_vec2();
+                let position_vec = position.get();
+                let destination = position_vec + random_direction.coord().as_vec2();
 
-            if map.can_move_through(destination, movement_component) {
-                info!("{} moved to {:?}", name, destination);
-                position.set_value(destination);
+                if map.can_move_through(destination, movement_component) {
+                    info!("{} moved to {:?}", name, destination);
+                    position.set_value(destination);
+                } else {
+                    *action_state = ActionState::Failure;
+                }
             } else {
                 *action_state = ActionState::Failure;
             }
