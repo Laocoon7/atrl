@@ -1,17 +1,23 @@
 [package]
-name = "atrl-map"
-version = "0.1.0"
-edition = "2021"
+categories  = ["games", "game-map", "map"]
+description = "Away Team Roguelike Game Utils"
+edition     = "2021"
+license     = "BlueOak-1.0.0"
+name        = "atrl-map"
+publish     = false
+readme      = "../README.md"
+repository  = "https://github.com/Laocoon7/atrl"
+version     = "0.1.0"
 
 [features]
-debug = []
-dev = []
+debug   = []
+dev     = []
 release = []
 
 [dependencies]
-atrl-common         = {workspace = true}
-bevy                = {workspace = true}
-banana_bevy_utils   = {workspace = true}
-bevy_ecs_tilemap    = {workspace = true}
-bevy_tileset        = {workspace = true}
-iyes_loopless       = {workspace = true}
+atrl-common       = { workspace = true }
+banana_bevy_utils = { workspace = true }
+bevy              = { workspace = true }
+bevy_ecs_tilemap  = { workspace = true }
+bevy_tileset      = { workspace = true }
+iyes_loopless     = { workspace = true }

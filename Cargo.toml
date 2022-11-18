@@ -239,12 +239,10 @@ version  = "0.8"
 # version = "0.17"
 
 [workspace.dependencies.kayak_ui]
-branch = "multi-context"
-git    = "https://github.com/StarArawn/kayak_ui"
+git = "https://github.com/StarArawn/kayak_ui"
 
 [workspace.dependencies.kayak_font]
-branch = "multi-context"
-git    = "https://github.com/StarArawn/kayak_ui"
+git = "https://github.com/StarArawn/kayak_ui"
 
 ######################################
 #########       Utility
