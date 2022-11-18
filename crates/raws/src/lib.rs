@@ -18,7 +18,6 @@ pub mod prelude {
 
     mod import {
         pub use atrl_common::prelude::*;
-        pub use banana_bevy_utils::prelude::*;
         pub use bevy::prelude::*;
         pub use bevy_asset_loader::prelude::*;
         pub use iyes_loopless::prelude::*;

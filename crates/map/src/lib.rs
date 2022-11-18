@@ -33,8 +33,6 @@ pub mod prelude {
             utils::{HashMap, HashSet},
         };
 
-        pub use banana_bevy_utils::prelude::*;
-
         pub use bevy_ecs_tilemap::prelude::*;
         pub use bevy_tileset::prelude::*;
 

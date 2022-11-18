@@ -15,6 +15,5 @@ dev     = []
 release = []
 
 [dependencies]
-banana_bevy_utils = { workspace = true }
 bevy              = { workspace = true }
 iyes_loopless     = { workspace = true }

@@ -16,7 +16,6 @@ release = []
 
 [dependencies]
 atrl-common       = { workspace = true }
-banana_bevy_utils = { workspace = true }
 bevy              = { workspace = true }
 bevy_ecs_tilemap  = { workspace = true }
 bevy_tileset      = { workspace = true }

@@ -15,8 +15,7 @@ dev     = []
 release = []
 
 [dependencies]
-atrl-common       = { path = "../common" }
-banana_bevy_utils = { workspace = true }
+atrl-common       = { workspace = true }
 bevy              = { workspace = true }
 bevy_asset_loader = { workspace = true }
 iyes_loopless     = { workspace = true }

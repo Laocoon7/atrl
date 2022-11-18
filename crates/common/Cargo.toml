@@ -17,7 +17,6 @@ release = []
 [dependencies]
 atrl-macros = { workspace = true }
 
-banana_bevy_utils      = { workspace = true }
 bevy                   = { workspace = true }
 bitvec                 = { workspace = true }
 iyes_loopless          = { workspace = true }

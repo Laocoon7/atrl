@@ -202,15 +202,11 @@ version  = "1"
 ######################################
 [workspace.dependencies.iyes_loopless]
 features = ["states"]
-git      = "https://github.com/banana-studios/iyes_loopless"
+git      = "https://github.com/IyesGames/iyes_loopless.git"
 
 [workspace.dependencies.iyes_progress]
 features = ["assets"]
 git      = "https://github.com/banana-studios/iyes_progress"
-
-[workspace.dependencies.banana_bevy_utils]
-features = ["states"]
-git      = "https://github.com/banana-studios/banana_bevy_utils"
 
 ######################################
 #########       Random
@@ -347,8 +343,6 @@ workspace = true
 [dependencies.iyes_loopless]
 workspace = true
 [dependencies.iyes_progress]
-workspace = true
-[dependencies.banana_bevy_utils]
 workspace = true
 [dependencies.noise]
 workspace = true

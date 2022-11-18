@@ -6,7 +6,11 @@ pub struct AIComponent {
     ai_type: AIType,
 }
 
-impl_new!(AIComponent, ai_type: AIType);
+impl AIComponent {
+    pub fn new(ai_type: AIType) -> Self {
+        Self { ai_type }
+    }
+}
 
 impl AIComponent {
     pub const fn human() -> Self {

@@ -97,7 +97,7 @@ impl TurnState {
 
         if let Some(next) = current.next() {
             bevy::log::info!("transitioning turnstate from {:?} to {:?}", current, next);
-            insert_resource!(commands, next);
+            commands.insert_resource(next);
         } else {
             bevy::log::error!("no next turnstate for {:?}.", current);
         }

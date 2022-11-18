@@ -30,7 +30,6 @@ pub mod prelude {
     mod import {
         pub use atrl_common::prelude::*;
         pub use atrl_raws::prelude::*;
-        pub use banana_bevy_utils::prelude::*;
         pub use bevy::{app::AppExit, prelude::*};
         pub use iyes_loopless::prelude::*;
         pub use kayak_ui::prelude::*;

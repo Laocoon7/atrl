@@ -220,7 +220,6 @@ dependencies = [
  "atrl-map",
  "atrl-raws",
  "atrl-ui",
- "banana_bevy_utils",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "bevy-inspector-egui 0.15.0-pre.0",
  "bevy_asset_loader",
@@ -234,7 +233,7 @@ dependencies = [
  "colored",
  "egui_dock",
  "embed-resource",
- "iyes_loopless",
+ "iyes_loopless 0.9.0 (git+https://github.com/IyesGames/iyes_loopless.git)",
  "iyes_progress",
  "kayak_font",
  "kayak_ui",
@@ -259,9 +258,8 @@ dependencies = [
 name = "atrl-camera"
 version = "0.1.0"
 dependencies = [
- "banana_bevy_utils",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "iyes_loopless",
+ "iyes_loopless 0.9.0 (git+https://github.com/IyesGames/iyes_loopless.git)",
 ]
 
 [[package]]
@@ -269,10 +267,9 @@ name = "atrl-common"
 version = "0.1.0"
 dependencies = [
  "atrl-macros",
- "banana_bevy_utils",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "bitvec",
- "iyes_loopless",
+ "iyes_loopless 0.9.0 (git+https://github.com/IyesGames/iyes_loopless.git)",
  "leafwing-input-manager",
  "noise",
  "num-derive",
@@ -298,13 +295,12 @@ dependencies = [
  "atrl-raws",
  "atrl-saveload",
  "atrl-ui",
- "banana_bevy_utils",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "bevy-inspector-egui 0.14.0",
  "bevy_ecs_tilemap",
  "bevy_tileset",
  "big-brain",
- "iyes_loopless",
+ "iyes_loopless 0.9.0 (git+https://github.com/IyesGames/iyes_loopless.git)",
  "leafwing-input-manager",
  "num-traits",
  "smart-default",
@@ -319,11 +315,10 @@ name = "atrl-map"
 version = "0.1.0"
 dependencies = [
  "atrl-common",
- "banana_bevy_utils",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "bevy_ecs_tilemap",
  "bevy_tileset",
- "iyes_loopless",
+ "iyes_loopless 0.9.0 (git+https://github.com/IyesGames/iyes_loopless.git)",
 ]
 
 [[package]]
@@ -331,10 +326,9 @@ name = "atrl-raws"
 version = "0.1.0"
 dependencies = [
  "atrl-common",
- "banana_bevy_utils",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "bevy_asset_loader",
- "iyes_loopless",
+ "iyes_loopless 0.9.0 (git+https://github.com/IyesGames/iyes_loopless.git)",
  "iyes_progress",
  "kayak_ui",
  "smart-default",
@@ -354,9 +348,8 @@ version = "0.1.0"
 dependencies = [
  "atrl-common",
  "atrl-raws",
- "banana_bevy_utils",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "iyes_loopless",
+ "iyes_loopless 0.9.0 (git+https://github.com/IyesGames/iyes_loopless.git)",
  "kayak_font",
  "kayak_ui",
 ]
@@ -377,15 +370,6 @@ name = "autocfg"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
-
-[[package]]
-name = "banana_bevy_utils"
-version = "0.1.0"
-source = "git+https://github.com/banana-studios/banana_bevy_utils#128080dfca97c3cce61debf3c3134d21cc4db701"
-dependencies = [
- "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "iyes_loopless",
-]
 
 [[package]]
 name = "base-x"
@@ -585,7 +569,7 @@ dependencies = [
  "anyhow",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "bevy_asset_loader_derive",
- "iyes_loopless",
+ "iyes_loopless 0.9.0 (git+https://github.com/banana-studios/iyes_loopless)",
  "iyes_progress",
 ]
 
@@ -3071,6 +3055,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "iyes_loopless"
+version = "0.9.0"
+source = "git+https://github.com/IyesGames/iyes_loopless.git#92ecd3cc6e97a833581f8a7caeb4a155fa649c08"
+dependencies = [
+ "bevy_app 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bevy_ecs 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bevy_time 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bevy_utils 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "iyes_progress"
 version = "0.6.0"
 source = "git+https://github.com/banana-studios/iyes_progress#1f8726fb2daa87232f751d7ced86432e11a0000c"
@@ -3079,7 +3074,7 @@ dependencies = [
  "bevy_asset 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "bevy_ecs 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "bevy_utils 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "iyes_loopless",
+ "iyes_loopless 0.9.0 (git+https://github.com/banana-studios/iyes_loopless)",
 ]
 
 [[package]]
