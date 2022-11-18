@@ -15,10 +15,12 @@ impl MapManager {
         &mut self,
         commands: &mut Commands,
         game_context: &mut ResMut<GameContext>,
+        tileset_name: Option<String>,
+        tileset_id: Option<u8>,
         tilesets: &Tilesets,
         world_position: WorldPosition,
     ) -> AtrlResult<Entity> {
-        println!("MapManager::get_or_generate({:?})", world_position);
+        info!("MapManager::get_or_generate({:?})", world_position);
 
         if !game_context.is_valid_world_position(world_position) {
             return Err(AtrlError::InvalidWorldPosition(*world_position));
@@ -46,6 +48,18 @@ impl MapManager {
         let map_name =
             format!("Map ({}, {}, {})", world_position.x, world_position.y, world_position.z);
 
+        let tileset = if let Some(name) = tileset_name {
+            tilesets
+                .get_by_name(&name)
+                .unwrap_or_else(|| panic!("Couldn't find tilemap_name: {}", &name))
+        } else if let Some(id) = tileset_id {
+            tilesets.get_by_id(&id).unwrap_or_else(|| panic!("Couldn't find tilemap_id: {:?}", id))
+        } else {
+            tilesets.get_by_id(&0).unwrap_or_else(|| panic!("Couldn't find tilemap_id: {:?}", 0))
+        };
+
+        let tileset_id = *tileset.id();
+
         let terrain_layer_entity = commands.spawn_empty().id();
         let feature_layer_entity = commands.spawn_empty().id();
         let item_layer_entity = commands.spawn_empty().id();
@@ -59,21 +73,15 @@ impl MapManager {
                 world_position,
                 random,
 
-                terrain_tileset_id: 0,
-                feature_tileset_id: 0,
-                item_tileset_id: 0,
+                terrain_tileset_id: tileset_id,
+                feature_tileset_id: tileset_id,
+                item_tileset_id: tileset_id,
 
                 terrain_layer_entity,
                 feature_layer_entity,
                 item_layer_entity,
             },
         ));
-
-        let tileset_count = tilesets.len() as f64 - 1.0;
-        let tileset_selection = (tileset_count * map_noise).round() as u8;
-        let tileset = tilesets
-            .get_by_id(&tileset_selection)
-            .unwrap_or_else(|| panic!("couldn't find tilemap_id: {:?}", tileset_selection));
 
         create_tilemap_on_entity(
             commands,
