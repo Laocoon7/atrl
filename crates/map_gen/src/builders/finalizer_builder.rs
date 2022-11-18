@@ -22,7 +22,7 @@ impl<T> MapArchitect<T> for FinalizerBuilder<T> {
     fn generate(&mut self, data: &mut MapGenData<T>) {
         let rect = match &self.rect {
             Some(r) => r.clone(),
-            None => Rectangle::new((0i32, 0), data.size),
+            None => Rectangle::new((0i32, 0), data.size - UVec2::new(1, 1)),
         };
 
         if !data.grid.in_bounds(rect.min()) || !data.grid.in_bounds(rect.max()) {

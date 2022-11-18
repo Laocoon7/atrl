@@ -35,7 +35,7 @@ pub(crate) fn update_tilemaps(
             }
         };
 
-        // TODO: Possible catch Vec<UVec2> of tiles that are not updated properly?
+        let mut check_next = Vec::new();
         if map.update_all {
             for y in 0..map.size.height() {
                 for x in 0..map.size.width() {
@@ -44,6 +44,8 @@ pub(crate) fn update_tilemaps(
                         if let Ok(mut tile_texture_index) = q_tiles.get_mut(entity) {
                             let index = (*map.terrain_types.get_unchecked((x, y))).into();
                             tile_texture_index.0 = index;
+                        } else {
+                            check_next.push(UVec2::new(x, y));
                         }
                     }
 
@@ -51,6 +53,8 @@ pub(crate) fn update_tilemaps(
                         if let Ok(mut tile_texture_index) = q_tiles.get_mut(entity) {
                             let index = (*map.feature_types.get_unchecked((x, y))).into();
                             tile_texture_index.0 = index;
+                        } else {
+                            check_next.push(UVec2::new(x, y));
                         }
                     }
 
@@ -65,6 +69,9 @@ pub(crate) fn update_tilemaps(
                 }
             }
 
+            for v in check_next.drain(..) {
+                map.update_tiles.insert(v);
+            }
             map.update_all = false;
         } else {
             let mut positions = std::mem::take(&mut map.update_tiles);
@@ -73,12 +80,16 @@ pub(crate) fn update_tilemaps(
                 if let Some(entity) = terrain_storage.get(&tile_pos) {
                     if let Ok(mut tile_texture_index) = q_tiles.get_mut(entity) {
                         tile_texture_index.0 = (*map.terrain_types.get_unchecked(position)).into();
+                    } else {
+                        map.update_tiles.insert(UVec2::new(tile_pos.x, tile_pos.y));
                     }
                 }
 
                 if let Some(entity) = feature_storage.get(&tile_pos) {
                     if let Ok(mut tile_texture_index) = q_tiles.get_mut(entity) {
                         tile_texture_index.0 = (*map.feature_types.get_unchecked(position)).into();
+                    } else {
+                        map.update_tiles.insert(UVec2::new(tile_pos.x, tile_pos.y));
                     }
                 }
 

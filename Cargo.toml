@@ -166,6 +166,7 @@ version = "0.9"
 [workspace.dependencies.bevy_asset_loader]
 features = ["stageless", "2d", "progress_tracking_stageless"]
 git      = "https://github.com/banana-studios/bevy_asset_loader"
+rev       = "a1f6752d2b2ecb4d23b151b143ef53d27af7cca0"
 
 [workspace.dependencies.bevy_common_assets]
 features = ["ron", "toml", "json"]
@@ -212,11 +213,13 @@ version  = "1"
 ######################################
 [workspace.dependencies.iyes_loopless]
 features = ["states"]
-git      = "https://github.com/IyesGames/iyes_loopless.git"
+#git      = "https://github.com/IyesGames/iyes_loopless.git"
+git = "https://github.com/banana-studios/iyes_loopless.git"
 
 [workspace.dependencies.iyes_progress]
 features = ["assets"]
 git      = "https://github.com/banana-studios/iyes_progress"
+rev       = "1f8726fb2daa87232f751d7ced86432e11a0000c"
 
 ######################################
 #########       Random

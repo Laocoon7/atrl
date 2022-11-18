@@ -1,8 +1,6 @@
 mod builders {
     mod cellular_automata_builder;
     pub use cellular_automata_builder::*;
-    mod clear_builder;
-    pub use clear_builder::*;
     mod finalizer_builder;
     pub use finalizer_builder::*;
     mod scatter_builder;

@@ -139,10 +139,14 @@ impl MapManager {
     ) -> MapGenData<MapPassThroughData> {
         MapGenerator::new(size, name, starting_position, rng, ScatterBuilder::new(), user_data)
             .with(CellularAutomataBuilder::new())
-            .with(ClearBuilder::new().with_rect(Rectangle::new(
-                starting_position.as_ivec2() - IVec2::new(1, 1),
-                starting_position.as_ivec2() + IVec2::new(1, 1),
-            )))
+            .with(
+                SetBuilder::new()
+                    .with_rect(Rectangle::new(
+                        starting_position.as_ivec2() - IVec2::new(1, 1),
+                        starting_position.as_ivec2() + IVec2::new(1, 1),
+                    ))
+                    .set_value(0),
+            )
             .with(FinalizerBuilder::new(1, 2))
             .generate()
     }
