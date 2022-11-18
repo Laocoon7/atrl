@@ -200,6 +200,46 @@ impl<T: GridParam> Grid<T> {
 }
 
 ///////////////////////////////////////////////////////////////////////////
+// Blit
+///////////////////////////////////////////////////////////////////////////
+
+impl<T: GridParam + Clone> Grid<T> {
+    pub fn blit_clone(
+        &mut self,
+        to: impl Point2d,
+        source: &Grid<T>,
+        from: impl Point2d,
+        size: impl Size2d,
+    ) {
+        for y in 0..size.height() {
+            for x in 0..size.width() {
+                if let Some(val) = source.get((x + from.x() as u32, y + from.y() as u32)) {
+                    self.set((x + to.x() as u32, y + to.y() as u32), val.clone());
+                }
+            }
+        }
+    }
+}
+
+impl<T: GridParam + Copy> Grid<T> {
+    pub fn blit_copy(
+        &mut self,
+        to: impl Point2d,
+        source: &Grid<T>,
+        from: impl Point2d,
+        size: impl Size2d,
+    ) {
+        for y in 0..size.height() {
+            for x in 0..size.width() {
+                if let Some(val) = source.get((x + from.x() as u32, y + from.y() as u32)) {
+                    self.set((x + to.x() as u32, y + to.y() as u32), *val);
+                }
+            }
+        }
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////
 // Row / Column Iterators
 ///////////////////////////////////////////////////////////////////////////
 

@@ -156,14 +156,10 @@ mod geometry {
         pub use line::*;
         mod polygon;
         pub use polygon::*;
-        mod ray;
-        pub use ray::*;
         mod rectangle;
         pub use rectangle::*;
         //mod old_rectangle;
         //pub use old_rectangle::*;
-        mod segment;
-        pub use segment::*;
         mod triangle;
         pub use triangle::*;
     }

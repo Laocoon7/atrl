@@ -127,8 +127,8 @@ impl MapManager {
         local_position: UVec2,
         size: impl Size2d,
         q_map: Query<&GameMap>,
-    ) -> Grid<VisionType> {
-        let grid = Grid::new_default(size);
+    ) -> Grid<TerrainType> {
+        let mut grid = Grid::new_default(size);
 
         let half_size = size.as_ivec2() / 2;
         let local_position = local_position.as_ivec2();
@@ -157,10 +157,10 @@ impl MapManager {
                     let start_y = GRID_HEIGHT as i32 + bottom;
                     let end_y = GRID_HEIGHT as i32;
                     let bounds = ((start_x, start_y), (end_x, end_y));
-                    grid.blit(
+                    grid.blit_copy(
                         (index_x, index_y),
-                        map.terrain_types.get(bounds.0),
                         &map.terrain_types,
+                        bounds.0,
                         bounds.1.as_ivec2() - bounds.0.as_ivec2(),
                     );
                     written_x = end_x - start_x;
@@ -182,10 +182,10 @@ impl MapManager {
                     let start_y = GRID_HEIGHT as i32 + bottom;
                     let end_y = GRID_HEIGHT as i32;
                     let bounds = ((start_x, start_y), (end_x, end_y));
-                    grid.blit(
+                    grid.blit_copy(
                         (index_x, index_y),
-                        map.terrain_types.get(bounds.0),
                         &map.terrain_types,
+                        bounds.0,
                         bounds.1.as_ivec2() - bounds.0.as_ivec2(),
                     );
                     written_x = end_x - start_x;
@@ -207,10 +207,10 @@ impl MapManager {
                     let start_y = GRID_HEIGHT as i32 + bottom;
                     let end_y = GRID_HEIGHT as i32;
                     let bounds = ((start_x, start_y), (end_x, end_y));
-                    grid.blit(
+                    grid.blit_copy(
                         (index_x, index_y),
-                        map.terrain_types.get(bounds.0),
                         &map.terrain_types,
+                        bounds.0,
                         bounds.1.as_ivec2() - bounds.0.as_ivec2(),
                     );
                     written_y = end_y - start_y;
@@ -233,10 +233,10 @@ impl MapManager {
                     let start_y = bottom.max(0);
                     let end_y = top.min(GRID_HEIGHT as i32 - 1);
                     let bounds = ((start_x, start_y), (end_x, end_y));
-                    grid.blit(
+                    grid.blit_copy(
                         (index_x, index_y),
-                        map.terrain_types.get(bounds.0),
                         &map.terrain_types,
+                        bounds.0,
                         bounds.1.as_ivec2() - bounds.0.as_ivec2(),
                     );
                     written_x = end_x - start_x;
@@ -254,10 +254,10 @@ impl MapManager {
                 let start_y = bottom.max(0);
                 let end_y = top.min(GRID_HEIGHT as i32 - 1);
                 let bounds = ((start_x, start_y), (end_x, end_y));
-                grid.blit(
+                grid.blit_copy(
                     (index_x, index_y),
-                    map.terrain_types.get(bounds.0),
                     &map.terrain_types,
+                    bounds.0,
                     bounds.1.as_ivec2() - bounds.0.as_ivec2(),
                 );
                 written_x = end_x - start_x;
@@ -278,10 +278,10 @@ impl MapManager {
                     let start_y = bottom.max(0);
                     let end_y = top.min(GRID_HEIGHT as i32 - 1);
                     let bounds = ((start_x, start_y), (end_x, end_y));
-                    grid.blit(
+                    grid.blit_copy(
                         (index_x, index_y),
-                        map.terrain_types.get(bounds.0),
                         &map.terrain_types,
+                        bounds.0,
                         bounds.1.as_ivec2() - bounds.0.as_ivec2(),
                     );
                     written_y = end_y - start_y;
@@ -304,10 +304,10 @@ impl MapManager {
                     let start_y = 0;
                     let end_y = top - GRID_HEIGHT as i32;
                     let bounds = ((start_x, start_y), (end_x, end_y));
-                    grid.blit(
+                    grid.blit_copy(
                         (index_x, index_y),
-                        map.terrain_types.get(bounds.0),
                         &map.terrain_types,
+                        bounds.0,
                         bounds.1.as_ivec2() - bounds.0.as_ivec2(),
                     );
                     written_x = end_x - start_x;
@@ -329,10 +329,10 @@ impl MapManager {
                     let start_y = 0;
                     let end_y = top - GRID_HEIGHT as i32;
                     let bounds = ((start_x, start_y), (end_x, end_y));
-                    grid.blit(
+                    grid.blit_copy(
                         (index_x, index_y),
-                        map.terrain_types.get(bounds.0),
                         &map.terrain_types,
+                        bounds.0,
                         bounds.1.as_ivec2() - bounds.0.as_ivec2(),
                     );
                     written_x = end_x - start_x;
@@ -354,10 +354,10 @@ impl MapManager {
                     let start_y = 0;
                     let end_y = top - GRID_HEIGHT as i32;
                     let bounds = ((start_x, start_y), (end_x, end_y));
-                    grid.blit(
+                    grid.blit_copy(
                         (index_x, index_y),
-                        map.terrain_types.get(bounds.0),
                         &map.terrain_types,
+                        bounds.0,
                         bounds.1.as_ivec2() - bounds.0.as_ivec2(),
                     );
                 }

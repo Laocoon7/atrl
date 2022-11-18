@@ -1,7 +1,7 @@
 use crate::prelude::*;
 use std::ops::Div;
 
-#[derive(Serialize, Deserialize, Debug, Clone, Eq, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq)]
 pub struct Rectangle {
     min: IVec2,
     max: IVec2,
