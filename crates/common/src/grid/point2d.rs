@@ -78,10 +78,7 @@ pub trait Point2d: Clone + Copy {
 
     #[inline]
     fn mid_point(&self, point: impl Point2d) -> IVec2 {
-        IVec2 {
-            x: (self.x() + point.x()) / 2,
-            y: (self.y() + point.y()) / 2
-        }
+        IVec2 { x: (self.x() + point.x()) / 2, y: (self.y() + point.y()) / 2 }
     }
 
     #[inline]

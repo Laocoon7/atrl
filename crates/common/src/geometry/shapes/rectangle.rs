@@ -112,21 +112,13 @@ impl Rectangle {
     pub fn as_triangles(&self) -> (Triangle, Triangle) {
         let max = IVec2::new(self.right(), self.top());
         let min = IVec2::new(self.left(), self.bottom());
-        (
-            Triangle::new(self.min(), max, min),
-            Triangle::new(self.max(), max, min),
-        )
+        (Triangle::new(self.min(), max, min), Triangle::new(self.max(), max, min))
     }
 
     pub fn as_polygon(&self) -> Polygon {
         let max = IVec2::new(self.right(), self.top());
         let bottom_left = IVec2::new(self.left(), self.bottom());
-        Polygon::new(vec![
-            self.min,
-            max,
-            self.max,
-            bottom_left,
-        ])
+        Polygon::new(vec![self.min, max, self.max, bottom_left])
     }
 
     pub fn as_ellipse(&self) -> Ellipse {

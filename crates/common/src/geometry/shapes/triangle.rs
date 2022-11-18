@@ -25,11 +25,7 @@ pub struct Triangle {
 }
 
 impl Triangle {
-    pub fn new(
-        point1: impl Point2d,
-        point2: impl Point2d,
-        point3: impl Point2d,
-    ) -> Self {
+    pub fn new(point1: impl Point2d, point2: impl Point2d, point3: impl Point2d) -> Self {
         let points = [point1.as_ivec2(), point2.as_ivec2(), point3.as_ivec2()];
         let angles = [
             points[0].angle_to(points[1]),
@@ -43,35 +39,33 @@ impl Triangle {
             TriangleAngleType::Equiangular
         } else if angles.iter().all(|a| a.abs() < 90.0) {
             TriangleAngleType::Acute
-        }  else { //else if angles.iter().any(|a| a.abs() > 90.0) {
+        } else {
+            //else if angles.iter().any(|a| a.abs() > 90.0) {
             TriangleAngleType::Obtuse
         };
 
-
-        let side_type = if
-        DistanceAlg::PythagorasSquared.distance2d(points[0], points[1]) == DistanceAlg::PythagorasSquared.distance2d(points[1], points[2]) &&
-        DistanceAlg::PythagorasSquared.distance2d(points[2], points[0]) == DistanceAlg::PythagorasSquared.distance2d(points[1], points[2])
+        let side_type = if DistanceAlg::PythagorasSquared.distance2d(points[0], points[1])
+            == DistanceAlg::PythagorasSquared.distance2d(points[1], points[2])
+            && DistanceAlg::PythagorasSquared.distance2d(points[2], points[0])
+                == DistanceAlg::PythagorasSquared.distance2d(points[1], points[2])
         {
             TriangleSideType::Equilateral
-        } else if
-        DistanceAlg::PythagorasSquared.distance2d(points[0], points[1]) == DistanceAlg::PythagorasSquared.distance2d(points[1], points[2]) ||
-        DistanceAlg::PythagorasSquared.distance2d(points[2], points[0]) == DistanceAlg::PythagorasSquared.distance2d(points[1], points[2]) ||
-        DistanceAlg::PythagorasSquared.distance2d(points[2], points[0]) == DistanceAlg::PythagorasSquared.distance2d(points[0], points[1])
+        } else if DistanceAlg::PythagorasSquared.distance2d(points[0], points[1])
+            == DistanceAlg::PythagorasSquared.distance2d(points[1], points[2])
+            || DistanceAlg::PythagorasSquared.distance2d(points[2], points[0])
+                == DistanceAlg::PythagorasSquared.distance2d(points[1], points[2])
+            || DistanceAlg::PythagorasSquared.distance2d(points[2], points[0])
+                == DistanceAlg::PythagorasSquared.distance2d(points[0], points[1])
         {
             TriangleSideType::Isosceles
         } else {
             TriangleSideType::Scalene
         };
 
-        let mut triangle = Self {
-            points,
-            angles,
-            angle_type,
-            side_type,
-            center: IVec2::new(0, 0)
-        };
+        let mut triangle = Self { points, angles, angle_type, side_type, center: IVec2::new(0, 0) };
 
-        triangle.center = IVec2::new(triangle.left(), triangle.bottom()).mid_point(IVec2::new(triangle.right(), triangle.top()));
+        triangle.center = IVec2::new(triangle.left(), triangle.bottom())
+            .mid_point(IVec2::new(triangle.right(), triangle.top()));
         triangle
     }
 }

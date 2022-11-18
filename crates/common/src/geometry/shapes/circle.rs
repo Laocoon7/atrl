@@ -48,7 +48,10 @@ impl Shape for Circle {
 
     /// Returns [center, edge_at_0_degrees]
     fn points(&self) -> Vec<IVec2> {
-        vec![self.center, Point2d::as_ivec2(&IVec2::from_angle(self.center, self.radius as f32, 0.0))]
+        vec![
+            self.center,
+            Point2d::as_ivec2(&IVec2::from_angle(self.center, self.radius as f32, 0.0)),
+        ]
     }
 
     #[inline]

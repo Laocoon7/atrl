@@ -8,10 +8,7 @@ pub struct Ellipse {
 
 impl Ellipse {
     pub fn new(center: impl Point2d, size: impl Size2d) -> Self {
-        Self {
-            center: center.as_ivec2(),
-            size: size.as_uvec2()
-        }
+        Self { center: center.as_ivec2(), size: size.as_uvec2() }
     }
 }
 

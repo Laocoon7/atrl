@@ -84,7 +84,12 @@ impl Shape for Line {
             LineType::Vertical => {
                 self.start.x == point.x && self.start.y <= point.y && point.y <= self.end.y
             }
-            LineType::Angled => (DistanceAlg::Pythagoras.distance2d(self.start, point) + DistanceAlg::Pythagoras.distance2d(self.end, point)).floor() as u32 == self.len, // TODO: CHECK THIS
+            LineType::Angled => {
+                (DistanceAlg::Pythagoras.distance2d(self.start, point)
+                    + DistanceAlg::Pythagoras.distance2d(self.end, point))
+                .floor() as u32
+                    == self.len
+            } // TODO: CHECK THIS
         }
     }
 

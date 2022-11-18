@@ -23,7 +23,10 @@ impl Polygon {
         };
         poly.center =
             IVec2::new(poly.left(), poly.top()).mid_point(IVec2::new(poly.right(), poly.bottom()));
-        let dists: Vec<f32> = points.iter().map(|p| DistanceAlg::PythagorasSquared.distance2d(*p, poly.center)).collect();
+        let dists: Vec<f32> = points
+            .iter()
+            .map(|p| DistanceAlg::PythagorasSquared.distance2d(*p, poly.center))
+            .collect();
         poly.is_regular = dists.iter().all(|dist| dist == &dists[0]);
         poly
     }
@@ -110,7 +113,8 @@ impl Polygon {
 
     /// Creates a circle using the average point distance from the center
     pub fn as_avg_circle(&self) -> Circle {
-        let total: f32 = self.points.iter().map(|p| DistanceAlg::Pythagoras.distance2d(*p, self.center)).sum();
+        let total: f32 =
+            self.points.iter().map(|p| DistanceAlg::Pythagoras.distance2d(*p, self.center)).sum();
         let radius = total / self.points.len() as f32;
         Circle::new(self.center, radius.floor() as u32)
     }
