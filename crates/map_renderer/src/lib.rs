@@ -4,7 +4,7 @@
 
 mod components {
     mod tileset_identity;
-    pub use tileset_identity::*;
+    pub(crate) use tileset_identity::*;
 }
 
 mod functions {
@@ -23,9 +23,10 @@ mod systems {
     pub(crate) use load_tilesets::*;
 }
 
-mod map_plugin;
-mod tilemap_settings;
+mod map_renderer_plugin;
+mod map_renderer_settings;
 
+#[allow(unused_imports)]
 pub mod prelude {
     mod imports {
         pub use bevy::{
@@ -34,6 +35,7 @@ pub mod prelude {
         };
 
         pub use bevy_ecs_tilemap::prelude::*;
+
         pub use bevy_tileset::prelude::*;
 
         pub use iyes_loopless::prelude::*;
@@ -42,17 +44,11 @@ pub mod prelude {
     }
     pub(crate) use imports::*;
 
-    // Components are used internally
-    // Don't add components to the external prelude...
-    pub(crate) use crate::components::*;
-    // Systems should be loaded by the plugin...
-    // Don't add systems to the external prelude...
-    pub(crate) use crate::systems::*;
-    // Resources are used internally
-    // Don't add resources to the external prelude...
-    pub(crate) use crate::resources::*;
-
+    pub use crate::components::*;
     pub use crate::functions::*;
-    pub use crate::map_plugin::*;
-    pub use crate::tilemap_settings::*;
+    pub use crate::resources::*;
+    pub use crate::systems::*;
+
+    pub use crate::map_renderer_plugin::*;
+    pub use crate::map_renderer_settings::*;
 }

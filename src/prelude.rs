@@ -59,7 +59,7 @@ mod import {
     pub use atrl_common::prelude::UiState::*;
     pub use atrl_common::prelude::*;
     pub use atrl_game::prelude::*;
-    pub use atrl_map::prelude::*;
+    pub use atrl_map_renderer::prelude::*;
     pub use atrl_raws::prelude::*;
     pub use atrl_ui::prelude::*;
 }

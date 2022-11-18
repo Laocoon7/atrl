@@ -1,17 +1,17 @@
 use crate::prelude::*;
 
-pub struct GameMapPlugin<T> {
+pub struct MapPlugin<T> {
     pub state_construct: T,
     pub state_running: T,
 }
 
-impl<T: StateNext> GameMapPlugin<T> {
+impl<T: StateNext> MapPlugin<T> {
     pub fn new(state_construct: T, state_running: T) -> Self {
         Self { state_construct, state_running }
     }
 }
 
-impl<T: StateNext> Plugin for GameMapPlugin<T> {
+impl<T: StateNext> Plugin for MapPlugin<T> {
     fn build(&self, app: &mut App) {
         app.insert_resource(MapManager::new())
             .add_exit_system_set(

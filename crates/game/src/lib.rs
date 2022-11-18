@@ -23,9 +23,8 @@ mod ai {
     mod ai_plugin;
     pub use ai_plugin::*;
 }
-pub use ai::*;
 
-mod game_map {
+mod map {
     mod resources {
         mod map_manager;
         pub use map_manager::*;
@@ -34,16 +33,16 @@ mod game_map {
 
     mod systems {
         mod load_first_map;
-        mod update_tilemaps;
-        mod wait_for_tilesets_to_load;
         pub use load_first_map::*;
+        mod update_tilemaps;
         pub use update_tilemaps::*;
+        mod wait_for_tilesets_to_load;
         pub use wait_for_tilesets_to_load::*;
     }
     pub use systems::*;
 
-    mod game_map_plugin;
-    pub use game_map_plugin::*;
+    mod map_plugin;
+    pub use map_plugin::*;
 }
 
 mod map_gen {
@@ -139,7 +138,7 @@ pub mod prelude {
         pub use atrl_common::prelude::TurnState::*;
         pub use atrl_common::prelude::UiState::*;
         pub use atrl_common::prelude::*;
-        pub use atrl_map::prelude::*;
+        pub use atrl_map_renderer::prelude::*;
         pub use atrl_raws::prelude::*;
         pub use atrl_saveload::prelude::*;
         pub use atrl_ui::prelude::*;
@@ -147,7 +146,7 @@ pub mod prelude {
     pub(crate) use import::*;
 
     pub use crate::ai::*;
-    pub use crate::game_map::*;
+    pub use crate::map::*;
     pub use crate::map_gen::*;
     pub use crate::player::*;
     pub use crate::spawner::*;

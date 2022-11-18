@@ -33,7 +33,7 @@ release = [
   "atrl-camera/release",
   "atrl-common/release",
   "atrl-game/release",
-  "atrl-map/release",
+  "atrl-map-renderer/release",
   "atrl-raws/release",
   "atrl-ui/release",
 ]
@@ -52,7 +52,7 @@ debug = [
   "atrl-camera/debug",
   "atrl-common/debug",
   "atrl-game/debug",
-  "atrl-map/debug",
+  "atrl-map-renderer/debug",
   "atrl-raws/debug",
   "atrl-ui/debug",
 ]
@@ -64,7 +64,7 @@ dev = [
   "atrl-camera/dev",
   "atrl-common/dev",
   "atrl-game/dev",
-  "atrl-map/dev",
+  "atrl-map-renderer/dev",
   "atrl-raws/dev",
   "atrl-ui/dev",
 ]
@@ -103,20 +103,20 @@ panic         = 'abort'
 #########       Internal Crate Dependencies
 ################################
 [workspace.dependencies]
-atrl-camera   = { path = "crates/camera" }
-atrl-common   = { path = "crates/common" }
-atrl-game     = { path = "crates/game" }
-atrl-macros   = { path = "crates/macros" }
-atrl-map      = { path = "crates/map" }
-atrl-raws     = { path = "crates/raws" }
-atrl-saveload = { path = "crates/saveload" }
-atrl-ui       = { path = "crates/ui" }
+atrl-camera            = { path = "crates/camera" }
+atrl-common            = { path = "crates/common" }
+atrl-game              = { path = "crates/game" }
+atrl-macros            = { path = "crates/macros" }
+atrl-map-renderer      = { path = "crates/map_renderer" }
+atrl-raws              = { path = "crates/raws" }
+atrl-saveload          = { path = "crates/saveload" }
+atrl-ui                = { path = "crates/ui" }
 
 [dependencies]
 atrl-camera = { workspace = true }
 atrl-common = { workspace = true }
 atrl-game   = { workspace = true }
-atrl-map    = { workspace = true }
+atrl-map-renderer    = { workspace = true }
 atrl-raws   = { workspace = true }
 atrl-ui     = { workspace = true }
 
