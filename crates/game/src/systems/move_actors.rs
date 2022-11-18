@@ -1,7 +1,7 @@
 use crate::prelude::*;
 
 pub fn move_actors(
-    q_map: Query<&GameMap>,
+    q_map: Query<&Map>,
     mut move_events: EventReader<WantsToMove>,
     mut pos_q: Query<(&mut Transform, &WorldPosition, &Movement)>,
 ) {

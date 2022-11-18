@@ -1,5 +1,3 @@
-use bevy::ecs::entity;
-
 use crate::prelude::*;
 
 #[derive(Default, Resource)]
@@ -36,16 +34,40 @@ impl MapManager {
             world_position.y,
             world_position.z,
         );
+        let mut random = Random::new(map_seed);
+        let rng = Box::new(Pcg64::seed_from_u64(random.prng.next_u64()));
+
         let map_noise = game_context.map_manager_random.noise.get(
             world_position.x,
             world_position.y,
             world_position.z,
         );
-        let map_noise = (map_noise + 1.0) * 0.5; // TODO: Verify noise.get() returns (-1, 1)
+        let map_noise = (map_noise + 1.0) * 0.5;
         let map_name =
             format!("Map ({}, {}, {})", world_position.x, world_position.y, world_position.z);
 
-        let mut map = Self::generate_map(&map_name, map_seed, world_position)?;
+        let terrain_layer_entity = commands.spawn_empty().id();
+        let feature_layer_entity = commands.spawn_empty().id();
+        let item_layer_entity = commands.spawn_empty().id();
+
+        let map = Map::from(Self::generate_map(
+            [GRID_WIDTH, GRID_HEIGHT],
+            &map_name,
+            (GRID_WIDTH / 2, GRID_HEIGHT / 2),
+            rng,
+            MapPassThroughData {
+                world_position: world_position,
+                random,
+
+                terrain_tileset_id: 0,
+                feature_tileset_id: 0,
+                item_tileset_id: 0,
+
+                terrain_layer_entity,
+                feature_layer_entity,
+                item_layer_entity,
+            },
+        ));
 
         let tileset_count = tilesets.len() as f64 - 1.0;
         let tileset_selection = (tileset_count * map_noise).round() as u8;
@@ -53,44 +75,43 @@ impl MapManager {
             .get_by_id(&tileset_selection)
             .unwrap_or_else(|| panic!("couldn't find tilemap_id: {:?}", tileset_selection));
 
-        let terrain_layer = create_tilemap(
+        create_tilemap_on_entity(
             commands,
+            terrain_layer_entity,
             [GRID_WIDTH, GRID_HEIGHT],
             f32::from(MapLayer::Terrain),
             tileset,
             1.0,
         );
-        let feature_layer = create_tilemap(
+        create_tilemap_on_entity(
             commands,
+            feature_layer_entity,
             [GRID_WIDTH, GRID_HEIGHT],
             f32::from(MapLayer::Features),
             tileset,
             1.0,
         );
-        let item_layer = create_tilemap(
+        create_tilemap_on_entity(
             commands,
+            item_layer_entity,
             [GRID_WIDTH, GRID_HEIGHT],
             f32::from(MapLayer::Items),
             tileset,
             1.0,
         );
 
-        commands.entity(terrain_layer).insert(Name::new(format!(
+        commands.entity(terrain_layer_entity).insert(Name::new(format!(
             "TerrainLayer ({}, {}, {})",
             world_position.x, world_position.y, world_position.z
         )));
-        commands.entity(feature_layer).insert(Name::new(format!(
+        commands.entity(feature_layer_entity).insert(Name::new(format!(
             "FeatureLayer ({}, {}, {})",
             world_position.x, world_position.y, world_position.z
         )));
-        commands.entity(item_layer).insert(Name::new(format!(
+        commands.entity(item_layer_entity).insert(Name::new(format!(
             "ItemLayer ({}, {}, {})",
             world_position.x, world_position.y, world_position.z
         )));
-
-        map.terrain_layer_entity = Some(terrain_layer);
-        map.feature_layer_entity = Some(feature_layer);
-        map.item_layer_entity = Some(item_layer);
 
         let map_entity = commands
             .spawn((
@@ -101,24 +122,29 @@ impl MapManager {
                 )),
                 SpatialBundle::default(),
             ))
-            .add_child(terrain_layer)
-            .add_child(feature_layer)
-            .add_child(item_layer)
+            .add_child(terrain_layer_entity)
+            .add_child(feature_layer_entity)
+            .add_child(item_layer_entity)
             .id();
 
         Ok(map_entity)
     }
 
-    fn generate_map(name: &str, seed: u64, world_position: WorldPosition) -> AtrlResult<GameMap> {
-        let mut random = Random::new(seed);
-        let (start_x, start_y) = random_start_position(&mut random);
-        let chain = BuilderChain::new([GRID_WIDTH, GRID_HEIGHT], random, world_position, name)
-            .start_with(CellularAutomataArchitect::new())
-            .with(RoomMapArchitect::new())
-            .with(AreaStartingPosition::new(start_x, start_y))
-            .generate();
-
-        Ok(chain.get_map())
+    fn generate_map(
+        size: impl Size2d,
+        name: &str,
+        starting_position: impl Point2d,
+        rng: Box<dyn RngCore>,
+        user_data: MapPassThroughData,
+    ) -> MapGenData<MapPassThroughData> {
+        MapGenerator::new(size, name, starting_position, rng, ScatterBuilder::new(), user_data)
+            .with(CellularAutomataBuilder::new())
+            .with(ClearBuilder::new().with_rect(Rectangle::new(
+                starting_position.as_ivec2() - IVec2::new(1, 1),
+                starting_position.as_ivec2() + IVec2::new(1, 1),
+            )))
+            .with(FinalizerBuilder::new(1, 2))
+            .generate()
     }
 
     pub fn get_terrain_map_around_point(
@@ -126,7 +152,7 @@ impl MapManager {
         world_position: WorldPosition,
         local_position: UVec2,
         size: impl Size2d,
-        q_map: Query<&GameMap>,
+        q_map: Query<&Map>,
     ) -> Grid<TerrainType> {
         let mut grid = Grid::new_default(size);
 

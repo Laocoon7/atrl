@@ -17,7 +17,7 @@ pub struct Wander {
 
 pub fn wander_action(
     ctx: Res<GameContext>,
-    map_q: Query<&GameMap>,
+    map_q: Query<&Map>,
     mut action_q: Query<(&Name, &Actor, &mut ActionState, &Wander)>,
     mut spatial_q: Query<(&mut Transform, &WorldPosition, &Movement)>,
 ) {

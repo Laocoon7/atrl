@@ -32,12 +32,11 @@ pub enum TurnState {
 pub enum GameState {
     #[default]
     Initializing,
+    AssetLoad(AssetLoadState),
+    Ui(UiState),
+    Construct(ConstructState),
     InGame,
     Quit,
-
-    Ui(UiState),
-    AssetLoad(AssetLoadState),
-    Construct(ConstructState),
 }
 
 /**

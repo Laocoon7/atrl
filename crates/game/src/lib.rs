@@ -45,37 +45,6 @@ mod map {
     pub use map_plugin::*;
 }
 
-mod map_gen {
-    mod builders {
-        mod cellular_automata;
-        mod rooms;
-        pub use cellular_automata::*;
-        pub use rooms::*;
-    }
-    pub use builders::*;
-
-    mod meta {
-        mod area_points {
-            mod area_ending_point;
-            mod area_starting_point;
-            pub use area_ending_point::*;
-            pub use area_starting_point::*;
-        }
-        pub use area_points::*;
-
-        mod cull_unreachable;
-        pub use cull_unreachable::*;
-    }
-    pub use meta::*;
-
-    mod builder_chain;
-    mod common;
-    mod map_builder;
-    pub use builder_chain::*;
-    pub use common::*;
-    pub use map_builder::*;
-}
-
 mod player {
     mod systems {
         mod player_input;
@@ -132,12 +101,17 @@ pub mod prelude {
 
         pub use num_traits::{FromPrimitive, ToPrimitive};
 
+        pub use rand::prelude::*;
+        pub use rand_pcg::Pcg64;
+
         pub use atrl_camera::prelude::*;
-        pub use atrl_common::prelude::AssetLoadState::*;
-        pub use atrl_common::prelude::ConstructState::*;
-        pub use atrl_common::prelude::TurnState::*;
-        pub use atrl_common::prelude::UiState::*;
         pub use atrl_common::prelude::*;
+        pub use atrl_data::prelude::AssetLoadState::*;
+        pub use atrl_data::prelude::ConstructState::*;
+        pub use atrl_data::prelude::TurnState::*;
+        pub use atrl_data::prelude::UiState::*;
+        pub use atrl_data::prelude::*;
+        pub use atrl_map_gen::prelude::*;
         pub use atrl_map_renderer::prelude::*;
         pub use atrl_raws::prelude::*;
         pub use atrl_saveload::prelude::*;
@@ -147,7 +121,6 @@ pub mod prelude {
 
     pub use crate::ai::*;
     pub use crate::map::*;
-    pub use crate::map_gen::*;
     pub use crate::player::*;
     pub use crate::spawner::*;
     pub use crate::systems::*;

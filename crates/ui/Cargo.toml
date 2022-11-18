@@ -21,4 +21,5 @@ kayak_font        = { workspace = true }
 kayak_ui          = { workspace = true }
 
 atrl-common = { workspace = true }
+atrl-data   = { workspace = true }
 atrl-raws   = { workspace = true }

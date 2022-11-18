@@ -1,11 +1,10 @@
 use crate::prelude::*;
 
-#[derive(Reflect, Component, Default)]
-#[reflect(Component)]
-pub struct GameMap {
+// This needs to impl FromWorld not derive reflect
+#[derive(Component)]
+pub struct Map {
     pub size: UVec2,
     pub world_position: WorldPosition,
-    #[reflect(ignore)] // TODO: Random impl's Serialize/Deserialize but not Reflect
     pub random: Random,
 
     pub terrain_types: Grid<TerrainType>,
@@ -18,60 +17,15 @@ pub struct GameMap {
     pub feature_tileset_id: u8,
     pub item_tileset_id: u8,
 
-    pub terrain_layer_entity: Option<Entity>,
-    pub feature_layer_entity: Option<Entity>,
-    pub item_layer_entity: Option<Entity>,
+    pub terrain_layer_entity: Entity,
+    pub feature_layer_entity: Entity,
+    pub item_layer_entity: Entity,
 
     pub update_tiles: HashSet<UVec2>,
     pub update_all: bool,
 }
 
-impl GameMap {
-    pub fn new<Tid: Into<u8>>(
-        size: impl Size2d,
-        world_position: WorldPosition,
-        random: Random,
-        terrain_types: Grid<TerrainType>,
-        feature_types: Grid<FeatureType>,
-        item_types: Grid<Vec<ItemType>>,
-        terrain_tileset_id: Tid,
-        feature_tileset_id: Tid,
-        item_tileset_id: Tid,
-    ) -> Self {
-        Self {
-            size: size.as_uvec2(),
-
-            world_position,
-            random,
-
-            // Terrain Layer
-            terrain_types,
-
-            // Feature Layer
-            feature_types,
-
-            // Items Layer
-            item_types,
-
-            // Actors on the map
-            actors: Grid::new_clone(size, None),
-
-            // Id for the tileset to use
-            terrain_tileset_id: terrain_tileset_id.into(),
-            feature_tileset_id: feature_tileset_id.into(),
-            item_tileset_id: item_tileset_id.into(),
-
-            // Tilemap Entities.
-            terrain_layer_entity: None,
-            feature_layer_entity: None,
-            item_layer_entity: None,
-
-            // Internal render fields
-            update_tiles: HashSet::new(),
-            update_all: true,
-        }
-    }
-
+impl Map {
     pub fn can_move_through(&self, index: impl Point2d, movement_component: &Movement) -> bool {
         let terrain = match self.terrain_types.get(index) {
             Some(t) => t.allowed_movement(),
@@ -154,6 +108,56 @@ impl GameMap {
         if let Some(actor) = self.get_actor(from) {
             self.remove_actor(from);
             self.add_actor(to, actor);
+        }
+    }
+}
+
+pub struct MapPassThroughData {
+    pub world_position: WorldPosition,
+    pub random: Random,
+
+    pub terrain_tileset_id: u8,
+    pub feature_tileset_id: u8,
+    pub item_tileset_id: u8,
+
+    pub terrain_layer_entity: Entity,
+    pub feature_layer_entity: Entity,
+    pub item_layer_entity: Entity,
+}
+
+impl From<MapGenData<MapPassThroughData>> for Map {
+    fn from(data: MapGenData<MapPassThroughData>) -> Self {
+        let mut terrain_types = Grid::new_default(data.size);
+
+        for y in 0..data.size.height() {
+            for x in 0..data.size.width() {
+                let v = *data.grid.get_unchecked((x, y));
+                match v {
+                    1 => terrain_types.set((x, y), TerrainType::Floor),
+                    2 => terrain_types.set((x, y), TerrainType::Wall),
+                    _ => terrain_types.set((x, y), TerrainType::None),
+                };
+                // FromPrimitive like this instead...
+                //terrain_types.set((x, y), v.into());
+            }
+        }
+
+        Self {
+            size: data.size,
+            world_position: data.user_data.world_position,
+            random: data.user_data.random,
+            terrain_types,
+            feature_types: Grid::new_default(data.size),
+            item_types: Grid::new_default(data.size),
+            actors: Grid::new_default(data.size),
+            terrain_tileset_id: data.user_data.terrain_tileset_id,
+            feature_tileset_id: data.user_data.feature_tileset_id,
+            item_tileset_id: data.user_data.item_tileset_id,
+            terrain_layer_entity: data.user_data.terrain_layer_entity,
+            feature_layer_entity: data.user_data.feature_layer_entity,
+            item_layer_entity: data.user_data.item_layer_entity,
+            update_tiles: HashSet::new(),
+            update_all: true,
         }
     }
 }

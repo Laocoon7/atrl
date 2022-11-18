@@ -53,11 +53,12 @@ mod import {
     pub use rayon::prelude::*;
 
     pub use atrl_camera::prelude::*;
-    pub use atrl_common::prelude::AssetLoadState::*;
-    pub use atrl_common::prelude::ConstructState::*;
-    pub use atrl_common::prelude::TurnState::*;
-    pub use atrl_common::prelude::UiState::*;
     pub use atrl_common::prelude::*;
+    pub use atrl_data::prelude::AssetLoadState::*;
+    pub use atrl_data::prelude::ConstructState::*;
+    pub use atrl_data::prelude::TurnState::*;
+    pub use atrl_data::prelude::UiState::*;
+    pub use atrl_data::prelude::*;
     pub use atrl_game::prelude::*;
     pub use atrl_map_renderer::prelude::*;
     pub use atrl_raws::prelude::*;

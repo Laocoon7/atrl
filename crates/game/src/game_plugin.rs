@@ -48,8 +48,8 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
 
 impl<T: StateNext> GamePlugin<T> {
     fn setup_states(app: &mut App) {
-        app.add_loopless_state(GameState::default()).add_enter_system(
-            GameState::default(),
+        app.add_loopless_state(GameState::Initializing).add_enter_system(
+            GameState::Initializing,
             switch_in_game_state!(GameState::AssetLoad(AssetLoadState::Load)),
         );
     }

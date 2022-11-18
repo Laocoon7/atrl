@@ -3,7 +3,7 @@ use crate::prelude::*;
 pub fn player_input(
     state: Res<TurnState>,
     mut commands: Commands,
-    map_q: Query<&GameMap>,
+    map_q: Query<&Map>,
     mut query: Query<
         (&mut Transform, &WorldPosition, &Movement, &ActionState<PlayerAction>),
         With<Player>,

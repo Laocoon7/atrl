@@ -1,7 +1,7 @@
 use crate::prelude::*;
 
 pub(crate) fn update_tilemaps(
-    mut q_map: Query<&mut GameMap>,
+    mut q_map: Query<&mut Map>,
     q_storage: Query<&TileStorage>,
     mut q_tiles: Query<&mut TileTextureIndex>,
 ) {
@@ -11,45 +11,27 @@ pub(crate) fn update_tilemaps(
         }
 
         // Get storages
-        let terrain_storage = match map.terrain_layer_entity {
-            None => continue,
-            Some(entity) => {
-                //println!("{:?}", entity);
-                match q_storage.get(entity) {
-                    Err(e) => {
-                        error!("{}", e);
-                        continue;
-                    }
-                    Ok(storage) => storage,
-                }
+        let terrain_storage = match q_storage.get(map.terrain_layer_entity) {
+            Ok(s) => s,
+            Err(e) => {
+                error!("{}", e);
+                continue;
             }
         };
 
-        let feature_storage = match map.feature_layer_entity {
-            None => continue,
-            Some(entity) => {
-                //println!("{:?}", entity);
-                match q_storage.get(entity) {
-                    Err(e) => {
-                        error!("{}", e);
-                        continue;
-                    }
-                    Ok(storage) => storage,
-                }
+        let feature_storage = match q_storage.get(map.feature_layer_entity) {
+            Ok(s) => s,
+            Err(e) => {
+                error!("{}", e);
+                continue;
             }
         };
 
-        let item_storage = match map.item_layer_entity {
-            None => continue,
-            Some(entity) => {
-                //println!("{:?}", entity);
-                match q_storage.get(entity) {
-                    Err(e) => {
-                        error!("{}", e);
-                        continue;
-                    }
-                    Ok(storage) => storage,
-                }
+        let item_storage = match q_storage.get(map.item_layer_entity) {
+            Ok(s) => s,
+            Err(e) => {
+                error!("{}", e);
+                continue;
             }
         };
 

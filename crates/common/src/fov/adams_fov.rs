@@ -51,10 +51,10 @@ mod test {
 
     #[test]
     fn test_fov() {
-        let mut map = VisibilityMap2d::new_default([30, 30]);
-        map[(0, 1)].opaque = true;
-        map[(1, 0)].opaque = true;
-        fov::compute((0, 0), 5, &mut map);
+        let mut map = VisibilityMap2d::new_default([30u32, 30u32]);
+        map[(0u32, 1u32)].opaque = true;
+        map[(1u32, 0u32)].opaque = true;
+        compute((0u32, 0u32), 5, &mut map);
 
         assert!(map[(0, 0)].visible);
 

@@ -1,0 +1,24 @@
+[package]
+name = "atrl-data"
+version = "0.1.0"
+edition = "2021"
+
+[features]
+debug   = []
+dev     = []
+release = []
+
+[dependencies]
+atrl-common             = {workspace = true}
+atrl-macros             = {workspace = true}
+atrl-map-gen            = {workspace = true}
+
+bevy                    = {workspace = true}
+iyes_loopless           = {workspace = true}
+leafwing-input-manager  = {workspace = true}
+num-derive              = {workspace = true}
+num-traits              = {workspace = true}
+once_cell               = {workspace = true}
+parking_lot             = {workspace = true}
+serde                   = {workspace = true}
+ron                     = {workspace = true}

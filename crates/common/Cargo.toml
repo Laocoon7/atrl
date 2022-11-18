@@ -15,6 +15,7 @@ dev     = []
 release = []
 
 [dependencies]
+#atrl-data   = { workspace = true }
 atrl-macros = { workspace = true }
 
 bevy                   = { workspace = true }

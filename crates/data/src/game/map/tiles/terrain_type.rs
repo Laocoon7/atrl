@@ -1,7 +1,7 @@
 use crate::prelude::*;
 
 use num_derive::{FromPrimitive, ToPrimitive};
-use num_traits::ToPrimitive;
+use num_traits::{FromPrimitive, ToPrimitive};
 
 #[derive(
     Reflect,
@@ -68,6 +68,15 @@ impl TerrainType {
 
 impl From<TerrainType> for u32 {
     fn from(value: TerrainType) -> Self {
-        ToPrimitive::to_u32(&value).expect("Failed to convert `TerrainType` to u32")
+        ToPrimitive::to_u32(&value).expect("Failed to convert `TerrainType` to `u32`")
+    }
+}
+
+impl From<u32> for TerrainType {
+    fn from(value: u32) -> Self {
+        match FromPrimitive::from_u32(value) {
+            Some(v) => v,
+            None => TerrainType::None,
+        }
     }
 }

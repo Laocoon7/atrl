@@ -32,7 +32,9 @@ release = [
   "bevy_embedded_assets",
   "atrl-camera/release",
   "atrl-common/release",
+  "atrl-data/release",
   "atrl-game/release",
+  "atrl-map-gen/release",
   "atrl-map-renderer/release",
   "atrl-raws/release",
   "atrl-ui/release",
@@ -51,7 +53,9 @@ debug = [
   "trace",
   "atrl-camera/debug",
   "atrl-common/debug",
+  "atrl-data/debug",
   "atrl-game/debug",
+  "atrl-map-gen/debug",
   "atrl-map-renderer/debug",
   "atrl-raws/debug",
   "atrl-ui/debug",
@@ -63,7 +67,9 @@ dev = [
   "bevy/dynamic",
   "atrl-camera/dev",
   "atrl-common/dev",
+  "atrl-data/dev",
   "atrl-game/dev",
+  "atrl-map-gen/dev",
   "atrl-map-renderer/dev",
   "atrl-raws/dev",
   "atrl-ui/dev",
@@ -105,20 +111,24 @@ panic         = 'abort'
 [workspace.dependencies]
 atrl-camera            = { path = "crates/camera" }
 atrl-common            = { path = "crates/common" }
+atrl-data              = { path = "crates/data" }
 atrl-game              = { path = "crates/game" }
 atrl-macros            = { path = "crates/macros" }
+atrl-map-gen           = { path = "crates/map_gen" }
 atrl-map-renderer      = { path = "crates/map_renderer" }
 atrl-raws              = { path = "crates/raws" }
 atrl-saveload          = { path = "crates/saveload" }
 atrl-ui                = { path = "crates/ui" }
 
 [dependencies]
-atrl-camera = { workspace = true }
-atrl-common = { workspace = true }
-atrl-game   = { workspace = true }
+atrl-camera          = { workspace = true }
+atrl-common          = { workspace = true }
+atrl-data            = { workspace = true }
+atrl-game            = { workspace = true }
+atrl-map-gen         = { workspace = true }
 atrl-map-renderer    = { workspace = true }
-atrl-raws   = { workspace = true }
-atrl-ui     = { workspace = true }
+atrl-raws            = { workspace = true }
+atrl-ui              = { workspace = true }
 
 ######################################
 #########       Bevy

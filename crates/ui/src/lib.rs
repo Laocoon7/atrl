@@ -29,6 +29,7 @@ mod ui_plugin;
 pub mod prelude {
     mod import {
         pub use atrl_common::prelude::*;
+        pub use atrl_data::prelude::*;
         pub use atrl_raws::prelude::*;
         pub use bevy::{app::AppExit, prelude::*};
         pub use iyes_loopless::prelude::*;
