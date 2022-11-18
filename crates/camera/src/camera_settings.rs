@@ -58,27 +58,27 @@ impl CameraSettings {
         self
     }
 
-    pub fn with_clear_color(mut self, clear_color: Color) -> Self {
+    pub const fn with_clear_color(mut self, clear_color: Color) -> Self {
         self.clear_color = Some(clear_color);
         self
     }
 
-    pub fn with_position(mut self, position: Vec2) -> Self {
+    pub const fn with_position(mut self, position: Vec2) -> Self {
         self.position = Some(position);
         self
     }
 
-    pub fn with_scaling_mode(mut self, mode: ScalingMode) -> Self {
+    pub const fn with_scaling_mode(mut self, mode: ScalingMode) -> Self {
         self.scaling_mode = mode;
         self
     }
 
-    pub fn with_scale(mut self, scale: f32) -> Self {
+    pub const fn with_scale(mut self, scale: f32) -> Self {
         self.scale = scale;
         self
     }
 
-    pub fn with_viewport(mut self, viewport: Viewport) -> Self {
+    pub const fn with_viewport(mut self, viewport: Viewport) -> Self {
         self.viewport = Some(viewport);
         self
     }
@@ -110,13 +110,8 @@ impl Default for CameraSettings {
 
 impl From<CameraSettings> for Camera2dBundle {
     fn from(settings: CameraSettings) -> Self {
-        let target = match settings.render_target {
-            Some(t) => t,
-            None => RenderTarget::default(),
-        };
-
+        let target = settings.render_target.map_or_else(RenderTarget::default, |t| t);
         let near = 0.0;
-
         let far = 1000.0;
 
         let transform = match settings.position {
@@ -128,10 +123,8 @@ impl From<CameraSettings> for Camera2dBundle {
             }
         };
 
-        let clear_color_config = match settings.clear_color {
-            Some(color) => ClearColorConfig::Custom(color),
-            None => ClearColorConfig::Default,
-        };
+        let clear_color_config =
+            settings.clear_color.map_or(ClearColorConfig::Default, ClearColorConfig::Custom);
 
         Self {
             camera: Camera {

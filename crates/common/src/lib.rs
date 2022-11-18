@@ -1,7 +1,7 @@
 #![allow(clippy::module_inception)]
+#![warn(clippy::nursery, clippy::all)]
 #![allow(clippy::type_complexity)] // Bevy can have complex queries, so we shush clippy
 #![allow(clippy::too_many_arguments)] // Bevy has a lot of arguments, so we shush clippy
-                                      // #![feature(trait_alias)]
 
 mod direction {
     mod bitmap;
@@ -29,7 +29,7 @@ mod fov {
     mod visibility_map;
 
     pub use adams_fov::*;
-    pub(crate) use visibility_compute::*;
+    pub use visibility_compute::*;
     pub(crate) use visibility_map::*;
 }
 
@@ -59,8 +59,6 @@ mod geometry {
         pub use polygon::*;
         mod rectangle;
         pub use rectangle::*;
-        //mod old_rectangle;
-        //pub use old_rectangle::*;
         mod triangle;
         pub use triangle::*;
     }
