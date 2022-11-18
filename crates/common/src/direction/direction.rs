@@ -49,7 +49,6 @@ impl GridDirection {
         }
     }
 
-    // TODO(FIX): Normal direction coord is N: -1, S: 1, E: 1, W: -1
     // Bevy Transform uses N: 1, S: -1, E: 1, W: -1
     pub fn coord(self) -> IVec2 {
         match self {

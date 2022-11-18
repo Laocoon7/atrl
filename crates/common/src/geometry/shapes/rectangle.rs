@@ -23,10 +23,12 @@ impl Rectangle {
 }
 
 impl Rectangle {
+    #[inline]
     pub fn width(&self) -> i32 {
         self.max.x - self.min.x
     }
 
+    #[inline]
     pub fn height(&self) -> i32 {
         self.max.y - self.min.y
     }
@@ -56,6 +58,7 @@ impl Shape for Rectangle {
         Rectangle::new(points[0], points[1])
     }
 
+    #[inline]
     fn contains(&self, point: impl Point2d) -> bool {
         self.min.x <= point.x()
             && self.max.x > point.x()
@@ -63,6 +66,7 @@ impl Shape for Rectangle {
             && self.max.y > point.y()
     }
 
+    #[inline]
     fn points(&self) -> Vec<IVec2> {
         vec![self.min, self.max]
     }
@@ -75,22 +79,27 @@ impl Shape for Rectangle {
         Self::from_points(points)
     }
 
+    #[inline]
     fn center(&self) -> IVec2 {
         self.min.mid_point(self.max)
     }
 
+    #[inline]
     fn left(&self) -> i32 {
         self.min.x.min(self.max.x)
     }
 
+    #[inline]
     fn right(&self) -> i32 {
         self.min.x.max(self.max.x)
     }
 
+    #[inline]
     fn top(&self) -> i32 {
         self.min.y.max(self.max.y)
     }
 
+    #[inline]
     fn bottom(&self) -> i32 {
         self.min.y.min(self.max.y)
     }
@@ -159,6 +168,11 @@ impl Rectangle {
     {
         RectPointIter::new(self.min, self.max).for_each(f);
     }
+
+    /// iterates over all points in the rectangle
+    pub fn iter(&self) -> RectPointIter {
+        RectPointIter::new(self.min, self.max)
+    }
 }
 
 impl Default for Rectangle {
@@ -200,6 +214,7 @@ impl Iterator for RectPointIter {
             self.offset.x = 0;
             self.offset.y += 1;
         }
+
         Some(self.min + p)
     }
 }
@@ -216,5 +231,16 @@ impl IntoIterator for Rectangle {
 impl From<Rectangle> for RectPointIter {
     fn from(rect: Rectangle) -> Self {
         rect.into_iter()
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use crate::prelude::*;
+
+    #[test]
+    fn test_rect_iter() {
+        let rect = Rectangle::new((39, 21), (41, 23));
+        assert_eq!(rect.iter().count(), 9);
     }
 }

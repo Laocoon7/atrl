@@ -59,11 +59,14 @@ pub(crate) fn update_tilemaps(
                     }
 
                     if let Some(entity) = item_storage.get(&tile_pos) {
-                        if let Ok(_tile_texture_index) = q_tiles.get_mut(entity) {
+                        if let Ok(mut tile_texture_index) = q_tiles.get_mut(entity) {
                             // TODO: Display Items
                             // sort through items to decide which to show
-                            //let index = (*map.item_types.get_unchecked((x, y))).into();
-                            //tile_texture_index.0 = index;
+                            if let Some((index, _)) =
+                                map.item_types.get_unchecked((x, y)).iter().enumerate().next()
+                            {
+                                tile_texture_index.0 = index as u32;
+                            }
                         }
                     }
                 }
@@ -94,10 +97,14 @@ pub(crate) fn update_tilemaps(
                 }
 
                 if let Some(entity) = item_storage.get(&tile_pos) {
-                    if let Ok(_tile_texture_index) = q_tiles.get_mut(entity) {
+                    if let Ok(mut tile_texture_index) = q_tiles.get_mut(entity) {
                         // TODO: Display Items
-                        //tile_texture_index.0 =
-                        // (*map.item_types.get_unchecked(position)).into();
+                        // sort through items to decide which to show
+                        if let Some((index, _)) =
+                            map.item_types.get_unchecked(position).iter().enumerate().next()
+                        {
+                            tile_texture_index.0 = index as u32;
+                        }
                     }
                 }
             }
