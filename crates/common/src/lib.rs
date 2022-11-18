@@ -55,11 +55,6 @@ mod components {
     pub use tags::*;
 }
 
-mod events {
-    mod event_plugin;
-    pub use event_plugin::*;
-}
-
 mod data {
     mod actors {
         mod class_type;
@@ -122,6 +117,52 @@ mod direction {
     pub use table::*;
 }
 
+mod events {
+    mod event_plugin;
+    pub use event_plugin::*;
+}
+
+mod geometry {
+    mod math {
+        mod distance;
+        pub use distance::*;
+        mod intersects;
+        pub use intersects::*;
+        mod lerp;
+        pub use lerp::*;
+        mod rotate_points;
+        pub use rotate_points::*;
+        mod scale_points;
+        pub use scale_points::*;
+    }
+    pub use math::*;
+
+    mod shapes {
+        mod circle;
+        pub use circle::*;
+        mod ellipse;
+        pub use ellipse::*;
+        mod line;
+        pub use line::*;
+        mod polygon;
+        pub use polygon::*;
+        mod ray;
+        pub use ray::*;
+        mod rectangle;
+        pub use rectangle::*;
+        //mod old_rectangle;
+        //pub use old_rectangle::*;
+        mod segment;
+        pub use segment::*;
+        mod triangle;
+        pub use triangle::*;
+    }
+    pub use shapes::*;
+
+    mod shape;
+    pub use shape::*;
+}
+
 mod grid {
     mod axis;
     pub use axis::*;
@@ -147,29 +188,6 @@ mod random {
 mod system_params {
     mod player_param;
     pub use player_param::*;
-}
-
-mod geometry {
-    mod distance;
-    pub use distance::*;
-
-    mod shapes {
-        mod circle;
-        pub use circle::*;
-        mod line;
-        pub use line::*;
-        mod polygon;
-        pub use polygon::*;
-        mod ray;
-        pub use ray::*;
-        mod rectangle;
-        pub use rectangle::*;
-        mod segment;
-        pub use segment::*;
-        mod triangle;
-        pub use triangle::*;
-    }
-    pub use shapes::*;
 }
 
 mod app_settings;

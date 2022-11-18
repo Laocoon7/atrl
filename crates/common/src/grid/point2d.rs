@@ -56,6 +56,43 @@ pub trait Point2d: Clone + Copy {
 
         x >= 0 && y >= 0 && (x as u32) < size.width() && (y as u32) < size.height()
     }
+
+    ////////////////
+    //  Geometry  //
+    ////////////////
+    #[inline]
+    fn from_angle(center: impl Point2d, distance: f32, degrees: f32) -> IVec2 {
+        let rads = degrees.to_radians();
+        let x = (distance * rads.cos()).floor() as i32; // .round() ??
+        let y = (distance * rads.sin()).floor() as i32;
+
+        IVec2::new(center.x() + x, center.y() + y)
+    }
+
+    #[inline]
+    fn angle_to(&self, point: impl Point2d) -> f32 {
+        let x = (point.x() - self.x()) as f32;
+        let y = (point.y() - self.y()) as f32;
+        y.atan2(x).to_degrees()
+    }
+
+    #[inline]
+    fn mid_point(&self, point: impl Point2d) -> IVec2 {
+        IVec2 {
+            x: (self.x() + point.x()) / 2,
+            y: (self.y() + point.y()) / 2
+        }
+    }
+
+    #[inline]
+    fn cross_product(&self, point: impl Point2d) -> i32 {
+        self.x() * point.y() - self.y() * point.x()
+    }
+
+    #[inline]
+    fn dot_product(&self, point: impl Point2d) -> i32 {
+        self.x() * point.x() + self.y() * point.y()
+    }
 }
 
 #[macro_export]
