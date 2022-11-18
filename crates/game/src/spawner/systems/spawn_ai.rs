@@ -44,8 +44,7 @@ pub fn spawn_ai(tilesets: Tilesets, mut commands: Commands, game_context: Res<Ga
                 transform: Transform::from_xyz(
                     (GRID_WIDTH / 3) as f32 + 0.5,
                     (GRID_HEIGHT / 3) as f32 + 0.5,
-                    f32::from(MapLayer::Player), /* TODO: We need to have set Z values for each
-                                                  * different layer */
+                    f32::from(MapLayer::Actors),
                 ),
                 ..default()
             },
