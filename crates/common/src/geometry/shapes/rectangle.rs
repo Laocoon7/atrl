@@ -125,3 +125,98 @@ impl Rectangle {
         Ellipse::from_points(self.points())
     }
 }
+
+impl Rectangle {
+    /// Check if this rectangle intersects another rectangle.
+    #[inline]
+    #[must_use]
+    pub fn intersects(&self, other: Self) -> bool {
+        // (self.min.cmple(other.max) & self.max.cmpge(other.min)).all()
+
+        self.min.x <= other.max.x
+            && self.max.x >= other.min.x
+            && self.min.y <= other.max.y
+            && self.max.y >= other.min.y
+    }
+
+    /// Gets a set of all tiles in the rectangle
+    #[must_use]
+    #[inline]
+    pub fn point_set(&self) -> HashSet<IVec2> {
+        let mut result = HashSet::new();
+        for y in self.min.y..self.max.y {
+            for x in self.min.x..self.max.x {
+                result.insert(IVec2::new(x, y));
+            }
+        }
+        result
+    }
+
+    /// Calls a function for each x/y point in the rectangle
+    pub fn for_each<F>(&self, f: F)
+    where
+        F: FnMut(IVec2),
+    {
+        RectPointIter::new(self.min, self.max).for_each(f);
+    }
+}
+
+impl Default for Rectangle {
+    fn default() -> Self {
+        Self::new_with_size(IVec2::ZERO, IVec2::ONE)
+    }
+}
+
+#[derive(Debug, Clone)]
+#[allow(clippy::module_name_repetitions)]
+pub struct RectPointIter {
+    curr: IVec2,
+    size: IVec2,
+
+    /// The minimum corner point of the rect.
+    pub min: IVec2,
+    /// The maximum corner point of the rect.
+    pub max: IVec2,
+}
+
+impl RectPointIter {
+    pub fn new(min: impl Size2d, max: impl Size2d) -> Self {
+        let min = min.as_ivec2();
+        let max = max.as_ivec2();
+        let size = max - min;
+        Self { min, max, size, curr: IVec2::ZERO }
+    }
+}
+
+impl Iterator for RectPointIter {
+    type Item = IVec2;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.curr.cmpge(self.max).any() {
+            return None;
+        }
+
+        let p = self.curr;
+        self.curr.x += 1;
+        if self.curr.x == self.size.x {
+            self.curr.x = 0;
+            self.curr.y += 1;
+        }
+        Some(self.min + p)
+    }
+}
+
+impl IntoIterator for Rectangle {
+    type Item = IVec2;
+    type IntoIter = RectPointIter;
+
+    fn into_iter(self) -> Self::IntoIter {
+        RectPointIter::new(self.min, self.max)
+    }
+}
+
+impl From<Rectangle> for RectPointIter {
+    fn from(rect: Rectangle) -> Self {
+        rect.into_iter()
+    }
+}

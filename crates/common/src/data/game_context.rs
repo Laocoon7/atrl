@@ -15,7 +15,7 @@ impl Default for GameContext {
         Self {
             map_manager_random,
             random: Mutex::new(random),
-            world_bounds: Rectangle { min: (-5, -5).into(), max: (5, 5).into() },
+            world_bounds: Rectangle::new((-5, -5), (5, 5)),
         }
     }
 }
