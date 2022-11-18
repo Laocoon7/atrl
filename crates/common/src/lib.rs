@@ -141,9 +141,9 @@ mod geometry {
         mod lerp;
         pub use lerp::*;
         mod rotate_points;
-        pub use rotate_points::*;
+        pub(crate) use rotate_points::*;
         mod scale_points;
-        pub use scale_points::*;
+        pub(crate) use scale_points::*;
     }
     pub use math::*;
 

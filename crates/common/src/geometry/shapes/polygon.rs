@@ -139,8 +139,8 @@ impl Polygon {
             return None;
         }
         let mut output = vec![];
-        for IVec2s in self.points.windows(2) {
-            output.push(Triangle::new(IVec2s[0], IVec2s[1], self.center));
+        for p in self.points.windows(2) {
+            output.push(Triangle::new(p[0], p[1], self.center));
         }
         output.push(Triangle::new(*self.points.last().unwrap(), self.points[0], self.center));
 

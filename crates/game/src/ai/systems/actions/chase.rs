@@ -12,7 +12,7 @@ pub enum ChaseActorFailureBehavior {
 pub struct ChaseActor {
     last_seen_pt: Option<Vec2>,
     // What to do if entity reaches last seen player position
-    fail_behavior: ChaseActorFailureBehavior,
+    _fail_behavior: ChaseActorFailureBehavior,
 }
 
 pub fn chase_actor(
@@ -22,8 +22,8 @@ pub fn chase_actor(
     println!("Chase actor action");
     use ActionState::*;
 
-    let (player_entity, player_pos) = player_q.single();
-    for (Actor(actor), mut action_state, mut chase) in action_q.iter_mut() {
+    let (_player_entity, player_pos) = player_q.single();
+    for (Actor(_actor), mut action_state, mut chase) in action_q.iter_mut() {
         match *action_state {
             ActionState::Init => {
                 println!("Chase init");

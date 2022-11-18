@@ -2,6 +2,7 @@ mod systems {}
 
 mod saveload_plugin;
 
+#[allow(unused_imports)] // TODO: Remove this once crate::internal::* has a reference
 pub mod prelude {
     mod internal {
         pub use crate::systems::*;

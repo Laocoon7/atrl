@@ -73,7 +73,8 @@ pub(crate) fn update_tilemaps(
                     }
 
                     if let Some(entity) = item_storage.get(&tile_pos) {
-                        if let Ok(mut tile_texture_index) = q_tiles.get_mut(entity) {
+                        if let Ok(_tile_texture_index) = q_tiles.get_mut(entity) {
+                            // TODO: Display Items
                             // sort through items to decide which to show
                             //let index = (*map.item_types.get_unchecked((x, y))).into();
                             //tile_texture_index.0 = index;
@@ -100,7 +101,8 @@ pub(crate) fn update_tilemaps(
                 }
 
                 if let Some(entity) = item_storage.get(&tile_pos) {
-                    if let Ok(mut tile_texture_index) = q_tiles.get_mut(entity) {
+                    if let Ok(_tile_texture_index) = q_tiles.get_mut(entity) {
+                        // TODO: Display Items
                         //tile_texture_index.0 =
                         // (*map.item_types.get_unchecked(position)).into();
                     }

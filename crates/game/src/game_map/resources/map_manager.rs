@@ -4,13 +4,13 @@ use crate::prelude::*;
 
 #[derive(Default, Resource)]
 pub struct MapManager {
-    current_map: WorldPosition,
+    _current_map: WorldPosition,
     loaded_maps: HashMap<WorldPosition, Entity>,
 }
 
 impl MapManager {
     pub fn new() -> Self {
-        Self { current_map: WorldPosition(IVec3::new(0, 0, 0)), loaded_maps: HashMap::new() }
+        Self { _current_map: WorldPosition(IVec3::new(0, 0, 0)), loaded_maps: HashMap::new() }
     }
 
     pub fn get_or_generate(
@@ -121,7 +121,7 @@ impl MapManager {
         Ok(chain.get_map())
     }
 
-    fn get_terrain_map_around_point(
+    pub fn get_terrain_map_around_point(
         &self,
         world_position: WorldPosition,
         local_position: UVec2,
