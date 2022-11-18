@@ -39,12 +39,6 @@ impl MapManager {
         let mut random = Random::new(map_seed);
         let rng = Box::new(Pcg64::seed_from_u64(random.prng.next_u64()));
 
-        let map_noise = game_context.map_manager_random.noise.get(
-            world_position.x,
-            world_position.y,
-            world_position.z,
-        );
-        let map_noise = (map_noise + 1.0) * 0.5;
         let map_name =
             format!("Map ({}, {}, {})", world_position.x, world_position.y, world_position.z);
 

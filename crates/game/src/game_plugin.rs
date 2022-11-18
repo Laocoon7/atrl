@@ -66,7 +66,8 @@ impl<T: StateNext> GamePlugin<T> {
         app.add_plugin(
             MapRendererPlugin::new(state_construct, state_running, [GRID_WIDTH, GRID_HEIGHT])
                 //.add_tileset_file("path/to/file.ron")
-                .add_tileset_folder("tilesets/"),
+                .add_tileset_file("./tilesets/terminal8x8.ron")
+                .add_tileset_file("./tilesets/dcss_terrain.ron"),
         );
     }
 
