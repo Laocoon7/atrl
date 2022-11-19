@@ -159,7 +159,13 @@ impl From<MapGenData<MapPassThroughData>> for Map {
 
 impl VisibilityMap for Map {
     fn is_opaque(&self, p: impl Point2d, vision_component: &Vision) -> bool {
-        self.can_see_through(p, vision_component)
+        println!(
+            "Is opaque: {:?} {:?} {}",
+            p.as_ivec2(),
+            vision_component,
+            self.can_see_through(p, vision_component)
+        );
+        !self.can_see_through(p, vision_component)
     }
 
     fn is_in_bounds(&self, p: impl Point2d) -> bool {
