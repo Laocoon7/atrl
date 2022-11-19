@@ -120,8 +120,8 @@ pub mod fov {
     pub use visibility_map::*;
     mod visibility_provider;
     pub use visibility_provider::*;
-    mod grid_packer;
-    pub use grid_packer::*;
+    mod bit_packer;
+    pub use bit_packer::*;
 }
 
 mod system_params {
