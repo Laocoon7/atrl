@@ -48,8 +48,8 @@ pub fn spawn_ai(tilesets: Tilesets, mut commands: Commands, game_context: Res<Ga
                 ),
                 ..default()
             },
-            vision_component: Vision(VisionType::Colored.into()),
-            movement_component: Movement(MovementType::Walk.into()),
+            vision_component: Vision(VisionType::Colored.as_u8()),
+            movement_component: Movement(MovementType::Walk.as_u8()),
         },
         thinker,
     ));

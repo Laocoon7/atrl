@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-pub(crate) fn load_first_map(
+pub fn load_first_map(
     mut commands: Commands,
     mut game_context: ResMut<GameContext>,
     tilesets: Tilesets,

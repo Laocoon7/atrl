@@ -1,5 +1,7 @@
+#![warn(clippy::nursery, clippy::all)]
 #![allow(clippy::module_inception)]
 #![allow(clippy::type_complexity)]
+#![allow(clippy::too_many_arguments)] // Bevy has a lot of arguments, so we shush clippy
 #![allow(unused_imports)] // TODO: REMOVE ME
 
 mod ai {
@@ -71,9 +73,11 @@ mod spawner {
 
 mod systems {
     mod apply_damage;
+    mod fov;
     mod move_actors;
     mod perform_healing;
     pub use apply_damage::*;
+    pub use fov::*;
     pub use move_actors::*;
     pub use perform_healing::*;
 }

@@ -1,7 +1,7 @@
 use crate::prelude::*;
 
 #[derive(Resource)]
-pub(crate) struct LoadedTilesets {
+pub struct LoadedTilesets {
     pub tileset_files: Vec<String>,
     pub tileset_folders: Vec<String>,
     pub handles: Vec<Handle<Tileset>>,

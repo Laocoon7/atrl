@@ -18,115 +18,115 @@ pub enum CardinalDirection {
 impl CardinalDirection {
     pub fn from_unit_coord(coord: impl Point2d + std::fmt::Debug) -> Self {
         match [coord.x(), coord.y()] {
-            [1, 0] => CardinalDirection::East,
-            [-1, 0] => CardinalDirection::West,
-            [0, 1] => CardinalDirection::South,
-            [0, -1] => CardinalDirection::North,
+            [1, 0] => Self::East,
+            [-1, 0] => Self::West,
+            [0, 1] => Self::South,
+            [0, -1] => Self::North,
             _ => panic!("Unexpected coord: {:?}", coord),
         }
     }
 
-    pub fn direction(self) -> GridDirection {
+    pub const fn direction(self) -> GridDirection {
         match self {
-            CardinalDirection::North => GridDirection::North,
-            CardinalDirection::East => GridDirection::East,
-            CardinalDirection::South => GridDirection::South,
-            CardinalDirection::West => GridDirection::West,
+            Self::North => GridDirection::North,
+            Self::East => GridDirection::East,
+            Self::South => GridDirection::South,
+            Self::West => GridDirection::West,
         }
     }
 
-    pub fn opposite(self) -> CardinalDirection {
+    pub const fn opposite(self) -> Self {
         match self {
-            CardinalDirection::North => CardinalDirection::South,
-            CardinalDirection::East => CardinalDirection::West,
-            CardinalDirection::South => CardinalDirection::North,
-            CardinalDirection::West => CardinalDirection::East,
+            Self::North => Self::South,
+            Self::East => Self::West,
+            Self::South => Self::North,
+            Self::West => Self::East,
         }
     }
 
-    pub fn coord(self) -> IVec2 {
+    pub const fn coord(self) -> IVec2 {
         match self {
-            CardinalDirection::North => IVec2::new(0, 1),
-            CardinalDirection::East => IVec2::new(1, 0),
-            CardinalDirection::South => IVec2::new(0, -1),
-            CardinalDirection::West => IVec2::new(-1, 0),
+            Self::North => IVec2::new(0, 1),
+            Self::East => IVec2::new(1, 0),
+            Self::South => IVec2::new(0, -1),
+            Self::West => IVec2::new(-1, 0),
         }
     }
 
-    pub fn left90(self) -> CardinalDirection {
+    pub const fn left90(self) -> Self {
         match self {
-            CardinalDirection::North => CardinalDirection::West,
-            CardinalDirection::East => CardinalDirection::North,
-            CardinalDirection::South => CardinalDirection::East,
-            CardinalDirection::West => CardinalDirection::South,
+            Self::North => Self::West,
+            Self::East => Self::North,
+            Self::South => Self::East,
+            Self::West => Self::South,
         }
     }
 
-    pub fn right90(self) -> CardinalDirection {
+    pub const fn right90(self) -> Self {
         match self {
-            CardinalDirection::North => CardinalDirection::East,
-            CardinalDirection::East => CardinalDirection::South,
-            CardinalDirection::South => CardinalDirection::West,
-            CardinalDirection::West => CardinalDirection::North,
+            Self::North => Self::East,
+            Self::East => Self::South,
+            Self::South => Self::West,
+            Self::West => Self::North,
         }
     }
 
-    pub fn left45(self) -> OrdinalDirection {
+    pub const fn left45(self) -> OrdinalDirection {
         match self {
-            CardinalDirection::North => OrdinalDirection::NorthWest,
-            CardinalDirection::East => OrdinalDirection::NorthEast,
-            CardinalDirection::South => OrdinalDirection::SouthEast,
-            CardinalDirection::West => OrdinalDirection::SouthWest,
+            Self::North => OrdinalDirection::NorthWest,
+            Self::East => OrdinalDirection::NorthEast,
+            Self::South => OrdinalDirection::SouthEast,
+            Self::West => OrdinalDirection::SouthWest,
         }
     }
 
-    pub fn right45(self) -> OrdinalDirection {
+    pub const fn right45(self) -> OrdinalDirection {
         match self {
-            CardinalDirection::North => OrdinalDirection::NorthEast,
-            CardinalDirection::East => OrdinalDirection::SouthEast,
-            CardinalDirection::South => OrdinalDirection::SouthWest,
-            CardinalDirection::West => OrdinalDirection::NorthWest,
+            Self::North => OrdinalDirection::NorthEast,
+            Self::East => OrdinalDirection::SouthEast,
+            Self::South => OrdinalDirection::SouthWest,
+            Self::West => OrdinalDirection::NorthWest,
         }
     }
 
-    pub fn left135(self) -> OrdinalDirection {
+    pub const fn left135(self) -> OrdinalDirection {
         match self {
-            CardinalDirection::North => OrdinalDirection::SouthWest,
-            CardinalDirection::East => OrdinalDirection::NorthWest,
-            CardinalDirection::South => OrdinalDirection::NorthEast,
-            CardinalDirection::West => OrdinalDirection::SouthEast,
+            Self::North => OrdinalDirection::SouthWest,
+            Self::East => OrdinalDirection::NorthWest,
+            Self::South => OrdinalDirection::NorthEast,
+            Self::West => OrdinalDirection::SouthEast,
         }
     }
 
-    pub fn right135(self) -> OrdinalDirection {
+    pub const fn right135(self) -> OrdinalDirection {
         match self {
-            CardinalDirection::North => OrdinalDirection::SouthEast,
-            CardinalDirection::East => OrdinalDirection::SouthWest,
-            CardinalDirection::South => OrdinalDirection::NorthWest,
-            CardinalDirection::West => OrdinalDirection::NorthEast,
+            Self::North => OrdinalDirection::SouthEast,
+            Self::East => OrdinalDirection::SouthWest,
+            Self::South => OrdinalDirection::NorthWest,
+            Self::West => OrdinalDirection::NorthEast,
         }
     }
 
-    pub fn axis(self) -> GridAxis {
+    pub const fn axis(self) -> GridAxis {
         match self {
-            CardinalDirection::East | CardinalDirection::West => GridAxis::X,
-            CardinalDirection::North | CardinalDirection::South => GridAxis::Y,
+            Self::East | Self::West => GridAxis::X,
+            Self::North | Self::South => GridAxis::Y,
         }
     }
 
-    pub fn sign(self) -> i32 {
+    pub const fn sign(self) -> i32 {
         match self {
-            CardinalDirection::South | CardinalDirection::East => 1,
-            CardinalDirection::North | CardinalDirection::West => -1,
+            Self::South | Self::East => 1,
+            Self::North | Self::West => -1,
         }
     }
 
-    pub fn axis_and_sign(self) -> (GridAxis, i32) {
+    pub const fn axis_and_sign(self) -> (GridAxis, i32) {
         match self {
-            CardinalDirection::North => (GridAxis::Y, 1),
-            CardinalDirection::East => (GridAxis::X, 1),
-            CardinalDirection::South => (GridAxis::Y, -1),
-            CardinalDirection::West => (GridAxis::X, -1),
+            Self::North => (GridAxis::Y, 1),
+            Self::East => (GridAxis::X, 1),
+            Self::South => (GridAxis::Y, -1),
+            Self::West => (GridAxis::X, -1),
         }
     }
 

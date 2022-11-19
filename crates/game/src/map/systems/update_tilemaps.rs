@@ -1,6 +1,12 @@
 use crate::prelude::*;
 
-pub(crate) fn update_tilemaps(
+/// TODO:
+///
+/// the function has a cognitive complexity of (28/25)
+/// you could split it up into multiple smaller functions
+///
+/// https://rust-lang.github.io/rust-clippy/master/index.html#cognitive_complexity
+pub fn update_tilemaps(
     mut q_map: Query<&mut Map>,
     q_storage: Query<&TileStorage>,
     mut q_tiles: Query<&mut TileTextureIndex>,
@@ -72,7 +78,7 @@ pub(crate) fn update_tilemaps(
                 }
             }
 
-            for v in check_next.drain(..) {
+            for v in check_next.into_iter() {
                 map.update_tiles.insert(v);
             }
             map.update_all = false;

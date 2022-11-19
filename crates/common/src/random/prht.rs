@@ -9,7 +9,7 @@ pub struct Prht {
 
 #[allow(dead_code)]
 impl Prht {
-    pub fn new(seed: u64) -> Self {
+    pub const fn new(seed: u64) -> Self {
         let xxhash = Xxh3Builder::new().with_seed(seed).build();
 
         Self { seed, xxhash }

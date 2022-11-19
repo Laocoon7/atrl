@@ -1,19 +1,21 @@
 use crate::prelude::*;
 
 #[derive(Clone)]
-pub(crate) struct Slope {
+pub struct Slope {
     pub x: i32,
     pub y: i32,
 } // represents the slope Y/X as a rational number
 
 impl Slope {
     // this > y/x
-    pub fn greater(&self, y: i32, x: i32) -> bool {
+    #[inline]
+    pub const fn greater(&self, y: i32, x: i32) -> bool {
         self.y * x > self.x * y
     }
 
     // s >= y/x
-    pub fn greater_or_equal(&self, y: i32, x: i32) -> bool {
+    #[inline]
+    pub const fn greater_or_equal(&self, y: i32, x: i32) -> bool {
         self.y * x >= self.x * y
     }
 
@@ -22,12 +24,13 @@ impl Slope {
     //    self.y * x < self.x * y
     //}
 
-    pub fn less_or_equal(&self, y: i32, x: i32) -> bool {
+    #[inline]
+    pub const fn less_or_equal(&self, y: i32, x: i32) -> bool {
         self.y * x <= self.x * y
     } // this <= y/x
 }
 
-pub(crate) fn compute_octant<T: VisibilityMap>(
+pub fn compute_octant<T: VisibilityMap>(
     octant: usize,
     origin: IVec2,
     range: i32,
@@ -49,7 +52,7 @@ pub(crate) fn compute_octant<T: VisibilityMap>(
     }
 }
 
-pub(crate) fn compute_y_coordinate<T: VisibilityMap>(
+fn compute_y_coordinate<T: VisibilityMap>(
     octant: usize,
     origin: IVec2,
     x: i32,
@@ -96,7 +99,7 @@ pub(crate) fn compute_y_coordinate<T: VisibilityMap>(
     IVec2::new(top_y, bottom_y)
 }
 
-pub(crate) fn compute_visiblity<T: VisibilityMap>(
+fn compute_visiblity<T: VisibilityMap>(
     top_y: i32,
     bottom_y: i32,
     range: i32,
@@ -180,7 +183,7 @@ pub(crate) fn compute_visiblity<T: VisibilityMap>(
     was_opaque == 0
 }
 
-pub(crate) fn blocks_light<T: VisibilityMap>(
+fn blocks_light<T: VisibilityMap>(
     x: i32,
     y: i32,
     octant: usize,
@@ -232,13 +235,7 @@ pub(crate) fn blocks_light<T: VisibilityMap>(
     map.is_opaque(IVec2::new(nx, ny))
 }
 
-pub(crate) fn set_visible<T: VisibilityMap>(
-    x: i32,
-    y: i32,
-    octant: usize,
-    origin: IVec2,
-    map: &mut T,
-) {
+fn set_visible<T: VisibilityMap>(x: i32, y: i32, octant: usize, origin: IVec2, map: &mut T) {
     let (mut nx, mut ny) = origin.into();
     match octant {
         0 => {

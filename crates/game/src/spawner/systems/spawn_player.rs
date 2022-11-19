@@ -41,7 +41,7 @@ pub fn spawn_player(tilesets: Tilesets, mut commands: Commands, game_context: Re
                 ..Default::default()
             },
 
-            vision_component: Vision(VisionType::Colored.into()),
+            vision_component: Vision(VisionType::Colored.as_u8()),
             movement_component: Movement(MovementType::Walk.as_u8() | (MovementType::Swim as u8)),
         },
         input_manager: InputManagerBundle {

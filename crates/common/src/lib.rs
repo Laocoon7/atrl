@@ -23,14 +23,14 @@ mod events {
     pub use event_plugin::*;
 }
 
-mod fov {
+pub mod fov {
     mod adams_fov;
     mod visibility_compute;
     mod visibility_map;
 
     pub use adams_fov::*;
     pub use visibility_compute::*;
-    pub(crate) use visibility_map::*;
+    pub use visibility_map::*;
 }
 
 mod geometry {
@@ -42,9 +42,9 @@ mod geometry {
         mod lerp;
         pub use lerp::*;
         mod rotate_points;
-        pub(crate) use rotate_points::*;
+        pub use rotate_points::*;
         mod scale_points;
-        pub(crate) use scale_points::*;
+        pub use scale_points::*;
     }
     pub use math::*;
 
@@ -94,8 +94,6 @@ mod states {
 mod utils {
     mod axis;
     pub use axis::*;
-    mod cp437;
-    pub use cp437::*;
     mod file_utils;
     pub use file_utils::*;
     mod grid;
@@ -169,7 +167,7 @@ pub mod prelude {
         pub use crate::states::*;
         pub use crate::utils::*;
 
-        pub use crate::fov::*;
+        pub use crate::fov;
 
         pub use crate::common_plugin::*;
         pub use crate::error::*;

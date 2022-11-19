@@ -17,7 +17,7 @@ impl Circle {
     ///
     /// Distance from center to edge
     #[inline]
-    pub fn radius(&self) -> u32 {
+    pub const fn radius(&self) -> u32 {
         self.radius
     }
 }
@@ -30,15 +30,15 @@ impl Shape for Circle {
     {
         debug_assert!(points.len() >= 2);
         let radius = DistanceAlg::Pythagoras.distance2d(points[0], points[1]).floor() as u32; // .round() ??
-        Circle::new(points[0], radius)
+        Self::new(points[0], radius)
     }
 
     fn translate_by(&self, delta: impl Point2d) -> Self {
-        Circle::new(self.center + delta.as_ivec2(), self.radius)
+        Self::new(self.center + delta.as_ivec2(), self.radius)
     }
 
     fn move_to(&self, point: impl Point2d) -> Self {
-        Circle::new(point.as_ivec2(), self.radius)
+        Self::new(point.as_ivec2(), self.radius)
     }
 
     fn contains(&self, point: impl Point2d) -> bool {

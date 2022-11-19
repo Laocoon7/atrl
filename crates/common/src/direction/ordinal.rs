@@ -18,121 +18,121 @@ pub enum OrdinalDirection {
 impl OrdinalDirection {
     pub fn from_unit_coord(coord: impl Point2d + std::fmt::Debug) -> Self {
         match [coord.x(), coord.y()] {
-            [1, 1] => OrdinalDirection::SouthEast,
-            [1, -1] => OrdinalDirection::NorthEast,
-            [-1, 1] => OrdinalDirection::SouthWest,
-            [-1, -1] => OrdinalDirection::NorthWest,
+            [1, 1] => Self::SouthEast,
+            [1, -1] => Self::NorthEast,
+            [-1, 1] => Self::SouthWest,
+            [-1, -1] => Self::NorthWest,
             _ => panic!("Unexpected coord: {:?}", coord),
         }
     }
 
-    pub fn direction(self) -> GridDirection {
+    pub const fn direction(self) -> GridDirection {
         match self {
-            OrdinalDirection::NorthEast => GridDirection::NorthEast,
-            OrdinalDirection::SouthEast => GridDirection::SouthEast,
-            OrdinalDirection::SouthWest => GridDirection::SouthWest,
-            OrdinalDirection::NorthWest => GridDirection::NorthWest,
+            Self::NorthEast => GridDirection::NorthEast,
+            Self::SouthEast => GridDirection::SouthEast,
+            Self::SouthWest => GridDirection::SouthWest,
+            Self::NorthWest => GridDirection::NorthWest,
         }
     }
 
-    pub fn opposite(self) -> OrdinalDirection {
+    pub const fn opposite(self) -> Self {
         match self {
-            OrdinalDirection::NorthEast => OrdinalDirection::SouthWest,
-            OrdinalDirection::SouthEast => OrdinalDirection::NorthWest,
-            OrdinalDirection::SouthWest => OrdinalDirection::NorthEast,
-            OrdinalDirection::NorthWest => OrdinalDirection::SouthEast,
+            Self::NorthEast => Self::SouthWest,
+            Self::SouthEast => Self::NorthWest,
+            Self::SouthWest => Self::NorthEast,
+            Self::NorthWest => Self::SouthEast,
         }
     }
 
-    pub fn coord(self) -> IVec2 {
+    pub const fn coord(self) -> IVec2 {
         match self {
-            OrdinalDirection::NorthEast => IVec2::new(1, 1),
-            OrdinalDirection::SouthEast => IVec2::new(1, -1),
-            OrdinalDirection::SouthWest => IVec2::new(-1, -1),
-            OrdinalDirection::NorthWest => IVec2::new(-1, 1),
+            Self::NorthEast => IVec2::new(1, 1),
+            Self::SouthEast => IVec2::new(1, -1),
+            Self::SouthWest => IVec2::new(-1, -1),
+            Self::NorthWest => IVec2::new(-1, 1),
         }
     }
 
-    pub fn left90(self) -> OrdinalDirection {
+    pub const fn left90(self) -> Self {
         match self {
-            OrdinalDirection::NorthEast => OrdinalDirection::NorthWest,
-            OrdinalDirection::SouthEast => OrdinalDirection::NorthEast,
-            OrdinalDirection::SouthWest => OrdinalDirection::SouthEast,
-            OrdinalDirection::NorthWest => OrdinalDirection::SouthWest,
+            Self::NorthEast => Self::NorthWest,
+            Self::SouthEast => Self::NorthEast,
+            Self::SouthWest => Self::SouthEast,
+            Self::NorthWest => Self::SouthWest,
         }
     }
 
-    pub fn right90(self) -> OrdinalDirection {
+    pub const fn right90(self) -> Self {
         match self {
-            OrdinalDirection::NorthEast => OrdinalDirection::SouthEast,
-            OrdinalDirection::SouthEast => OrdinalDirection::SouthWest,
-            OrdinalDirection::SouthWest => OrdinalDirection::NorthWest,
-            OrdinalDirection::NorthWest => OrdinalDirection::NorthEast,
+            Self::NorthEast => Self::SouthEast,
+            Self::SouthEast => Self::SouthWest,
+            Self::SouthWest => Self::NorthWest,
+            Self::NorthWest => Self::NorthEast,
         }
     }
 
-    pub fn left45(self) -> CardinalDirection {
+    pub const fn left45(self) -> CardinalDirection {
         match self {
-            OrdinalDirection::NorthEast => CardinalDirection::North,
-            OrdinalDirection::SouthEast => CardinalDirection::East,
-            OrdinalDirection::SouthWest => CardinalDirection::South,
-            OrdinalDirection::NorthWest => CardinalDirection::West,
+            Self::NorthEast => CardinalDirection::North,
+            Self::SouthEast => CardinalDirection::East,
+            Self::SouthWest => CardinalDirection::South,
+            Self::NorthWest => CardinalDirection::West,
         }
     }
 
-    pub fn right45(self) -> CardinalDirection {
+    pub const fn right45(self) -> CardinalDirection {
         match self {
-            OrdinalDirection::NorthEast => CardinalDirection::East,
-            OrdinalDirection::SouthEast => CardinalDirection::South,
-            OrdinalDirection::SouthWest => CardinalDirection::West,
-            OrdinalDirection::NorthWest => CardinalDirection::North,
+            Self::NorthEast => CardinalDirection::East,
+            Self::SouthEast => CardinalDirection::South,
+            Self::SouthWest => CardinalDirection::West,
+            Self::NorthWest => CardinalDirection::North,
         }
     }
 
-    pub fn left135(self) -> CardinalDirection {
+    pub const fn left135(self) -> CardinalDirection {
         match self {
-            OrdinalDirection::NorthEast => CardinalDirection::West,
-            OrdinalDirection::SouthEast => CardinalDirection::North,
-            OrdinalDirection::SouthWest => CardinalDirection::East,
-            OrdinalDirection::NorthWest => CardinalDirection::South,
+            Self::NorthEast => CardinalDirection::West,
+            Self::SouthEast => CardinalDirection::North,
+            Self::SouthWest => CardinalDirection::East,
+            Self::NorthWest => CardinalDirection::South,
         }
     }
 
-    pub fn right135(self) -> CardinalDirection {
+    pub const fn right135(self) -> CardinalDirection {
         match self {
-            OrdinalDirection::NorthEast => CardinalDirection::South,
-            OrdinalDirection::SouthEast => CardinalDirection::West,
-            OrdinalDirection::SouthWest => CardinalDirection::North,
-            OrdinalDirection::NorthWest => CardinalDirection::East,
+            Self::NorthEast => CardinalDirection::South,
+            Self::SouthEast => CardinalDirection::West,
+            Self::SouthWest => CardinalDirection::North,
+            Self::NorthWest => CardinalDirection::East,
         }
     }
 
-    pub fn from_cardinals(a: CardinalDirection, b: CardinalDirection) -> Option<Self> {
+    pub const fn from_cardinals(a: CardinalDirection, b: CardinalDirection) -> Option<Self> {
         match a {
             CardinalDirection::North => match b {
-                CardinalDirection::East => Some(OrdinalDirection::NorthEast),
-                CardinalDirection::West => Some(OrdinalDirection::NorthWest),
+                CardinalDirection::East => Some(Self::NorthEast),
+                CardinalDirection::West => Some(Self::NorthWest),
                 _ => None,
             },
             CardinalDirection::East => match b {
-                CardinalDirection::North => Some(OrdinalDirection::NorthEast),
-                CardinalDirection::South => Some(OrdinalDirection::SouthEast),
+                CardinalDirection::North => Some(Self::NorthEast),
+                CardinalDirection::South => Some(Self::SouthEast),
                 _ => None,
             },
             CardinalDirection::South => match b {
-                CardinalDirection::East => Some(OrdinalDirection::SouthEast),
-                CardinalDirection::West => Some(OrdinalDirection::SouthWest),
+                CardinalDirection::East => Some(Self::SouthEast),
+                CardinalDirection::West => Some(Self::SouthWest),
                 _ => None,
             },
             CardinalDirection::West => match b {
-                CardinalDirection::North => Some(OrdinalDirection::NorthWest),
-                CardinalDirection::South => Some(OrdinalDirection::SouthWest),
+                CardinalDirection::North => Some(Self::NorthWest),
+                CardinalDirection::South => Some(Self::SouthWest),
                 _ => None,
             },
         }
     }
 
-    pub fn to_cardinals(self) -> (CardinalDirection, CardinalDirection) {
+    pub const fn to_cardinals(self) -> (CardinalDirection, CardinalDirection) {
         use self::CardinalDirection::*;
         use self::OrdinalDirection::*;
         match self {

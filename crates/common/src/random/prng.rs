@@ -27,7 +27,7 @@ impl Prng {
         self
     }
 
-    pub fn seed(&self) -> u64 {
+    pub const fn seed(&self) -> u64 {
         self.seed
     }
 

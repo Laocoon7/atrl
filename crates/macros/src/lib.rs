@@ -1,3 +1,5 @@
+#![warn(clippy::nursery, clippy::all)]
+
 mod primative;
 
 pub mod prelude {

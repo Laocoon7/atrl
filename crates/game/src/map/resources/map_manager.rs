@@ -2,13 +2,13 @@ use crate::prelude::*;
 
 #[derive(Default, Resource)]
 pub struct MapManager {
-    _current_map: WorldPosition,
+    pub current_map: WorldPosition,
     loaded_maps: HashMap<WorldPosition, Entity>,
 }
 
 impl MapManager {
     pub fn new() -> Self {
-        Self { _current_map: WorldPosition(IVec3::new(0, 0, 0)), loaded_maps: HashMap::new() }
+        Self { current_map: WorldPosition(IVec3::new(0, 0, 0)), loaded_maps: HashMap::new() }
     }
 
     pub fn get_or_generate(
@@ -42,15 +42,27 @@ impl MapManager {
         let map_name =
             format!("Map ({}, {}, {})", world_position.x, world_position.y, world_position.z);
 
-        let tileset = if let Some(name) = tileset_name {
-            tilesets
-                .get_by_name(&name)
-                .unwrap_or_else(|| panic!("Couldn't find tilemap_name: {}", &name))
-        } else if let Some(id) = tileset_id {
-            tilesets.get_by_id(&id).unwrap_or_else(|| panic!("Couldn't find tilemap_id: {:?}", id))
-        } else {
-            tilesets.get_by_id(&0).unwrap_or_else(|| panic!("Couldn't find tilemap_id: {:?}", 0))
-        };
+        let tileset = tileset_name.map_or_else(
+            || {
+                tileset_id.map_or_else(
+                    || {
+                        tilesets
+                            .get_by_id(&0)
+                            .unwrap_or_else(|| panic!("Couldn't find tilemap_id: {:?}", 0))
+                    },
+                    |id| {
+                        tilesets
+                            .get_by_id(&id)
+                            .unwrap_or_else(|| panic!("Couldn't find tilemap_id: {:?}", id))
+                    },
+                )
+            },
+            |name| {
+                tilesets
+                    .get_by_name(&name)
+                    .unwrap_or_else(|| panic!("Couldn't find tilemap_name: {}", &name))
+            },
+        );
 
         let tileset_id = *tileset.id();
 
@@ -167,6 +179,12 @@ impl MapManager {
         }
     }
 
+    /// TODO:
+    ///
+    /// the function has a cognitive complexity of (28/25)
+    /// you could split it up into multiple smaller functions
+    ///
+    /// https://rust-lang.github.io/rust-clippy/master/index.html#cognitive_complexity
     pub fn get_terrain_map_around_point(
         &self,
         world_position: WorldPosition,

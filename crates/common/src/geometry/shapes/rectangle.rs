@@ -24,22 +24,22 @@ impl Rectangle {
 
 impl Rectangle {
     #[inline]
-    pub fn width(&self) -> i32 {
+    pub const fn width(&self) -> i32 {
         self.max.x - self.min.x
     }
 
     #[inline]
-    pub fn height(&self) -> i32 {
+    pub const fn height(&self) -> i32 {
         self.max.y - self.min.y
     }
 
     #[inline]
-    pub fn min(&self) -> IVec2 {
+    pub const fn min(&self) -> IVec2 {
         self.min
     }
 
     #[inline]
-    pub fn max(&self) -> IVec2 {
+    pub const fn max(&self) -> IVec2 {
         self.max
     }
 
@@ -55,7 +55,7 @@ impl Shape for Rectangle {
     where
         Self: Sized,
     {
-        Rectangle::new(points[0], points[1])
+        Self::new(points[0], points[1])
     }
 
     #[inline]
@@ -139,7 +139,7 @@ impl Rectangle {
     /// Check if this rectangle intersects another rectangle.
     #[inline]
     #[must_use]
-    pub fn intersects(&self, other: Self) -> bool {
+    pub const fn intersects(&self, other: Self) -> bool {
         // (self.min.cmple(other.max) & self.max.cmpge(other.min)).all()
 
         self.min.x <= other.max.x

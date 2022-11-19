@@ -40,27 +40,27 @@ impl Line {
 impl Line {
     #[allow(clippy::len_without_is_empty)] //use start()==end() to check that
     #[inline]
-    pub fn len(&self) -> u32 {
+    pub const fn len(&self) -> u32 {
         self.len
     }
 
     #[inline]
-    pub fn angle(&self) -> f32 {
+    pub const fn angle(&self) -> f32 {
         self.angle
     }
 
     #[inline]
-    pub fn start(&self) -> IVec2 {
+    pub const fn start(&self) -> IVec2 {
         self.start
     }
 
     #[inline]
-    pub fn end(&self) -> IVec2 {
+    pub const fn end(&self) -> IVec2 {
         self.end
     }
 
     #[inline]
-    pub fn line_type(&self) -> LineType {
+    pub const fn line_type(&self) -> LineType {
         self.line_type
     }
 }
@@ -71,7 +71,7 @@ impl Shape for Line {
         Self: Sized,
     {
         debug_assert!(points.len() >= 2);
-        Line::new(points[0], points[1])
+        Self::new(points[0], points[1])
     }
 
     fn contains(&self, point: impl Point2d) -> bool {

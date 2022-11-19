@@ -8,7 +8,7 @@ pub struct Health {
 }
 
 impl Health {
-    pub fn new(current_hp: i32, max_hp: i32) -> Self {
+    pub const fn new(current_hp: i32, max_hp: i32) -> Self {
         Self { current_hp, max_hp }
     }
 }

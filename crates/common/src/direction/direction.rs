@@ -24,123 +24,123 @@ pub enum DirectionType {
 impl GridDirection {
     pub fn from_unit_coord<P>(coord: impl Point2d + std::fmt::Debug) -> Self {
         match [coord.x(), coord.y()] {
-            [1, 0] => GridDirection::East,
-            [-1, 0] => GridDirection::West,
-            [0, 1] => GridDirection::South,
-            [0, -1] => GridDirection::North,
-            [1, 1] => GridDirection::SouthEast,
-            [1, -1] => GridDirection::NorthEast,
-            [-1, 1] => GridDirection::SouthWest,
-            [-1, -1] => GridDirection::NorthWest,
+            [1, 0] => Self::East,
+            [-1, 0] => Self::West,
+            [0, 1] => Self::South,
+            [0, -1] => Self::North,
+            [1, 1] => Self::SouthEast,
+            [1, -1] => Self::NorthEast,
+            [-1, 1] => Self::SouthWest,
+            [-1, -1] => Self::NorthWest,
             _ => panic!("Unexpected coord: {:?}", coord),
         }
     }
 
-    pub fn opposite(self) -> GridDirection {
+    pub const fn opposite(self) -> Self {
         match self {
-            GridDirection::North => GridDirection::South,
-            GridDirection::NorthEast => GridDirection::SouthWest,
-            GridDirection::East => GridDirection::West,
-            GridDirection::SouthEast => GridDirection::NorthWest,
-            GridDirection::South => GridDirection::North,
-            GridDirection::SouthWest => GridDirection::NorthEast,
-            GridDirection::West => GridDirection::East,
-            GridDirection::NorthWest => GridDirection::SouthEast,
+            Self::North => Self::South,
+            Self::NorthEast => Self::SouthWest,
+            Self::East => Self::West,
+            Self::SouthEast => Self::NorthWest,
+            Self::South => Self::North,
+            Self::SouthWest => Self::NorthEast,
+            Self::West => Self::East,
+            Self::NorthWest => Self::SouthEast,
         }
     }
 
     // Bevy Transform uses N: 1, S: -1, E: 1, W: -1
-    pub fn coord(self) -> IVec2 {
+    pub const fn coord(self) -> IVec2 {
         match self {
-            GridDirection::North => IVec2::new(0, 1),
-            GridDirection::NorthEast => IVec2::new(1, 1),
+            Self::North => IVec2::new(0, 1),
+            Self::NorthEast => IVec2::new(1, 1),
 
-            GridDirection::East => IVec2::new(1, 0),
-            GridDirection::SouthEast => IVec2::new(1, -1),
+            Self::East => IVec2::new(1, 0),
+            Self::SouthEast => IVec2::new(1, -1),
 
-            GridDirection::South => IVec2::new(0, -1),
-            GridDirection::SouthWest => IVec2::new(-1, -1),
+            Self::South => IVec2::new(0, -1),
+            Self::SouthWest => IVec2::new(-1, -1),
 
-            GridDirection::West => IVec2::new(-1, 0),
-            GridDirection::NorthWest => IVec2::new(-1, 1),
+            Self::West => IVec2::new(-1, 0),
+            Self::NorthWest => IVec2::new(-1, 1),
         }
     }
 
-    pub fn left90(self) -> GridDirection {
+    pub const fn left90(self) -> Self {
         match self {
-            GridDirection::North => GridDirection::West,
-            GridDirection::NorthEast => GridDirection::NorthWest,
-            GridDirection::East => GridDirection::North,
-            GridDirection::SouthEast => GridDirection::NorthEast,
-            GridDirection::South => GridDirection::East,
-            GridDirection::SouthWest => GridDirection::SouthEast,
-            GridDirection::West => GridDirection::South,
-            GridDirection::NorthWest => GridDirection::SouthWest,
+            Self::North => Self::West,
+            Self::NorthEast => Self::NorthWest,
+            Self::East => Self::North,
+            Self::SouthEast => Self::NorthEast,
+            Self::South => Self::East,
+            Self::SouthWest => Self::SouthEast,
+            Self::West => Self::South,
+            Self::NorthWest => Self::SouthWest,
         }
     }
 
-    pub fn right90(self) -> GridDirection {
+    pub const fn right90(self) -> Self {
         match self {
-            GridDirection::North => GridDirection::East,
-            GridDirection::NorthEast => GridDirection::SouthEast,
-            GridDirection::East => GridDirection::South,
-            GridDirection::SouthEast => GridDirection::SouthWest,
-            GridDirection::South => GridDirection::West,
-            GridDirection::SouthWest => GridDirection::NorthWest,
-            GridDirection::West => GridDirection::North,
-            GridDirection::NorthWest => GridDirection::NorthEast,
+            Self::North => Self::East,
+            Self::NorthEast => Self::SouthEast,
+            Self::East => Self::South,
+            Self::SouthEast => Self::SouthWest,
+            Self::South => Self::West,
+            Self::SouthWest => Self::NorthWest,
+            Self::West => Self::North,
+            Self::NorthWest => Self::NorthEast,
         }
     }
 
-    pub fn left45(self) -> GridDirection {
+    pub const fn left45(self) -> Self {
         match self {
-            GridDirection::North => GridDirection::NorthWest,
-            GridDirection::NorthEast => GridDirection::North,
-            GridDirection::East => GridDirection::NorthEast,
-            GridDirection::SouthEast => GridDirection::East,
-            GridDirection::South => GridDirection::SouthEast,
-            GridDirection::SouthWest => GridDirection::South,
-            GridDirection::West => GridDirection::SouthWest,
-            GridDirection::NorthWest => GridDirection::West,
+            Self::North => Self::NorthWest,
+            Self::NorthEast => Self::North,
+            Self::East => Self::NorthEast,
+            Self::SouthEast => Self::East,
+            Self::South => Self::SouthEast,
+            Self::SouthWest => Self::South,
+            Self::West => Self::SouthWest,
+            Self::NorthWest => Self::West,
         }
     }
 
-    pub fn right45(self) -> GridDirection {
+    pub const fn right45(self) -> Self {
         match self {
-            GridDirection::North => GridDirection::NorthEast,
-            GridDirection::NorthEast => GridDirection::East,
-            GridDirection::East => GridDirection::SouthEast,
-            GridDirection::SouthEast => GridDirection::South,
-            GridDirection::South => GridDirection::SouthWest,
-            GridDirection::SouthWest => GridDirection::West,
-            GridDirection::West => GridDirection::NorthWest,
-            GridDirection::NorthWest => GridDirection::North,
+            Self::North => Self::NorthEast,
+            Self::NorthEast => Self::East,
+            Self::East => Self::SouthEast,
+            Self::SouthEast => Self::South,
+            Self::South => Self::SouthWest,
+            Self::SouthWest => Self::West,
+            Self::West => Self::NorthWest,
+            Self::NorthWest => Self::North,
         }
     }
 
-    pub fn left135(self) -> GridDirection {
+    pub const fn left135(self) -> Self {
         match self {
-            GridDirection::North => GridDirection::SouthWest,
-            GridDirection::NorthEast => GridDirection::West,
-            GridDirection::East => GridDirection::NorthWest,
-            GridDirection::SouthEast => GridDirection::North,
-            GridDirection::South => GridDirection::NorthEast,
-            GridDirection::SouthWest => GridDirection::East,
-            GridDirection::West => GridDirection::SouthEast,
-            GridDirection::NorthWest => GridDirection::South,
+            Self::North => Self::SouthWest,
+            Self::NorthEast => Self::West,
+            Self::East => Self::NorthWest,
+            Self::SouthEast => Self::North,
+            Self::South => Self::NorthEast,
+            Self::SouthWest => Self::East,
+            Self::West => Self::SouthEast,
+            Self::NorthWest => Self::South,
         }
     }
 
-    pub fn right135(self) -> GridDirection {
+    pub const fn right135(self) -> Self {
         match self {
-            GridDirection::North => GridDirection::SouthEast,
-            GridDirection::NorthEast => GridDirection::South,
-            GridDirection::East => GridDirection::SouthWest,
-            GridDirection::SouthEast => GridDirection::West,
-            GridDirection::South => GridDirection::NorthWest,
-            GridDirection::SouthWest => GridDirection::North,
-            GridDirection::West => GridDirection::NorthEast,
-            GridDirection::NorthWest => GridDirection::East,
+            Self::North => Self::SouthEast,
+            Self::NorthEast => Self::South,
+            Self::East => Self::SouthWest,
+            Self::SouthEast => Self::West,
+            Self::South => Self::NorthWest,
+            Self::SouthWest => Self::North,
+            Self::West => Self::NorthEast,
+            Self::NorthWest => Self::East,
         }
     }
 
@@ -152,52 +152,43 @@ impl GridDirection {
         DirectionBitmap::new(self.bitmap_raw())
     }
 
-    pub fn is_cardinal(self) -> bool {
-        matches!(
-            self,
-            GridDirection::North | GridDirection::East | GridDirection::South | GridDirection::West
-        )
+    pub const fn is_cardinal(self) -> bool {
+        matches!(self, Self::North | Self::East | Self::South | Self::West)
     }
 
-    pub fn is_ordinal(self) -> bool {
-        matches!(
-            self,
-            GridDirection::NorthEast
-                | GridDirection::SouthEast
-                | GridDirection::SouthWest
-                | GridDirection::NorthWest
-        )
+    pub const fn is_ordinal(self) -> bool {
+        matches!(self, Self::NorthEast | Self::SouthEast | Self::SouthWest | Self::NorthWest)
     }
 
-    pub fn typ(self) -> DirectionType {
+    pub const fn typ(self) -> DirectionType {
         match self {
-            GridDirection::North => DirectionType::Cardinal(CardinalDirection::North),
-            GridDirection::NorthEast => DirectionType::Ordinal(OrdinalDirection::NorthEast),
-            GridDirection::East => DirectionType::Cardinal(CardinalDirection::East),
-            GridDirection::SouthEast => DirectionType::Ordinal(OrdinalDirection::SouthEast),
-            GridDirection::South => DirectionType::Cardinal(CardinalDirection::South),
-            GridDirection::SouthWest => DirectionType::Ordinal(OrdinalDirection::SouthWest),
-            GridDirection::West => DirectionType::Cardinal(CardinalDirection::West),
-            GridDirection::NorthWest => DirectionType::Ordinal(OrdinalDirection::NorthWest),
+            Self::North => DirectionType::Cardinal(CardinalDirection::North),
+            Self::NorthEast => DirectionType::Ordinal(OrdinalDirection::NorthEast),
+            Self::East => DirectionType::Cardinal(CardinalDirection::East),
+            Self::SouthEast => DirectionType::Ordinal(OrdinalDirection::SouthEast),
+            Self::South => DirectionType::Cardinal(CardinalDirection::South),
+            Self::SouthWest => DirectionType::Ordinal(OrdinalDirection::SouthWest),
+            Self::West => DirectionType::Cardinal(CardinalDirection::West),
+            Self::NorthWest => DirectionType::Ordinal(OrdinalDirection::NorthWest),
         }
     }
 
-    pub fn cardinal(self) -> Option<CardinalDirection> {
+    pub const fn cardinal(self) -> Option<CardinalDirection> {
         match self {
-            GridDirection::North => Some(CardinalDirection::North),
-            GridDirection::East => Some(CardinalDirection::East),
-            GridDirection::South => Some(CardinalDirection::South),
-            GridDirection::West => Some(CardinalDirection::West),
+            Self::North => Some(CardinalDirection::North),
+            Self::East => Some(CardinalDirection::East),
+            Self::South => Some(CardinalDirection::South),
+            Self::West => Some(CardinalDirection::West),
             _ => None,
         }
     }
 
-    pub fn ordinal(self) -> Option<OrdinalDirection> {
+    pub const fn ordinal(self) -> Option<OrdinalDirection> {
         match self {
-            GridDirection::NorthEast => Some(OrdinalDirection::NorthEast),
-            GridDirection::SouthEast => Some(OrdinalDirection::SouthEast),
-            GridDirection::SouthWest => Some(OrdinalDirection::SouthWest),
-            GridDirection::NorthWest => Some(OrdinalDirection::NorthWest),
+            Self::NorthEast => Some(OrdinalDirection::NorthEast),
+            Self::SouthEast => Some(OrdinalDirection::SouthEast),
+            Self::SouthWest => Some(OrdinalDirection::SouthWest),
+            Self::NorthWest => Some(OrdinalDirection::NorthWest),
             _ => None,
         }
     }

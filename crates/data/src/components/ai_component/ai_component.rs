@@ -7,7 +7,8 @@ pub struct AIComponent {
 }
 
 impl AIComponent {
-    pub fn new(ai_type: AIType) -> Self {
+    #[inline]
+    pub const fn new(ai_type: AIType) -> Self {
         Self { ai_type }
     }
 }

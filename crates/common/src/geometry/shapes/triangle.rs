@@ -72,15 +72,15 @@ impl Triangle {
 
 impl Triangle {
     #[inline]
-    pub fn angles(&self) -> [f32; 3] {
+    pub const fn angles(&self) -> [f32; 3] {
         self.angles
     }
     #[inline]
-    pub fn angle_type(&self) -> &TriangleAngleType {
+    pub const fn angle_type(&self) -> &TriangleAngleType {
         &self.angle_type
     }
     #[inline]
-    pub fn side_type(&self) -> &TriangleSideType {
+    pub const fn side_type(&self) -> &TriangleSideType {
         &self.side_type
     }
 }

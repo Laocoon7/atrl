@@ -6,7 +6,8 @@ pub struct MapPlugin<T> {
 }
 
 impl<T: StateNext> MapPlugin<T> {
-    pub fn new(state_construct: T, state_running: T) -> Self {
+    #[inline(always)]
+    pub const fn new(state_construct: T, state_running: T) -> Self {
         Self { state_construct, state_running }
     }
 }

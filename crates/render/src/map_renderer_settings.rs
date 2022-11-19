@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-pub(crate) struct MapRendererSettings {
+pub struct MapRendererSettings {
     pub chunk_size: UVec2,
     pub tileset_file_paths: Vec<String>,
     pub tileset_folder_paths: Vec<String>,

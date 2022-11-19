@@ -16,7 +16,7 @@ pub trait Lerp {
 /// see [f32::lerp]
 #[inline]
 pub fn flerp(start: f32, end: f32, percent: f32) -> f32 {
-    start + ((end - start) * percent)
+    (end - start).mul_add(percent, start)
 }
 
 macro_rules! impl_lerp {
@@ -47,7 +47,7 @@ impl_lerp!(isize);
 
 impl Lerp for IVec2 {
     #[inline]
-    fn lerp(self, end: IVec2, percent: f32) -> IVec2 {
-        IVec2 { x: self.x.lerp(end.x, percent), y: self.y.lerp(end.y, percent) }
+    fn lerp(self, end: Self, percent: f32) -> Self {
+        Self { x: self.x.lerp(end.x, percent), y: self.y.lerp(end.y, percent) }
     }
 }

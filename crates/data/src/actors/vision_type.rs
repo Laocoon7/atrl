@@ -28,9 +28,17 @@ pub enum VisionType {
     Any = !0,
 }
 
-impl From<VisionType> for u8 {
-    fn from(value: VisionType) -> Self {
-        value.to_u8().unwrap()
+impl TryFrom<VisionType> for u8 {
+    type Error = String;
+
+    fn try_from(value: VisionType) -> Result<Self, Self::Error> {
+        value.to_u8().map_or(Err("Failed to convert `VisionType` to `u8`".to_string()), Ok)
+    }
+}
+
+impl VisionType {
+    pub fn as_u8(self) -> u8 {
+        self.try_into().unwrap()
     }
 }
 

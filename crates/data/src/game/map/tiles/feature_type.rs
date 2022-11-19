@@ -27,7 +27,7 @@ pub enum FeatureType {
 
 impl FeatureType {
     /// Movement is allowed if MovementComponent allows any of these types
-    pub fn allowed_movement(&self) -> u8 {
+    pub const fn allowed_movement(&self) -> u8 {
         match self {
             Self::None => MovementType::Any as u8,
             Self::StairsDown => {
@@ -58,7 +58,7 @@ impl FeatureType {
     }
 
     /// The tile is visible to these vision types (but not necessarily explored)
-    pub fn allowed_vision(&self) -> u8 {
+    pub const fn allowed_vision(&self) -> u8 {
         match self {
             Self::None => VisionType::None as u8,
             Self::StairsDown => {
@@ -89,7 +89,7 @@ impl FeatureType {
     }
 
     /// The tile is considered opaque unless VisionComponent includes one of these types
-    pub fn vision_penetrates(&self) -> u8 {
+    pub const fn vision_penetrates(&self) -> u8 {
         match self {
             Self::None => VisionType::None as u8,
             Self::StairsDown => {

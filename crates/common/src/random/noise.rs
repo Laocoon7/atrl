@@ -37,7 +37,7 @@ impl Noise {
         let value = self.get(x, y, z);
 
         // min + (value - -1) * (max - min) / (1 - -1)
-        min + (value + 1.0) * (max - min) * 0.5
+        ((value + 1.0) * (max - min)).mul_add(0.5, min)
     }
 }
 

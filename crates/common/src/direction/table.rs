@@ -61,7 +61,7 @@ macro_rules! make_direction_table {
                 self.values[direction as usize] = value;
             }
 
-            pub fn get(&self, direction: $direction_type) -> &T {
+            pub const fn get(&self, direction: $direction_type) -> &T {
                 &self.values[direction as usize]
             }
 
@@ -77,7 +77,7 @@ macro_rules! make_direction_table {
                 self.values.iter_mut()
             }
 
-            pub fn directions(&self) -> $direction_iter {
+            pub const fn directions(&self) -> $direction_iter {
                 $direction_iter::new()
             }
 

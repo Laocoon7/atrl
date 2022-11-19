@@ -31,7 +31,7 @@ impl<T: Clone + GridParam> Grid<T> {
     pub fn blit_clone(
         &mut self,
         to: impl Point2d,
-        source: &Grid<T>,
+        source: &Self,
         from: impl Point2d,
         size: impl Size2d,
     ) {
@@ -57,7 +57,7 @@ impl<T: Copy + GridParam> Grid<T> {
     pub fn blit_copy(
         &mut self,
         to: impl Point2d,
-        source: &Grid<T>,
+        source: &Self,
         from: impl Point2d,
         size: impl Size2d,
     ) {
@@ -107,7 +107,7 @@ impl<T: GridParam> Grid<T> {
     }
 
     #[inline]
-    pub fn size(&self) -> UVec2 {
+    pub const fn size(&self) -> UVec2 {
         self.size
     }
 

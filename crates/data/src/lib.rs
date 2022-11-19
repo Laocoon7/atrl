@@ -1,4 +1,5 @@
 #![allow(clippy::module_inception)]
+#![warn(clippy::nursery, clippy::all)]
 #![allow(clippy::type_complexity)] // Bevy can have complex queries, so we shush clippy
 #![allow(clippy::too_many_arguments)] // Bevy has a lot of arguments, so we shush clippy
 

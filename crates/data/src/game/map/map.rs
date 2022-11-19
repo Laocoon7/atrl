@@ -23,19 +23,18 @@ pub struct Map {
 
     pub update_tiles: HashSet<UVec2>,
     pub update_all: bool,
+
+    pub visibility_map: VisibilityMap2d,
 }
 
 impl Map {
     pub fn can_move_through(&self, index: impl Point2d, movement_component: &Movement) -> bool {
-        let terrain = match self.terrain_types.get(index) {
-            Some(t) => t.allowed_movement(),
-            None => MovementType::None as u8, // block any out of map stuff???
-        };
-
-        let feature = match self.feature_types.get(index) {
-            Some(f) => f.allowed_movement(),
-            None => MovementType::Any as u8,
-        };
+        let terrain = self
+            .terrain_types
+            .get(index)
+            .map_or(MovementType::None as u8, |t| t.allowed_movement());
+        let feature =
+            self.feature_types.get(index).map_or(MovementType::Any as u8, |f| f.allowed_movement());
 
         println!(
             "T: {:?}, F: {:?}, M:{:?}, A:{:?}",
@@ -49,24 +48,17 @@ impl Map {
     }
 
     pub fn can_see_through(&self, index: impl Point2d, vision_component: &Vision) -> bool {
-        let terrain = match self.terrain_types.get(index) {
-            Some(t) => t.vision_penetrates(),
-            None => VisionType::Any as u8,
-        };
-
-        let feature = match self.feature_types.get(index) {
-            Some(f) => f.vision_penetrates(),
-            None => VisionType::Any as u8,
-        };
+        let terrain =
+            self.terrain_types.get(index).map_or(VisionType::Any as u8, |t| t.vision_penetrates());
+        let feature =
+            self.feature_types.get(index).map_or(VisionType::Any as u8, |f| f.vision_penetrates());
 
         (terrain & feature & (**vision_component)) != 0
     }
 
     pub fn can_see_feature(&self, index: impl Point2d, vision_component: &Vision) -> bool {
-        let feature = match self.feature_types.get(index) {
-            Some(f) => f.allowed_vision(),
-            None => VisionType::None as u8,
-        };
+        let feature =
+            self.feature_types.get(index).map_or(VisionType::None as u8, |f| f.allowed_vision());
 
         (feature & **vision_component) != 0
     }
@@ -94,10 +86,7 @@ impl Map {
     }
 
     pub fn get_actor(&self, index: impl Point2d) -> Option<Entity> {
-        match self.actors.get(index) {
-            Some(e) => e.as_ref().copied(),
-            None => None,
-        }
+        self.actors.get(index).and_then(|e| e.as_ref().copied())
     }
 
     pub fn move_actor(&mut self, from: impl Point2d, to: impl Point2d) {
@@ -152,6 +141,7 @@ impl From<MapGenData<MapPassThroughData>> for Map {
             item_layer_entity: data.user_data.item_layer_entity,
             update_tiles: HashSet::new(),
             update_all: true,
+            visibility_map: VisibilityMap2d::new_default(data.size),
         }
     }
 }

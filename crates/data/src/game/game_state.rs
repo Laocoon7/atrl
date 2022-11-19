@@ -84,8 +84,8 @@ impl StateNext for GameState {
 impl StateNext for TurnState {
     fn next(&self) -> Option<Self> {
         match self {
-            TurnState::AwaitingInput => Some(TurnState::Ticking),
-            TurnState::Ticking => Some(TurnState::AwaitingInput),
+            Self::AwaitingInput => Some(Self::Ticking),
+            Self::Ticking => Some(Self::AwaitingInput),
         }
     }
 }
@@ -94,11 +94,14 @@ impl TurnState {
     pub fn set_next(&self, commands: &mut Commands) {
         let current = &self;
 
-        if let Some(next) = current.next() {
-            bevy::log::info!("transitioning turnstate from {:?} to {:?}", current, next);
-            commands.insert_resource(next);
-        } else {
-            bevy::log::error!("no next turnstate for {:?}.", current);
-        }
+        current.next().map_or_else(
+            || {
+                bevy::log::error!("no next turnstate for {:?}.", current);
+            },
+            |next| {
+                bevy::log::info!("transitioning turnstate from {:?} to {:?}", current, next);
+                commands.insert_resource(next);
+            },
+        )
     }
 }

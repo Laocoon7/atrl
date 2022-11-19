@@ -34,12 +34,12 @@ impl Polygon {
 
 impl Polygon {
     #[inline]
-    pub fn fpoints(&self) -> &Vec<Vec2> {
+    pub const fn fpoints(&self) -> &Vec<Vec2> {
         &self.fpoints
     }
 
     #[inline]
-    pub fn is_regular(&self) -> bool {
+    pub const fn is_regular(&self) -> bool {
         self.is_regular
     }
 
@@ -56,7 +56,7 @@ impl Polygon {
     }
 
     #[inline]
-    pub fn is_convex(&self) -> bool {
+    pub const fn is_convex(&self) -> bool {
         self.is_convex
     }
 }
@@ -66,7 +66,7 @@ impl Shape for Polygon {
     where
         Self: Sized,
     {
-        Polygon::new(points)
+        Self::new(points)
     }
 
     fn contains(&self, point: impl Point2d) -> bool {
@@ -79,9 +79,9 @@ impl Shape for Polygon {
                 || self.fpoints[j].y < fpoint.y && self.fpoints[i].y >= fpoint.y)
                 && (self.fpoints[i].x <= fpoint.x || self.fpoints[j].x <= fpoint.x)
             {
-                odd_number_of_nodes ^= self.fpoints[i].x
-                    + (fpoint.y - self.fpoints[i].y) / (self.fpoints[j].y - self.fpoints[i].y)
-                        * (self.fpoints[j].x - self.fpoints[i].x)
+                odd_number_of_nodes ^= ((fpoint.y - self.fpoints[i].y)
+                    / (self.fpoints[j].y - self.fpoints[i].y))
+                    .mul_add(self.fpoints[j].x - self.fpoints[i].x, self.fpoints[i].x)
                     < fpoint.x;
             }
             j = i;

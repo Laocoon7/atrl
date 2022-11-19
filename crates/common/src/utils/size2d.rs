@@ -28,10 +28,10 @@ pub trait Size2d: Clone + Copy {
     // Create a new UVec2
     // Panics if `width` or `height` is greater than `i32::MAX`
     fn new(width: u32, height: u32) -> UVec2 {
-        match Self::new_try(width, height) {
-            Some(size) => size,
-            None => panic!("Size is too big: ({}, {}). Max is {}.", width, height, MAX_SIZE),
-        }
+        Self::new_try(width, height).map_or_else(
+            || panic!("Size is too big: ({}, {}). Max is {}.", width, height, MAX_SIZE),
+            |size| size,
+        )
     }
 
     /// Returns width value.

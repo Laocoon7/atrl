@@ -14,12 +14,12 @@ impl Ellipse {
 
 impl Ellipse {
     #[inline]
-    pub fn width(&self) -> u32 {
+    pub const fn width(&self) -> u32 {
         self.size.x
     }
 
     #[inline]
-    pub fn height(&self) -> u32 {
+    pub const fn height(&self) -> u32 {
         self.size.y
     }
 }
@@ -34,15 +34,15 @@ impl Shape for Ellipse {
         let width = points[1].x() - points[0].x();
         let height = points[1].y() - points[0].x();
         let center = points[0].mid_point(points[1]);
-        Ellipse::new(center, [width.max(0), height.max(0)])
+        Self::new(center, [width.max(0), height.max(0)])
     }
 
     fn translate_by(&self, delta: impl Point2d) -> Self {
-        Ellipse::new(self.center + delta.as_ivec2(), self.size)
+        Self::new(self.center + delta.as_ivec2(), self.size)
     }
 
     fn move_to(&self, point: impl Point2d) -> Self {
-        Ellipse::new(point, self.size)
+        Self::new(point, self.size)
     }
 
     fn contains(&self, point: impl Point2d) -> bool {

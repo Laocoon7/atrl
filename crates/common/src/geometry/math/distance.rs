@@ -24,11 +24,11 @@ impl DistanceAlg {
     /// Provides a 2D distance between points, using the specified algorithm.
     pub fn distance2d(self, start: impl Point2d, end: impl Point2d) -> f32 {
         match self {
-            DistanceAlg::Pythagoras => distance2d_pythagoras(start, end),
-            DistanceAlg::PythagorasSquared => distance2d_pythagoras_squared(start, end),
-            DistanceAlg::Manhattan => distance2d_manhattan(start, end),
-            DistanceAlg::Chebyshev => distance2d_chebyshev(start, end),
-            DistanceAlg::Diagonal => distance2d_diagonal(start, end),
+            Self::Pythagoras => distance2d_pythagoras(start, end),
+            Self::PythagorasSquared => distance2d_pythagoras_squared(start, end),
+            Self::Manhattan => distance2d_manhattan(start, end),
+            Self::Chebyshev => distance2d_chebyshev(start, end),
+            Self::Diagonal => distance2d_diagonal(start, end),
         }
     }
 }
@@ -63,9 +63,9 @@ fn distance2d_chebyshev(start: impl Point2d, end: impl Point2d) -> f32 {
     let end = end.as_vec2();
     let dist = start.max(end) - start.min(end);
     if dist.x > dist.y {
-        (dist.x - dist.y) + 1.0 * dist.y
+        1.0f32.mul_add(dist.y, dist.x - dist.y)
     } else {
-        (dist.y - dist.x) + 1.0 * dist.x
+        1.0f32.mul_add(dist.x, dist.y - dist.x)
     }
 }
 
@@ -83,73 +83,73 @@ mod tests {
 
     #[test]
     fn test_pythagoras_distance() {
-        let mut d = DistanceAlg::Pythagoras.distance2d((0, 0), (5, 0));
+        let mut d = Self::Pythagoras.distance2d((0, 0), (5, 0));
         assert!(f32::abs(d - 5.0) < f32::EPSILON);
 
-        d = DistanceAlg::Pythagoras.distance2d((0, 0), (-5, 0));
+        d = Self::Pythagoras.distance2d((0, 0), (-5, 0));
         assert!(f32::abs(d - 5.0) < f32::EPSILON);
 
-        d = DistanceAlg::Pythagoras.distance2d((0, 0), (0, 5));
+        d = Self::Pythagoras.distance2d((0, 0), (0, 5));
         assert!(f32::abs(d - 5.0) < f32::EPSILON);
 
-        d = DistanceAlg::Pythagoras.distance2d((0, 0), (0, -5));
+        d = Self::Pythagoras.distance2d((0, 0), (0, -5));
         assert!(f32::abs(d - 5.0) < f32::EPSILON);
 
-        d = DistanceAlg::Pythagoras.distance2d((0, 0), (5, 5));
+        d = Self::Pythagoras.distance2d((0, 0), (5, 5));
         assert!(f32::abs(d - 7.071_068) < f32::EPSILON);
     }
 
     #[test]
     fn test_pythagoras_squared_distance() {
-        let mut d = DistanceAlg::PythagorasSquared.distance2d((0, 0), (5, 0));
+        let mut d = Self::PythagorasSquared.distance2d((0, 0), (5, 0));
         assert!(f32::abs(d - 25.0) < f32::EPSILON);
 
-        d = DistanceAlg::PythagorasSquared.distance2d((0, 0), (-5, 0));
+        d = Self::PythagorasSquared.distance2d((0, 0), (-5, 0));
         assert!(f32::abs(d - 25.0) < f32::EPSILON);
 
-        d = DistanceAlg::PythagorasSquared.distance2d((0, 0), (0, 5));
+        d = Self::PythagorasSquared.distance2d((0, 0), (0, 5));
         assert!(f32::abs(d - 25.0) < f32::EPSILON);
 
-        d = DistanceAlg::PythagorasSquared.distance2d((0, 0), (0, -5));
+        d = Self::PythagorasSquared.distance2d((0, 0), (0, -5));
         assert!(f32::abs(d - 25.0) < f32::EPSILON);
 
-        d = DistanceAlg::PythagorasSquared.distance2d((0, 0), (5, 5));
+        d = Self::PythagorasSquared.distance2d((0, 0), (5, 5));
         assert!(f32::abs(d - 50.0) < f32::EPSILON);
     }
 
     #[test]
     fn test_manhattan_distance() {
-        let mut d = DistanceAlg::Manhattan.distance2d((0, 0), (5, 0));
+        let mut d = Self::Manhattan.distance2d((0, 0), (5, 0));
         assert!(f32::abs(d - 5.0) < f32::EPSILON);
 
-        d = DistanceAlg::Manhattan.distance2d((0, 0), (-5, 0));
+        d = Self::Manhattan.distance2d((0, 0), (-5, 0));
         assert!(f32::abs(d - 5.0) < f32::EPSILON);
 
-        d = DistanceAlg::Manhattan.distance2d((0, 0), (0, 5));
+        d = Self::Manhattan.distance2d((0, 0), (0, 5));
         assert!(f32::abs(d - 5.0) < f32::EPSILON);
 
-        d = DistanceAlg::Manhattan.distance2d((0, 0), (0, -5));
+        d = Self::Manhattan.distance2d((0, 0), (0, -5));
         assert!(f32::abs(d - 5.0) < f32::EPSILON);
 
-        d = DistanceAlg::Manhattan.distance2d((0, 0), (5, 5));
+        d = Self::Manhattan.distance2d((0, 0), (5, 5));
         assert!(f32::abs(d - 10.0) < f32::EPSILON);
     }
 
     #[test]
     fn test_chebyshev_distance() {
-        let mut d = DistanceAlg::Chebyshev.distance2d((0, 0), (5, 0));
+        let mut d = Self::Chebyshev.distance2d((0, 0), (5, 0));
         assert!(f32::abs(d - 5.0) < f32::EPSILON);
 
-        d = DistanceAlg::Chebyshev.distance2d((0, 0), (-5, 0));
+        d = Self::Chebyshev.distance2d((0, 0), (-5, 0));
         assert!(f32::abs(d - 5.0) < f32::EPSILON);
 
-        d = DistanceAlg::Chebyshev.distance2d((0, 0), (0, 5));
+        d = Self::Chebyshev.distance2d((0, 0), (0, 5));
         assert!(f32::abs(d - 5.0) < f32::EPSILON);
 
-        d = DistanceAlg::Chebyshev.distance2d((0, 0), (0, -5));
+        d = Self::Chebyshev.distance2d((0, 0), (0, -5));
         assert!(f32::abs(d - 5.0) < f32::EPSILON);
 
-        d = DistanceAlg::Chebyshev.distance2d((0, 0), (5, 5));
+        d = Self::Chebyshev.distance2d((0, 0), (5, 5));
         assert!(f32::abs(d - 5.0) < f32::EPSILON);
     }
 }

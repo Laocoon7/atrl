@@ -1,6 +1,7 @@
 #![warn(clippy::nursery, clippy::all)]
-#![allow(clippy::type_complexity)] // Bevy can have complex queries, so we shush clippy
+#![allow(clippy::type_complexity)]
 #![allow(clippy::too_many_arguments)] // Bevy has a lot of arguments, so we shush clippy
+#![allow(unused_imports)] // TODO: REMOVE ME
 
 pub(crate) mod prelude;
 use crate::prelude::*;

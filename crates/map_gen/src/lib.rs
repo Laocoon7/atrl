@@ -1,3 +1,9 @@
+#![warn(clippy::nursery, clippy::all)]
+#![allow(clippy::module_inception)]
+#![allow(clippy::type_complexity)]
+#![allow(clippy::too_many_arguments)] // Bevy has a lot of arguments, so we shush clippy
+#![allow(unused_imports)] // TODO: REMOVE ME
+
 mod builders {
     mod cellular_automata_builder;
     pub use cellular_automata_builder::*;

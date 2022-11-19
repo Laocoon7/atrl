@@ -26,15 +26,17 @@ pub enum MovementType {
     Any = !0,
 }
 
-impl From<MovementType> for u8 {
-    fn from(value: MovementType) -> Self {
-        value.to_u8().unwrap()
+impl TryFrom<MovementType> for u8 {
+    type Error = String;
+
+    fn try_from(value: MovementType) -> Result<Self, Self::Error> {
+        value.to_u8().map_or(Err("Failed to convert `MovementType` to `u8`".to_string()), Ok)
     }
 }
 
 impl MovementType {
     pub fn as_u8(self) -> u8 {
-        self.into()
+        self.try_into().unwrap()
     }
 }
 

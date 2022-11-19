@@ -29,7 +29,7 @@ pub enum TerrainType {
 
 impl TerrainType {
     /// Movement is allowed if MovementComponent allows any of these types
-    pub fn allowed_movement(&self) -> u8 {
+    pub const fn allowed_movement(&self) -> u8 {
         match self {
             Self::None => (MovementType::None) as u8,
             Self::Wall => (MovementType::Fly as u8) | (MovementType::Phase as u8),
@@ -46,7 +46,7 @@ impl TerrainType {
     }
 
     /// The tile is opaque except to these vision types
-    pub fn vision_penetrates(&self) -> u8 {
+    pub const fn vision_penetrates(&self) -> u8 {
         match self {
             Self::None => VisionType::None as u8,
             Self::Wall => VisionType::XRay as u8,
@@ -74,9 +74,6 @@ impl From<TerrainType> for u32 {
 
 impl From<u32> for TerrainType {
     fn from(value: u32) -> Self {
-        match FromPrimitive::from_u32(value) {
-            Some(v) => v,
-            None => TerrainType::None,
-        }
+        FromPrimitive::from_u32(value).map_or(Self::None, |v| v)
     }
 }

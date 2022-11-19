@@ -1,10 +1,12 @@
+#![warn(clippy::nursery, clippy::all)]
+#![allow(clippy::module_inception)]
 #![allow(clippy::type_complexity)]
-#![allow(clippy::type_complexity)] // Bevy can have complex queries, so we shush clippy
 #![allow(clippy::too_many_arguments)] // Bevy has a lot of arguments, so we shush clippy
+#![allow(unused_imports)] // TODO: REMOVE ME
 
 mod components {
     mod tileset_identity;
-    pub(crate) use tileset_identity::*;
+    pub use tileset_identity::*;
 }
 
 mod functions {
@@ -15,12 +17,12 @@ mod functions {
 mod resources {
     //mod loaded_tilesets;
     mod loaded_tilesets;
-    pub(crate) use loaded_tilesets::*;
+    pub use loaded_tilesets::*;
 }
 
 mod systems {
     mod load_tilesets;
-    pub(crate) use load_tilesets::*;
+    pub use load_tilesets::*;
 }
 
 mod ui {

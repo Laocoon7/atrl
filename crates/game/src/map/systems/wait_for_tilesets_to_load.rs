@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-pub(crate) fn wait_for_tilesets_to_load(
+pub fn wait_for_tilesets_to_load(
     mut commands: Commands,
     tilesets: Tilesets,
     state: Res<CurrentGameState>,
