@@ -73,6 +73,9 @@ fn default_plugins(app: &mut App) -> &mut App {
 
     app.add_plugins(defaults);
 
+    #[cfg(feature = "release")]
+    defaults.add_before::<bevy::asset::AssetPlugin, _>(bevy_embedded_assets::EmbeddedAssetPlugin);
+
     #[cfg(not(feature = "debug"))]
     app.add_plugin(bevy::log::LogPlugin { level: bevy::log::Level::WARN, ..Default::default() });
 

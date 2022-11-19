@@ -14,7 +14,7 @@ pub fn fov(
     for (player_pos, fov, vision_component) in q_player.iter() {
         if let Some(map) = q_map.iter().find(|m| m.world_position == manager.current_map) {
             let visibility_map =
-                generate_visibility_map(&*map, player_pos.get(), fov.0, vision_component);
+                generate_visibility_map(map, player_pos.get(), fov.0, vision_component);
 
             // Tiles
             for (mut tile_vis, tile_pos) in q_tile.iter_mut() {
@@ -39,7 +39,7 @@ pub fn fov(
         }
     }
 
-    for entity in visible_actors.drain(..) {
+    for entity in visible_actors.into_iter() {
         if let Ok((_, _, mut visible)) = q_actors.get_mut(entity) {
             visible.is_visible = true;
         }
@@ -54,7 +54,7 @@ fn generate_visibility_map<P: VisibilityProvider, R: Into<u32>>(
 ) -> VisibilityMap2d {
     let mut visibility_map = VisibilityMap2d::new_packer(visibility_provider.size());
     fov::compute(origin, range.into(), vision_component, visibility_provider, &mut visibility_map);
-    //dump_visibility_map(&visibility_map);
+    _dump_visibility_map(&visibility_map);
     visibility_map
 }
 

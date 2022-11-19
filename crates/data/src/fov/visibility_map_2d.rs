@@ -9,7 +9,7 @@ impl GridPacker for VisibilityMap2d {
             width += 1;
         }
 
-        Grid::new_default([width, size.height()])
+        Self::new_default([width, size.height()])
     }
 
     fn size_packed(&self) -> UVec2 {
@@ -23,19 +23,15 @@ impl GridPacker for VisibilityMap2d {
     }
 
     fn get_bits_at(&self, p: impl Point2d) -> Bits {
-        if let Some(byte) = self.get((p.x() / 4, p.y())) {
-            (*byte >> ((p.x() % 4) * 2)) & 0b0000_0011
-        } else {
-            0
-        }
+        self.get((p.x() / 4, p.y())).map_or(0, |byte| (*byte >> ((p.x() % 4) * 2)) & 0b0000_0011)
     }
 
     fn set_bits_at(&mut self, p: impl Point2d, bits: Bits) {
         if let Some(byte) = self.get((p.x() / 4, p.y())) {
             let mut byte = *byte;
             let pos = (p.x() % 4) * 2;
-            byte = byte & (!3 << pos);
-            byte = byte | (bits << pos);
+            byte &= !3 << pos;
+            byte |= bits << pos;
             self.set((p.x() / 4, p.y()), byte);
         }
     }
