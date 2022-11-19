@@ -9,7 +9,7 @@ impl BitPacker for VisibilityMap2d {
             width += 1;
         }
 
-        Grid::new_default([width, size.height()])
+        Self::new_default([width, size.height()])
     }
 
     fn get_bit_at(&self, p: impl Point2d) -> bool {
