@@ -3,7 +3,7 @@ use bitflags::bitflags;
 
 bitflags! {
     #[derive(Reflect, FromReflect)]
-    pub struct VisibilityFlag: u32 {
+    pub struct VisibilityFlag: u8 {
         const NONE = 0b00000000;
         const VISIBLE = 0b00000001;
         const OPAQUE = 0b00000010;

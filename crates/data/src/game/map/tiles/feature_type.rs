@@ -62,28 +62,16 @@ impl FeatureType {
         match self {
             Self::None => VisionType::None as u8,
             Self::StairsDown => {
-                (VisionType::BlackAndWhite as u8)
-                    | (VisionType::Colored as u8)
-                    | (VisionType::Infared as u8)
-                    | (VisionType::XRay as u8)
+                (VisionType::Colored as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
             }
             Self::StairsUp => {
-                (VisionType::BlackAndWhite as u8)
-                    | (VisionType::Colored as u8)
-                    | (VisionType::Infared as u8)
-                    | (VisionType::XRay as u8)
+                (VisionType::Colored as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
             }
             Self::DoorClosed => {
-                (VisionType::BlackAndWhite as u8)
-                    | (VisionType::Colored as u8)
-                    | (VisionType::Infared as u8)
-                    | (VisionType::XRay as u8)
+                (VisionType::Colored as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
             }
             Self::DoorOpen => {
-                (VisionType::BlackAndWhite as u8)
-                    | (VisionType::Colored as u8)
-                    | (VisionType::Infared as u8)
-                    | (VisionType::XRay as u8)
+                (VisionType::Colored as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
             }
         }
     }
@@ -93,23 +81,14 @@ impl FeatureType {
         match self {
             Self::None => VisionType::None as u8,
             Self::StairsDown => {
-                (VisionType::BlackAndWhite as u8)
-                    | (VisionType::Colored as u8)
-                    | (VisionType::Infared as u8)
-                    | (VisionType::XRay as u8)
+                (VisionType::Colored as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
             }
             Self::StairsUp => {
-                (VisionType::BlackAndWhite as u8)
-                    | (VisionType::Colored as u8)
-                    | (VisionType::Infared as u8)
-                    | (VisionType::XRay as u8)
+                (VisionType::Colored as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
             }
             Self::DoorClosed => VisionType::XRay as u8,
             Self::DoorOpen => {
-                (VisionType::BlackAndWhite as u8)
-                    | (VisionType::Colored as u8)
-                    | (VisionType::Infared as u8)
-                    | (VisionType::XRay as u8)
+                (VisionType::Colored as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
             }
         }
     }

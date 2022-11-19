@@ -17,15 +17,15 @@ use atrl_macros::impl_as_primative;
     Deserialize,
 )]
 #[repr(u8)] // this must match with vision component
+#[rustfmt::skip]
 pub enum VisionType {
     #[default]
-    None = 0,
-    Blind = 1 << 0,
-    BlackAndWhite = 1 << 1,
-    Colored = 1 << 2,
-    Infared = 1 << 3,
-    XRay = 1 << 4,
-    Any = !0,
+    None    = 0,
+    Blind   = 1 << 0,
+    Colored = 1 << 1,
+    Infared = 1 << 2,
+    XRay    = 1 << 3,
+    Any     = !0,
 }
 
 impl TryFrom<VisionType> for u8 {

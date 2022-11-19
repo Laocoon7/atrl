@@ -114,6 +114,14 @@ pub mod fov {
     pub use slope::*;
     pub use visibility_compute::*;
     pub use visibility_map::*;
+    mod t_visibility_flags;
+    pub use t_visibility_flags::*;
+    mod t_grid_packer2;
+    pub use t_grid_packer2::*;
+    mod t_visibility_map_2d;
+    pub use t_visibility_map_2d::*;
+    mod t_visibility_map_util;
+    pub use t_visibility_map_util::*;
 }
 
 mod system_params {

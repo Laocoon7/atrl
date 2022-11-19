@@ -40,9 +40,7 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
         // UI
         .add_plugin(UiPlugin { state_main_menu: self.state_main_menu.clone() })
         // Spawner
-        .add_plugin(SpawnerPlugin {
-            state_construct: self.state_construct.clone(),
-        })
+        .add_plugin(SpawnerPlugin { state_construct: self.state_construct.clone() })
         // Player
         .add_plugin(PlayerPlugin { state_running: self.state_running.clone() });
     }

@@ -12,19 +12,20 @@ pub struct Map {
 
     pub actors: Grid<Option<Entity>>,
 
-    pub item_tileset_id: u8,
     pub terrain_tileset_id: u8,
     pub feature_tileset_id: u8,
+    pub item_tileset_id: u8,
 
-    pub item_layer_entity: Entity,
     pub terrain_layer_entity: Entity,
     pub feature_layer_entity: Entity,
+    pub item_layer_entity: Entity,
 
-    pub item_types: Grid<Vec<ItemType>>,
     pub terrain_types: Grid<TerrainType>,
     pub feature_types: Grid<FeatureType>,
+    pub item_types: Grid<Vec<ItemType>>,
 
     pub visibility_map: VisibilityMap2d,
+    pub explored_tiles: HashSet<UVec2>,
 }
 
 impl Map {
@@ -50,10 +51,20 @@ impl Map {
     }
 
     pub fn can_see_through(&self, index: impl Point2d, vision_component: &Vision) -> bool {
+        // Check if the player is blind
+        if (**vision_component & VisionType::Blind as u8) != 0 {
+            return false;
+        }
+
+        // Get the vision types that can see through this terrain:
+        // None by default (if there's no terrain, there's nothing to see)
         let terrain = self
             .terrain_types
             .get(index)
-            .map_or(VisionType::Any.as_u8(), |t| t.vision_penetrates());
+            .map_or(VisionType::None.as_u8(), |t| t.vision_penetrates());
+
+        // Get the vision types that can see through this feature:
+        // Any by default (if there's no feature, there's nothing blocking)
         let feature = self
             .feature_types
             .get(index)
@@ -118,6 +129,8 @@ pub struct MapPassThroughData {
     pub terrain_layer_entity: Entity,
     pub feature_layer_entity: Entity,
     pub item_layer_entity: Entity,
+    // TODO: Explored tiles should be passed from serialized data for the map on loading, or just a new HashSet
+    //pub explored_tiles: HashSet<UVec2>
 }
 
 impl From<MapGenData<MapPassThroughData>> for Map {
@@ -153,6 +166,8 @@ impl From<MapGenData<MapPassThroughData>> for Map {
             feature_layer_entity: data.user_data.feature_layer_entity,
 
             visibility_map: VisibilityMap2d::new_default(data.size),
+            // TODO: Add explored_tiles HashSet to MapPassThroughData
+            explored_tiles: HashSet::new(),
         }
     }
 }
@@ -175,6 +190,7 @@ impl VisibilityMap for Map {
     fn set_visible(&mut self, p: impl Point2d) {
         if self.visibility_map.in_bounds(p) {
             self.visibility_map[p] |= VisibilityFlag::VISIBLE;
+            self.explored_tiles.insert(p.as_uvec2());
         }
     }
 }
