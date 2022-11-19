@@ -37,18 +37,16 @@ pub fn compute<P: VisibilityProvider, M: VisibilityMap>(
 
     let range = range as i32;
     GridDirection::all().enumerate().for_each(|(octant, _)| {
-        compute_octant(
-            1,
-            &mut VisibilityData {
-                visibility_provider,
-                visibility_map,
-                range,
-                octant,
-                origin,
-                vision_component,
-                top: &mut Slope { x: 1, y: 1 },
-                bottom: &mut Slope { x: 1, y: 0 },
-            },
-        )
+        let mut data = VisibilityData {
+            visibility_provider,
+            visibility_map,
+            range,
+            octant,
+            origin,
+            vision_component,
+            top: &mut Slope { x: 1, y: 1 },
+            bottom: &mut Slope { x: 1, y: 0 },
+        };
+        compute_octant(1, &mut data);
     });
 }

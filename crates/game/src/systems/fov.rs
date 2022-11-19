@@ -54,26 +54,5 @@ fn generate_visibility_map<P: VisibilityProvider, R: Into<u32>>(
 ) -> VisibilityMap2d {
     let mut visibility_map = VisibilityMap2d::new_packer(visibility_provider.size());
     fov::compute(origin, range.into(), vision_component, visibility_provider, &mut visibility_map);
-    //dump_visibility_map(&visibility_map);
     visibility_map
-}
-
-fn _dump_visibility_map(map: &VisibilityMap2d) {
-    let size = map.size_packed();
-    for y in 0..size.y {
-        let mut s = String::new();
-        for x in 0..size.x {
-            let p = UVec2::new(x, y);
-            if map.get_visible(p) {
-                if map.get_opaque(p) {
-                    s = format!("{}{}", s, "#");
-                } else {
-                    s = format!("{}{}", s, ".");
-                }
-            } else {
-                s = format!("{}{}", s, "X");
-            }
-        }
-        println!("{}", s);
-    }
 }

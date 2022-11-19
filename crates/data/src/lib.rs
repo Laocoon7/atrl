@@ -114,8 +114,6 @@ pub mod fov {
     pub use visibility_compute::*;
     mod af_fov;
     pub use af_fov::*;
-    mod visibility_flags;
-    pub use visibility_flags::*;
     mod visibility_map_2d;
     pub use visibility_map_2d::*;
     mod visibility_map;
