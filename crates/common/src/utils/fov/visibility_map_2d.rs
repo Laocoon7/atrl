@@ -1,9 +1,9 @@
 use crate::prelude::*;
 
-pub type TVisibilityMap2d = Grid<TVisibilityFlag>;
+pub type VisibilityMap2d = Grid<VisibilityFlag>;
 
-impl GridPacker2 for TVisibilityMap2d {
-    fn new_packer_2(size: impl Size2d) -> Grid<u8> {
+impl GridPacker for VisibilityMap2d {
+    fn new_packer(size: impl Size2d) -> Grid<u8> {
         let mut width = size.width() / 4;
         if size.width() % 4 != 0 {
             width += 1;
@@ -17,7 +17,12 @@ impl GridPacker2 for TVisibilityMap2d {
         UVec2::new(width, self.size.y)
     }
 
-    fn get_bits2_at(&self, p: impl Point2d) -> Bits2 {
+    fn in_bounds_packed(&self, p: impl Point2d) -> bool {
+        let size = self.size_packed();
+        size.contains(p)
+    }
+
+    fn get_bits_at(&self, p: impl Point2d) -> Bits {
         if let Some(byte) = self.get((p.x() / 4, p.y())) {
             (*byte >> ((p.x() % 4) * 2)) & 0b0000_0011
         } else {
@@ -25,36 +30,40 @@ impl GridPacker2 for TVisibilityMap2d {
         }
     }
 
-    fn set_bits2_at(&mut self, p: impl Point2d, bits: Bits2) {
+    fn set_bits_at(&mut self, p: impl Point2d, bits: Bits) {
         if let Some(byte) = self.get((p.x() / 4, p.y())) {
-            self.set((p.x() / 4, p.y()), !((!bits) << ((p.x() % 4) * 2)) & byte);
+            let mut byte = *byte;
+            let pos = (p.x() % 4) * 2;
+            byte = byte & (!3 << pos);
+            byte = byte | (bits << pos);
+            self.set((p.x() / 4, p.y()), byte);
         }
     }
 }
 
-impl TVisibilityMapUtility for TVisibilityMap2d {
+impl VisibilityMap for VisibilityMap2d {
     fn get_visible(&self, p: impl Point2d) -> bool {
-        (self.get_bits2_at(p) & VISIBLE) != 0
+        (self.get_bits_at(p) & VISIBLE) != 0
     }
 
     fn set_visible(&mut self, p: impl Point2d) {
-        self.set_bits2_at(p, self.get_bits2_at(p) | VISIBLE);
+        self.set_bits_at(p, self.get_bits_at(p) | VISIBLE);
     }
 
     fn clear_visible(&mut self, p: impl Point2d) {
-        self.set_bits2_at(p, self.get_bits2_at(p) & !VISIBLE);
+        self.set_bits_at(p, self.get_bits_at(p) & !VISIBLE);
     }
 
     fn get_opaque(&self, p: impl Point2d) -> bool {
-        (self.get_bits2_at(p) & OPAQUE) != 0
+        (self.get_bits_at(p) & OPAQUE) != 0
     }
 
     fn set_opaque(&mut self, p: impl Point2d) {
-        self.set_bits2_at(p, self.get_bits2_at(p) | OPAQUE);
+        self.set_bits_at(p, self.get_bits_at(p) | OPAQUE);
     }
 
     fn clear_opaque(&mut self, p: impl Point2d) {
-        self.set_bits2_at(p, self.get_bits2_at(p) & !OPAQUE);
+        self.set_bits_at(p, self.get_bits_at(p) & !OPAQUE);
     }
 
     fn clear_all(&mut self) {

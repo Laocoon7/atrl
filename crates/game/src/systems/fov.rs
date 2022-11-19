@@ -1,40 +1,78 @@
-use atrl_data::fov::VisibilityMapUtility;
-
 use crate::prelude::*;
 
 pub fn fov(
-    mut map: Query<&mut Map>,
+    q_map: Query<&Map>,
     manager: Res<MapManager>,
-    player_q: Query<(&Transform, &FieldOfView, &Vision), With<Player>>,
-    mut tile_q: Query<(&mut TileVisible, &TilePos)>,
-    mut vis_q: Query<(&Transform, &mut Visibility), (With<AIComponent>, Without<Player>)>,
+    q_player: Query<(&Transform, &FieldOfView, &Vision), With<Player>>,
+    mut q_tile: Query<(&mut TileVisible, &TilePos)>,
+    mut q_actors: Query<
+        (Entity, &Transform, &mut Visibility),
+        (With<AIComponent>, Without<Player>),
+    >,
 ) {
-    if let Ok((player_pos, fov, vision_component)) = player_q.get_single() {
-        if let Some(mut map) = map.iter_mut().find(|m| m.world_position == manager.current_map) {
-            map.visibility_map.clear_visible();
-            map.visibility_map.clear_opaque();
-
-            fov::compute(player_pos.get(), fov.0, vision_component, &mut *map);
+    let mut visible_actors = Vec::new();
+    for (player_pos, fov, vision_component) in q_player.iter() {
+        if let Some(map) = q_map.iter().find(|m| m.world_position == manager.current_map) {
+            let visibility_map =
+                generate_visibility_map(&*map, player_pos.get(), fov.0, vision_component);
 
             // Tiles
-            for (mut tile_vis, tile_pos) in tile_q.iter_mut() {
-                if map.visibility_map.visible_at(tile_pos.as_ivec2()) {
+            for (mut tile_vis, tile_pos) in q_tile.iter_mut() {
+                if visibility_map.get_visible(tile_pos.as_ivec2())
+                // | map.explored_tiles.contains(&tile_pos.as_uvec2())
+                {
+                    // TODO: Dim tiles in map.explored_tiles that aren't visible
                     // reveal tiles
                     tile_vis.0 = true;
-                } else {
-                    // hide tiles
-                    tile_vis.0 = false;
                 }
             }
 
             // Actors
-            for (e_pos, mut e_vis) in vis_q.iter_mut() {
-                if map.visibility_map.visible_at(e_pos.get()) {
-                    e_vis.is_visible = true;
+            for (entity, e_pos, mut e_vis) in q_actors.iter_mut() {
+                if visibility_map.get_visible(e_pos.get()) {
+                    visible_actors.push(entity);
                 } else {
                     e_vis.is_visible = false;
                 }
             }
         }
+    }
+
+    for entity in visible_actors.drain(..) {
+        if let Ok((_, _, mut visible)) = q_actors.get_mut(entity) {
+            visible.is_visible = true;
+        }
+    }
+}
+
+fn generate_visibility_map<P: fov::VisibilityProvider, R: Into<u32>>(
+    visibility_provider: &P,
+    origin: impl Point2d,
+    range: R,
+    vision_component: &Vision,
+) -> VisibilityMap2d {
+    let mut visibility_map = VisibilityMap2d::new_packer(visibility_provider.size());
+    fov::compute(origin, range.into(), vision_component, visibility_provider, &mut visibility_map);
+    //dump_visibility_map(&visibility_map);
+    visibility_map
+}
+
+fn _dump_visibility_map(map: &VisibilityMap2d) {
+    let size = map.size_packed();
+    for y in 0..size.y {
+        let mut s = String::new();
+        for x in 0..size.x {
+            let p = UVec2::new(x, y);
+            if map.get_visible(p) {
+                if map.get_opaque(p) {
+                    s = format!("{}{}", s, "#");
+                } else {
+                    s = format!("{}{}", s, ".");
+                }
+            } else {
+                s = format!("{}{}", s, "X");
+            }
+        }
+        println!("{}", s);
     }
 }

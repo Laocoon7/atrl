@@ -69,12 +69,12 @@ mod components {
 
     mod consumable;
     mod equipable;
-    mod fov;
+    mod field_of_view;
     mod health;
     mod tags;
     pub use consumable::*;
     pub use equipable::*;
-    pub use fov::*;
+    pub use field_of_view::*;
     pub use health::*;
     pub use tags::*;
 }
@@ -109,19 +109,11 @@ pub mod fov {
     mod adams_fov;
     mod slope;
     mod visibility_compute;
-    mod visibility_map;
+    mod visibility_provider;
     pub use adams_fov::*;
     pub use slope::*;
     pub use visibility_compute::*;
-    pub use visibility_map::*;
-    mod t_visibility_flags;
-    pub use t_visibility_flags::*;
-    mod t_grid_packer2;
-    pub use t_grid_packer2::*;
-    mod t_visibility_map_2d;
-    pub use t_visibility_map_2d::*;
-    mod t_visibility_map_util;
-    pub use t_visibility_map_util::*;
+    pub use visibility_provider::*;
 }
 
 mod system_params {
@@ -180,7 +172,6 @@ pub mod prelude {
         pub use crate::system_params::*;
 
         pub use crate::fov;
-        pub use crate::fov::{VisibilityFlag, VisibilityMap2d, VisibilityMapUtility};
 
         pub use crate::app_settings::*;
     }

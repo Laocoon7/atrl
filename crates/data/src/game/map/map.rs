@@ -24,7 +24,6 @@ pub struct Map {
     pub feature_types: Grid<FeatureType>,
     pub item_types: Grid<Vec<ItemType>>,
 
-    pub visibility_map: VisibilityMap2d,
     pub explored_tiles: HashSet<UVec2>,
 }
 
@@ -165,32 +164,22 @@ impl From<MapGenData<MapPassThroughData>> for Map {
             terrain_layer_entity: data.user_data.terrain_layer_entity,
             feature_layer_entity: data.user_data.feature_layer_entity,
 
-            visibility_map: VisibilityMap2d::new_default(data.size),
             // TODO: Add explored_tiles HashSet to MapPassThroughData
             explored_tiles: HashSet::new(),
         }
     }
 }
 
-impl VisibilityMap for Map {
+impl VisibilityProvider for Map {
+    fn size(&self) -> UVec2 {
+        self.size
+    }
+
     fn is_opaque(&self, p: impl Point2d, vision_component: &Vision) -> bool {
-        println!(
-            "Is opaque: {:?} {:?} {}",
-            p.as_ivec2(),
-            vision_component,
-            self.can_see_through(p, vision_component)
-        );
-        !self.can_see_through(p, vision_component)
-    }
-
-    fn is_in_bounds(&self, p: impl Point2d) -> bool {
-        self.visibility_map.in_bounds(p)
-    }
-
-    fn set_visible(&mut self, p: impl Point2d) {
-        if self.visibility_map.in_bounds(p) {
-            self.visibility_map[p] |= VisibilityFlag::VISIBLE;
-            self.explored_tiles.insert(p.as_uvec2());
+        if self.size.contains(p) {
+            !self.can_see_through(p, vision_component)
+        } else {
+            true
         }
     }
 }

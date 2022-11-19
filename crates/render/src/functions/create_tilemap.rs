@@ -40,7 +40,7 @@ pub fn create_tilemap_on_entity<ZLevel: Into<f32>>(
                     position: tile_pos,
                     tilemap_id: TilemapId(entity),
                     texture_index: TileTextureIndex(0),
-                    visible: TileVisible(false), // TODO: Should this be configurable?
+                    visible: TileVisible(false),
                     ..Default::default()
                 })
                 .id();

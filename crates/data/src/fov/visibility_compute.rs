@@ -1,16 +1,20 @@
 use crate::prelude::*;
 
-pub struct VisibilityData<'a, T: VisibilityMap> {
+pub struct VisibilityData<'a, P: VisibilityProvider, M: VisibilityMap> {
     pub range: i32,
     pub octant: usize,
     pub origin: IVec2,
-    pub map: &'a mut T,
+    pub visibility_provider: &'a P,
+    pub visibility_map: &'a mut M,
     pub top: &'a mut Slope,
     pub bottom: &'a mut Slope,
     pub vision_component: &'a Vision,
 }
 
-pub fn compute_octant<T: VisibilityMap>(x: i32, data: &mut VisibilityData<T>) {
+pub fn compute_octant<P: VisibilityProvider, M: VisibilityMap>(
+    x: i32,
+    data: &mut VisibilityData<P, M>,
+) {
     for x in x..=data.range {
         let y_coords = compute_y_coordinate(x, data);
         let top_y = y_coords.x;
@@ -22,7 +26,10 @@ pub fn compute_octant<T: VisibilityMap>(x: i32, data: &mut VisibilityData<T>) {
     }
 }
 
-fn compute_y_coordinate<T: VisibilityMap>(x: i32, data: &VisibilityData<T>) -> IVec2 {
+fn compute_y_coordinate<P: VisibilityProvider, M: VisibilityMap>(
+    x: i32,
+    data: &VisibilityData<P, M>,
+) -> IVec2 {
     let mut top_y;
     if data.top.x == 1 {
         top_y = x;
@@ -61,16 +68,18 @@ fn compute_y_coordinate<T: VisibilityMap>(x: i32, data: &VisibilityData<T>) -> I
     IVec2::new(top_y, bottom_y)
 }
 
-fn compute_visiblity<T: VisibilityMap>(
+fn compute_visiblity<P: VisibilityProvider, M: VisibilityMap>(
     top_y: i32,
     bottom_y: i32,
     x: i32,
-    data: &mut VisibilityData<T>,
+    data: &mut VisibilityData<P, M>,
 ) -> bool {
     let mut was_opaque = -1;
 
     for y in (bottom_y..=top_y).rev() {
-        if data.range < 0 || data.map.distance(IVec2::ZERO, IVec2::new(x, y)) <= data.range as f32 {
+        if data.range < 0
+            || data.visibility_provider.distance(IVec2::ZERO, IVec2::new(x, y)) <= data.range as f32
+        {
             let is_opaque = blocks_light(x, y, data);
 
             // Less symmetrical
@@ -132,7 +141,11 @@ fn compute_visiblity<T: VisibilityMap>(
     was_opaque == 0
 }
 
-fn blocks_light<T: VisibilityMap>(x: i32, y: i32, data: &VisibilityData<T>) -> bool {
+fn blocks_light<P: VisibilityProvider, M: VisibilityMap>(
+    x: i32,
+    y: i32,
+    data: &VisibilityData<P, M>,
+) -> bool {
     let (mut nx, mut ny) = data.origin.into();
     match data.octant {
         0 => {
@@ -170,15 +183,14 @@ fn blocks_light<T: VisibilityMap>(x: i32, y: i32, data: &VisibilityData<T>) -> b
         _ => {}
     }
 
-    let p = IVec2::new(nx, ny);
-    if !data.map.is_in_bounds(p) {
-        return true;
-    }
-
-    data.map.is_opaque(IVec2::new(nx, ny), data.vision_component)
+    data.visibility_provider.is_opaque(IVec2::new(nx, ny), data.vision_component)
 }
 
-fn set_visible<T: VisibilityMap>(x: i32, y: i32, data: &mut VisibilityData<T>) {
+fn set_visible<P: VisibilityProvider, M: VisibilityMap>(
+    x: i32,
+    y: i32,
+    data: &mut VisibilityData<P, M>,
+) {
     let (mut nx, mut ny) = data.origin.into();
     match data.octant {
         0 => {
@@ -217,7 +229,5 @@ fn set_visible<T: VisibilityMap>(x: i32, y: i32, data: &mut VisibilityData<T>) {
     }
 
     let p = IVec2::new(nx, ny);
-    if data.map.is_in_bounds(p) {
-        data.map.set_visible(p);
-    }
+    data.visibility_map.set_visible(p);
 }

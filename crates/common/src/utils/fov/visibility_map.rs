@@ -1,7 +1,7 @@
 use crate::prelude::*;
 
 /// A trait used by the fov algorithm to manipluate a visibility map.
-pub trait TVisibilityMapUtility {
+pub trait VisibilityMap {
     /// gets visibility for a `Point2d`.
     fn get_visible(&self, p: impl Point2d) -> bool;
 
@@ -25,7 +25,7 @@ pub trait TVisibilityMapUtility {
 
     // Clear anything marked visible.
     fn clear_all_visible(&mut self);
-    
+
     // Clear anything marked opaque.
     fn clear_all_opaque(&mut self);
 }

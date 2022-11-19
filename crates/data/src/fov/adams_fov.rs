@@ -25,21 +25,23 @@
 use crate::prelude::*;
 
 /// Compute the fov in a map from the given position.
-pub fn compute<T: VisibilityMap, R: Into<i32>>(
+pub fn compute<P: VisibilityProvider, M: VisibilityMap>(
     origin: impl Point2d,
-    range: R,
+    range: u32,
     vision_component: &Vision,
-    map: &mut T,
+    visibility_provider: &P,
+    visibility_map: &mut M,
 ) {
     let origin = origin.as_ivec2();
-    map.set_visible(origin);
+    visibility_map.set_visible(origin);
 
-    let range = range.into();
+    let range = range as i32;
     GridDirection::all().enumerate().for_each(|(octant, _)| {
         compute_octant(
             1,
             &mut VisibilityData {
-                map,
+                visibility_provider,
+                visibility_map,
                 range,
                 octant,
                 origin,
@@ -49,26 +51,4 @@ pub fn compute<T: VisibilityMap, R: Into<i32>>(
             },
         )
     });
-}
-
-#[cfg(test)]
-mod test {
-    use crate::prelude::*;
-
-    #[test]
-    fn test_fov() {
-        let mut map = VisibilityMap2d::new_default([30u32, 30u32]);
-        map[(0u32, 1u32)] &= TileFlags::OPAQUE;
-        map[(1u32, 0u32)] &= TileFlags::OPAQUE;
-
-        fov::compute((0u32, 0u32), 5, &Vision(!0), &mut map);
-
-        assert!(map.visible_at((0, 0)));
-
-        assert!(map.visible_at((0, 1)));
-        assert!(map.visible_at((0, 2)));
-
-        assert!(map.visible_at((1, 0)));
-        assert!(map.visible_at((2, 0)));
-    }
 }

@@ -37,10 +37,10 @@ impl AtrlPosition2 for Transform {
     type Position = Vec2;
 
     fn get(&self) -> Self::Position {
-        self.translation.truncate()
+        self.translation.truncate() // .floor()??
     }
 
     fn set_value(&mut self, pos: Self::Position) {
-        self.translation = pos.extend(self.translation.z);
+        self.translation = pos.extend(self.translation.z); // + (0.5, 0.5)??
     }
 }
