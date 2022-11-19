@@ -74,11 +74,9 @@ mod spawner {
 mod systems {
     mod apply_damage;
     mod fov;
-    mod move_actors;
     mod perform_healing;
     pub use apply_damage::*;
     pub use fov::*;
-    pub use move_actors::*;
     pub use perform_healing::*;
 }
 

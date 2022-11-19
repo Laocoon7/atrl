@@ -24,17 +24,6 @@
 
 use crate::prelude::*;
 
-pub type VisibilityMap2d = Grid<VisibilityPoint>;
-
-/// A point in the visibility map.
-///
-/// This is used to store the visibility state of a point in the map.
-#[derive(Default, Debug, Clone, Copy, Reflect, FromReflect)]
-pub struct VisibilityPoint {
-    pub opaque: bool,
-    pub visible: bool,
-}
-
 /// Compute the fov in a map from the given position.
 pub fn compute<T: VisibilityMap>(origin: impl Point2d, range: i32, map: &mut T) {
     let origin = origin.as_ivec2();

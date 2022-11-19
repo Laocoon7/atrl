@@ -1,7 +1,7 @@
-#![allow(clippy::module_inception)]
 #![warn(clippy::nursery, clippy::all)]
 #![allow(clippy::type_complexity)] // Bevy can have complex queries, so we shush clippy
 #![allow(clippy::too_many_arguments)] // Bevy has a lot of arguments, so we shush clippy
+#![allow(clippy::module_inception)]
 
 mod direction {
     mod bitmap;
@@ -16,11 +16,6 @@ mod direction {
     pub use ordinal::*;
     mod table;
     pub use table::*;
-}
-
-mod events {
-    mod event_plugin;
-    pub use event_plugin::*;
 }
 
 pub mod fov {
@@ -93,18 +88,20 @@ mod states {
 
 mod utils {
     mod axis;
-    pub use axis::*;
+    mod bitgrid;
     mod file_utils;
-    pub use file_utils::*;
     mod grid;
-    pub use grid::*;
     mod point2d;
-    pub use point2d::*;
     mod range;
-    pub use range::*;
     mod size2d;
-    pub use size2d::*;
     mod white_pixel;
+    pub use axis::*;
+    pub use bitgrid::*;
+    pub use file_utils::*;
+    pub use grid::*;
+    pub use point2d::*;
+    pub use range::*;
+    pub use size2d::*;
     pub use white_pixel::*;
 }
 
@@ -124,17 +121,15 @@ pub mod prelude {
             utils::HashSet,
         };
 
-        pub use bitvec::prelude::*;
-
+        pub use bevy_ecs_tilemap::prelude::TilePos;
         pub use iyes_loopless::prelude::CurrentState;
-
         pub use leafwing_input_manager::{action_state::ActionState, prelude::*};
 
         pub use num_derive::*;
         pub use num_traits::*;
 
+        pub use bitvec::prelude::*;
         pub use once_cell::sync::Lazy;
-
         pub use parking_lot::{Mutex, MutexGuard};
 
         pub use noise::{NoiseFn, Perlin};
@@ -153,7 +148,6 @@ pub mod prelude {
 
     mod export {
         pub use crate::direction::*;
-        pub use crate::events::*;
         pub use crate::fov::*;
         pub use crate::geometry::*;
 

@@ -4,27 +4,26 @@ use crate::prelude::*;
 #[derive(Component)]
 pub struct Map {
     pub size: UVec2,
-    pub world_position: WorldPosition,
     pub random: Random,
+    pub world_position: WorldPosition,
 
-    pub terrain_types: Grid<TerrainType>,
-    pub feature_types: Grid<FeatureType>,
-    pub item_types: Grid<Vec<ItemType>>,
+    pub update_all: bool,
+    pub update_tiles: HashSet<UVec2>,
+    pub visibility_map: VisibilityMap2d,
 
     pub actors: Grid<Option<Entity>>,
 
+    pub item_tileset_id: u8,
     pub terrain_tileset_id: u8,
     pub feature_tileset_id: u8,
-    pub item_tileset_id: u8,
 
+    pub item_layer_entity: Entity,
     pub terrain_layer_entity: Entity,
     pub feature_layer_entity: Entity,
-    pub item_layer_entity: Entity,
 
-    pub update_tiles: HashSet<UVec2>,
-    pub update_all: bool,
-
-    pub visibility_map: VisibilityMap2d,
+    pub item_types: Grid<Vec<ItemType>>,
+    pub terrain_types: Grid<TerrainType>,
+    pub feature_types: Grid<FeatureType>,
 }
 
 impl Map {

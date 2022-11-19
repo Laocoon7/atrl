@@ -71,7 +71,6 @@ impl<T: Copy + GridParam> Grid<T> {
     }
 }
 
-#[allow(dead_code)]
 impl<T: Default + GridParam> Grid<T> {
     pub fn new_default(size: impl Size2d) -> Self {
         let count = size.count();
@@ -228,6 +227,10 @@ impl<T: GridParam> Grid<T> {
 
     pub fn point_iter(&self) -> PointIterRowMajor {
         self.size.iter()
+    }
+
+    pub fn enumerate(&self) -> impl Iterator<Item = (IVec2, &T)> {
+        self.point_iter().zip(self.iter())
     }
 }
 

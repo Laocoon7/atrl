@@ -113,17 +113,17 @@ atrl-game     = { path = "crates/game" }
 atrl-macros   = { path = "crates/macros" }
 atrl-map-gen  = { path = "crates/map_gen" }
 atrl-raws     = { path = "crates/raws" }
-atrl-renderer   = { path = "crates/render" }
+atrl-renderer = { path = "crates/render" }
 atrl-saveload = { path = "crates/saveload" }
 
 [dependencies]
-atrl-camera  = { workspace = true }
-atrl-common  = { workspace = true }
-atrl-data    = { workspace = true }
-atrl-game    = { workspace = true }
-atrl-map-gen = { workspace = true }
-atrl-raws    = { workspace = true }
-atrl-renderer  = { workspace = true }
+atrl-camera   = { workspace = true }
+atrl-common   = { workspace = true }
+atrl-data     = { workspace = true }
+atrl-game     = { workspace = true }
+atrl-map-gen  = { workspace = true }
+atrl-raws     = { workspace = true }
+atrl-renderer = { workspace = true }
 
 ######################################
 #########       Bevy
@@ -259,7 +259,8 @@ git = "https://github.com/zkat/big-brain"
 version = "1"
 
 [workspace.dependencies.bitvec]
-version = "1.0.1"
+features = ["serde"]
+version  = "1.0.1"
 
 [workspace.dependencies.thiserror]
 version = "1"
@@ -282,6 +283,9 @@ version = "0.6"
 [workspace.dependencies.strum]
 features = ["derive"]
 version  = "0.24"
+
+[workspace.dependencies.bitflags]
+version = "1"
 
 ######################################
 ######################################
@@ -379,4 +383,6 @@ workspace = true
 [dependencies.kayak_font]
 workspace = true
 [dependencies.kayak_ui]
+workspace = true
+[dependencies.bitflags]
 workspace = true

@@ -150,3 +150,13 @@ impl Point2d for (f32, f32) {
         self.1.floor() as i32
     }
 }
+
+impl Point2d for TilePos {
+    fn x(&self) -> i32 {
+        self.x as i32
+    }
+
+    fn y(&self) -> i32 {
+        self.y as i32
+    }
+}

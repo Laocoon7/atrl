@@ -19,6 +19,8 @@ release = []
 atrl-macros = { workspace = true }
 
 bevy                   = { workspace = true }
+bevy_ecs_tilemap       = { workspace = true }
+bitflags               = { workspace = true }
 bitvec                 = { workspace = true }
 iyes_loopless          = { workspace = true }
 leafwing-input-manager = { workspace = true }
