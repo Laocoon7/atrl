@@ -7,6 +7,7 @@ pub struct ActorBundle {
     pub ai: AIComponent,
     pub position: WorldPosition,
 
+    pub fov: FieldOfView,
     pub vision_component: Vision,
     pub movement_component: Movement,
 

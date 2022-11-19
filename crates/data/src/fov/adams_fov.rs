@@ -25,12 +25,29 @@
 use crate::prelude::*;
 
 /// Compute the fov in a map from the given position.
-pub fn compute<T: VisibilityMap>(origin: impl Point2d, range: i32, map: &mut T) {
+pub fn compute<T: VisibilityMap, R: Into<i32>>(
+    origin: impl Point2d,
+    range: R,
+    vision_component: &Vision,
+    map: &mut T,
+) {
     let origin = origin.as_ivec2();
     map.set_visible(origin);
 
+    let range = range.into();
     GridDirection::all().enumerate().for_each(|(octant, _)| {
-        compute_octant(octant, origin, range, 1, Slope { x: 1, y: 1 }, Slope { x: 1, y: 0 }, map)
+        compute_octant(
+            1,
+            &mut VisibilityData {
+                map,
+                range,
+                octant,
+                origin,
+                vision_component,
+                top: &mut Slope { x: 1, y: 1 },
+                bottom: &mut Slope { x: 1, y: 0 },
+            },
+        )
     });
 }
 
@@ -41,16 +58,17 @@ mod test {
     #[test]
     fn test_fov() {
         let mut map = VisibilityMap2d::new_default([30u32, 30u32]);
-        map[(0u32, 1u32)].opaque = true;
-        map[(1u32, 0u32)].opaque = true;
-        compute((0u32, 0u32), 5, &mut map);
+        map[(0u32, 1u32)] &= TileFlags::OPAQUE;
+        map[(1u32, 0u32)] &= TileFlags::OPAQUE;
 
-        assert!(map[(0, 0)].visible);
+        fov::compute((0u32, 0u32), 5, &Vision(!0), &mut map);
 
-        assert!(map[(0, 1)].visible);
-        assert!(!map[(0, 2)].visible);
+        assert!(map.visible_at((0, 0)));
 
-        assert!(map[(1, 0)].visible);
-        assert!(!map[(2, 0)].visible);
+        assert!(map.visible_at((0, 1)));
+        assert!(map.visible_at((0, 2)));
+
+        assert!(map.visible_at((1, 0)));
+        assert!(map.visible_at((2, 0)));
     }
 }

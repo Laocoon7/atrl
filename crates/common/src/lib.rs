@@ -5,56 +5,46 @@
 
 mod direction {
     mod bitmap;
-    pub use bitmap::*;
     mod cardinal;
-    pub use cardinal::*;
     mod direction;
-    pub use direction::*;
     mod iter;
-    pub use iter::*;
     mod ordinal;
-    pub use ordinal::*;
     mod table;
+    pub use bitmap::*;
+    pub use cardinal::*;
+    pub use direction::*;
+    pub use iter::*;
+    pub use ordinal::*;
     pub use table::*;
-}
-
-pub mod fov {
-    mod adams_fov;
-    mod visibility_compute;
-    mod visibility_map;
-
-    pub use adams_fov::*;
-    pub use visibility_compute::*;
-    pub use visibility_map::*;
 }
 
 mod geometry {
     mod math {
         mod distance;
-        pub use distance::*;
         mod intersects;
-        pub use intersects::*;
         mod lerp;
-        pub use lerp::*;
         mod rotate_points;
-        pub use rotate_points::*;
         mod scale_points;
+        pub use distance::*;
+        pub use intersects::*;
+        pub use lerp::*;
+        pub use rotate_points::*;
         pub use scale_points::*;
     }
     pub use math::*;
 
     mod shapes {
         mod circle;
-        pub use circle::*;
         mod ellipse;
-        pub use ellipse::*;
         mod line;
-        pub use line::*;
         mod polygon;
-        pub use polygon::*;
         mod rectangle;
-        pub use rectangle::*;
         mod triangle;
+        pub use circle::*;
+        pub use ellipse::*;
+        pub use line::*;
+        pub use polygon::*;
+        pub use rectangle::*;
         pub use triangle::*;
     }
     pub use shapes::*;
@@ -65,19 +55,19 @@ mod geometry {
 
 mod macros {
     mod generic_macros;
-    pub use generic_macros::*;
     mod switch_in_game_state;
+    pub use generic_macros::*;
     pub use switch_in_game_state::*;
 }
 
 mod random {
     mod noise;
-    pub use self::noise::*;
     mod prht;
-    pub use prht::*;
     mod prng;
-    pub use prng::*;
     mod random;
+    pub use self::noise::*;
+    pub use prht::*;
+    pub use prng::*;
     pub use random::*;
 }
 
@@ -148,7 +138,6 @@ pub mod prelude {
 
     mod export {
         pub use crate::direction::*;
-        pub use crate::fov::*;
         pub use crate::geometry::*;
 
         pub use crate::macros::*;
@@ -160,8 +149,6 @@ pub mod prelude {
         pub use crate::random::*;
         pub use crate::states::*;
         pub use crate::utils::*;
-
-        pub use crate::fov;
 
         pub use crate::common_plugin::*;
         pub use crate::error::*;

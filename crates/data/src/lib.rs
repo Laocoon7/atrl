@@ -69,10 +69,12 @@ mod components {
 
     mod consumable;
     mod equipable;
+    mod fov;
     mod health;
     mod tags;
     pub use consumable::*;
     pub use equipable::*;
+    pub use fov::*;
     pub use health::*;
     pub use tags::*;
 }
@@ -102,16 +104,27 @@ mod game {
     pub use game_state::*;
 }
 
+// Leave this as pub so that we can do `fov::compute` and not `compute`
+pub mod fov {
+    mod adams_fov;
+    mod slope;
+    mod visibility_compute;
+    mod visibility_map;
+    pub use adams_fov::*;
+    pub use slope::*;
+    pub use visibility_compute::*;
+    pub use visibility_map::*;
+}
+
 mod system_params {
     mod player_param;
     pub use player_param::*;
 }
 
-mod states {}
-
 mod app_settings;
 
 pub mod prelude {
+
     mod import {
         pub use bevy::{
             ecs::{
@@ -146,12 +159,20 @@ pub mod prelude {
     }
     pub(crate) use import::*;
 
+    mod internal {
+        pub use crate::fov::*;
+    }
+    pub(crate) use internal::*;
+
     mod export {
         pub use crate::actors::*;
         pub use crate::camera::*;
         pub use crate::components::*;
         pub use crate::game::*;
         pub use crate::system_params::*;
+
+        pub use crate::fov;
+        pub use crate::fov::{VisibilityFlag, VisibilityMap2d, VisibilityMapUtility};
 
         pub use crate::app_settings::*;
     }

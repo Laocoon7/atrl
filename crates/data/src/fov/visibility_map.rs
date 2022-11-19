@@ -29,7 +29,7 @@ pub type VisibilityMap2d = Grid<VisibilityFlag>;
 /// A trait used by the fov algorithm to calculate the resulting fov.
 pub trait VisibilityMap {
     /// Returns true if the point is opaque.`
-    fn is_opaque(&self, p: impl Point2d) -> bool;
+    fn is_opaque(&self, p: impl Point2d, vision_component: &Vision) -> bool;
 
     /// Returns true if the point is in bounds.
     fn is_in_bounds(&self, p: impl Point2d) -> bool;
@@ -47,44 +47,24 @@ pub trait VisibilityMap {
 pub trait VisibilityMapUtility {
     /// Clear all opaque tiles from the map
     fn clear_opaque(&mut self);
+
     /// Clear all visible tiles from the map
     fn clear_visible(&mut self);
-    /// toggle visibility for a `Point2d`.
-    fn toggle_opaque(&mut self, p: impl Point2d);
-    /// toggle visibility for a `Point2d`.
-    fn toggle_visible(&mut self, p: impl Point2d);
+
     /// Clear visibility grid from `opaque` and `visible` tiles.
     fn clear_all(&mut self);
-}
 
-impl VisibilityMap2d {
-    pub fn get_visibility(&self, p: impl Point2d) -> bool {
-        self.get(p).unwrap().contains(VisibilityFlag::VISIBLE)
-    }
+    /// toggle visibility for a `Point2d`.
+    fn toggle_opaque(&mut self, p: impl Point2d);
 
-    pub fn get_opaque(&self, p: impl Point2d) -> bool {
-        self.get(p).unwrap_or_default().contains(VisibilityFlag::OPAQUE)
-    }
-}
+    /// toggle visibility for a `Point2d`.
+    fn toggle_visible(&mut self, p: impl Point2d);
 
-impl VisibilityMap for VisibilityMap2d {
-    fn is_opaque(&self, p: impl Point2d) -> bool {
-        if self.in_bounds(p) {
-            self[p].contains(VisibilityFlag::OPAQUE)
-        } else {
-            true
-        }
-    }
+    /// Get the visibility flag for a `Point2d`.
+    fn visible_at(&self, p: impl Point2d) -> bool;
 
-    fn is_in_bounds(&self, p: impl Point2d) -> bool {
-        self.in_bounds(p)
-    }
-
-    fn set_visible(&mut self, p: impl Point2d) {
-        if self.in_bounds(p) {
-            self[p] |= VisibilityFlag::VISIBLE;
-        }
-    }
+    /// Get the opaque flag for a `Point2d`.
+    fn opaque_at(&self, p: impl Point2d) -> bool;
 }
 
 impl VisibilityMapUtility for VisibilityMap2d {
@@ -108,5 +88,13 @@ impl VisibilityMapUtility for VisibilityMap2d {
 
     fn clear_visible(&mut self) {
         self.iter_mut().for_each(|p| p.remove(VisibilityFlag::VISIBLE));
+    }
+
+    fn visible_at(&self, p: impl Point2d) -> bool {
+        self.get(p).unwrap().contains(VisibilityFlag::VISIBLE)
+    }
+
+    fn opaque_at(&self, p: impl Point2d) -> bool {
+        self.get(p).unwrap_or_default().contains(VisibilityFlag::OPAQUE)
     }
 }

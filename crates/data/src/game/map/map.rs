@@ -9,7 +9,6 @@ pub struct Map {
 
     pub update_all: bool,
     pub update_tiles: HashSet<UVec2>,
-    pub visibility_map: VisibilityMap2d,
 
     pub actors: Grid<Option<Entity>>,
 
@@ -24,6 +23,8 @@ pub struct Map {
     pub item_types: Grid<Vec<ItemType>>,
     pub terrain_types: Grid<TerrainType>,
     pub feature_types: Grid<FeatureType>,
+
+    pub visibility_map: VisibilityMap2d,
 }
 
 impl Map {
@@ -31,9 +32,11 @@ impl Map {
         let terrain = self
             .terrain_types
             .get(index)
-            .map_or(MovementType::None as u8, |t| t.allowed_movement());
-        let feature =
-            self.feature_types.get(index).map_or(MovementType::Any as u8, |f| f.allowed_movement());
+            .map_or(MovementType::None.as_u8(), |t| t.allowed_movement());
+        let feature = self
+            .feature_types
+            .get(index)
+            .map_or(MovementType::Any.as_u8(), |f| f.allowed_movement());
 
         println!(
             "T: {:?}, F: {:?}, M:{:?}, A:{:?}",
@@ -47,17 +50,21 @@ impl Map {
     }
 
     pub fn can_see_through(&self, index: impl Point2d, vision_component: &Vision) -> bool {
-        let terrain =
-            self.terrain_types.get(index).map_or(VisionType::Any as u8, |t| t.vision_penetrates());
-        let feature =
-            self.feature_types.get(index).map_or(VisionType::Any as u8, |f| f.vision_penetrates());
+        let terrain = self
+            .terrain_types
+            .get(index)
+            .map_or(VisionType::Any.as_u8(), |t| t.vision_penetrates());
+        let feature = self
+            .feature_types
+            .get(index)
+            .map_or(VisionType::Any.as_u8(), |f| f.vision_penetrates());
 
         (terrain & feature & (**vision_component)) != 0
     }
 
     pub fn can_see_feature(&self, index: impl Point2d, vision_component: &Vision) -> bool {
         let feature =
-            self.feature_types.get(index).map_or(VisionType::None as u8, |f| f.allowed_vision());
+            self.feature_types.get(index).map_or(VisionType::None.as_u8(), |f| f.allowed_vision());
 
         (feature & **vision_component) != 0
     }
@@ -126,21 +133,42 @@ impl From<MapGenData<MapPassThroughData>> for Map {
 
         Self {
             size: data.size,
-            world_position: data.user_data.world_position,
+            update_all: true,
+
+            update_tiles: HashSet::new(),
             random: data.user_data.random,
-            terrain_types,
-            feature_types: Grid::new_default(data.size),
-            item_types: Grid::new_default(data.size),
             actors: Grid::new_default(data.size),
+            world_position: data.user_data.world_position,
+
+            terrain_types,
+            item_types: Grid::new_default(data.size),
+            feature_types: Grid::new_default(data.size),
+
+            item_tileset_id: data.user_data.item_tileset_id,
             terrain_tileset_id: data.user_data.terrain_tileset_id,
             feature_tileset_id: data.user_data.feature_tileset_id,
-            item_tileset_id: data.user_data.item_tileset_id,
+
+            item_layer_entity: data.user_data.item_layer_entity,
             terrain_layer_entity: data.user_data.terrain_layer_entity,
             feature_layer_entity: data.user_data.feature_layer_entity,
-            item_layer_entity: data.user_data.item_layer_entity,
-            update_tiles: HashSet::new(),
-            update_all: true,
+
             visibility_map: VisibilityMap2d::new_default(data.size),
+        }
+    }
+}
+
+impl VisibilityMap for Map {
+    fn is_opaque(&self, p: impl Point2d, vision_component: &Vision) -> bool {
+        self.can_see_through(p, vision_component)
+    }
+
+    fn is_in_bounds(&self, p: impl Point2d) -> bool {
+        self.visibility_map.in_bounds(p)
+    }
+
+    fn set_visible(&mut self, p: impl Point2d) {
+        if self.visibility_map.in_bounds(p) {
+            self.visibility_map[p] |= VisibilityFlag::VISIBLE;
         }
     }
 }

@@ -59,7 +59,7 @@ pub trait Point2d: Clone + Copy {
 
     /// Returns distance from another `Point2d`.
     fn distance(&self, other: impl Point2d) -> f32 {
-        Vec2::distance(self.as_vec2(), other.as_vec2())
+        self.as_vec2().distance(other.as_vec2())
     }
 
     ////////////////

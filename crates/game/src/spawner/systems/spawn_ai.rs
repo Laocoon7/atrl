@@ -48,6 +48,8 @@ pub fn spawn_ai(tilesets: Tilesets, mut commands: Commands, game_context: Res<Ga
                 ),
                 ..default()
             },
+
+            fov: FieldOfView(4),
             vision_component: Vision(VisionType::Colored.as_u8()),
             movement_component: Movement(MovementType::Walk.as_u8()),
         },

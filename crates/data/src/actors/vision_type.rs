@@ -38,7 +38,7 @@ impl TryFrom<VisionType> for u8 {
 
 impl VisionType {
     pub fn as_u8(self) -> u8 {
-        self.try_into().unwrap()
+        self.try_into().unwrap_or(Self::None as u8)
     }
 }
 
