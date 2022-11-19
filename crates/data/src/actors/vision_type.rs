@@ -20,12 +20,13 @@ use atrl_macros::impl_as_primative;
 #[rustfmt::skip]
 pub enum VisionType {
     #[default]
-    None    = 0,
-    Blind   = 1 << 0,
-    Colored = 1 << 1,
-    Infared = 1 << 2,
-    XRay    = 1 << 3,
-    Any     = !0,
+    None        = 0,
+    Blind       = 1 << 0,
+    Colored     = 1 << 1,
+    Infared     = 1 << 2,
+    XRay        = 1 << 3,
+    NotBlind    = !(VisionType::Blind as u8),
+    Any         = !0,
 }
 
 impl TryFrom<VisionType> for u8 {

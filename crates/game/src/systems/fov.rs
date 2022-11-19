@@ -22,6 +22,7 @@ pub fn fov(
                 // | map.explored_tiles.contains(&tile_pos.as_uvec2())
                 {
                     // TODO: Dim tiles in map.explored_tiles that aren't visible
+                    // probably show all explored files dim first, then replace index on visible tiles.
                     // reveal tiles
                     tile_vis.0 = true;
                 }
@@ -45,7 +46,7 @@ pub fn fov(
     }
 }
 
-fn generate_visibility_map<P: fov::VisibilityProvider, R: Into<u32>>(
+fn generate_visibility_map<P: VisibilityProvider, R: Into<u32>>(
     visibility_provider: &P,
     origin: impl Point2d,
     range: R,

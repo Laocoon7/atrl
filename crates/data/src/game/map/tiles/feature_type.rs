@@ -79,7 +79,7 @@ impl FeatureType {
     /// The tile is considered opaque unless VisionComponent includes one of these types
     pub const fn vision_penetrates(&self) -> u8 {
         match self {
-            Self::None => VisionType::None as u8,
+            Self::None => VisionType::Any as u8,
             Self::StairsDown => {
                 (VisionType::Colored as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
             }

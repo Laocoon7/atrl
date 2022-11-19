@@ -109,11 +109,21 @@ pub mod fov {
     mod adams_fov;
     mod slope;
     mod visibility_compute;
-    mod visibility_provider;
     pub use adams_fov::*;
     pub use slope::*;
     pub use visibility_compute::*;
+    mod af_fov;
+    pub use af_fov::*;
+    mod visibility_flags;
+    pub use visibility_flags::*;
+    mod visibility_map_2d;
+    pub use visibility_map_2d::*;
+    mod visibility_map;
+    pub use visibility_map::*;
+    mod visibility_provider;
     pub use visibility_provider::*;
+    mod grid_packer;
+    pub use grid_packer::*;
 }
 
 mod system_params {

@@ -77,21 +77,10 @@ mod states {
 }
 
 mod utils {
-    mod fov {
-        mod visibility_flags;
-        pub use visibility_flags::*;
-        mod visibility_map_2d;
-        pub use visibility_map_2d::*;
-        mod visibility_map;
-        pub use visibility_map::*;
-    }
-    pub use fov::*;
-
     mod axis;
     mod bitgrid;
     mod file_utils;
     mod grid;
-    mod grid_packer;
     mod point2d;
     mod range;
     mod size2d;
@@ -100,7 +89,6 @@ mod utils {
     pub use bitgrid::*;
     pub use file_utils::*;
     pub use grid::*;
-    pub use grid_packer::*;
     pub use point2d::*;
     pub use range::*;
     pub use size2d::*;
