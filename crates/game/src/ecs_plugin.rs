@@ -2,6 +2,7 @@ use crate::prelude::*;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, StageLabel)]
 pub enum AtrlStage {
+    Startup,
     ConsumeEvents,
 }
 
@@ -24,6 +25,12 @@ impl<T: StateNext, R: StateNext + Resource> Plugin for EcsPlugin<T, R> {
             state_running: self.state_running.clone(),
             turn_state_ticking: self.turn_state_ticking.clone(),
         });
+
+        // We need a `Startup` set to run all the initial systems
+        app.add_enter_system_set(
+            self.state_running.clone(),
+            ConditionSet::new().with_system(fov).into(),
+        );
 
         app.add_system_set_to_stage(
             AtrlStage::ConsumeEvents,

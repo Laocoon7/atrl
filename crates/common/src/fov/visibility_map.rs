@@ -24,15 +24,6 @@ impl Default for &VisibilityFlag {
     }
 }
 
-/// A point in the visibility map.
-///
-/// This is used to store the visibility state of a point in the map.
-#[derive(Default, Debug, Clone, Copy, Reflect, FromReflect)]
-pub struct VisibilityPoint {
-    pub opaque: bool,
-    pub visible: bool,
-}
-
 pub type VisibilityMap2d = Grid<VisibilityFlag>;
 
 /// A trait used by the fov algorithm to calculate the resulting fov.
