@@ -112,8 +112,6 @@ pub mod fov {
     pub use adams_fov::*;
     pub use slope::*;
     pub use visibility_compute::*;
-    mod af_fov;
-    pub use af_fov::*;
     mod visibility_map_2d;
     pub use visibility_map_2d::*;
     mod visibility_map;
