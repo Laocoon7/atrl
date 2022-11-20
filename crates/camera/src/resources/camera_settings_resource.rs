@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-#[derive(Resource)]
+#[derive(Resource, Debug)]
 pub struct CameraSettingsResource {
     pub settings: Vec<CameraSettings>,
 }

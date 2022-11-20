@@ -138,7 +138,7 @@ impl CardinalDirection {
         DirectionCardinalIter::new()
     }
 
-    pub fn combine(self, other: Self) -> Option<OrdinalDirection> {
+    pub const fn combine(self, other: Self) -> Option<OrdinalDirection> {
         OrdinalDirection::from_cardinals(self, other)
     }
 }
@@ -166,7 +166,17 @@ impl From<CardinalDirection> for (i32, i32) {
     }
 }
 
-#[cfg(feature = "rng")]
+impl FromIterator<CardinalDirection> for &[CardinalDirection] {
+    fn from_iter<T: IntoIterator<Item = CardinalDirection>>(iter: T) -> Self {
+        let mut v = Vec::new();
+        for d in iter {
+            v.push(d);
+        }
+
+        Box::leak(v.into_boxed_slice())
+    }
+}
+
 impl Distribution<CardinalDirection> for Standard {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> CardinalDirection {
         let index = rng.gen_range(0..NUM_CARDINAL_DIRECTIONS as u8);

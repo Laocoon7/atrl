@@ -213,6 +213,7 @@ impl From<GridDirection> for [i32; 2] {
         }
     }
 }
+
 impl From<GridDirection> for (i32, i32) {
     fn from(d: GridDirection) -> (i32, i32) {
         use self::GridDirection::*;
@@ -226,6 +227,17 @@ impl From<GridDirection> for (i32, i32) {
             SouthEast => (1, -1),
             SouthWest => (-1, -1),
         }
+    }
+}
+
+impl FromIterator<GridDirection> for &[GridDirection] {
+    fn from_iter<T: IntoIterator<Item = GridDirection>>(iter: T) -> Self {
+        let mut v = Vec::new();
+        for d in iter {
+            v.push(d);
+        }
+
+        Box::leak(v.into_boxed_slice())
     }
 }
 

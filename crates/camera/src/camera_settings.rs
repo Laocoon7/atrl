@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct CameraSettings {
     pub(crate) left: f32,
     pub(crate) right: f32,

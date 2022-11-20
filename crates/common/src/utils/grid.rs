@@ -342,3 +342,17 @@ impl<T: Copy + GridParam, P: Point2d> IndexMut<P> for Grid<T> {
         self.get_mut_unchecked(index)
     }
 }
+
+impl<T: GridParam> std::ops::Deref for Grid<T> {
+    type Target = Vec<T>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.cells
+    }
+}
+
+impl<T: GridParam> std::ops::DerefMut for Grid<T> {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.cells
+    }
+}

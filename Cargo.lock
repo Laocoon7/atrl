@@ -223,37 +223,11 @@ dependencies = [
  "atrl-renderer",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "bevy-inspector-egui 0.15.0-pre.0",
- "bevy_asset_loader",
- "bevy_common_assets",
- "bevy_ecs_tilemap",
  "bevy_embedded_assets",
  "bevy_mod_debugdump",
- "bevy_tileset",
- "bevy_tweening",
- "big-brain",
- "bitflags",
- "colored",
  "egui_dock",
  "embed-resource",
- "iyes_loopless 0.9.0 (git+https://github.com/banana-studios/iyes_loopless.git)",
- "iyes_progress 0.6.0 (git+https://github.com/banana-studios/iyes_progress?rev=1f8726fb2daa87232f751d7ced86432e11a0000c)",
- "kayak_font",
- "kayak_ui",
- "leafwing-input-manager",
- "noise",
- "num-derive",
- "num-traits",
- "once_cell",
- "parking_lot 0.12.1",
- "rand 0.8.5",
- "rand_pcg",
- "rand_seeder",
  "rayon",
- "ron 0.8.0",
- "serde",
- "smart-default",
- "strum",
- "xxhash-rust",
 ]
 
 [[package]]
@@ -292,17 +266,19 @@ dependencies = [
 name = "atrl-data"
 version = "0.1.0"
 dependencies = [
+ "arrayvec",
  "atrl-common",
  "atrl-macros",
  "atrl-map-gen",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "bitflags",
  "iyes_loopless 0.9.0 (git+https://github.com/banana-studios/iyes_loopless.git)",
  "leafwing-input-manager",
  "num-derive",
  "num-traits",
  "once_cell",
+ "ordered-float",
  "parking_lot 0.12.1",
+ "pathfinding",
  "ron 0.8.0",
  "serde",
 ]
@@ -626,20 +602,6 @@ dependencies = [
  "bevy_utils 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "parking_lot 0.12.1",
  "rodio",
-]
-
-[[package]]
-name = "bevy_common_assets"
-version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4f6b7df078908d118a55440470962f4393ac6a4ce89b13a3cd5bff49d4a06f29"
-dependencies = [
- "anyhow",
- "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "ron 0.7.1",
- "serde",
- "serde_json",
- "toml",
 ]
 
 [[package]]
@@ -1582,16 +1544,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "bevy_tweening"
-version = "0.6.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6d38b2abf5518df10c3c32ee57a54b9ba7067f3bd1c137b912e286d573962145"
-dependencies = [
- "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "interpolation",
-]
-
-[[package]]
 name = "bevy_ui"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2001,17 +1953,6 @@ name = "color_quant"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3d7b894f5411737b7867f4827955924d7c254fc9f4d91a6aad6b097804b1018b"
-
-[[package]]
-name = "colored"
-version = "2.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b3616f750b84d8f0de8a58bda93e08e2a81ad3f523089b05f1dffecab48c6cbd"
-dependencies = [
- "atty",
- "lazy_static",
- "winapi",
-]
 
 [[package]]
 name = "combine"
@@ -3043,10 +2984,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "interpolation"
-version = "0.2.0"
+name = "integer-sqrt"
+version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d3b7357d2bbc5ee92f8e899ab645233e43d21407573cceb37fed8bc3dede2c02"
+checksum = "276ec31bcb4a9ee45f58bec6f9ec700ae4cf4f4f8f2fa7e06cb406bd5ffdd770"
+dependencies = [
+ "num-traits",
+]
 
 [[package]]
 name = "io-kit-sys"
@@ -3895,6 +3839,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "86f0b0d4bf799edbc74508c1e8bf170ff5f41238e5f8225603ca7caaae2b7860"
 
 [[package]]
+name = "ordered-float"
+version = "3.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d84eb1409416d254e4a9c8fa56cc24701755025b458f0fcd8e59e1f5f40c23bf"
+dependencies = [
+ "num-traits",
+ "serde",
+]
+
+[[package]]
 name = "os_str_bytes"
 version = "6.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3967,6 +3921,21 @@ dependencies = [
  "redox_syscall",
  "smallvec",
  "windows-sys 0.42.0",
+]
+
+[[package]]
+name = "pathfinding"
+version = "3.0.14"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cb45190a18e771c500291c549959777a3be38d30113a860930bc1f2119f0cc13"
+dependencies = [
+ "fixedbitset",
+ "indexmap",
+ "integer-sqrt",
+ "itertools",
+ "num-traits",
+ "rustc-hash",
+ "thiserror",
 ]
 
 [[package]]
@@ -4690,28 +4659,6 @@ name = "strsim"
 version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "73473c0e59e6d5812c5dfe2a064a6444949f089e20eec9a2e5506596494e4623"
-
-[[package]]
-name = "strum"
-version = "0.24.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "063e6045c0e62079840579a7e47a355ae92f60eb74daaf156fb1e84ba164e63f"
-dependencies = [
- "strum_macros",
-]
-
-[[package]]
-name = "strum_macros"
-version = "0.24.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1e385be0d24f186b4ce2f9982191e7101bb737312ad61c1f2f984f34bcf85d59"
-dependencies = [
- "heck",
- "proc-macro2",
- "quote",
- "rustversion",
- "syn",
-]
 
 [[package]]
 name = "svg_fmt"

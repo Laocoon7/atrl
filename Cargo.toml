@@ -46,7 +46,6 @@ default = ["dev"]
 debug = [
   "egui_dock",
   "bevy-inspector-egui",
-  "colored",
   "debug-graph",
   # "debug_asset_server",
   "trace",
@@ -284,8 +283,15 @@ version = "0.6"
 features = ["derive"]
 version  = "0.24"
 
-[workspace.dependencies.bitflags]
-version = "1"
+[workspace.dependencies.arrayvec]
+version = "0.7"
+
+[workspace.dependencies.pathfinding]
+version = "3"
+
+[workspace.dependencies.ordered-float]
+features = ["serde"]
+version  = "3"
 
 ######################################
 ######################################
@@ -323,10 +329,6 @@ rev      = "041e5f362c281c286a63edeef2f7d02dbd5d62f4"
 git      = "https://github.com/jakobhellermann/bevy_mod_debugdump"
 optional = true
 
-[dependencies.colored]
-optional = true
-version  = "2"
-
 ######################################
 #########       Parallel
 ######################################
@@ -335,54 +337,4 @@ git      = "https://github.com/rayon-rs/rayon"
 optional = true
 
 [dependencies.bevy]
-workspace = true
-[dependencies.bevy_asset_loader]
-workspace = true
-[dependencies.bevy_common_assets]
-workspace = true
-[dependencies.bevy_tweening]
-workspace = true
-[dependencies.leafwing-input-manager]
-workspace = true
-[dependencies.bevy_ecs_tilemap]
-workspace = true
-[dependencies.bevy_tileset]
-workspace = true
-[dependencies.ron]
-workspace = true
-[dependencies.serde]
-workspace = true
-[dependencies.iyes_loopless]
-workspace = true
-[dependencies.iyes_progress]
-workspace = true
-[dependencies.noise]
-workspace = true
-[dependencies.rand]
-workspace = true
-[dependencies.rand_pcg]
-workspace = true
-[dependencies.rand_seeder]
-workspace = true
-[dependencies.xxhash-rust]
-workspace = true
-[dependencies.big-brain]
-workspace = true
-[dependencies.num-derive]
-workspace = true
-[dependencies.num-traits]
-workspace = true
-[dependencies.once_cell]
-workspace = true
-[dependencies.parking_lot]
-workspace = true
-[dependencies.smart-default]
-workspace = true
-[dependencies.strum]
-workspace = true
-[dependencies.kayak_font]
-workspace = true
-[dependencies.kayak_ui]
-workspace = true
-[dependencies.bitflags]
 workspace = true

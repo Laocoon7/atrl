@@ -77,21 +77,29 @@ mod states {
 }
 
 mod utils {
+    mod point {
+        mod point2d;
+        pub use point2d::*;
+        mod point2d_impl;
+        pub use point2d_impl::*;
+        mod point2d_iter;
+        pub use point2d_iter::*;
+    }
+    pub use point::*;
+
     mod axis;
-    mod bitgrid;
-    mod file_utils;
-    mod grid;
-    mod point2d;
-    mod range;
-    mod size2d;
-    mod white_pixel;
     pub use axis::*;
+    mod bitgrid;
     pub use bitgrid::*;
+    mod file_utils;
     pub use file_utils::*;
+    mod grid;
     pub use grid::*;
-    pub use point2d::*;
+    mod range;
     pub use range::*;
+    mod size2d;
     pub use size2d::*;
+    mod white_pixel;
     pub use white_pixel::*;
 }
 

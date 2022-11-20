@@ -180,7 +180,6 @@ impl From<OrdinalDirection> for (i32, i32) {
     }
 }
 
-#[cfg(feature = "rng")]
 impl Distribution<OrdinalDirection> for Standard {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> OrdinalDirection {
         let index = rng.gen_range(0..NUM_ORDINAL_DIRECTIONS as u8);

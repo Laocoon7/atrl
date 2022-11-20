@@ -122,6 +122,15 @@ pub mod fov {
     pub use bit_packer::*;
 }
 
+mod pathfinding {
+    mod pathmap;
+    pub use pathmap::*;
+    mod pathmap_2d;
+    pub use pathmap_2d::*;
+    mod pathfinder;
+    pub use pathfinder::*;
+}
+
 mod system_params {
     mod player_param;
     pub use player_param::*;
@@ -143,14 +152,12 @@ pub mod prelude {
         };
 
         pub use iyes_loopless::prelude::*;
-
         pub use leafwing_input_manager::prelude::*;
 
         pub use num_derive::{FromPrimitive, ToPrimitive};
         pub use num_traits::{FromPrimitive, ToPrimitive};
-
         pub use once_cell::sync::Lazy;
-
+        pub use ordered_float::OrderedFloat;
         pub use parking_lot::{Mutex, MutexGuard};
 
         pub use ron;
@@ -175,6 +182,7 @@ pub mod prelude {
         pub use crate::camera::*;
         pub use crate::components::*;
         pub use crate::game::*;
+        pub use crate::pathfinding::*;
         pub use crate::system_params::*;
 
         pub use crate::fov;

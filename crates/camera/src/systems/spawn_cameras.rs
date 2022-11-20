@@ -14,6 +14,7 @@ pub fn spawn_cameras(mut commands: Commands, mut camera_settings: ResMut<CameraS
                 loaded_cameras.add(id, entity)
             },
         );
+        println!("Spawning camera: {:?}", settings);
         commands.entity(entity).insert(Camera2dBundle::from(settings));
     }
 
