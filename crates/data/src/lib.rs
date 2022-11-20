@@ -123,12 +123,16 @@ pub mod fov {
 }
 
 mod pathfinding {
+    mod pathfinder {
+        mod atar;
+        pub use atar::*;
+    }
+    pub use pathfinder::*;
+
     mod pathmap;
     pub use pathmap::*;
     mod pathmap_2d;
     pub use pathmap_2d::*;
-    mod pathfinder;
-    pub use pathfinder::*;
 }
 
 mod system_params {

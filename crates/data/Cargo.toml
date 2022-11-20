@@ -10,7 +10,6 @@ release = []
 
 [dependencies]
 atrl-common  = { workspace = true }
-atrl-macros  = { workspace = true }
 atrl-map-gen = { workspace = true }
 
 arrayvec               = { workspace = true }

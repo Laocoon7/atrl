@@ -109,7 +109,6 @@ atrl-camera   = { path = "crates/camera" }
 atrl-common   = { path = "crates/common" }
 atrl-data     = { path = "crates/data" }
 atrl-game     = { path = "crates/game" }
-atrl-macros   = { path = "crates/macros" }
 atrl-map-gen  = { path = "crates/map_gen" }
 atrl-raws     = { path = "crates/raws" }
 atrl-renderer = { path = "crates/render" }
@@ -337,4 +336,8 @@ git      = "https://github.com/rayon-rs/rayon"
 optional = true
 
 [dependencies.bevy]
+workspace = true
+[dependencies.kayak_font]
+workspace = true
+[dependencies.kayak_ui]
 workspace = true

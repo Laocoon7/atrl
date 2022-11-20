@@ -1,5 +1,4 @@
 use crate::prelude::*;
-use atrl_macros::impl_as_primative;
 
 #[derive(
     Reflect,

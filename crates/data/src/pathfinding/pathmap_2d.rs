@@ -8,14 +8,15 @@ use ordered_float::OrderedFloat;
 ///
 /// # Example
 /// ```rust
+/// use crate::prelude::*;
 ///
 /// let mut map = PathMap2d::new([50,50]);
-/// let mut pf = Pathfinder::new();
 ///
 /// // Set position [5,4] of the path map to be a pathfinding obstacle.
 /// map[[5,4]] = true;
 ///
-/// let path = pf.astar(&map, [4,4], [10,10]).unwrap();
+/// let path = pathfinder::astar(&map, [4,4], [10,10]);
+/// if let Some(path) = path {...}
 /// ```
 pub type PathMap2d = Grid<u8>;
 

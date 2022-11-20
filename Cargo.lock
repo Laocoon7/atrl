@@ -227,6 +227,8 @@ dependencies = [
  "bevy_mod_debugdump",
  "egui_dock",
  "embed-resource",
+ "kayak_font",
+ "kayak_ui",
  "rayon",
 ]
 
@@ -242,7 +244,6 @@ dependencies = [
 name = "atrl-common"
 version = "0.1.0"
 dependencies = [
- "atrl-macros",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "bevy_ecs_tilemap",
  "bitvec",
@@ -268,7 +269,6 @@ version = "0.1.0"
 dependencies = [
  "arrayvec",
  "atrl-common",
- "atrl-macros",
  "atrl-map-gen",
  "bevy 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "iyes_loopless 0.9.0 (git+https://github.com/banana-studios/iyes_loopless.git)",
@@ -306,10 +306,6 @@ dependencies = [
  "rand_pcg",
  "smart-default",
 ]
-
-[[package]]
-name = "atrl-macros"
-version = "0.1.0"
 
 [[package]]
 name = "atrl-map-gen"

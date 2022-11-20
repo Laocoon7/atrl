@@ -58,6 +58,8 @@ mod macros {
     mod switch_in_game_state;
     pub use generic_macros::*;
     pub use switch_in_game_state::*;
+    mod primative;
+    pub use primative::*;
 }
 
 mod random {
@@ -151,7 +153,8 @@ pub mod prelude {
         pub use crate::macros::*;
         pub use crate::switch_in_game_state;
         pub use crate::{
-            impl_default, impl_new, insert_resource, remove_resource, spawn_component,
+            impl_as_primative, impl_default, impl_new, insert_resource, remove_resource,
+            spawn_component,
         };
 
         pub use crate::random::*;
