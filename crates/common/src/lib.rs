@@ -103,6 +103,8 @@ mod utils {
     pub use size2d::*;
     mod white_pixel;
     pub use white_pixel::*;
+    mod canvas;
+    pub use canvas::*;
 }
 
 mod common_plugin;

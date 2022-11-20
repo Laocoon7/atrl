@@ -21,9 +21,6 @@ pub fn fov(
                 if visibility_map.get_visible(tile_pos.as_ivec2())
                     | map.explored_tiles.contains(&tile_pos.as_uvec2())
                 {
-                    // TODO: Dim tiles in map.explored_tiles that aren't visible
-                    // probably show all explored files dim first, then replace index on visible tiles.
-                    // reveal tiles
                     tile_vis.0 = true;
                     tile_col.0 = *tile_col.0.set_a(1.0);
                 } else {

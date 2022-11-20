@@ -83,6 +83,7 @@ impl CameraSettings {
         self
     }
 
+    #[allow(clippy::missing_const_for_fn)]
     pub fn with_render_target(mut self, render_target: RenderTarget) -> Self {
         self.render_target = Some(render_target);
         self

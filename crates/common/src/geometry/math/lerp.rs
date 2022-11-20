@@ -1,5 +1,3 @@
-use crate::prelude::*;
-
 pub trait Lerp {
     /// calculate the point at `percent` between `self` and `end`
     ///
@@ -44,10 +42,3 @@ impl_lerp!(u128);
 impl_lerp!(i128);
 impl_lerp!(usize);
 impl_lerp!(isize);
-
-impl Lerp for IVec2 {
-    #[inline]
-    fn lerp(self, end: Self, percent: f32) -> Self {
-        Self { x: self.x.lerp(end.x, percent), y: self.y.lerp(end.y, percent) }
-    }
-}

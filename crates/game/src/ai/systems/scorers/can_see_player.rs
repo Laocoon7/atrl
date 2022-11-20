@@ -12,16 +12,33 @@ impl Default for CanSeePlayer {
 }
 
 pub fn can_see_player(
-    player_q: Query<Entity, With<Player>>,
-    mut query: Query<(&Actor, &mut Score)>,
+    q_map: Query<&Map>,
+    manager: Res<MapManager>,
+    player_q: Query<(Entity, &Transform), With<Player>>,
+    ai_q: Query<(&Transform, &FieldOfView, &Vision)>,
+    mut query: Query<(&Actor, &mut Score, &CanSeePlayer)>,
 ) {
-    if let Ok(_player) = player_q.get_single() {
-        for (Actor(_actor), mut score) in query.iter_mut() {
-            println!("Can see player scorer");
+    for (_player, player_transform) in &player_q {
+        for (Actor(actor), mut score, can_see_player) in query.iter_mut() {
+            let mut sees_player = false;
+            if let Ok((ai_transform, fov, vision)) = ai_q.get(*actor) {
+                if let Some(map) = q_map.iter().find(|m| m.world_position == manager.current_map) {
+                    let player_pos = player_transform.get();
+                    let ai_pos = ai_transform.get();
+                    if DistanceAlg::Pythagoras.distance2d(ai_pos, player_pos) < fov.0 as f32 {
+                        let line = Line::new(ai_pos, player_pos);
 
-            // Do stuff to see player
+                        if line.iter().all(|point| map.can_see_through(point, vision)) {
+                            score.set(can_see_player.score_if_true);
+                            sees_player = true;
+                        }
+                    }
+                }
+            }
 
-            score.set(0.0);
+            if !sees_player {
+                score.set(0.0);
+            }
         }
     }
 }

@@ -90,4 +90,26 @@ pub trait Shape {
         let points = scale_points(point, &self.points(), factor);
         Self::from_points(points)
     }
+
+    fn iter(&self) -> ShapeIterator
+    where
+        Self: std::fmt::Debug,
+    {
+        panic!("Please implement me for {self:?}")
+    }
+}
+
+#[derive(Debug, Clone)]
+pub enum ShapeIterator {
+    Line(GridLineIter),
+}
+
+impl Iterator for ShapeIterator {
+    type Item = IVec2;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        match self {
+            Self::Line(i) => i.next(),
+        }
+    }
 }
