@@ -4,7 +4,7 @@ pub fn fov(
     q_map: Query<&Map>,
     manager: Res<MapManager>,
     q_player: Query<(&Transform, &FieldOfView, &Vision), With<Player>>,
-    mut q_tile: Query<(&mut TileVisible, &TilePos)>,
+    mut q_tile: Query<(&mut TileVisible, &mut TileColor, &TilePos)>,
     mut q_actors: Query<
         (Entity, &Transform, &mut Visibility),
         (With<AIComponent>, Without<Player>),
@@ -17,14 +17,17 @@ pub fn fov(
                 generate_visibility_map(map, player_pos.get(), fov.0, vision_component);
 
             // Tiles
-            for (mut tile_vis, tile_pos) in q_tile.iter_mut() {
+            for (mut tile_vis, mut tile_col, tile_pos) in q_tile.iter_mut() {
                 if visibility_map.get_visible(tile_pos.as_ivec2())
-                // | map.explored_tiles.contains(&tile_pos.as_uvec2())
+                    | map.explored_tiles.contains(&tile_pos.as_uvec2())
                 {
                     // TODO: Dim tiles in map.explored_tiles that aren't visible
                     // probably show all explored files dim first, then replace index on visible tiles.
                     // reveal tiles
                     tile_vis.0 = true;
+                    tile_col.0 = *tile_col.0.set_a(1.0);
+                } else {
+                    tile_col.0 = *tile_col.0.set_a(0.15);
                 }
             }
 

@@ -19,21 +19,18 @@ pub fn player_input(
                     if let Some(map) =
                         map_q.iter().find(|map| map.world_position == *world_position)
                     {
-                        if map.world_position == *world_position {
-                            if map.can_move_through(
-                                (position_vec.x, position_vec.y),
-                                movement_component,
-                            ) {
-                                position.set_value(position_vec);
-                                println!(
-                                    "Player moved to {} {:?} {:?}",
-                                    position.translation,
-                                    direction,
-                                    direction.coord().as_vec2()
-                                );
-                            } else {
-                                println!("Blocked!");
-                            }
+                        if map
+                            .can_move_through((position_vec.x, position_vec.y), movement_component)
+                        {
+                            position.set_value(position_vec);
+                            println!(
+                                "Player moved to {} {:?} {:?}",
+                                position.translation,
+                                direction,
+                                direction.coord().as_vec2()
+                            );
+                        } else {
+                            println!("Blocked!");
                         }
                     }
 
