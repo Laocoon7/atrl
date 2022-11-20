@@ -7,7 +7,8 @@ pub fn load_first_map(
 
     mut map_manager: ResMut<MapManager>,
 ) {
-    let tileset_id = Prng::from_entropy().range(0..TILESET_TERRAIN_IDS_TABLE.len() as u32) as usize;
+    let length = (TILESET_TERRAIN_IDS_TABLE.len() - 1) as u32;
+    let tileset_id = Prng::from_entropy().range(0..length) as usize;
     let tileset_id = TILESET_TERRAIN_IDS_TABLE[tileset_id];
 
     if let Err(e) = map_manager.get_or_generate(
