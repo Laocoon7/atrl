@@ -51,10 +51,10 @@ impl TerrainType {
             Self::None => VisionType::None as u8,
             Self::Wall => VisionType::XRay as u8,
             Self::Floor => {
-                (VisionType::Colored as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
+                (VisionType::Normal as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
             }
             Self::Water => {
-                (VisionType::Colored as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
+                (VisionType::Normal as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
             }
         }
     }

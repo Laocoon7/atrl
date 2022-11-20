@@ -22,7 +22,7 @@ pub enum VisionType {
     #[default]
     None        = 0,
     Blind       = 1 << 0,
-    Colored     = 1 << 1,
+    Normal     = 1 << 1,
     Infared     = 1 << 2,
     XRay        = 1 << 3,
     NotBlind    = !(VisionType::Blind as u8),

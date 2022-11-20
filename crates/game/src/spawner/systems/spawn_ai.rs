@@ -50,7 +50,7 @@ pub fn spawn_ai(tilesets: Tilesets, mut commands: Commands, game_context: Res<Ga
             },
 
             fov: FieldOfView(4),
-            vision_component: Vision(VisionType::Colored.as_u8()),
+            vision_component: Vision(VisionType::Normal.as_u8()),
             movement_component: Movement(MovementType::Walk.as_u8()),
         },
         thinker,

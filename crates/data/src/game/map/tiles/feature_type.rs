@@ -62,16 +62,16 @@ impl FeatureType {
         match self {
             Self::None => VisionType::None as u8,
             Self::StairsDown => {
-                (VisionType::Colored as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
+                (VisionType::Normal as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
             }
             Self::StairsUp => {
-                (VisionType::Colored as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
+                (VisionType::Normal as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
             }
             Self::DoorClosed => {
-                (VisionType::Colored as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
+                (VisionType::Normal as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
             }
             Self::DoorOpen => {
-                (VisionType::Colored as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
+                (VisionType::Normal as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
             }
         }
     }
@@ -81,14 +81,14 @@ impl FeatureType {
         match self {
             Self::None => VisionType::Any as u8,
             Self::StairsDown => {
-                (VisionType::Colored as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
+                (VisionType::Normal as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
             }
             Self::StairsUp => {
-                (VisionType::Colored as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
+                (VisionType::Normal as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
             }
             Self::DoorClosed => VisionType::XRay as u8,
             Self::DoorOpen => {
-                (VisionType::Colored as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
+                (VisionType::Normal as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
             }
         }
     }
