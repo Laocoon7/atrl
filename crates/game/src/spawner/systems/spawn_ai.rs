@@ -1,20 +1,13 @@
 use crate::prelude::*;
 
-pub fn spawn_ai(tilesets: Tilesets, mut commands: Commands, game_context: Res<GameContext>) {
+pub fn spawn_ai(mut commands: Commands, tilesets: Tilesets) {
     println!("Spawning AI!");
 
     let world_position = IVec3::ZERO;
-    let rng = &mut game_context.get_random();
 
-    // TODO: check deserialize map from world_position
-    let map_noise = rng.noise.get(world_position.x, world_position.y, world_position.z);
-    let map_noise = (map_noise + 1.0) * 0.5; // TODO: Verify noise.get() returns (-1, 1)
-
-    let tileset_count = tilesets.len() as f64 - 1.0;
-    let tileset_selection = (tileset_count * map_noise).round() as u8;
     let tileset = tilesets
-        .get_by_id(&tileset_selection)
-        .unwrap_or_else(|| panic!("couldn't find tilemap_id: {:?}", tileset_selection));
+        .get_by_id(TILESET_ACTORS_OGRE_ID)
+        .unwrap_or_else(|| panic!("couldn't find tilemap_id: {:?}", TILESET_ACTORS_OGRE_ID));
 
     let chase_and_attack = Steps::build().step(ChaseActor::default());
 
@@ -35,8 +28,7 @@ pub fn spawn_ai(tilesets: Tilesets, mut commands: Commands, game_context: Res<Ga
             sprite: SpriteSheetBundle {
                 sprite: TextureAtlasSprite {
                     color: Color::RED,
-                    index: 4,
-                    // index: from_cp437('G'),
+                    index: 0,
                     custom_size: Some(Vec2::ONE),
                     ..Default::default()
                 },

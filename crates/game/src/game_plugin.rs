@@ -63,12 +63,14 @@ impl<T: StateNext> GamePlugin<T> {
     }
 
     fn add_map_renderer(state_construct: T, state_running: T, app: &mut App) {
-        app.add_plugin(
-            MapRendererPlugin::new(state_construct, state_running, [GRID_WIDTH, GRID_HEIGHT])
-                //.add_tileset_file("path/to/file.ron")
-                .add_tileset_file("./tilesets/terminal8x8.ron")
-                .add_tileset_file("./tilesets/dcss_terrain.ron"),
-        );
+        let mut plugin =
+            MapRendererPlugin::new(state_construct, state_running, [GRID_WIDTH, GRID_HEIGHT]);
+
+        for path in get_tileset_paths() {
+            plugin = plugin.add_tileset_file(path.as_str());
+        }
+
+        app.add_plugin(plugin);
     }
 
     fn add_game_map(state_construct: T, state_running: T, app: &mut App) {

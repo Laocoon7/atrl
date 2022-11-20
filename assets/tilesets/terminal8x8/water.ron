@@ -1,4 +1,0 @@
-(
-    name: "water",
-    tile: Standard("tilesets/terminal8x8/126.png")
-)

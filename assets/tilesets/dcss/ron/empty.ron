@@ -1,4 +1,0 @@
-(
-    name: "empty",
-    tile: Standard("tilesets/transparent_32x32.png")
-)

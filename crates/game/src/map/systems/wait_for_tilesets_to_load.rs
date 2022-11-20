@@ -5,15 +5,30 @@ pub fn wait_for_tilesets_to_load(
     tilesets: Tilesets,
     state: Res<CurrentGameState>,
 ) {
-    let tilesets_count = tilesets.len() as u8;
-
-    if tilesets_count == 0 {
-        return;
+    for i in TILESET_ACTORS_IDS_TABLE {
+        if tilesets.get_by_id(i).is_none() {
+            info!("Waiting for actor tilesets to load...");
+            return;
+        }
     }
 
-    for i in 0..tilesets_count {
-        if tilesets.get_by_id(&i).is_none() {
-            info!("Waiting for {} tilesets to load...", tilesets_count);
+    for i in TILESET_FEATURES_IDS_TABLE {
+        if tilesets.get_by_id(i).is_none() {
+            info!("Waiting for feature tilesets to load...");
+            return;
+        }
+    }
+
+    for i in TILESET_ITEMS_IDS_TABLE {
+        if tilesets.get_by_id(i).is_none() {
+            info!("Waiting for item tilesets to load...");
+            return;
+        }
+    }
+
+    for i in TILESET_TERRAIN_IDS_TABLE {
+        if tilesets.get_by_id(i).is_none() {
+            info!("Waiting for terrain tilesets to load...");
             return;
         }
     }

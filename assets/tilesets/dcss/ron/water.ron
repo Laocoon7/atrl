@@ -1,4 +1,0 @@
-(
-    name: "water",
-    tile: Standard("tilesets/dcss/dungeon/water/open_sea.png")
-)

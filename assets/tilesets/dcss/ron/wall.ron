@@ -1,4 +1,0 @@
-(
-    name: "wall",
-    tile: Standard("tilesets/dcss/dungeon/wall/stone2_dark_3.png")
-)

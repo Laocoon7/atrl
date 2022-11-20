@@ -1,4 +1,0 @@
-(
-    name: "wall",
-    tile: Standard("tilesets/terminal8x8/35.png")
-)

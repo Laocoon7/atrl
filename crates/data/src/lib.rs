@@ -141,6 +141,7 @@ mod system_params {
 }
 
 mod app_settings;
+mod tileset_paths;
 
 pub mod prelude {
 
@@ -154,6 +155,8 @@ pub mod prelude {
             render::render_resource::{Extent3d, TextureDimension, TextureFormat},
             utils::HashSet,
         };
+
+        pub use bevy_tileset::prelude::*;
 
         pub use iyes_loopless::prelude::*;
         pub use leafwing_input_manager::prelude::*;
@@ -192,6 +195,7 @@ pub mod prelude {
         pub use crate::fov;
 
         pub use crate::app_settings::*;
+        pub use crate::tileset_paths::*;
     }
     pub use export::*;
 }

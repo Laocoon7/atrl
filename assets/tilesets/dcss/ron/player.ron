@@ -1,4 +1,0 @@
-(
-    name: "player",
-    tile: Standard("tilesets/dcss/player/base/ogre_male.png")
-)
