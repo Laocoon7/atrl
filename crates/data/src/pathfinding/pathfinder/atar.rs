@@ -22,10 +22,9 @@ mod test {
         let map = PathMap2d::new_default([10, 10]);
 
         let start = IVec2::new(0, 0);
-        let end = IVec2::new(2, 0);
+        let end = IVec2::new(5, 0);
         let path = crate::pathfinding::pathfinder::astar(&map, start, end).unwrap();
 
-        println!("{:?}", path);
         assert_eq!(6, path.0.len());
         assert_eq!([0, 0], path.0[0].to_array());
         assert_eq!([5, 0], path.0[5].to_array());

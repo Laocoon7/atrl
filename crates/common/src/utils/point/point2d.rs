@@ -176,7 +176,7 @@ mod tests {
         let b = (20, 20);
 
         let dist = Point2d::taxi_dist(a, b);
-        assert_eq!(dist, 20);
+        assert_eq!(dist, 20.);
     }
 
     #[test]
