@@ -31,9 +31,9 @@ impl PathMap for PathMap2d {
                 continue;
             }
 
-            //if !self.get_bit_at(adj) {
-            //    points.push((adj, self.cost(adj)));
-            //}
+            if !self.get_bit_at(adj) {
+                points.push((adj, self.cost(adj)));
+            }
         }
 
         points.into_iter()
