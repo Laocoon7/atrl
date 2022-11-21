@@ -91,25 +91,18 @@ pub trait Shape {
         Self::from_points(points)
     }
 
+    /// returns an iterator over all points in the shape
     fn iter(&self) -> ShapeIterator
     where
         Self: std::fmt::Debug,
     {
         panic!("Please implement me for {self:?}")
     }
-}
 
-#[derive(Debug, Clone)]
-pub enum ShapeIterator {
-    Line(GridLineIter),
-}
-
-impl Iterator for ShapeIterator {
-    type Item = IVec2;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        match self {
-            Self::Line(i) => i.next(),
-        }
+    fn iter_exlusive(&self) -> ShapeIteratorExclusive
+    where
+        Self: std::fmt::Debug,
+    {
+        panic!("Please implement me for {self:?}")
     }
 }

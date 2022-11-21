@@ -2,6 +2,7 @@ use std::fmt::{self, Debug};
 
 use crate::prelude::*;
 
+#[derive(Clone)]
 pub struct Prht {
     seed: u64,
     xxhash: Xxh3,

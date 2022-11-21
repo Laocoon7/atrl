@@ -1,10 +1,9 @@
 use crate::prelude::*;
 
 pub fn load_first_map(
+    tilesets: Tilesets,
     mut commands: Commands,
     mut game_context: ResMut<GameContext>,
-    tilesets: Tilesets,
-
     mut map_manager: ResMut<MapManager>,
 ) {
     let length = (TILESET_TERRAIN_IDS_TABLE.len() - 1) as u32;

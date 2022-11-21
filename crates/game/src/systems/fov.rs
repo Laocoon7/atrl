@@ -1,7 +1,6 @@
 use crate::prelude::*;
 
 pub fn fov(
-    q_map: Query<&Map>,
     manager: Res<MapManager>,
     q_player: Query<(&Transform, &FieldOfView, &Vision), With<Player>>,
     mut q_tile: Query<(&mut TileVisible, &mut TileColor, &TilePos)>,
@@ -12,7 +11,7 @@ pub fn fov(
 ) {
     let mut visible_actors = Vec::new();
     for (player_pos, fov, vision_component) in q_player.iter() {
-        if let Some(map) = q_map.iter().find(|m| m.world_position == manager.current_map) {
+        if let Some(map) = manager.get_current_map() {
             let visibility_map =
                 generate_visibility_map(map, player_pos.get(), fov.0, vision_component);
 

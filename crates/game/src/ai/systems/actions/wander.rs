@@ -17,23 +17,18 @@ pub struct Wander {
 
 pub fn wander_action(
     ctx: Res<GameContext>,
-    map_q: Query<&Map>,
+    manager: Res<MapManager>,
     mut action_q: Query<(&Name, &Actor, &mut ActionState, &Wander)>,
-    mut spatial_q: Query<(&mut Transform, &WorldPosition, &Movement)>,
+    mut spatial_q: Query<(&mut Transform, &Movement)>,
 ) {
     use ActionState::*;
 
     for (name, Actor(actor), mut action_state, _wander) in action_q.iter_mut() {
-        if let Ok((mut position, world_pos, movement_component)) = spatial_q.get_mut(*actor) {
+        if let Ok((mut position, movement_component)) = spatial_q.get_mut(*actor) {
             match *action_state {
-                Executing => {}
                 Init => {
                     println!("Wander init");
                     continue;
-                }
-                Requested => {
-                    println!("{} gonna start wandering!", name);
-                    *action_state = ActionState::Executing;
                 }
                 ActionState::Success => {
                     println!("Wander success");
@@ -48,9 +43,16 @@ pub fn wander_action(
                     println!("Wander failed");
                     continue;
                 }
+
+                // These final two fall through to logic
+                Requested => {
+                    println!("{} gonna start wandering!", name);
+                    *action_state = ActionState::Executing;
+                }
+                Executing => {}
             }
 
-            if let Some(map) = map_q.iter().find(|map| map.world_position == *world_pos) {
+            if let Some(map) = manager.get_current_map() {
                 let rng = &mut ctx.get_random().prng;
                 let random_direction = rng.sample::<GridDirection>();
 
@@ -58,7 +60,6 @@ pub fn wander_action(
                 let destination = position_vec + random_direction.coord().as_vec2();
 
                 if map.can_move_through(destination, movement_component) {
-                    info!("{} moved to {:?}", name, destination);
                     position.set_value(destination);
                 } else {
                     *action_state = ActionState::Failure;

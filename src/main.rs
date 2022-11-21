@@ -62,7 +62,7 @@ fn default_plugins(app: &mut App) -> &mut App {
                     min_height: (GRID_HEIGHT * MIN_SPRITE_HEIGHT) as f32,
                     ..Default::default()
                 },
-                present_mode: PresentMode::AutoVsync,
+                // present_mode: PresentMode::AutoVsync,
                 ..Default::default()
             },
             ..Default::default()

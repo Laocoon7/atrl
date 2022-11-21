@@ -1,7 +1,7 @@
 use crate::prelude::*;
 
 // This needs to impl FromWorld not derive reflect
-#[derive(Component)]
+#[derive(Component, Clone)]
 pub struct Map {
     pub size: UVec2,
     pub random: Random,
@@ -37,14 +37,6 @@ impl Map {
             .feature_types
             .get(index)
             .map_or(MovementType::Any.as_u8(), |f| f.allowed_movement());
-
-        println!(
-            "T: {:?}, F: {:?}, M:{:?}, A:{:?}",
-            terrain,
-            feature,
-            **movement_component,
-            (terrain & feature & **movement_component)
-        );
 
         (terrain & feature & **movement_component) != 0
     }
@@ -103,6 +95,18 @@ impl Map {
 
     pub fn get_actor(&self, index: impl Point2d) -> Option<Entity> {
         self.actors.get(index).and_then(|e| e.as_ref().copied())
+    }
+
+    pub fn get_actor_position(&self, actor: Entity) -> Option<IVec2> {
+        self.actors.enumerate().find_map(
+            |(pt, e)| {
+                if e.as_ref() == Some(&actor) {
+                    Some(pt)
+                } else {
+                    None
+                }
+            },
+        )
     }
 
     pub fn move_actor(&mut self, from: impl Point2d, to: impl Point2d) {
@@ -180,6 +184,16 @@ impl VisibilityProvider for Map {
             !self.can_see_through(p, vision_component)
         } else {
             true
+        }
+    }
+}
+
+impl PathMapProvider for Map {
+    fn cost(&self, node: impl Point2d, movement_component: &Movement) -> OrderedFloat<f32> {
+        if self.can_move_through(node, movement_component) {
+            self.terrain_types.get(node).map_or(0.0, |t| t.get_movement_cost()).into()
+        } else {
+            0.0.into()
         }
     }
 }

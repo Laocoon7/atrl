@@ -24,6 +24,7 @@ impl<T: StateNext, R: StateNext + Resource> Plugin for AIPlugin<T, R> {
                     .run_in_state(self.state_running.clone())
                     .run_if_resource_equals(self.turn_state_ticking.clone())
                     .with_system(wander_action)
+                    .with_system(chase_action)
                     .into(),
             );
     }

@@ -58,6 +58,16 @@ impl TerrainType {
             }
         }
     }
+
+    /// Movement cost per tile
+    pub const fn get_movement_cost(&self) -> f32 {
+        match self {
+            Self::None => 0.0,
+            Self::Wall => 0.0,
+            Self::Floor => 1.0,
+            Self::Water => 1.45,
+        }
+    }
 }
 
 impl From<TerrainType> for u32 {

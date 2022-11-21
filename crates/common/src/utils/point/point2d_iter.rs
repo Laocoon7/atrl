@@ -38,6 +38,7 @@ impl Iterator for PointIterRowMajor {
 // Adjacent Iter
 ////////////////////////////////////////////////////////////
 
+#[derive(Debug)]
 pub struct AdjIterator<'a> {
     i: usize,
     p: IVec2,

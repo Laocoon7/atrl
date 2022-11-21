@@ -17,18 +17,33 @@ impl PlayerBundle {
         use PlayerAction::*;
         let mut input_map = InputMap::default();
 
+        /////////////////////////////
         // Movement
-        input_map // ArrowKeys
+        /////////////////////////////
+        input_map
+            // ArrowKeys
             .insert(KeyCode::Up, North)
-            .insert(GamepadButtonType::DPadUp, North)
             .insert(KeyCode::Down, South)
-            .insert(GamepadButtonType::DPadDown, South)
             .insert(KeyCode::Left, West)
-            .insert(GamepadButtonType::DPadLeft, West)
             .insert(KeyCode::Right, East)
+            // WSAD
+            .insert(KeyCode::W, North)
+            .insert(KeyCode::S, South)
+            .insert(KeyCode::A, West)
+            .insert(KeyCode::D, East)
+            // Diagonals
+            .insert(KeyCode::Y, NorthWest)
+            .insert(KeyCode::U, NorthEast)
+            .insert(KeyCode::B, SouthWest)
+            .insert(KeyCode::N, SouthEast)
+            // GamePad
+            .insert(GamepadButtonType::DPadUp, North)
+            .insert(GamepadButtonType::DPadDown, South)
+            .insert(GamepadButtonType::DPadLeft, West)
             .insert(GamepadButtonType::DPadRight, East);
 
-        input_map // Numpad
+        input_map
+            // Numpad
             .insert(KeyCode::Numpad7, NorthWest)
             .insert(KeyCode::Numpad8, North)
             .insert(KeyCode::Numpad9, NorthEast)
@@ -38,7 +53,11 @@ impl PlayerBundle {
             .insert(KeyCode::Numpad1, SouthWest)
             .insert(KeyCode::Numpad4, West);
 
-        input_map // Waiting
+        /////////////////////////////
+        // Actions
+        /////////////////////////////
+        input_map
+            // Waiting
             .insert(KeyCode::Numpad5, Wait);
 
         input_map

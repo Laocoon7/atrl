@@ -34,6 +34,12 @@ mod geometry {
     pub use math::*;
 
     mod shapes {
+        mod iter {
+            mod line_iter;
+            pub use line_iter::*;
+        }
+        pub use iter::*;
+
         mod circle;
         mod ellipse;
         mod line;
@@ -51,6 +57,8 @@ mod geometry {
 
     mod shape;
     pub use shape::*;
+    mod shape_iter;
+    pub use shape_iter::*;
 }
 
 mod macros {

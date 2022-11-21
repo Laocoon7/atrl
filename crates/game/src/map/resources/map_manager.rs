@@ -2,13 +2,17 @@ use crate::prelude::*;
 
 #[derive(Default, Resource)]
 pub struct MapManager {
-    pub current_map: WorldPosition,
+    pub current_map: Option<Map>,
     loaded_maps: HashMap<WorldPosition, Entity>,
 }
 
 impl MapManager {
     pub fn new() -> Self {
-        Self { current_map: WorldPosition(IVec3::new(0, 0, 0)), loaded_maps: HashMap::new() }
+        Self { current_map: None, loaded_maps: HashMap::new() }
+    }
+
+    pub const fn get_current_map(&self) -> Option<&Map> {
+        self.current_map.as_ref()
     }
 
     pub fn get_or_generate(
@@ -126,6 +130,8 @@ impl MapManager {
             "ItemLayer ({}, {}, {})",
             world_position.x, world_position.y, world_position.z
         )));
+
+        self.current_map = Some(map.clone());
 
         let map_entity = commands
             .spawn((

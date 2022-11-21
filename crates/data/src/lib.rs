@@ -123,16 +123,17 @@ pub mod fov {
 }
 
 mod pathfinding {
-    mod pathfinder {
+    pub mod pathfinder {
         mod atar;
         pub use atar::*;
     }
-    pub use pathfinder::*;
 
-    mod pathmap;
-    pub use pathmap::*;
-    mod pathmap_2d;
-    pub use pathmap_2d::*;
+    mod path_map_provider;
+    pub use path_map_provider::*;
+    mod path_map;
+    pub use path_map::*;
+    mod path_map_2d;
+    pub use path_map_2d::*;
 }
 
 mod system_params {
@@ -141,6 +142,7 @@ mod system_params {
 }
 
 mod app_settings;
+mod queries;
 mod tileset_paths;
 
 pub mod prelude {
@@ -188,11 +190,11 @@ pub mod prelude {
         pub use crate::actors::*;
         pub use crate::camera::*;
         pub use crate::components::*;
+        pub use crate::fov;
         pub use crate::game::*;
         pub use crate::pathfinding::*;
+        pub use crate::queries::*;
         pub use crate::system_params::*;
-
-        pub use crate::fov;
 
         pub use crate::app_settings::*;
         pub use crate::tileset_paths::*;

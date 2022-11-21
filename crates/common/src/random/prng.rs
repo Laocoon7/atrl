@@ -6,7 +6,7 @@ use rand::RngCore;
 use rand::{Rng as RandRng, SeedableRng};
 use rand_pcg::Pcg64;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct Prng {
     seed: u64,
     rng: Pcg64,

@@ -12,6 +12,27 @@ impl BitPacker for VisibilityMap2d {
         Self::new_default([width, size.height()])
     }
 
+    fn new_packer_with(size: impl Size2d, value: u8) -> Grid<u8> {
+        let mut width = size.width() / 4;
+        if size.width() % 4 != 0 {
+            width += 1;
+        }
+
+        Self::new_clone([width, size.height()], value)
+    }
+
+    fn new_packer_fn<F>(size: impl Size2d, f: F) -> Grid<u8>
+    where
+        F: FnMut(IVec2) -> u8,
+    {
+        let mut width = size.width() / 4;
+        if size.width() % 4 != 0 {
+            width += 1;
+        }
+
+        Self::new_fn([width, size.height()], f)
+    }
+
     fn get_bit_at(&self, p: impl Point2d) -> bool {
         self.get((p.x() / 8, p.y())).map_or(false, |byte| (*byte >> (p.x() % 8)) & 0b0000_0001 == 1)
     }

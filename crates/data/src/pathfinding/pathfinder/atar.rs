@@ -1,14 +1,16 @@
 use crate::prelude::*;
 
 pub fn astar(
-    map: &impl PathMap,
     start: impl Point2d,
     end: impl Point2d,
+    movement_component: &Movement,
+    path_map_provider: &impl PathMapProvider,
+    path_map: &impl PathMap,
 ) -> Option<(Vec<IVec2>, OrderedFloat<f32>)> {
     pathfinding::prelude::astar(
         &start.as_ivec2(),
-        |p| map.successors(p),
-        |p| map.distance(*p, end),
+        |p| path_map.successors(*p).map(|p| (p, path_map_provider.cost(p, movement_component))),
+        |p| path_map.distance(*p, end),
         |p| *p == end.as_ivec2(),
     )
 }
@@ -17,13 +19,28 @@ pub fn astar(
 mod test {
     use crate::prelude::*;
 
+    struct PathProvider;
+    impl PathMapProvider for PathProvider {
+        fn cost(&self, node: impl Point2d, _: &Movement) -> OrderedFloat<f32> {
+            OrderedFloat(1.0)
+        }
+    }
+
     #[test]
     fn right_test() {
         let map = PathMap2d::new_default([10, 10]);
 
         let start = IVec2::new(0, 0);
         let end = IVec2::new(5, 0);
-        let path = crate::pathfinding::pathfinder::astar(&map, start, end).unwrap();
+        let movement_component = Movement(MovementType::Any.as_u8());
+        let path = crate::pathfinding::pathfinder::astar(
+            start,
+            end,
+            &movement_component,
+            &PathProvider {},
+            &map,
+        )
+        .unwrap();
 
         assert_eq!(6, path.0.len());
         assert_eq!([0, 0], path.0[0].to_array());
@@ -36,7 +53,15 @@ mod test {
 
         let start = IVec2::new(5, 5);
         let end = IVec2::new(5, 0);
-        let path = crate::pathfinding::pathfinder::astar(&map, start, end).unwrap();
+        let movement_component = Movement(MovementType::Any.as_u8());
+        let path = crate::pathfinding::pathfinder::astar(
+            start,
+            end,
+            &movement_component,
+            &PathProvider {},
+            &map,
+        )
+        .unwrap();
 
         assert_eq!(6, path.0.len());
         assert_eq!([5, 5], path.0[0].to_array());
@@ -49,7 +74,15 @@ mod test {
 
         let start = IVec2::new(5, 4);
         let end = IVec2::new(5, 9);
-        let path = crate::pathfinding::pathfinder::astar(&map, start, end).unwrap();
+        let movement_component = Movement(MovementType::Any.as_u8());
+        let path = crate::pathfinding::pathfinder::astar(
+            start,
+            end,
+            &movement_component,
+            &PathProvider {},
+            &map,
+        )
+        .unwrap();
 
         assert_eq!(6, path.0.len());
         assert_eq!([5, 4], path.0[0].to_array());
@@ -62,7 +95,15 @@ mod test {
 
         let start = IVec2::new(9, 5);
         let end = IVec2::new(4, 5);
-        let path = crate::pathfinding::pathfinder::astar(&map, start, end).unwrap();
+        let movement_component = Movement(MovementType::Any.as_u8());
+        let path = crate::pathfinding::pathfinder::astar(
+            start,
+            end,
+            &movement_component,
+            &PathProvider {},
+            &map,
+        )
+        .unwrap();
 
         assert_eq!(6, path.0.len());
         assert_eq!([9, 5], path.0[0].to_array());
@@ -75,7 +116,14 @@ mod test {
 
         let start = IVec2::new(0, 0);
         let end = IVec2::new(100000, 100000);
-        let path = crate::pathfinding::pathfinder::astar(&map, start, end);
+        let movement_component = Movement(MovementType::Any.as_u8());
+        let path = crate::pathfinding::pathfinder::astar(
+            start,
+            end,
+            &movement_component,
+            &PathProvider {},
+            &map,
+        );
 
         assert_eq!(path, None);
     }

@@ -1,5 +1,5 @@
 use crate::prelude::*;
-use arrayvec::{ArrayVec, IntoIter};
+use arrayvec::ArrayVec;
 use ordered_float::OrderedFloat;
 
 /// A pathmap represented as a 2d grid of [bool].
@@ -21,26 +21,19 @@ use ordered_float::OrderedFloat;
 pub type PathMap2d = Grid<u8>;
 
 impl PathMap for PathMap2d {
-    type ExitIterator = IntoIter<(IVec2, OrderedFloat<f32>), 8>;
+    type ExitIterator = arrayvec::IntoIter<IVec2, 8>;
 
-    fn successors(&self, p: &impl Point2d) -> Self::ExitIterator {
+    fn successors(&self, p: impl Point2d) -> Self::ExitIterator {
         let mut points = ArrayVec::new();
 
         for adj in p.adj_8() {
-            if !self.in_bounds(adj) {
-                continue;
-            }
-
+            println!("get_bit_at: {:?}", adj);
             if !self.get_bit_at(adj) {
-                points.push((adj, self.cost(adj)));
+                points.push(adj);
             }
         }
 
         points.into_iter()
-    }
-
-    fn cost(&self, _: impl Point2d) -> OrderedFloat<f32> {
-        OrderedFloat(1.0)
     }
 
     fn distance(&self, a: impl Point2d, b: impl Point2d) -> OrderedFloat<f32> {
