@@ -104,22 +104,29 @@ mod game {
     pub use game_state::*;
 }
 
-// Leave this as pub so that we can do `fov::compute` and not `compute`
 pub mod fov {
-    mod adams_fov;
-    mod slope;
-    mod visibility_compute;
-    pub use adams_fov::*;
-    pub use slope::*;
-    pub use visibility_compute::*;
-    mod visibility_map_2d;
-    pub use visibility_map_2d::*;
+    mod adams {
+        mod adams_fov;
+        pub use adams_fov::*;
+        mod octant;
+        mod slope;
+    }
+    pub use adams::*;
+
+    mod af {
+        mod af_fov;
+        pub use af_fov::*;
+        mod quadrant;
+        mod row;
+        mod slope;
+    }
+    pub use af::*;
+
+    mod fov;
+    pub use fov::*;
+
     mod visibility_map;
     pub use visibility_map::*;
-    mod visibility_provider;
-    pub use visibility_provider::*;
-    mod bit_packer;
-    pub use bit_packer::*;
 }
 
 mod pathfinding {
@@ -185,12 +192,6 @@ pub mod prelude {
     }
     pub(crate) use import::*;
 
-    mod internal {
-        pub use crate::fov::*;
-        pub use crate::pathfinding::PathMap;
-    }
-    pub(crate) use internal::*;
-
     mod export {
         pub use crate::actors::*;
         pub use crate::camera::*;
@@ -199,7 +200,7 @@ pub mod prelude {
         pub use crate::queries::*;
         pub use crate::system_params::*;
 
-        pub use crate::fov;
+        pub use crate::fov::*;
         pub use crate::pathfinding::PathFinder;
 
         pub use crate::resources::*;

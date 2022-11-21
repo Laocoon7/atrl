@@ -108,9 +108,6 @@ pub mod prelude {
 
         pub use atrl_camera::prelude::*;
         pub use atrl_common::prelude::*;
-        pub use atrl_data::prelude::fov::{
-            BitPacker, VisibilityMap, VisibilityMap2d, VisibilityProvider,
-        };
         pub use atrl_data::prelude::AssetLoadState::*;
         pub use atrl_data::prelude::ConstructState::*;
         pub use atrl_data::prelude::TurnState::*;

@@ -28,7 +28,8 @@ pub fn can_see_player(
                     // If the player is within the FOV range of the AI, check line of sight
                     if DistanceAlg::Pythagoras.distance2d(ai_pos, player_pos) < fov.0 as f32 {
                         let line = Line::new(ai_pos, player_pos);
-                        if line.iter().all(|point| map.can_see_through(point, vision)) {
+
+                        if line.iter().all(|point| map.can_see_through(point, vision.0)) {
                             score.set(can_see_player.score_if_true);
                             sees_player = true;
                         }

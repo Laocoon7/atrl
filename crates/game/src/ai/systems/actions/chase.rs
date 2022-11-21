@@ -10,7 +10,7 @@ pub enum ChaseActorFailureBehavior {
 #[derive(Debug, Default, Component, Clone)]
 // could be used for temporary storage for multi turn actions
 pub struct ChaseActor {
-    last_seen_pt: Option<Vec2>,
+    last_seen_pt: Option<IVec2>,
     // What to do if entity reaches last seen player position
     fail_behavior: ChaseActorFailureBehavior,
 }

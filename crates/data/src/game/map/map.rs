@@ -42,9 +42,11 @@ impl Map {
         (terrain & feature & **movement_component) != 0
     }
 
-    pub fn can_see_through(&self, index: impl Point2d, vision_component: &Vision) -> bool {
+    pub fn can_see_through(&self, index: impl Point2d, vision_type: VisionType) -> bool {
+        let vision_type = vision_type.as_u8();
+
         // Check if the player is blind
-        if (**vision_component & VisionType::Blind as u8) != 0 {
+        if (vision_type & VisionType::Blind as u8) != 0 {
             return false;
         }
 
@@ -62,14 +64,14 @@ impl Map {
             .get(index)
             .map_or(VisionType::Any.as_u8(), |f| f.vision_penetrates());
 
-        (terrain & feature & (**vision_component)) != 0
+        (terrain & feature & (vision_type)) != 0
     }
 
-    pub fn can_see_feature(&self, index: impl Point2d, vision_component: &Vision) -> bool {
+    pub fn can_see_feature(&self, index: impl Point2d, vision_type: VisionType) -> bool {
         let feature =
             self.feature_types.get(index).map_or(VisionType::None.as_u8(), |f| f.allowed_vision());
 
-        (feature & **vision_component) != 0
+        (feature & vision_type.as_u8()) != 0
     }
 
     pub fn set_terrain_at(&mut self, index: impl Point2d, terrain_type: TerrainType) {
@@ -176,14 +178,10 @@ impl From<MapGenData<MapPassThroughData>> for Map {
     }
 }
 
-impl VisibilityProvider for Map {
-    fn size(&self) -> UVec2 {
-        self.size
-    }
-
-    fn is_opaque(&self, p: impl Point2d, vision_component: &Vision) -> bool {
-        if self.size.contains(p) {
-            !self.can_see_through(p, vision_component)
+impl FovProvider for Map {
+    fn is_opaque(&self, position: IVec2, vision_type: VisionType) -> bool {
+        if self.size.contains(position) {
+            !self.can_see_through(position, vision_type)
         } else {
             true
         }

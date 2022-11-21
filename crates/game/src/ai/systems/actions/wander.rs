@@ -57,7 +57,7 @@ pub fn wander_action(
                 let random_direction = rng.sample::<GridDirection>();
 
                 let position_vec = position.get();
-                let destination = position_vec + random_direction.coord().as_vec2();
+                let destination = position_vec + random_direction.coord();
 
                 if map.can_move_through(destination, movement_component) {
                     position.set_value(destination);

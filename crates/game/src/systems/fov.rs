@@ -11,9 +11,17 @@ pub fn fov(
 ) {
     let mut visible_actors = Vec::new();
     for (player_pos, fov, vision_component) in q_player.iter() {
-        if let Some(map) = manager.get_current_map() {
-            let visibility_map =
-                generate_visibility_map(map, player_pos.get(), fov.0, vision_component);
+        if let Some(map) = q_map.iter().find(|m| m.world_position == manager.current_map) {
+            let mut visibility_map = VisibilityMap::new(map.size);
+
+            //AFFov
+            AdamsFov::compute_fov(
+                player_pos.get(),
+                vision_component.0,
+                fov.0,
+                map,
+                &mut visibility_map,
+            );
 
             // Tiles
             for (mut tile_vis, mut tile_col, tile_pos) in q_tile.iter_mut() {
@@ -43,15 +51,4 @@ pub fn fov(
             visible.is_visible = true;
         }
     }
-}
-
-fn generate_visibility_map<P: VisibilityProvider, R: Into<u32>>(
-    visibility_provider: &P,
-    origin: impl Point2d,
-    range: R,
-    vision_component: &Vision,
-) -> VisibilityMap2d {
-    let mut visibility_map = VisibilityMap2d::new_packer(visibility_provider.size());
-    fov::compute(origin, range.into(), vision_component, visibility_provider, &mut visibility_map);
-    visibility_map
 }

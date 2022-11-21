@@ -14,7 +14,7 @@ pub fn player_input(
             if action_state.just_pressed(input_direction) {
                 if let Some(direction) = input_direction.direction() {
                     let mut position_vec = position.get();
-                    position_vec += direction.coord().as_vec2();
+                    position_vec += direction.coord();
 
                     if let Some(map) =
                         map_q.iter().find(|map| map.world_position == *world_position)
