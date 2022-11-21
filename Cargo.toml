@@ -170,7 +170,6 @@ version  = "0.6"
 #########       Input
 ######################################
 [workspace.dependencies.leafwing-input-manager]
-# features = ["egui"]
 version = "0.7.0"
 
 ######################################
@@ -203,13 +202,15 @@ version  = "1"
 ######################################
 [workspace.dependencies.iyes_loopless]
 features = ["states"]
+# version  = "0.9"
 #git      = "https://github.com/IyesGames/iyes_loopless.git"
 git = "https://github.com/banana-studios/iyes_loopless.git"
 
 [workspace.dependencies.iyes_progress]
 features = ["assets"]
-git      = "https://github.com/banana-studios/iyes_progress"
-rev      = "1f8726fb2daa87232f751d7ced86432e11a0000c"
+# version  = "0.7"
+git = "https://github.com/banana-studios/iyes_progress"
+rev = "1f8726fb2daa87232f751d7ced86432e11a0000c"
 
 ######################################
 #########       Random
@@ -248,7 +249,7 @@ git = "https://github.com/StarArawn/kayak_ui"
 ######################################
 
 [workspace.dependencies.big-brain]
-git = "https://github.com/zkat/big-brain"
+version = "0.15"
 
 [workspace.dependencies.anyhow]
 version = "1"
@@ -305,8 +306,8 @@ embed-resource = "1.4"
 #########       Release
 ######################################
 [dependencies.bevy_embedded_assets]
-git      = "https://github.com/vleue/bevy_embedded_assets"
 optional = true
+version  = "0.6"
 
 ######################################
 #########       Debug
@@ -322,15 +323,15 @@ optional = true
 rev      = "041e5f362c281c286a63edeef2f7d02dbd5d62f4"
 
 [dependencies.bevy_mod_debugdump]
-git      = "https://github.com/jakobhellermann/bevy_mod_debugdump"
 optional = true
+version  = "0.6"
 
 ######################################
 #########       Parallel
 ######################################
 [dependencies.rayon]
-git      = "https://github.com/rayon-rs/rayon"
 optional = true
+version  = "1"
 
 [dependencies.bevy]
 workspace = true
