@@ -136,9 +136,18 @@ mod system_params {
     pub use player_param::*;
 }
 
-mod app_settings;
+mod resources {
+    mod app_settings;
+    pub use app_settings::*;
+    mod tileset_paths;
+    pub use tileset_paths::*;
+    mod timer;
+    pub use timer::*;
+    mod font_paths;
+    pub use font_paths::*;
+}
+
 mod queries;
-mod tileset_paths;
 
 pub mod prelude {
 
@@ -193,8 +202,7 @@ pub mod prelude {
         pub use crate::fov;
         pub use crate::pathfinding::PathFinder;
 
-        pub use crate::app_settings::*;
-        pub use crate::tileset_paths::*;
+        pub use crate::resources::*;
     }
     pub use export::*;
 }

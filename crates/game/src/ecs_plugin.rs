@@ -22,21 +22,18 @@ impl<T: StateNext, R: StateNext + Resource> Plugin for EcsPlugin<T, R> {
         Self::setup_stages(app);
 
         app.add_plugin(AIPlugin {
-            state_running: self.state_running.clone(),
-            turn_state_ticking: self.turn_state_ticking.clone(),
+            state_running: self.state_running,
+            turn_state_ticking: self.turn_state_ticking,
         });
 
         // We need a `Startup` set to run all the initial systems
-        app.add_enter_system_set(
-            self.state_running.clone(),
-            ConditionSet::new().with_system(fov).into(),
-        );
+        app.add_enter_system_set(self.state_running, ConditionSet::new().with_system(fov).into());
 
         app.add_system_set_to_stage(
             AtrlStage::ConsumeEvents,
             ConditionSet::new()
-                .run_in_state(self.state_running.clone())
-                .run_if_resource_equals(self.turn_state_ticking.clone())
+                .run_in_state(self.state_running)
+                .run_if_resource_equals(self.turn_state_ticking)
                 .with_system(fov)
                 .into(),
         );

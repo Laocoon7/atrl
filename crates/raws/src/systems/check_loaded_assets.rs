@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-pub fn check_progress(
+pub fn check_loaded_assets(
     mut commands: Commands,
     state: Res<CurrentGameState>,
     splash_timer: Res<SplashTimer>,

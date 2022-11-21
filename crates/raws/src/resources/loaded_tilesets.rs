@@ -8,7 +8,7 @@ pub struct LoadedTilesets {
 }
 
 impl LoadedTilesets {
-    pub fn new(settings: &MapRendererSettings) -> Self {
+    pub fn new(settings: &AssetSettings) -> Self {
         let tileset_files = settings.tileset_file_paths.clone();
         let tileset_folders = settings.tileset_folder_paths.clone();
         Self { tileset_files, tileset_folders, handles: Vec::new() }

@@ -1,12 +1,14 @@
+//!
+//! To add a new tileset, add the name and id as pub const at the top
+//! This will allow access the tileset from Tilesets::get_by_[name/id]()
+//!
+//! Add the new name to the TILESET_XXX_NAME_TABLE it belongs to
+//! This will allow the tileset to be automatically loaded.
+//!
+//! Add the new id to the the TILESET_XXX_IDS_TABLE it belongs to
+//! This will cause loading to wait for this id to load.
+
 use crate::prelude::*;
-// To add a new tileset, add the name and id as pub const at the top
-// This will allow access the tileset from Tilesets::get_by_[name/id]()
-
-// Add the new name to the TILESET_XXX_NAME_TABLE it belongs to
-// This will allow the tileset to be automatically loaded.
-
-// Add the new id to the the TILESET_XXX_IDS_TABLE it belongs to
-// This will cause loading to wait for this id to load.
 
 // Tileset Names (Match filename to infile name)
 #[cfg(feature = "debug")] // Show TODO to catch bugs in debug mod

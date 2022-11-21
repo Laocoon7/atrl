@@ -45,6 +45,8 @@ fn main() {
         state_running: GameState::InGame,
         state_main_menu: GameState::Ui(MainMenu),
         state_construct: GameState::Construct(MapGen),
+        state_asset_load: GameState::AssetLoad(Load),
+        state_asset_load_failure: GameState::AssetLoad(LoadFailure),
     });
 
     app.run();

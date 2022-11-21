@@ -8,7 +8,7 @@ pub struct SpawnerPlugin<T> {
 
 impl<T: StateNext> Plugin for SpawnerPlugin<T> {
     fn build(&self, app: &mut App) {
-        app.add_exit_system(self.state_construct.clone(), spawn_player.label(PLAYER_SPAWN))
-            .add_exit_system(self.state_construct.clone(), spawn_ai.after(PLAYER_SPAWN));
+        app.add_exit_system(self.state_construct, spawn_player.label(PLAYER_SPAWN))
+            .add_exit_system(self.state_construct, spawn_ai.after(PLAYER_SPAWN));
     }
 }

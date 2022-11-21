@@ -23,5 +23,7 @@ bevy             = { workspace = true }
 bevy_ecs_tilemap = { workspace = true }
 bevy_tileset     = { workspace = true }
 iyes_loopless    = { workspace = true }
+iyes_progress    = { workspace = true }
 kayak_font       = { workspace = true }
 kayak_ui         = { workspace = true }
+smart-default    = { workspace = true }

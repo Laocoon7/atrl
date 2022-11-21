@@ -58,6 +58,8 @@ debug = [
   "atrl-raws/debug",
 ]
 
+debug-trace = ["debug", "trace"]
+
 # default configuration while developing
 dev = [
   "bevy/filesystem_watcher",
@@ -156,11 +158,6 @@ version = "0.9"
 ######################################
 #########       Assets
 ######################################
-[workspace.dependencies.bevy_asset_loader]
-features = ["stageless", "2d", "progress_tracking_stageless"]
-git      = "https://github.com/banana-studios/bevy_asset_loader"
-rev      = "a1f6752d2b2ecb4d23b151b143ef53d27af7cca0"
-
 [workspace.dependencies.bevy_common_assets]
 features = ["ron", "toml", "json"]
 version  = "0.4"

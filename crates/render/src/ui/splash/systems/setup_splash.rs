@@ -3,9 +3,6 @@ use crate::prelude::*;
 #[derive(Component)]
 pub struct OnSplashScreen;
 
-#[derive(Resource, Deref, DerefMut)]
-pub struct SplashTimer(Timer);
-
 pub fn setup_splash(
     timer: f32,
     mut commands: Commands,
