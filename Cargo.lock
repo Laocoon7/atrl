@@ -4241,7 +4241,7 @@ dependencies = [
 [[package]]
 name = "rayon"
 version = "1.6.0"
-source = "git+https://github.com/rayon-rs/rayon#c2dfa5c8684d88c20b0ba27a8a3bf762cf96af92"
+source = "git+https://github.com/rayon-rs/rayon#8e48eae53e969f328ef41f8d6977bb8cb7084bec"
 dependencies = [
  "crossbeam-deque",
  "either",
@@ -4250,8 +4250,8 @@ dependencies = [
 
 [[package]]
 name = "rayon-core"
-version = "1.10.0"
-source = "git+https://github.com/rayon-rs/rayon#c2dfa5c8684d88c20b0ba27a8a3bf762cf96af92"
+version = "1.10.1"
+source = "git+https://github.com/rayon-rs/rayon#8e48eae53e969f328ef41f8d6977bb8cb7084bec"
 dependencies = [
  "crossbeam-channel",
  "crossbeam-deque",
