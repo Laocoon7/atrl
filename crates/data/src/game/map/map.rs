@@ -24,6 +24,7 @@ pub struct Map {
     pub feature_types: Grid<FeatureType>,
     pub item_types: Grid<Vec<ItemType>>,
 
+    pub pathmap: Grid<u8>,
     pub explored_tiles: HashSet<UVec2>,
 }
 
@@ -170,6 +171,7 @@ impl From<MapGenData<MapPassThroughData>> for Map {
 
             // TODO: Add explored_tiles HashSet to MapPassThroughData
             explored_tiles: HashSet::new(),
+            pathmap: Grid::new_packer(data.size),
         }
     }
 }
@@ -188,12 +190,30 @@ impl VisibilityProvider for Map {
     }
 }
 
-impl PathMapProvider for Map {
+impl PathMap for Map {
+    type ExitIterator = arrayvec::IntoIter<(IVec2, OrderedFloat<f32>), 8>;
+
     fn cost(&self, node: impl Point2d, movement_component: &Movement) -> OrderedFloat<f32> {
         if self.can_move_through(node, movement_component) {
             self.terrain_types.get(node).map_or(0.0, |t| t.get_movement_cost()).into()
         } else {
             0.0.into()
         }
+    }
+
+    fn distance(&self, a: impl Point2d, b: impl Point2d) -> OrderedFloat<f32> {
+        a.taxi_dist(b).into()
+    }
+
+    fn successors(&self, p: impl Point2d, movement_component: &Movement) -> Self::ExitIterator {
+        let mut points = arrayvec::ArrayVec::new();
+
+        for adj in p.adj_8() {
+            if !self.pathmap.get_bit_at(adj) && self.can_move_through(adj, movement_component) {
+                points.push((adj, self.cost(adj, movement_component)));
+            }
+        }
+
+        points.into_iter()
     }
 }

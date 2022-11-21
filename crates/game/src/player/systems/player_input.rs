@@ -23,14 +23,14 @@ pub fn player_input(
                             .can_move_through((position_vec.x, position_vec.y), movement_component)
                         {
                             position.set_value(position_vec);
-                            println!(
+                            info!(
                                 "Player moved to {} {:?} {:?}",
                                 position.translation,
                                 direction,
                                 direction.coord().as_vec2()
                             );
                         } else {
-                            println!("Blocked!");
+                            info!("Blocked!");
                         }
                     }
 

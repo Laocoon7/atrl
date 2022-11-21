@@ -34,16 +34,25 @@ impl BitPacker for VisibilityMap2d {
     }
 
     fn get_bit_at(&self, p: impl Point2d) -> bool {
+        if p.x() < 0 {
+            return false;
+        }
         self.get((p.x() / 8, p.y())).map_or(false, |byte| (*byte >> (p.x() % 8)) & 0b0000_0001 == 1)
     }
 
     fn set_bit_at(&mut self, p: impl Point2d) {
+        if p.x() < 0 {
+            return;
+        }
         if let Some(byte) = self.get((p.x() / 8, p.y())) {
             self.set((p.x() / 8, p.y()), *byte | (1 << ((p.x().max(0)) % 8)) as u8);
         }
     }
 
     fn clear_bit_at(&mut self, p: impl Point2d) {
+        if p.x() < 0 {
+            return;
+        }
         if let Some(byte) = self.get((p.x() / 8, p.y())) {
             self.set((p.x() / 8, p.y()), *byte & !(1 << ((p.x().max(0)) % 8)));
         }

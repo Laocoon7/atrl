@@ -48,7 +48,7 @@ debug = [
   "bevy-inspector-egui",
   "debug-graph",
   # "debug_asset_server",
-  "trace",
+  # "trace",
   "atrl-camera/debug",
   "atrl-common/debug",
   "atrl-data/debug",

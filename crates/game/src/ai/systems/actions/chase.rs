@@ -12,7 +12,7 @@ pub enum ChaseActorFailureBehavior {
 pub struct ChaseActor {
     last_seen_pt: Option<Vec2>,
     // What to do if entity reaches last seen player position
-    _fail_behavior: ChaseActorFailureBehavior,
+    fail_behavior: ChaseActorFailureBehavior,
 }
 
 pub fn chase_action(
@@ -67,29 +67,35 @@ pub fn chase_action(
                 };
 
                 if let Some(target_pt) = target_pt {
-                    let pathmap = PathMap2d::new_packer_with(map.size(), 1);
-                    if let Some(path) =
-                        pathfinder::astar(ai_pos, player_pos, movement_component, map, &pathmap)
-                    {
-                        println!("Path: {:?}", path);
-                        let distance = DistanceAlg::PythagorasSquared.distance2d(ai_pos, target_pt);
-                        if distance > 1.45 {
-                            let destination = path.0[1];
-                            if map.can_move_through(destination, movement_component) {
-                                println!(
-                                    "Moving from {:?} to {:?}\n",
-                                    ai_pos,
-                                    destination.as_vec2()
-                                );
-                                position.set_value(destination.as_vec2());
+                    if target_pt == ai_pos {
+                        // We reached the end of our trail and the target isn't nearby
+                        // Let's do fallback behavior until AI cancels us
+                        match chase.fail_behavior {
+                            ChaseActorFailureBehavior::Wait => {
+                                println!("Reached last known position of player. Just gonna wait.");
                             }
+                        }
+                        *action_state = ActionState::Failure;
+                        continue;
+                    }
+
+                    if let Some(path) =
+                        PathFinder::Astar.compute(ai_pos, target_pt, movement_component, map)
+                    {
+                        let distance = DistanceAlg::Pythagoras.distance2d(ai_pos, target_pt);
+                        info!("Path: {:?} / distance: {}", path, distance);
+                        if distance > 1.45 {
+                            let destination = path.0[1].as_vec2() + Vec2::new(0.5, 0.5);
+                            info!("Moving from {:?} to {:?}", ai_pos, destination);
+                            position.set_value(destination);
                         } else {
                             // We can't get closer
+                            info!("Can't get closer to player");
                             *action_state = ActionState::Success;
                         };
                     }
                 } else {
-                    println!("Target not seen, what was I chasing?");
+                    info!("Target not seen, what was I chasing?");
                     *action_state = ActionState::Failure;
                 }
             } else {
@@ -98,5 +104,7 @@ pub fn chase_action(
         } else {
             *action_state = ActionState::Failure;
         }
+
+        info!("Chase action output: {:?}\n", action_state);
     }
 }
