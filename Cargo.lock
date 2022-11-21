@@ -2585,8 +2585,9 @@ checksum = "4217ad341ebadf8d8e724e264f13e593e0648f5b3e94b3896a5df283be015ecc"
 
 [[package]]
 name = "iyes_loopless"
-version = "0.9.0"
-source = "git+https://github.com/banana-studios/iyes_loopless.git#14d30f643ea64115cedafbfefef2043b5b6bb250"
+version = "0.9.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c47fd2cbdb1d7f295c25e6bfccfd78a84b6eef3055bc9f01b34ae861721b01ee"
 dependencies = [
  "bevy_app",
  "bevy_ecs",
@@ -2596,8 +2597,9 @@ dependencies = [
 
 [[package]]
 name = "iyes_progress"
-version = "0.6.0"
-source = "git+https://github.com/banana-studios/iyes_progress?rev=1f8726fb2daa87232f751d7ced86432e11a0000c#1f8726fb2daa87232f751d7ced86432e11a0000c"
+version = "0.7.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "266c468795c5af070ab4c5fa01aca792a8f01f511e76feb9bea3878a1dbee144"
 dependencies = [
  "bevy_app",
  "bevy_asset",
