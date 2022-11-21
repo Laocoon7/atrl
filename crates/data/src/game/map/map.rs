@@ -209,6 +209,10 @@ impl PathMap for Map {
         let mut points = arrayvec::ArrayVec::new();
 
         for adj in p.adj_8() {
+            if !self.pathmap.in_bounds(adj / IVec2::new(4, 1)) {
+                continue;
+            }
+
             if !self.pathmap.get_bit_at(adj) && self.can_move_through(adj, movement_component) {
                 points.push((adj, self.cost(adj, movement_component)));
             }
