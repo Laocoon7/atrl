@@ -18,9 +18,7 @@ pub fn astar(
 mod test {
     use crate::prelude::*;
 
-    pub type PathMap2d = Grid<u8>;
-
-    impl PathMap for PathMap2d {
+    impl PathMap for BitGrid {
         type ExitIterator = arrayvec::IntoIter<(IVec2, OrderedFloat<f32>), 8>;
 
         /// The cost of moving to a given node
@@ -42,11 +40,11 @@ mod test {
             let mut points = arrayvec::ArrayVec::new();
 
             for adj in node.adj_8() {
-                if !self.in_bounds(IVec2::new(adj.x / 4, adj.y)) {
+                if !self.in_bounds(adj) {
                     continue;
                 }
 
-                if !self.get_bit_at(adj) {
+                if !self.get_unchecked(adj) {
                     points.push((adj, self.cost(adj, movement_component)));
                 }
             }
@@ -57,11 +55,11 @@ mod test {
 
     #[test]
     fn right_test() {
-        let path_map = PathMap2d::new_packer([10, 10]);
+        let path_map = BitGrid::new_default([10, 10]);
         let start = IVec2::new(0, 0);
         let end = IVec2::new(5, 0);
         let movement_component = Movement(MovementType::Any.as_u8());
-        let path = PathFinder::AStar.compute(start, end, &movement_component, &path_map).unwrap();
+        let path = PathFinder::Astar.compute(start, end, &movement_component, &path_map).unwrap();
 
         assert_eq!(6, path.0.len());
         assert_eq!([0, 0], path.0[0].to_array());
@@ -70,11 +68,11 @@ mod test {
 
     #[test]
     fn down_test() {
-        let path_map = PathMap2d::new_packer([10, 10]);
+        let path_map = BitGrid::new_default([10, 10]);
         let start = IVec2::new(5, 5);
         let end = IVec2::new(5, 0);
         let movement_component = Movement(MovementType::Any.as_u8());
-        let path = PathFinder::AStar.compute(start, end, &movement_component, &path_map).unwrap();
+        let path = PathFinder::Astar.compute(start, end, &movement_component, &path_map).unwrap();
 
         assert_eq!(6, path.0.len());
         assert_eq!([5, 5], path.0[0].to_array());
@@ -83,12 +81,12 @@ mod test {
 
     #[test]
     fn up_test() {
-        let map = PathMap2d::new_packer([10, 10]);
+        let map = BitGrid::new_default([10, 10]);
 
         let start = IVec2::new(5, 4);
         let end = IVec2::new(5, 9);
         let movement_component = Movement(MovementType::Any.as_u8());
-        let path = PathFinder::AStar.compute(start, end, &movement_component, &map).unwrap();
+        let path = PathFinder::Astar.compute(start, end, &movement_component, &map).unwrap();
 
         assert_eq!(6, path.0.len());
         assert_eq!([5, 4], path.0[0].to_array());
@@ -97,12 +95,12 @@ mod test {
 
     #[test]
     fn left_test() {
-        let map = PathMap2d::new_packer([10, 10]);
+        let map = BitGrid::new_default([10, 10]);
 
         let start = IVec2::new(9, 5);
         let end = IVec2::new(4, 5);
         let movement_component = Movement(MovementType::Any.as_u8());
-        let path = PathFinder::AStar.compute(start, end, &movement_component, &map).unwrap();
+        let path = PathFinder::Astar.compute(start, end, &movement_component, &map).unwrap();
 
         assert_eq!(6, path.0.len());
         assert_eq!([9, 5], path.0[0].to_array());
@@ -111,12 +109,12 @@ mod test {
 
     #[test]
     fn fail_test() {
-        let map = PathMap2d::new_packer([1, 1]);
+        let map = BitGrid::new_default([1, 1]);
 
         let start = IVec2::new(0, 0);
         let end = IVec2::new(11, 11);
         let movement_component = Movement(MovementType::Any.as_u8());
-        let path = PathFinder::AStar.compute(start, end, &movement_component, &map);
+        let path = PathFinder::Astar.compute(start, end, &movement_component, &map);
 
         assert_eq!(path, None);
     }

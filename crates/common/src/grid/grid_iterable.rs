@@ -1,5 +1,5 @@
 use crate::prelude::*;
-use std::{iter, slice};
+use std::iter;
 
 pub type GridIterCol<'a, T> = iter::StepBy<T>;
 pub type GridEnumerate<'a, T> = iter::Zip<PointIterRowMajor, T>;
