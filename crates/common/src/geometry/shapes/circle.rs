@@ -78,6 +78,11 @@ impl Shape for Circle {
     fn bottom(&self) -> i32 {
         self.center.y + self.radius as i32
     }
+
+    #[inline]
+    fn iter(&self) -> ShapeIterator {
+        ShapeIterator::Circle(self.into_iter())
+    }
 }
 
 impl Circle {

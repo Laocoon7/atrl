@@ -83,5 +83,5 @@ fn distance2d_diagonal_with_costs(start: impl Point2d, end: impl Point2d, d1: f3
     let end = end.as_vec2();
 
     let distance = start.sub(end).abs();
-    d1 * distance.max_element() + (d2 - d1) * distance.min_element()
+    d1.mul_add(distance.max_element(), (d2 - d1) * distance.min_element())
 }

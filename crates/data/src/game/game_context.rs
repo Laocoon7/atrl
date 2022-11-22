@@ -2,7 +2,7 @@ use crate::prelude::*;
 
 #[derive(Resource)]
 pub struct GameContext {
-    pub random: Mutex<Random>,
+    pub random: Random,
     pub world_bounds: Rectangle,
     pub map_manager_random: Random,
 }
@@ -12,20 +12,12 @@ impl Default for GameContext {
         let mut random = Random::from_entropy();
         let map_manager_random = Random::new(random.prng.next_u64());
 
-        Self {
-            map_manager_random,
-            random: Mutex::new(random),
-            world_bounds: Rectangle::new((-5, -5), (5, 5)),
-        }
+        Self { map_manager_random, random, world_bounds: Rectangle::new((-5, -5), (5, 5)) }
     }
 }
 
 impl GameContext {
     pub fn is_valid_world_position(&self, world_position: WorldPosition) -> bool {
         self.world_bounds.contains(world_position.xy())
-    }
-
-    pub fn get_random(&self) -> MutexGuard<Random> {
-        self.random.lock()
     }
 }

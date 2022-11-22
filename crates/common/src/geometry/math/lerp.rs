@@ -1,3 +1,5 @@
+#![allow(clippy::use_self)]
+
 pub trait Lerp {
     /// calculate the point at `percent` between `self` and `end`
     ///

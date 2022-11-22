@@ -90,7 +90,7 @@ impl Shape for Triangle {
     where
         Self: Sized,
     {
-        Triangle::new(points[0], points[1], points[2])
+        Self::new(points[0], points[1], points[2])
     }
 
     fn contains(&self, point: impl Point2d) -> bool {
