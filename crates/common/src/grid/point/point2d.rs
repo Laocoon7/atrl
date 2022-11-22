@@ -153,16 +153,22 @@ pub trait Point2d: Clone + Copy {
     //  Iterator  //
     ////////////////
 
-    /// Returns an iterator over the 8 points adjacent to this one.
+    /// Returns an iterator over the 8 points adjacent to this one. (N, NE, E, SE, S, SW, W, NW)
     #[inline]
-    fn adj_8(&self) -> AdjIterator {
+    fn neighbors_all(&self) -> AdjIterator {
         AdjIterator::new(*self, GridDirection::all().collect())
     }
 
-    /// Returns an iterator over the 4 points adjacent to this one.
+    /// Returns an iterator over the 4 points cardinal - adjacent to this one. (N, E, S, W)
     #[inline]
-    fn adj_4(&self) -> AdjIterator {
+    fn neighbors_cardinal(&self) -> AdjIterator {
         AdjIterator::new(*self, CardinalDirection::all_directions().collect())
+    }
+
+    /// Returns an iterator over the 4 points ordinal - adjacent to this one. (NE, SE, SW, NW)
+    #[inline]
+    fn neighbors_ordinal(&self) -> AdjIterator {
+        AdjIterator::new(*self, OrdinalDirection::all_directions().collect())
     }
 }
 
@@ -181,13 +187,13 @@ mod tests {
 
     #[test]
     fn adj() {
-        let points: Vec<IVec2> = (10, 10).adj_4().collect();
+        let points: Vec<IVec2> = (10, 10).neighbors_cardinal().collect();
         assert!(points.contains(&IVec2::new(10, 9)));
         assert!(points.contains(&IVec2::new(9, 10)));
         assert!(points.contains(&IVec2::new(11, 10)));
         assert!(points.contains(&IVec2::new(10, 11)));
 
-        let points: Vec<IVec2> = (10, 10).adj_8().collect();
+        let points: Vec<IVec2> = (10, 10).neighbors_all().collect();
         assert!(points.contains(&IVec2::new(10, 9)));
         assert!(points.contains(&IVec2::new(9, 10)));
         assert!(points.contains(&IVec2::new(11, 10)));

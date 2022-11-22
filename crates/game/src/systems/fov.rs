@@ -2,6 +2,7 @@ use crate::prelude::*;
 
 pub fn fov(
     manager: Res<MapManager>,
+    q_map: Query<&Map>,
     q_player: Query<(&Transform, &FieldOfView, &Vision), With<Player>>,
     mut q_tile: Query<(&mut TileVisible, &mut TileColor, &TilePos)>,
     mut q_actors: Query<
@@ -14,8 +15,7 @@ pub fn fov(
         if let Some(map) = manager.get_current_map() {
             let mut visibility_map = VisibilityMap::new(map.size);
 
-            //AFFov
-            AdamsFov::compute_fov(
+            Fov::Shadowcast.compute(
                 player_pos.get(),
                 vision_component.0,
                 fov.0,
@@ -43,8 +43,8 @@ pub fn fov(
                     e_vis.is_visible = false;
                 }
             }
+            }
         }
-    }
 
     for entity in visible_actors.into_iter() {
         if let Ok((_, _, mut visible)) = q_actors.get_mut(entity) {

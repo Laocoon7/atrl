@@ -106,36 +106,55 @@ mod game {
 
 pub mod fov {
     mod adams {
-        mod adams_fov;
-        pub use adams_fov::*;
+        mod adams;
+        pub use adams::*;
         mod octant;
-        mod slope;
     }
     pub use adams::*;
 
-    mod af {
-        mod af_fov;
-        pub use af_fov::*;
+    mod shadowcast {
+        mod shadowcast;
+        pub(crate) use shadowcast::*;
         mod quadrant;
         mod row;
-        mod slope;
     }
-    pub use af::*;
+    pub(crate) use shadowcast::*;
+
+    mod shared {
+        mod fov_algorithm;
+        pub(crate) use fov_algorithm::*;
+        mod slope;
+        pub use slope::*;
+    }
 
     mod fov;
     pub use fov::*;
+    mod fov_provider;
+    pub use fov_provider::*;
+    mod fov_receiver;
+    pub use fov_receiver::*;
 
     mod visibility_map;
     pub use visibility_map::*;
 }
 
 mod pathfinding {
+    mod astar {
+        mod astar;
+        pub(crate) use astar::*;
+        mod astar_node;
+    }
+    pub(crate) use astar::*;
+
+    mod shared {
+        mod path_algorithm;
+        pub(crate) use path_algorithm::*;
+    }
+
     mod pathfinder;
     pub use pathfinder::*;
-    mod astar;
-    pub use astar::*;
-    mod path_map;
-    pub use path_map::*;
+    mod path_provider;
+    pub use path_provider::*;
 }
 
 mod system_params {
@@ -176,6 +195,7 @@ pub mod prelude {
 
         pub use bevy_tileset::prelude::*;
 
+        pub use index_list::{Index, IndexList};
         pub use iyes_loopless::prelude::*;
         pub use leafwing_input_manager::prelude::*;
 
@@ -207,6 +227,7 @@ pub mod prelude {
 
         pub use crate::fov::*;
         pub use crate::pathfinding::PathFinder;
+        pub use crate::pathfinding::*;
 
         pub use crate::resources::*;
     }

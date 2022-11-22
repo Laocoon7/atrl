@@ -248,18 +248,21 @@ git = "https://github.com/StarArawn/kayak_ui"
 #########       Utility
 ######################################
 
-[workspace.dependencies.big-brain]
-version = "0.15"
+[workspace.dependencies.arrayvec]
+version = "0.7"
 
 [workspace.dependencies.anyhow]
 version = "1"
+
+[workspace.dependencies.big-brain]
+version = "0.15"
 
 [workspace.dependencies.bitvec]
 features = ["serde"]
 version  = "1.0.1"
 
-[workspace.dependencies.thiserror]
-version = "1"
+[workspace.dependencies.index_list]
+version = "0.2.7"
 
 [workspace.dependencies.num-derive]
 version = "0.3"
@@ -280,8 +283,8 @@ version = "0.6"
 features = ["derive"]
 version  = "0.24"
 
-[workspace.dependencies.arrayvec]
-version = "0.7"
+[workspace.dependencies.thiserror]
+version = "1"
 
 [workspace.dependencies.pathfinding]
 version = "3"

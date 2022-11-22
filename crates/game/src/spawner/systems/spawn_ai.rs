@@ -42,7 +42,7 @@ pub fn spawn_ai(mut commands: Commands, tilesets: Tilesets) {
             },
 
             fov: FieldOfView(4),
-            vision_component: Vision(VisionType::Normal),
+            vision_component: Vision(VisionType::Normal.as_u8()),
             movement_component: Movement(MovementType::Walk.as_u8()),
         },
         thinker,

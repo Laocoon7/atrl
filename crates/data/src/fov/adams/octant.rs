@@ -3,7 +3,7 @@ use crate::prelude::*;
 pub(crate) struct Octant<'a> {
     direction: GridDirection,
     origin: IVec2,
-    vision_type: VisionType,
+    vision_type: u8,
     provider: Box<&'a dyn FovProvider>,
     receiver: Box<&'a mut dyn FovReceiver>,
 }
@@ -12,7 +12,7 @@ impl<'a> Octant<'a> {
     pub fn new(
         direction: GridDirection,
         origin: IVec2,
-        vision: VisionType,
+        vision: u8,
         provider: Box<&'a dyn FovProvider>,
         receiver: Box<&'a mut dyn FovReceiver>,
     ) -> Self {

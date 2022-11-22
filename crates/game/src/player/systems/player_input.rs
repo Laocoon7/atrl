@@ -14,7 +14,7 @@ pub fn player_input(
                     position_vec += direction.coord();
 
                     if let Some(map) = manager.get_current_map() {
-                        if map.can_move_through(position_vec, movement_component) {
+                        if map.can_move_through(position_vec, movement_component.0) {
                             position.set_value(position_vec);
                             info!(
                                 "Player moved to {} {:?} {:?}",

@@ -34,8 +34,8 @@ pub fn spawn_player(mut commands: Commands, tilesets: Tilesets) {
             },
 
             fov: FieldOfView(8),
-            vision_component: Vision(VisionType::Normal),
-            movement_component: Movement(MovementType::Walk.as_u8() | (MovementType::Swim.as_u8())),
+            vision_component: Vision(VisionType::Normal.as_u8()),
+            movement_component: Movement(MovementType::Walk.as_u8() | MovementType::Swim.as_u8()),
         },
         input_manager: InputManagerBundle {
             input_map: PlayerBundle::default_input_map(),

@@ -24,12 +24,11 @@ pub struct Map {
     pub feature_types: Grid<FeatureType>,
     pub item_types: Grid<Vec<ItemType>>,
 
-    pub pathmap: BitGrid,
     pub explored_tiles: HashSet<UVec2>,
 }
 
 impl Map {
-    pub fn can_move_through(&self, index: impl Point2d, movement_component: &Movement) -> bool {
+    pub fn can_move_through(&self, index: impl Point2d, movement_type: u8) -> bool {
         let terrain = self
             .terrain_types
             .get(index)
@@ -39,12 +38,10 @@ impl Map {
             .get(index)
             .map_or(MovementType::Any.as_u8(), |f| f.allowed_movement());
 
-        (terrain & feature & **movement_component) != 0
+        (terrain & feature & movement_type) != 0
     }
 
-    pub fn can_see_through(&self, index: impl Point2d, vision_type: VisionType) -> bool {
-        let vision_type = vision_type.as_u8();
-
+    pub fn can_see_through(&self, index: impl Point2d, vision_type: u8) -> bool {
         // Check if the player is blind
         if (vision_type & VisionType::Blind as u8) != 0 {
             return false;
@@ -67,11 +64,11 @@ impl Map {
         (terrain & feature & (vision_type)) != 0
     }
 
-    pub fn can_see_feature(&self, index: impl Point2d, vision_type: VisionType) -> bool {
+    pub fn can_see_feature(&self, index: impl Point2d, vision_type: u8) -> bool {
         let feature =
             self.feature_types.get(index).map_or(VisionType::None.as_u8(), |f| f.allowed_vision());
 
-        (feature & vision_type.as_u8()) != 0
+        (feature & vision_type) != 0
     }
 
     pub fn set_terrain_at(&mut self, index: impl Point2d, terrain_type: TerrainType) {
@@ -173,13 +170,12 @@ impl From<MapGenData<MapPassThroughData>> for Map {
 
             // TODO: Add explored_tiles HashSet to MapPassThroughData
             explored_tiles: HashSet::new(),
-            pathmap: BitGrid::new_default(data.size),
         }
     }
 }
 
 impl FovProvider for Map {
-    fn is_opaque(&self, position: IVec2, vision_type: VisionType) -> bool {
+    fn is_opaque(&self, position: IVec2, vision_type: u8) -> bool {
         if self.size.contains(position) {
             !self.can_see_through(position, vision_type)
         } else {
@@ -188,34 +184,12 @@ impl FovProvider for Map {
     }
 }
 
-impl PathMap for Map {
-    type ExitIterator = arrayvec::IntoIter<(IVec2, OrderedFloat<f32>), 8>;
-
-    fn cost(&self, node: impl Point2d, movement_component: &Movement) -> OrderedFloat<f32> {
-        if self.can_move_through(node, movement_component) {
-            self.terrain_types.get(node).map_or(0.0, |t| t.get_movement_cost()).into()
-        } else {
-            0.0.into()
-        }
+impl PathProvider for Map {
+    fn is_walkable(&self, position: IVec2, movement_type: u8) -> bool {
+        self.can_move_through(position, movement_type)
     }
 
-    fn distance(&self, a: impl Point2d, b: impl Point2d) -> OrderedFloat<f32> {
-        a.taxi_dist(b).into()
-    }
-
-    fn successors(&self, p: impl Point2d, movement_component: &Movement) -> Self::ExitIterator {
-        let mut points = arrayvec::ArrayVec::new();
-
-        for adj in p.adj_8() {
-            if !self.pathmap.in_bounds(adj / IVec2::new(4, 1)) {
-                continue;
-            }
-
-            if !self.pathmap.get_unchecked(adj) && self.can_move_through(adj, movement_component) {
-                points.push((adj, self.cost(adj, movement_component)));
-            }
-        }
-
-        points.into_iter()
+    fn cost(&self, _position: IVec2, _movement_type: u8) -> u32 {
+        1
     }
 }

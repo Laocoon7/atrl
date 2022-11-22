@@ -37,7 +37,6 @@ impl FovReceiver for VisibilityMap {
 
     fn set_visible(&mut self, position: IVec2) {
         if let Some((byte_index, bit_index)) = self.get_byte_index(position) {
-            println!("{}, {}, {}", position, byte_index, bit_index);
             // get old byte, and set the bit index
             let byte = *self.grid.get_unchecked(byte_index) | (1 << bit_index);
 

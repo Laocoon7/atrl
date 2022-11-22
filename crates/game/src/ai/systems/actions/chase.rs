@@ -80,12 +80,10 @@ pub fn chase_action(
                     }
 
                     if let Some(path) =
-                        PathFinder::Astar.compute(ai_pos, target_pt, movement_component, map)
+                        PathFinder::Astar.compute(ai_pos, target_pt, movement_component.0, map)
                     {
-                        let distance = DistanceAlg::Pythagoras.distance2d(ai_pos, target_pt);
-                        info!("Path: {:?} / distance: {}", path, distance);
-                        if distance > 1.45 {
-                            let destination = path.0[1];
+                        if path.len() > 1 {
+                            let destination = path[1];
                             info!("Moving from {:?} to {:?}", ai_pos, destination);
                             position.set_value(destination);
                         } else {

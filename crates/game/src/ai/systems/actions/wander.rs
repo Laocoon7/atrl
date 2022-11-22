@@ -59,7 +59,7 @@ pub fn wander_action(
                 let position_vec = position.get();
                 let destination = position_vec + random_direction.coord();
 
-                if map.can_move_through(destination, movement_component) {
+                if map.can_move_through(destination, movement_component.0) {
                     position.set_value(destination);
                 } else {
                     *action_state = ActionState::Failure;
