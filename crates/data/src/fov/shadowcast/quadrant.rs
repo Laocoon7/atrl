@@ -1,11 +1,11 @@
 use crate::prelude::*;
 
-pub(crate) struct Quadrant<'a> {
+pub struct Quadrant<'a> {
     direction: CardinalDirection,
     origin: IVec2,
     vision: u8,
-    provider: Box<&'a dyn FovProvider>,
-    receiver: Box<&'a mut dyn FovReceiver>,
+    provider: &'a dyn FovProvider,
+    receiver: &'a mut dyn FovReceiver,
 }
 
 impl<'a> Quadrant<'a> {
@@ -13,14 +13,14 @@ impl<'a> Quadrant<'a> {
         direction: CardinalDirection,
         origin: IVec2,
         vision: u8,
-        provider: Box<&'a dyn FovProvider>,
-        receiver: Box<&'a mut dyn FovReceiver>,
+        provider: &'a dyn FovProvider,
+        receiver: &'a mut dyn FovReceiver,
     ) -> Self {
         Self { direction, origin, vision, provider, receiver }
     }
 
     // adjust the transform based on which direction we are scanning
-    fn transform(&self, tile: IVec2) -> IVec2 {
+    const fn transform(&self, tile: IVec2) -> IVec2 {
         match self.direction {
             CardinalDirection::North => IVec2::new(self.origin.x + tile.y, self.origin.y - tile.x),
             CardinalDirection::South => IVec2::new(self.origin.x + tile.y, self.origin.y + tile.x),

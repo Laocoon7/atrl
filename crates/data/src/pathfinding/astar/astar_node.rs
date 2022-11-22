@@ -71,7 +71,7 @@ impl AStarNode {
         self.position
     }
 
-    pub const fn from_node(&self) -> Option<IVec2> {
+    pub const fn get_from_node(&self) -> Option<IVec2> {
         self.from_node
     }
 

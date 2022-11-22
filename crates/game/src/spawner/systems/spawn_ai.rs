@@ -1,8 +1,6 @@
 use crate::prelude::*;
 
 pub fn spawn_ai(mut commands: Commands, tilesets: Tilesets) {
-    println!("Spawning AI!");
-
     let world_position = IVec3::ZERO;
 
     let tileset = tilesets

@@ -1,18 +1,18 @@
 use super::super::shared::Slope;
 use crate::prelude::*;
 
-pub(crate) struct Row {
+pub struct Row {
     depth: u32,
     start_slope: Slope,
     end_slope: Slope,
 }
 
 impl Row {
-    pub fn new(depth: u32, start_slope: Slope, end_slope: Slope) -> Self {
+    pub const fn new(depth: u32, start_slope: Slope, end_slope: Slope) -> Self {
         Self { depth, start_slope, end_slope }
     }
 
-    pub fn next(&self) -> Self {
+    pub const fn next(&self) -> Self {
         Self { depth: self.depth + 1, start_slope: self.start_slope, end_slope: self.end_slope }
     }
 
@@ -24,14 +24,14 @@ impl Row {
         self.end_slope = Self::slope(tile)
     }
 
-    fn slope(tile: IVec2) -> Slope {
+    const fn slope(tile: IVec2) -> Slope {
         Slope::new(2 * tile.y - 1, 2 * tile.x)
     }
 
     pub fn tiles(&self) -> RowIter {
         RowIter {
             depth: self.depth,
-            current_col: (self.depth as f64 * self.start_slope.value() + 0.5).floor() as i32, // round up
+            current_col: (self.depth as f64).mul_add(self.start_slope.value(), 0.5).floor() as i32, // round up
             max_col: (self.depth as f64 * self.end_slope.value() - 0.5).ceil() as i32, // round down
         }
     }
@@ -42,7 +42,7 @@ impl Row {
     }
 }
 
-pub(crate) struct RowIter {
+pub struct RowIter {
     depth: u32,
     max_col: i32,
     current_col: i32,

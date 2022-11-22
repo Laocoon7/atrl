@@ -1,41 +1,6 @@
 use crate::prelude::*;
 
 //////////////////////////////////////////////////////////////////////////////////////////
-/// First Line Algo
-//////////////////////////////////////////////////////////////////////////////////////////
-
-#[derive(Debug, Clone)]
-pub struct GridLineIter {
-    dist: f32,
-    step: f32,
-    end: IVec2,
-    start: IVec2,
-}
-
-impl GridLineIter {
-    pub fn new(start: impl Point2d, end: impl Point2d) -> Self {
-        let start = start.as_ivec2();
-        let end = end.as_ivec2();
-        Self { start, end, step: 0.0, dist: DistanceAlg::Diagonal.distance2d(start, end) }
-    }
-}
-
-impl Iterator for GridLineIter {
-    type Item = IVec2;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        if self.step > self.dist {
-            return None;
-        }
-
-        let t = self.step as f32 / self.dist as f32;
-        self.step += 1.0;
-
-        Some(self.start.lerp(self.end, t))
-    }
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////
 /// Bresenham Algo
 //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -44,7 +9,7 @@ struct Octant(u8);
 
 /// Line-drawing iterator
 #[derive(Debug, Clone)]
-pub struct Bresenham {
+pub struct BresenhamLineIter {
     x: i32,
     y: i32,
     dx: i32,
@@ -99,7 +64,8 @@ impl Octant {
     }
 
     #[inline]
-    fn from_point(&self, p: impl Point2d) -> IVec2 {
+    #[allow(clippy::wrong_self_convention)]
+    fn from_octant(&self, p: impl Point2d) -> IVec2 {
         match self.0 {
             0 => IVec2::new(p.x(), p.y()),
             1 => IVec2::new(p.y(), p.x()),
@@ -114,7 +80,7 @@ impl Octant {
     }
 }
 
-impl Bresenham {
+impl BresenhamLineIter {
     /// Creates a new iterator.Yields intermediate points between `start`
     /// and `end`. Does include `start` but not `end`.
     #[inline]
@@ -145,11 +111,11 @@ impl Bresenham {
         // loop inc
         self.x += 1;
 
-        self.octant.from_point(p)
+        self.octant.from_octant(p)
     }
 }
 
-impl Iterator for Bresenham {
+impl Iterator for BresenhamLineIter {
     type Item = IVec2;
 
     #[inline]
@@ -168,12 +134,12 @@ impl Iterator for Bresenham {
 
 /// New type over `Bresenham` which include the `end` points when iterated over.
 #[derive(Debug, Clone)]
-pub struct BresenhamInclusive(Bresenham);
-impl BresenhamInclusive {
+pub struct BresenhamLineInclusiveIter(BresenhamLineIter);
+impl BresenhamLineInclusiveIter {
     /// Creates a new iterator. Yields points `start..=end`.
     #[inline]
     pub fn new(start: impl Point2d, end: impl Point2d) -> Self {
-        Self(Bresenham::new(start, end))
+        Self(BresenhamLineIter::new(start, end))
     }
 
     /// Return the next point without checking if we are past `end`.
@@ -182,7 +148,7 @@ impl BresenhamInclusive {
         self.0.advance()
     }
 }
-impl Iterator for BresenhamInclusive {
+impl Iterator for BresenhamLineInclusiveIter {
     type Item = IVec2;
 
     #[inline]

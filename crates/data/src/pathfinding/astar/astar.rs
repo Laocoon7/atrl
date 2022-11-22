@@ -25,7 +25,6 @@ impl PathAlgorithm for AStar {
             if open_nodes.is_empty() {
                 break;
             }
-
             // get the lowest cost node
             if let Some(current_node) = open_nodes.remove_first() {
                 if current_node.position() == destination {
@@ -77,7 +76,7 @@ impl AStar {
 
         loop {
             ret.push(current_node.position());
-            current_node = match current_node.from_node() {
+            current_node = match current_node.get_from_node() {
                 None => {
                     ret.reverse();
                     return Some(ret);

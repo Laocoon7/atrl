@@ -102,3 +102,12 @@ impl Circle {
         Ellipse::new(self.center, [self.radius * 2, self.radius * 2])
     }
 }
+
+impl IntoIterator for Circle {
+    type Item = IVec2;
+    type IntoIter = BresenhamCircleIter;
+
+    fn into_iter(self) -> Self::IntoIter {
+        BresenhamCircleIter::new(self.center, self.radius as i32)
+    }
+}

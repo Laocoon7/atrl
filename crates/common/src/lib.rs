@@ -37,6 +37,10 @@ mod geometry {
         mod iter {
             mod line_iter;
             pub use line_iter::*;
+            mod circle_iter;
+            pub use circle_iter::*;
+            mod rect_iter;
+            pub use rect_iter::*;
         }
         pub use iter::*;
 

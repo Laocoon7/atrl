@@ -2,7 +2,9 @@ use crate::prelude::*;
 
 #[derive(Debug, Clone)]
 pub enum ShapeIterator {
-    Line(Bresenham),
+    Rectangle(RectIter),
+    Line(BresenhamLineIter),
+    Circle(BresenhamCircleIter),
 }
 
 impl Iterator for ShapeIterator {
@@ -11,13 +13,15 @@ impl Iterator for ShapeIterator {
     fn next(&mut self) -> Option<Self::Item> {
         match self {
             Self::Line(i) => i.next(),
+            Self::Circle(i) => i.next(),
+            Self::Rectangle(i) => i.next(),
         }
     }
 }
 
 #[derive(Debug, Clone)]
 pub enum ShapeIteratorExclusive {
-    Line(BresenhamInclusive),
+    Line(BresenhamLineInclusiveIter),
 }
 
 impl Iterator for ShapeIteratorExclusive {

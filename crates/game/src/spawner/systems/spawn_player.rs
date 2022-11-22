@@ -1,8 +1,6 @@
 use crate::prelude::*;
 
 pub fn spawn_player(mut commands: Commands, tilesets: Tilesets) {
-    println!("Spawning player!");
-
     let world_position = IVec3::ZERO;
 
     let tileset = tilesets

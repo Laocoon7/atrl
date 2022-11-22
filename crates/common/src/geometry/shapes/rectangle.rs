@@ -3,8 +3,14 @@ use std::ops::Div;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq)]
 pub struct Rectangle {
-    min: IVec2,
-    max: IVec2,
+    pub min: IVec2,
+    pub max: IVec2,
+}
+
+impl Default for Rectangle {
+    fn default() -> Self {
+        Self::new_with_size(IVec2::ZERO, IVec2::ONE)
+    }
 }
 
 impl Rectangle {
@@ -103,6 +109,10 @@ impl Shape for Rectangle {
     fn bottom(&self) -> i32 {
         self.min.y.min(self.max.y)
     }
+
+    fn iter(&self) -> ShapeIterator {
+        ShapeIterator::Rectangle(self.into_iter())
+    }
 }
 
 impl Rectangle {
@@ -133,9 +143,7 @@ impl Rectangle {
     pub fn as_ellipse(&self) -> Ellipse {
         Ellipse::from_points(self.points())
     }
-}
 
-impl Rectangle {
     /// Check if this rectangle intersects another rectangle.
     #[inline]
     #[must_use]
@@ -166,81 +174,20 @@ impl Rectangle {
     where
         F: FnMut(IVec2),
     {
-        RectPointIter::new(self.min, self.max).for_each(f);
+        RectIter::new(self.min, self.max).for_each(f);
     }
 
     /// iterates over all points in the rectangle
-    pub fn iter(&self) -> RectPointIter {
-        RectPointIter::new(self.min, self.max)
-    }
-}
-
-impl Default for Rectangle {
-    fn default() -> Self {
-        Self::new_with_size(IVec2::ZERO, IVec2::ONE)
-    }
-}
-
-#[derive(Debug, Clone)]
-#[allow(clippy::module_name_repetitions)]
-pub struct RectPointIter {
-    offset: IVec2,
-    max_offset: IVec2,
-
-    /// The minimum corner point of the rect.
-    pub min: IVec2,
-}
-
-impl RectPointIter {
-    pub fn new(min: impl Point2d, max: impl Point2d) -> Self {
-        let min = min.as_ivec2();
-        let max = max.as_ivec2();
-        let size = max - min;
-        Self { min, max_offset: size, offset: IVec2::ZERO }
-    }
-}
-
-impl Iterator for RectPointIter {
-    type Item = IVec2;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        if self.offset.y > self.max_offset.y {
-            return None;
-        }
-
-        let p = self.offset;
-        self.offset.x += 1;
-        if self.offset.x > self.max_offset.x {
-            self.offset.x = 0;
-            self.offset.y += 1;
-        }
-
-        Some(self.min + p)
+    pub fn iter(&self) -> RectIter {
+        RectIter::new(self.min, self.max)
     }
 }
 
 impl IntoIterator for Rectangle {
     type Item = IVec2;
-    type IntoIter = RectPointIter;
+    type IntoIter = RectIter;
 
     fn into_iter(self) -> Self::IntoIter {
-        RectPointIter::new(self.min, self.max)
-    }
-}
-
-impl From<Rectangle> for RectPointIter {
-    fn from(rect: Rectangle) -> Self {
-        rect.into_iter()
-    }
-}
-
-#[cfg(test)]
-mod test {
-    use crate::prelude::*;
-
-    #[test]
-    fn test_rect_iter() {
-        let rect = Rectangle::new((39, 21), (41, 23));
-        assert_eq!(rect.iter().count(), 9);
+        RectIter::new(self.min, self.max)
     }
 }

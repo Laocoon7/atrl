@@ -105,13 +105,6 @@ mod game {
 }
 
 pub mod fov {
-    mod adams {
-        mod adams;
-        pub use adams::*;
-        mod octant;
-    }
-    pub use adams::*;
-
     mod shadowcast {
         mod shadowcast;
         pub use shadowcast::*;
@@ -126,6 +119,7 @@ pub mod fov {
         mod slope;
         pub use slope::*;
     }
+    pub(crate) use shared::*;
 
     mod fov;
     pub use fov::*;

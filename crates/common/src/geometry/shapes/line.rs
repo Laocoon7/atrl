@@ -140,8 +140,8 @@ impl Shape for Line {
 
 impl Line {
     #[inline]
-    fn into_iter_exlusive(self) -> BresenhamInclusive {
-        BresenhamInclusive::new(self.start, self.end)
+    fn into_iter_exlusive(self) -> BresenhamLineInclusiveIter {
+        BresenhamLineInclusiveIter::new(self.start, self.end)
     }
 
     pub fn as_rect(&self) -> Rectangle {
@@ -155,9 +155,9 @@ impl Line {
 
 impl IntoIterator for Line {
     type Item = IVec2;
-    type IntoIter = Bresenham;
+    type IntoIter = BresenhamLineIter;
 
     fn into_iter(self) -> Self::IntoIter {
-        Bresenham::new(self.start, self.end)
+        BresenhamLineIter::new(self.start, self.end)
     }
 }

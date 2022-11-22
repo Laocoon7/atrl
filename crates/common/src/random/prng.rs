@@ -22,6 +22,10 @@ impl Prng {
         Self::new(Pcg64::from_entropy().next_u64())
     }
 
+    pub fn as_rngcore(&mut self) -> &mut Pcg64 {
+        &mut self.rng
+    }
+
     pub fn advance(&mut self, delta: u128) -> &mut Self {
         self.rng.advance(delta);
         self
@@ -156,6 +160,10 @@ impl Prng {
         rand::distributions::Standard: rand::distributions::Distribution<D>,
     {
         self.rng.sample::<D, _>(Standard)
+    }
+
+    pub fn choose<'a, T>(&'a mut self, items: &'a [T]) -> Option<&T> {
+        items.choose(&mut self.rng)
     }
 }
 

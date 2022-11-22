@@ -20,6 +20,10 @@ impl Random {
     pub fn from_entropy() -> Self {
         Self::new(Prng::entropy_u64())
     }
+
+    pub fn get_prng(&mut self) -> &mut Prng {
+        &mut self.prng
+    }
 }
 
 impl Default for Random {
