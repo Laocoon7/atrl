@@ -1,5 +1,12 @@
 use crate::prelude::*;
+use bitvec::slice;
 use std::ops::Index;
+
+pub type BitIter<'a> = slice::Iter<'a, usize, Lsb0>;
+pub type BitIterMut<'a> = slice::IterMut<'a, usize, Lsb0>;
+
+pub type BitChunk<'a> = slice::Chunks<'a, usize, Lsb0>;
+pub type BitChunkMut<'a> = slice::ChunksMut<'a, usize, Lsb0>;
 
 #[derive(Serialize, Deserialize, Default, Debug, Clone, Hash, PartialEq, Eq)]
 pub struct BitGrid {
@@ -177,10 +184,10 @@ impl GridLayer<bool> for BitGrid {
 }
 
 impl GridIterable<bool> for BitGrid {
-    type IterReturn<'a> = bitvec::slice::Iter<'a, usize, bitvec::order::Lsb0>;
-    type IterMutReturn<'a> = bitvec::slice::IterMut<'a, usize, bitvec::order::Lsb0>;
-    type IterChunkReturn<'a> = bitvec::slice::Chunks<'a, usize, bitvec::order::Lsb0>;
-    type IterChunkMutReturn<'a> = bitvec::slice::ChunksMut<'a, usize, bitvec::order::Lsb0>;
+    type IterReturn<'a> = BitIter<'a>;
+    type IterMutReturn<'a> = BitIterMut<'a>;
+    type IterChunkReturn<'a> = BitChunk<'a>;
+    type IterChunkMutReturn<'a> = BitChunkMut<'a>;
 
     #[inline]
     fn iter(&self) -> Self::IterReturn<'_> {

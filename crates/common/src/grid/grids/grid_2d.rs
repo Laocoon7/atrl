@@ -7,6 +7,9 @@ use std::{
 pub type GridIter<'a, T> = slice::Iter<'a, T>;
 pub type GridIterMut<'a, T> = slice::IterMut<'a, T>;
 
+pub type GridChunks<'a, T> = slice::Chunks<'a, T>;
+pub type GridChunksMut<'a, T> = slice::ChunksMut<'a, T>;
+
 #[derive(Serialize, Deserialize, Default, Debug, Clone, Hash, PartialEq, Eq)]
 pub struct Grid<T: GridParam> {
     pub size: UVec2,
@@ -189,8 +192,8 @@ impl<T: GridParam> GridLayer<T> for Grid<T> {
 impl<T: GridParam> GridIterable<T> for Grid<T> {
     type IterReturn<'a> = GridIter<'a, T>;
     type IterMutReturn<'a> = GridIterMut<'a, T>;
-    type IterChunkReturn<'a> = std::slice::Chunks<'a, T>;
-    type IterChunkMutReturn<'a> = std::slice::ChunksMut<'a, T>;
+    type IterChunkReturn<'a> = GridChunks<'a, T>;
+    type IterChunkMutReturn<'a> = GridChunksMut<'a, T>;
 
     #[inline]
     fn iter(&self) -> GridIter<T> {
@@ -214,22 +217,22 @@ impl<T: GridParam> GridIterable<T> for Grid<T> {
     }
 
     #[inline]
-    fn rows(&self) -> GridRows<T> {
+    fn rows(&self) -> Self::IterChunkReturn<'_> {
         self.cells.chunks(self.size.width() as usize)
     }
 
     #[inline]
-    fn rows_mut(&mut self) -> GridRowsMut<T> {
+    fn rows_mut(&mut self) -> Self::IterChunkMutReturn<'_> {
         self.cells.chunks_mut(self.size.width() as usize)
     }
 
     #[inline]
-    fn cols(&self) -> GridRows<T> {
+    fn cols(&self) -> Self::IterChunkReturn<'_> {
         self.cells.chunks(self.size.width() as usize)
     }
 
     #[inline]
-    fn cols_mut(&mut self) -> GridRowsMut<T> {
+    fn cols_mut(&mut self) -> Self::IterChunkMutReturn<'_> {
         self.cells.chunks_mut(self.size.width() as usize)
     }
 

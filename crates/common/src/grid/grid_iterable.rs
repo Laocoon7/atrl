@@ -1,9 +1,6 @@
 use crate::prelude::*;
 use std::{iter, slice};
 
-pub type GridRows<'a, T> = slice::Chunks<'a, T>;
-pub type GridRowsMut<'a, T> = slice::ChunksMut<'a, T>;
-
 pub type GridIterCol<'a, T> = iter::StepBy<T>;
 pub type GridEnumerate<'a, T> = iter::Zip<PointIterRowMajor, T>;
 
