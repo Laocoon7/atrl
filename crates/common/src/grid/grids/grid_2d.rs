@@ -1,5 +1,11 @@
 use crate::prelude::*;
-use std::ops::{Index, IndexMut};
+use std::{
+    ops::{Index, IndexMut},
+    slice,
+};
+
+pub type GridIter<'a, T> = slice::Iter<'a, T>;
+pub type GridIterMut<'a, T> = slice::IterMut<'a, T>;
 
 #[derive(Serialize, Deserialize, Default, Debug, Clone, Hash, PartialEq, Eq)]
 pub struct Grid<T: GridParam> {
@@ -181,6 +187,11 @@ impl<T: GridParam> GridLayer<T> for Grid<T> {
 }
 
 impl<T: GridParam> GridIterable<T> for Grid<T> {
+    type IterReturn<'a> = GridIter<'a, T>;
+    type IterMutReturn<'a> = GridIterMut<'a, T>;
+    type IterChunkReturn<'a> = std::slice::Chunks<'a, T>;
+    type IterChunkMutReturn<'a> = std::slice::ChunksMut<'a, T>;
+
     #[inline]
     fn iter(&self) -> GridIter<T> {
         self.cells.iter()
@@ -198,7 +209,7 @@ impl<T: GridParam> GridIterable<T> for Grid<T> {
     }
 
     #[inline]
-    fn enumerate(&self) -> GridEnumerate<T> {
+    fn enumerate(&self) -> GridEnumerate<Self::IterReturn<'_>> {
         self.point_iter().zip(self.iter())
     }
 
@@ -223,7 +234,7 @@ impl<T: GridParam> GridIterable<T> for Grid<T> {
     }
 
     #[inline]
-    fn iter_column(&self, x: usize) -> Option<GridIterCol<T>> {
+    fn iter_column(&self, x: usize) -> Option<GridIterCol<Self::IterReturn<'_>>> {
         if x < self.size().count() {
             let w = self.width() as usize;
             return Some(self.cells[x..].iter().step_by(w));
@@ -233,7 +244,7 @@ impl<T: GridParam> GridIterable<T> for Grid<T> {
     }
 
     #[inline]
-    fn iter_column_unchecked(&self, x: usize) -> GridIterCol<T> {
+    fn iter_column_unchecked(&self, x: usize) -> GridIterCol<Self::IterReturn<'_>> {
         let w = self.width() as usize;
         return self.cells[x..].iter().step_by(w);
     }

@@ -1,63 +1,10 @@
 use crate::prelude::*;
-use std::{iter::Zip, ops::Index};
+use std::ops::Index;
 
 #[derive(Serialize, Deserialize, Default, Debug, Clone, Hash, PartialEq, Eq)]
 pub struct BitGrid {
     pub size: UVec2,
     pub cells: BitVec,
-}
-
-impl BitGrid {
-    /// Gets the `GridPoint` corresponding to an index
-    ///
-    /// # Safety
-    ///
-    /// This function is unsafe because it does not check if the index is out of bounds.
-    pub unsafe fn get_mut_unchecked(
-        &mut self,
-        index: impl Point2d,
-    ) -> BitRef<'_, bitvec::ptr::Mut> {
-        let w = self.width() as usize;
-        self.cells.get_unchecked_mut(index.as_index(w))
-    }
-
-    pub fn set(&mut self, index: impl Point2d, value: bool) {
-        if index.is_valid(self.size()) {
-            let index = self.get_idx_unchecked(index);
-            self.cells.set(index, value);
-        }
-    }
-
-    pub fn set_unchecked(&mut self, index: impl Point2d, value: bool) {
-        let index = self.get_idx_unchecked(index);
-        self.cells.set(index, value);
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-    // Iterator Functionality
-    ///////////////////////////////////////////////////////////////////////////
-
-    /// An iterator over all elements in the grid.
-    #[inline]
-    pub fn iter(&self) -> bitvec::slice::Iter<'_, usize, bitvec::order::Lsb0> {
-        self.cells.iter()
-    }
-
-    /// A mutable iterator over all elements in the grid.
-    #[inline]
-    pub fn iter_mut(&mut self) -> bitvec::slice::IterMut<'_, usize, bitvec::order::Lsb0> {
-        self.cells.iter_mut()
-    }
-
-    pub fn point_iter(&self) -> PointIterRowMajor {
-        self.size.iter()
-    }
-
-    pub fn enumerate(
-        &self,
-    ) -> Zip<PointIterRowMajor, bitvec::slice::Iter<'_, usize, bitvec::order::Lsb0>> {
-        self.point_iter().zip(self.iter())
-    }
 }
 
 impl GridLayer<bool> for BitGrid {
@@ -226,6 +173,69 @@ impl GridLayer<bool> for BitGrid {
     fn set_unchecked(&mut self, pos: impl Point2d, value: bool) -> bool {
         let index = self.get_idx_unchecked(pos);
         self.cells.replace(index, value)
+    }
+}
+
+impl GridIterable<bool> for BitGrid {
+    type IterReturn<'a> = bitvec::slice::Iter<'a, usize, bitvec::order::Lsb0>;
+    type IterMutReturn<'a> = bitvec::slice::IterMut<'a, usize, bitvec::order::Lsb0>;
+    type IterChunkReturn<'a> = bitvec::slice::Chunks<'a, usize, bitvec::order::Lsb0>;
+    type IterChunkMutReturn<'a> = bitvec::slice::ChunksMut<'a, usize, bitvec::order::Lsb0>;
+
+    #[inline]
+    fn iter(&self) -> Self::IterReturn<'_> {
+        self.cells.iter()
+    }
+
+    #[inline]
+    fn iter_mut(&mut self) -> Self::IterMutReturn<'_> {
+        self.cells.iter_mut()
+    }
+
+    #[inline]
+    fn point_iter(&self) -> PointIterRowMajor {
+        self.size.iter()
+    }
+
+    #[inline]
+    fn enumerate(&self) -> GridEnumerate<Self::IterReturn<'_>> {
+        self.point_iter().zip(self.iter())
+    }
+
+    #[inline]
+    fn rows(&self) -> Self::IterChunkReturn<'_> {
+        self.cells.chunks(self.size.width() as usize)
+    }
+
+    #[inline]
+    fn rows_mut(&mut self) -> Self::IterChunkMutReturn<'_> {
+        self.cells.chunks_mut(self.size.width() as usize)
+    }
+
+    #[inline]
+    fn cols(&self) -> Self::IterChunkReturn<'_> {
+        self.cells.chunks(self.size.width() as usize)
+    }
+
+    #[inline]
+    fn cols_mut(&mut self) -> Self::IterChunkMutReturn<'_> {
+        self.cells.chunks_mut(self.size.width() as usize)
+    }
+
+    #[inline]
+    fn iter_column(&self, x: usize) -> Option<GridIterCol<Self::IterReturn<'_>>> {
+        if x < self.size().count() {
+            let w = self.width() as usize;
+            return Some(self.cells[x..].iter().step_by(w));
+        } else {
+            None
+        }
+    }
+
+    #[inline]
+    fn iter_column_unchecked(&self, x: usize) -> GridIterCol<Self::IterReturn<'_>> {
+        let w = self.width() as usize;
+        return self.cells[x..].iter().step_by(w);
     }
 }
 
