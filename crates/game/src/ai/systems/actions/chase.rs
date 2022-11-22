@@ -85,7 +85,7 @@ pub fn chase_action(
                         let distance = DistanceAlg::Pythagoras.distance2d(ai_pos, target_pt);
                         info!("Path: {:?} / distance: {}", path, distance);
                         if distance > 1.45 {
-                            let destination = path.0[1].as_vec2() + Vec2::new(0.5, 0.5);
+                            let destination = path.0[1];
                             info!("Moving from {:?} to {:?}", ai_pos, destination);
                             position.set_value(destination);
                         } else {

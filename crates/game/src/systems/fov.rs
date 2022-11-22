@@ -11,7 +11,7 @@ pub fn fov(
 ) {
     let mut visible_actors = Vec::new();
     for (player_pos, fov, vision_component) in q_player.iter() {
-        if let Some(map) = q_map.iter().find(|m| m.world_position == manager.current_map) {
+        if let Some(map) = manager.get_current_map() {
             let mut visibility_map = VisibilityMap::new(map.size);
 
             //AFFov

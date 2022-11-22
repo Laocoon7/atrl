@@ -61,6 +61,37 @@ mod geometry {
     pub use shape_iter::*;
 }
 
+mod grid {
+    mod point {
+        mod point2d;
+        pub use point2d::*;
+        mod point2d_impl;
+        pub use point2d_impl::*;
+        mod point2d_iter;
+        pub use point2d_iter::*;
+    }
+    pub use point::*;
+
+    mod grids {
+        mod grid_2d;
+        pub use grid_2d::*;
+        mod bitgrid;
+        pub use bitgrid::*;
+    }
+    pub use grids::*;
+
+    mod axis;
+    pub use axis::*;
+    mod size2d;
+    pub use size2d::*;
+    mod grid_layer;
+    pub use grid_layer::*;
+    mod grid_param;
+    pub use grid_param::*;
+    mod grid_iterable;
+    pub use grid_iterable::*;
+}
+
 mod macros {
     mod generic_macros;
     mod switch_in_game_state;
@@ -87,28 +118,10 @@ mod states {
 }
 
 mod utils {
-    mod point {
-        mod point2d;
-        pub use point2d::*;
-        mod point2d_impl;
-        pub use point2d_impl::*;
-        mod point2d_iter;
-        pub use point2d_iter::*;
-    }
-    pub use point::*;
-
-    mod axis;
-    pub use axis::*;
-    mod bitgrid;
-    pub use bitgrid::*;
     mod file_utils;
     pub use file_utils::*;
-    mod grid;
-    pub use grid::*;
     mod range;
     pub use range::*;
-    mod size2d;
-    pub use size2d::*;
     mod white_pixel;
     pub use white_pixel::*;
     mod canvas;
@@ -167,6 +180,7 @@ pub mod prelude {
             spawn_component,
         };
 
+        pub use crate::grid::*;
         pub use crate::random::*;
         pub use crate::states::*;
         pub use crate::utils::*;

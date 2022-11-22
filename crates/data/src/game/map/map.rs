@@ -24,7 +24,7 @@ pub struct Map {
     pub feature_types: Grid<FeatureType>,
     pub item_types: Grid<Vec<ItemType>>,
 
-    pub pathmap: Grid<u8>,
+    pub pathmap: BitGrid,
     pub explored_tiles: HashSet<UVec2>,
 }
 
@@ -173,7 +173,7 @@ impl From<MapGenData<MapPassThroughData>> for Map {
 
             // TODO: Add explored_tiles HashSet to MapPassThroughData
             explored_tiles: HashSet::new(),
-            pathmap: Grid::new_packer(data.size),
+            pathmap: BitGrid::new_default(data.size),
         }
     }
 }
@@ -211,7 +211,7 @@ impl PathMap for Map {
                 continue;
             }
 
-            if !self.pathmap.get_bit_at(adj) && self.can_move_through(adj, movement_component) {
+            if !self.pathmap.get_unchecked(adj) && self.can_move_through(adj, movement_component) {
                 points.push((adj, self.cost(adj, movement_component)));
             }
         }
