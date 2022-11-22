@@ -7,7 +7,7 @@ pub struct Slope {
 
 impl Slope {
     #[inline]
-    pub fn new(y: i32, x: i32) -> Self {
+    pub const fn new(y: i32, x: i32) -> Self {
         Self { y, x }
     }
 

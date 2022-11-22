@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-pub(crate) trait PathAlgorithm {
+pub trait PathAlgorithm {
     fn compute_path(
         origin: IVec2,
         destination: IVec2,

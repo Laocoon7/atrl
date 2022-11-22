@@ -18,7 +18,7 @@ pub(super) struct AStarNode {
 }
 
 impl AStarNode {
-    pub fn new(origin: IVec2, destination: IVec2) -> AStarNode {
+    pub fn new(origin: IVec2, destination: IVec2) -> Self {
         let from_end = (DistanceAlg::DiagonalWithCosts(CARDINAL_COST_F32, ORDINAL_COST_F32)
             .distance2d(origin, destination)
             * SCALE_F32_TO_U32) as u32;
@@ -42,12 +42,12 @@ impl AStarNode {
         destination: IVec2,
         provider: &impl PathProvider,
         movement_type: u8,
-    ) -> AStarNode {
+    ) -> Self {
         let cost_from_end = (DistanceAlg::DiagonalWithCosts(CARDINAL_COST_F32, ORDINAL_COST_F32)
             .distance2d(position, destination)
             * SCALE_F32_TO_U32) as u32;
 
-        let mut s = AStarNode {
+        let mut s = Self {
             is_walkable: provider.is_walkable(position, movement_type),
             position,
             cost_multiplier: provider.cost(position, movement_type),
@@ -67,11 +67,11 @@ impl AStarNode {
         s
     }
 
-    pub fn position(&self) -> IVec2 {
+    pub const fn position(&self) -> IVec2 {
         self.position
     }
 
-    pub fn from_node(&self) -> Option<IVec2> {
+    pub const fn from_node(&self) -> Option<IVec2> {
         self.from_node
     }
 
@@ -83,7 +83,7 @@ impl AStarNode {
 
     /// perform walkable / cost checks before calling this
     /// this function is "unchecked"
-    fn update_node(&mut self, other: &AStarNode, new_cost_from_start: u32) {
+    fn update_node(&mut self, other: &Self, new_cost_from_start: u32) {
         self.cost_from_start = new_cost_from_start;
         self.from_node = Some(other.position);
         self.update_total();
@@ -96,31 +96,42 @@ impl AStarNode {
         destination: IVec2,
         provider: &impl PathProvider,
         movement_type: u8,
-        open_nodes: &mut IndexList<AStarNode>,
-        closed_nodes: &mut IndexList<AStarNode>,
+        open_nodes: &mut IndexList<Self>,
+        closed_nodes: &mut IndexList<Self>,
     ) {
-        if let Some(_neighbor_index) = Self::find_node_with_position(closed_nodes, position) {
-            // Neighbor Closed Nothing to do
-        } else if let Some(neighbor_index) = Self::find_node_with_position(open_nodes, position) {
-            // Update Neighbor
-            let neighbor = open_nodes.get(neighbor_index).unwrap(); // unwrap is safe because we still have a valid index
-            let new_cost_from_start = self.cost_from_start
-                + if is_diagonal { ORDINAL_COST } else { CARDINAL_COST } * neighbor.cost_multiplier;
-            if neighbor.is_walkable && neighbor.cost_from_start > new_cost_from_start {
-                let mut neighbor = open_nodes.remove(neighbor_index).unwrap(); // unwrap is safe because we sill have a valid index
-                neighbor.update_node(self, new_cost_from_start);
-                Self::insert_ordered(open_nodes, neighbor);
-            }
-        } else {
-            let new_neighbor =
-                self.create_neighbor(position, is_diagonal, destination, provider, movement_type);
-            if new_neighbor.is_walkable {
-                Self::insert_ordered(open_nodes, new_neighbor);
-            }
-        }
+        Self::find_node_with_position(closed_nodes, position).map_or_else(
+            || {
+                if let Some(neighbor_index) = Self::find_node_with_position(open_nodes, position) {
+                    // Update Neighbor
+                    let neighbor = open_nodes.get(neighbor_index).unwrap(); // unwrap is safe because we still have a valid index
+                    let new_cost_from_start = self.cost_from_start
+                        + if is_diagonal { ORDINAL_COST } else { CARDINAL_COST }
+                            * neighbor.cost_multiplier;
+                    if neighbor.is_walkable && neighbor.cost_from_start > new_cost_from_start {
+                        let mut neighbor = open_nodes.remove(neighbor_index).unwrap(); // unwrap is safe because we sill have a valid index
+                        neighbor.update_node(self, new_cost_from_start);
+                        Self::insert_ordered(open_nodes, neighbor);
+                    }
+                } else {
+                    let new_neighbor = self.create_neighbor(
+                        position,
+                        is_diagonal,
+                        destination,
+                        provider,
+                        movement_type,
+                    );
+                    if new_neighbor.is_walkable {
+                        Self::insert_ordered(open_nodes, new_neighbor);
+                    }
+                }
+            },
+            |_neighbor_index| {
+                // Neighbor Closed Nothing to do
+            },
+        )
     }
 
-    fn insert_ordered(list: &mut IndexList<AStarNode>, node_to_insert: AStarNode) {
+    fn insert_ordered(list: &mut IndexList<Self>, node_to_insert: Self) {
         let mut iter_index = list.first_index();
         let mut found_index = None;
 
@@ -144,7 +155,7 @@ impl AStarNode {
         };
     }
 
-    pub fn find_node_with_position(list: &IndexList<AStarNode>, position: IVec2) -> Option<Index> {
+    pub fn find_node_with_position(list: &IndexList<Self>, position: IVec2) -> Option<Index> {
         let mut index = list.first_index();
 
         while index.is_some() {
@@ -170,16 +181,12 @@ impl PartialOrd for AStarNode {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
         if self.cost_total > other.cost_total {
             Some(std::cmp::Ordering::Greater)
-        } else if self.cost_total < other.cost_total {
+        } else if self.cost_total < other.cost_total || self.cost_from_end < other.cost_from_end {
             Some(std::cmp::Ordering::Less)
+        } else if self.cost_from_end > other.cost_from_end {
+            Some(std::cmp::Ordering::Greater)
         } else {
-            if self.cost_from_end < other.cost_from_end {
-                Some(std::cmp::Ordering::Less)
-            } else if self.cost_from_end > other.cost_from_end {
-                Some(std::cmp::Ordering::Greater)
-            } else {
-                Some(std::cmp::Ordering::Equal)
-            }
+            Some(std::cmp::Ordering::Equal)
         }
     }
 }

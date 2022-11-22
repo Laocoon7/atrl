@@ -2,7 +2,7 @@ use super::super::shared::*;
 use super::astar_node::*;
 use crate::prelude::*;
 
-pub(crate) struct AStar;
+pub struct AStar;
 
 impl PathAlgorithm for AStar {
     fn compute_path(
@@ -22,9 +22,10 @@ impl PathAlgorithm for AStar {
         // loop through all the nodes
         // return if path is found
         loop {
-            if open_nodes.len() <= 0 {
+            if open_nodes.is_empty() {
                 break;
             }
+
             // get the lowest cost node
             if let Some(current_node) = open_nodes.remove_first() {
                 if current_node.position() == destination {

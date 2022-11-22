@@ -5,7 +5,7 @@ use super::super::shared::*;
 use super::{quadrant::*, row::*};
 use crate::prelude::*;
 
-pub(crate) struct Shadowcast;
+pub struct Shadowcast;
 
 impl FovAlgorithm for Shadowcast {
     fn compute_fov(

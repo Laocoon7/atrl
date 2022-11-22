@@ -114,7 +114,7 @@ pub mod fov {
 
     mod shadowcast {
         mod shadowcast;
-        pub(crate) use shadowcast::*;
+        pub use shadowcast::*;
         mod quadrant;
         mod row;
     }
@@ -122,7 +122,7 @@ pub mod fov {
 
     mod shared {
         mod fov_algorithm;
-        pub(crate) use fov_algorithm::*;
+        pub use fov_algorithm::*;
         mod slope;
         pub use slope::*;
     }
@@ -141,14 +141,14 @@ pub mod fov {
 mod pathfinding {
     mod astar {
         mod astar;
-        pub(crate) use astar::*;
+        pub use astar::*;
         mod astar_node;
     }
-    pub(crate) use astar::*;
+    pub use astar::*;
 
     mod shared {
         mod path_algorithm;
-        pub(crate) use path_algorithm::*;
+        pub use path_algorithm::*;
     }
 
     mod pathfinder;
