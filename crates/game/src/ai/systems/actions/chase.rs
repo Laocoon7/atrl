@@ -82,7 +82,8 @@ pub fn chase_action(
                     if let Some(path) =
                         PathFinder::Astar.compute(ai_pos, target_pt, movement_component.0, map)
                     {
-                        if path.len() > 1 {
+                        if path.len() > 2 {
+                            // 0: for us, 1: in between, 2: target minimum
                             let destination = path[1];
                             info!("Moving from {:?} to {:?}", ai_pos, destination);
                             position.set_value(destination);

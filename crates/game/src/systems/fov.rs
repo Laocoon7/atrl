@@ -2,7 +2,6 @@ use crate::prelude::*;
 
 pub fn fov(
     manager: Res<MapManager>,
-    q_map: Query<&Map>,
     q_player: Query<(&Transform, &FieldOfView, &Vision), With<Player>>,
     mut q_tile: Query<(&mut TileVisible, &mut TileColor, &TilePos)>,
     mut q_actors: Query<
@@ -43,8 +42,8 @@ pub fn fov(
                     e_vis.is_visible = false;
                 }
             }
-            }
         }
+    }
 
     for entity in visible_actors.into_iter() {
         if let Ok((_, _, mut visible)) = q_actors.get_mut(entity) {

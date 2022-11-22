@@ -176,12 +176,6 @@ mod resources {
 mod queries;
 
 pub mod prelude {
-    mod internal {
-        pub use crate::fov::*;
-        pub use crate::pathfinding::PathMap;
-    }
-    pub(crate) use internal::*;
-
     mod import {
         pub use bevy::{
             ecs::{
