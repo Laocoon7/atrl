@@ -8,22 +8,22 @@ pub type GridIterCol<'a, T> = iter::StepBy<T>;
 pub type GridEnumerate<'a, T> = iter::Zip<PointIterRowMajor, T>;
 
 pub trait GridIterable<T: GridParam> {
-    /// Returns an iterator over the cells of the grid.
+    /// iterator over the cells of the grid.
     type IterReturn<'a>
     where
         Self: 'a;
 
-    /// Returns a mutable iterator over the cells of the grid.
+    /// mutable iterator over the cells of the grid.
     type IterMutReturn<'a>
     where
         Self: 'a;
 
-    /// Returns an iterator over the row / col of the grid.
+    /// iterator over the row / col of the grid.
     type IterChunkReturn<'a>
     where
         Self: 'a;
 
-    /// Returns a mutable iterator over the row / col of the grid.
+    /// mutable iterator over the row / col of the grid.
     type IterChunkMutReturn<'a>
     where
         Self: 'a;
