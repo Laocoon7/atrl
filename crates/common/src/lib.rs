@@ -33,6 +33,16 @@ mod geometry {
     }
     pub use math::*;
 
+    mod grid_shapes {
+        mod circle;
+        pub use circle::*;
+        mod grid_shape;
+        pub use grid_shape::*;
+        mod line;
+        pub use line::*;
+    }
+    //pub use grid_shapes::*;
+
     mod shapes {
         mod iter {
             mod line_iter;
