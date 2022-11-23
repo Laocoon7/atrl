@@ -15,8 +15,8 @@ atrl-map-gen = { workspace = true }
 arrayvec               = { workspace = true }
 bevy                   = { workspace = true }
 bevy_tileset           = { workspace = true }
+index_list             = { workspace = true }
 iyes_loopless          = { workspace = true }
-index_list              ={ workspace = true }
 leafwing-input-manager = { workspace = true }
 num-derive             = { workspace = true }
 num-traits             = { workspace = true }

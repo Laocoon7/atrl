@@ -3,7 +3,7 @@ use std::ops::Sub;
 use crate::prelude::*;
 
 const CARDINAL_COST: f32 = 1.0;
-const DIAGONAL_COST: f32 = 1.4142135623730950488016887242096980785696718753769480731766797379;
+pub const DIAGONAL_COST: f32 = 1.4142135623730950488016887242096980785696718753769480731766797379;
 
 /// Enumeration of available 2D Distance algorithms
 #[allow(clippy::module_name_repetitions)]

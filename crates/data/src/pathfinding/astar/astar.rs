@@ -66,22 +66,23 @@ impl PathAlgorithm for AStar {
 }
 
 impl AStar {
+    ///This will return a path *WITHOUT* the starting point. It also
+    /// does not reverse the path, so it will be in the order of last point -> first point.
     fn reconstruct_path(
         finished_node: AStarNode,
         closed_nodes: &mut IndexList<AStarNode>,
     ) -> Option<Vec<IVec2>> {
         let mut ret = Vec::new();
-
         let mut current_node = finished_node;
 
         loop {
-            ret.push(current_node.position());
             current_node = match current_node.get_from_node() {
                 None => {
-                    ret.reverse();
+                    // ret.reverse();
                     return Some(ret);
                 }
                 Some(position) => {
+                    ret.push(current_node.position());
                     match AStarNode::find_node_with_position(closed_nodes, position) {
                         None => return None,
                         Some(index) => closed_nodes.remove(index).unwrap(),
