@@ -26,75 +26,77 @@ pub struct Map {
 
     pub explored_tiles: HashSet<UVec2>,
 }
+// OPTIMIZE: All pub fn should check / convert position to usize index
+// then switch to unchecked indexing grid[index] on private functions
 
 impl Map {
-    pub fn can_move_through(&self, index: impl Point2d, movement_type: u8) -> bool {
-        let terrain = self
-            .terrain_types
-            .get(index)
-            .map_or(MovementType::None.as_u8(), |t| t.allowed_movement());
-        let feature = self
-            .feature_types
-            .get(index)
-            .map_or(MovementType::Any.as_u8(), |f| f.allowed_movement());
-
-        (terrain & feature & movement_type) != 0
-    }
-
-    pub fn can_see_through(&self, index: impl Point2d, vision_type: u8) -> bool {
-        // Check if the player is blind
-        if (vision_type & VisionType::Blind as u8) != 0 {
-            return false;
+    pub fn try_add_actor(
+        &mut self,
+        position: impl Point2d,
+        actor: Entity,
+        movement_type: u8,
+    ) -> bool {
+        if self.can_place_actor(position, movement_type) {
+            self.add_actor(position, actor);
+            true
+        } else {
+            false
         }
-
-        // Get the vision types that can see through this terrain:
-        // None by default (if there's no terrain, there's nothing to see)
-        let terrain = self
-            .terrain_types
-            .get(index)
-            .map_or(VisionType::None.as_u8(), |t| t.vision_penetrates());
-
-        // Get the vision types that can see through this feature:
-        // Any by default (if there's no feature, there's nothing blocking)
-        let feature = self
-            .feature_types
-            .get(index)
-            .map_or(VisionType::Any.as_u8(), |f| f.vision_penetrates());
-
-        (terrain & feature & (vision_type)) != 0
     }
 
-    pub fn can_see_feature(&self, index: impl Point2d, vision_type: u8) -> bool {
-        let feature =
-            self.feature_types.get(index).map_or(VisionType::None.as_u8(), |f| f.allowed_vision());
-
-        (feature & vision_type) != 0
+    pub fn try_move_actor(
+        &mut self,
+        from: impl Point2d,
+        to: impl Point2d,
+        movement_type: u8,
+    ) -> bool {
+        if self.can_place_actor(to, movement_type) {
+            if let Some(entity) = self.remove_actor(from) {
+                self.add_actor(to, entity);
+                return true;
+            }
+        }
+        false
     }
 
-    pub fn set_terrain_at(&mut self, index: impl Point2d, terrain_type: TerrainType) {
-        self.terrain_types.set(index, terrain_type);
-        self.update_tiles.insert(index.as_uvec2());
+    pub fn try_remove_actor(&mut self, position: impl Point2d) -> Option<Entity> {
+        self.remove_actor(position)
     }
 
-    pub fn set_feature_at(&mut self, index: impl Point2d, feature_type: FeatureType) {
-        self.feature_types.set(index, feature_type);
-        self.update_tiles.insert(index.as_uvec2());
+    pub fn can_place_actor(&self, position: impl Point2d, movement_type: u8) -> bool {
+        self.is_walkable(position.as_ivec2(), movement_type) && !self.has_actor(position)
     }
 
-    pub fn has_actor(&mut self, index: impl Point2d) -> bool {
-        self.actors.get(index).is_some()
+    pub fn set_terrain_at(&mut self, position: impl Point2d, terrain_type: TerrainType) {
+        self.terrain_types.set(position, terrain_type);
+        self.update_tiles.insert(position.as_uvec2());
     }
 
-    pub fn add_actor(&mut self, index: impl Point2d, actor: Entity) {
-        self.actors.set(index, Some(actor));
+    pub fn add_feature_at(&mut self, position: impl Point2d, feature_type: FeatureType) {
+        self.feature_types.set(position, feature_type);
+        self.update_tiles.insert(position.as_uvec2());
     }
 
-    pub fn remove_actor(&mut self, index: impl Point2d) {
-        self.actors.set(index, None);
+    pub fn has_actor(&self, position: impl Point2d) -> bool {
+        match self.actors.get(position) {
+            Some(opt) => opt.is_some(),
+            None => false,
+        }
     }
 
-    pub fn get_actor(&self, index: impl Point2d) -> Option<Entity> {
-        self.actors.get(index).and_then(|e| e.as_ref().copied())
+    fn add_actor(&mut self, position: impl Point2d, actor: Entity) {
+        self.actors.set(position, Some(actor));
+    }
+
+    fn remove_actor(&mut self, position: impl Point2d) -> Option<Entity> {
+        match self.actors.set(position, None) {
+            Some(opt) => opt,
+            None => None,
+        }
+    }
+
+    pub fn get_actor(&self, position: impl Point2d) -> Option<Entity> {
+        self.actors.get(position).and_then(|e| e.as_ref().copied())
     }
 
     pub fn get_actor_position(&self, actor: Entity) -> Option<IVec2> {
@@ -176,17 +178,46 @@ impl From<MapGenData<MapPassThroughData>> for Map {
 
 impl FovProvider for Map {
     fn is_opaque(&self, position: IVec2, vision_type: u8) -> bool {
-        if self.size.contains(position) {
-            !self.can_see_through(position, vision_type)
-        } else {
-            true
+        // Check if the player is blind
+        if (vision_type & VisionType::Blind as u8) != 0 {
+            return false;
         }
+
+        // Get the vision types that can see through this terrain:
+        // None by default (if there's no terrain, there's nothing to see)
+        let terrain = self
+            .terrain_types
+            .get(position)
+            .map_or(VisionType::None.as_u8(), |t| t.vision_penetrates());
+
+        // Get the vision types that can see through this feature:
+        // Any by default (if there's no feature, don't block vision)
+        let feature = self
+            .feature_types
+            .get(position)
+            .map_or(VisionType::Any.as_u8(), |f| f.vision_penetrates());
+
+        (terrain & feature & (vision_type)) == 0
     }
 }
 
 impl PathProvider for Map {
     fn is_walkable(&self, position: IVec2, movement_type: u8) -> bool {
-        self.can_move_through(position, movement_type)
+        // Get the movement types that can move through this terrain:
+        // None by default (this provides bounds checking)
+        let terrain = self
+            .terrain_types
+            .get(position)
+            .map_or(MovementType::None.as_u8(), |t| t.allowed_movement());
+
+        // Get the movement types that can move through this feature:
+        // Any by default (if there's no feature, don't block movement)
+        let feature = self
+            .feature_types
+            .get(position)
+            .map_or(MovementType::Any.as_u8(), |f| f.allowed_movement());
+
+        (terrain & feature & movement_type) != 0
     }
 
     fn cost(&self, _position: IVec2, _movement_type: u8) -> u32 {

@@ -3,27 +3,25 @@ use crate::prelude::*;
 pub fn player_input(
     state: Res<TurnState>,
     mut commands: Commands,
-    manager: Res<MapManager>,
+    mut manager: ResMut<MapManager>,
     mut query: Query<(&mut Transform, &Movement, &ActionState<PlayerAction>), With<Player>>,
 ) {
     for (mut position, movement_component, action_state) in query.iter_mut() {
         for input_direction in PlayerAction::DIRECTIONS {
             if action_state.just_pressed(input_direction) {
                 if let Some(direction) = input_direction.direction() {
-                    let mut position_vec = position.get();
-                    position_vec += direction.coord();
+                    let last_position = position.get();
+                    let new_position = last_position + direction.coord();
 
-                    if let Some(map) = manager.get_current_map() {
-                        if map.can_move_through(position_vec, movement_component.0) {
-                            position.set_value(position_vec);
+                    if let Some(map) = manager.get_current_map_mut() {
+                        if map.try_move_actor(last_position, new_position, movement_component.0) {
+                            position.set_value(new_position);
                             info!(
-                                "Player moved to {} {:?} {:?}",
-                                position.translation,
-                                direction,
-                                direction.coord().as_vec2()
+                                "Player moved {:?} from {:?} to {:?}",
+                                direction, last_position, new_position
                             );
                         } else {
-                            info!("Blocked!");
+                            info!("{:?} is blocked!", new_position);
                         }
                     }
 

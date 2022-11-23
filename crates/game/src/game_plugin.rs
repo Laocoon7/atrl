@@ -38,7 +38,7 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
             // Create Camera
             .add_camera(app)
             // Map Rendering
-            .add_map_rendering(self.state_construct, self.state_running, app);
+            .add_map_plugins(self.state_construct, self.state_running, app);
 
         app
             // UI
@@ -47,7 +47,8 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
                 state_main_menu: self.state_main_menu,
             })
             // Spawner
-            .add_plugin(SpawnerPlugin { state_construct: self.state_construct })
+            // TODO: This needs to run after the map is generated.
+            .add_plugin(SpawnerPlugin { state_construct: self.state_running })
             // Player
             .add_plugin(PlayerPlugin { state_running: self.state_running });
     }
@@ -91,7 +92,7 @@ impl<T: StateNext> GamePlugin<T> {
         self
     }
 
-    fn add_map_rendering(self, state_construct: T, state_running: T, app: &mut App) -> Self {
+    fn add_map_plugins(self, state_construct: T, state_running: T, app: &mut App) -> Self {
         app.add_plugin(MapPlugin::new(state_construct, state_running))
             .add_plugin(MapRendererPlugin::new([GRID_WIDTH, GRID_HEIGHT]));
 

@@ -1,11 +1,18 @@
 use crate::prelude::*;
 
-pub fn spawn_ai(mut commands: Commands, tilesets: Tilesets) {
+pub fn spawn_ai(mut commands: Commands, tilesets: Tilesets, mut map_manager: ResMut<MapManager>) {
     let world_position = IVec3::ZERO;
 
-    let tileset = tilesets
-        .get_by_id(TILESET_ACTORS_OGRE_ID)
-        .unwrap_or_else(|| panic!("couldn't find tilemap_id: {:?}", TILESET_ACTORS_OGRE_ID));
+    let Some(tileset) = tilesets.get_by_id(TILESET_ACTORS_OGRE_ID) else {
+        // let's not crash the program just because we can't spawn an ai.
+        error!("Couldn't find tilemap_id: {:?}. Refusing to spawn ai.", TILESET_ACTORS_OGRE_ID);
+        return;
+    };
+
+    let Some(map) = map_manager.get_current_map_mut() else {
+        error!("Couldn't find a current map. Refusing to spawn ai.");
+        return;
+    };
 
     let chase_and_attack = Steps::build().step(ChaseActor::default());
 
@@ -17,7 +24,19 @@ pub fn spawn_ai(mut commands: Commands, tilesets: Tilesets) {
         .when(WinningScorer::build(1.0).push(CanSeePlayer::default()), chase_and_attack)
         .otherwise(Wander::default());
 
-    commands.spawn((
+    let entity = commands.spawn_empty().id();
+    let local_position = UVec2::new(GRID_WIDTH / 3, GRID_HEIGHT / 3);
+    let movement_type = MovementType::Walk.as_u8();
+
+    if !map.try_add_actor(local_position, entity, movement_type) {
+        error!("Couldn't place ai actor at {:?}", local_position);
+        commands.entity(entity).despawn();
+        return;
+    } else {
+        info!("AI spawned at {:?}", local_position);
+    }
+
+    commands.entity(entity).insert((
         ActorBundle {
             ai: AIComponent::aggressive(),
             name: Name::new("Gary the Destroyer"),
@@ -32,16 +51,16 @@ pub fn spawn_ai(mut commands: Commands, tilesets: Tilesets) {
                 },
                 texture_atlas: tileset.atlas().clone(),
                 transform: Transform::from_xyz(
-                    (GRID_WIDTH / 3) as f32 + 0.5,
-                    (GRID_HEIGHT / 3) as f32 + 0.5,
+                    (local_position.x) as f32 + 0.5,
+                    (local_position.y) as f32 + 0.5,
                     f32::from(MapLayer::Actors),
                 ),
                 ..default()
             },
 
-            fov: FieldOfView(4),
+            fov: FieldOfView(8),
             vision_component: Vision(VisionType::Normal.as_u8()),
-            movement_component: Movement(MovementType::Walk.as_u8()),
+            movement_component: Movement(movement_type),
         },
         thinker,
     ));

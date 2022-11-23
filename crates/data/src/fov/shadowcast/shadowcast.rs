@@ -1,7 +1,6 @@
 // FoV implementation taken from:
 // https://www.albertford.com/shadowcasting/
 
-use super::super::shared::*;
 use super::{quadrant::*, row::*};
 use crate::prelude::*;
 
@@ -42,11 +41,11 @@ impl Shadowcast {
     }
 
     fn scan_recursive(range: u32, quadrant: &mut Quadrant, row: &mut Row) {
-        let range_sqr = range.pow(2) as f32;
-
         let mut prev_tile = None;
+
         for tile in row.tiles() {
-            if DistanceAlg::PythagorasSquared.distance2d(IVec2::ZERO, tile) > range_sqr {
+            // compare the squares, it's faster!
+            if DistanceAlg::PythagorasSquared.distance2d(IVec2::ZERO, tile) > range.pow(2) as f32 {
                 continue;
             }
 

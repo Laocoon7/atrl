@@ -107,7 +107,7 @@ mod game {
 pub mod fov {
     mod shadowcast {
         mod shadowcast;
-        pub use shadowcast::*;
+        pub(crate) use shadowcast::*;
         mod quadrant;
         mod row;
     }
@@ -115,7 +115,7 @@ pub mod fov {
 
     mod shared {
         mod fov_algorithm;
-        pub use fov_algorithm::*;
+        pub(crate) use fov_algorithm::*;
         mod slope;
         pub use slope::*;
     }
@@ -138,7 +138,7 @@ mod pathfinding {
         pub use astar::*;
         mod astar_node;
     }
-    pub use astar::*;
+    pub(crate) use astar::*;
 
     mod shared {
         mod path_algorithm;
@@ -214,7 +214,7 @@ pub mod prelude {
         pub use crate::system_params::*;
 
         pub use crate::fov::*;
-        pub use crate::pathfinding::PathFinder;
+        pub use crate::pathfinding::PathFinder; // where's the redundancy lint???
         pub use crate::pathfinding::*;
 
         pub use crate::resources::*;

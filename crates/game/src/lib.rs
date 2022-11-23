@@ -26,6 +26,17 @@ mod ai {
     pub use ai_plugin::*;
 }
 
+mod events {
+    mod map {
+        mod map_events;
+        pub use map_events::*;
+    }
+    pub use map::*;
+
+    mod event_cleaner;
+    pub use event_cleaner::*;
+}
+
 mod map {
     mod resources {
         mod map_manager;
@@ -119,6 +130,7 @@ pub mod prelude {
     pub(crate) use import::*;
 
     pub use crate::ai::*;
+    pub use crate::events::*;
     pub use crate::map::*;
     pub use crate::player::*;
     pub use crate::spawner::*;

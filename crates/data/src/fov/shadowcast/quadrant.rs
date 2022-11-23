@@ -36,7 +36,11 @@ impl<'a> Quadrant<'a> {
 
     // check if this tile is opaque
     pub fn is_opaque(&self, tile: IVec2) -> bool {
-        self.provider.is_opaque(self.transform(tile), self.vision)
+        if self.provider.is_opaque(self.transform(tile), self.vision) {
+            true
+        } else {
+            false
+        }
     }
 
     pub fn is_clear(&self, tile: IVec2) -> bool {

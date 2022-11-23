@@ -19,6 +19,7 @@ impl<T: StateNext> Plugin for MapPlugin<T> {
                 self.state_construct,
                 ConditionSet::new().with_system(load_first_map).into(),
             )
+            // TODO: Move to raws???
             .add_system_set(
                 ConditionSet::new()
                     .run_in_state(self.state_construct)

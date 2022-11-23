@@ -180,6 +180,20 @@ impl PartialEq for AStarNode {
 
 impl PartialOrd for AStarNode {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        // we use this to insert values into a specific list
+        // so we want this as optimized as possible for what
+        // we assume that list will look like.
+        //
+        // most costs we assume will be larger than the front
+        // out of 8 possible values being changed around the node
+        // in general: 3 of them *may* be good, and the others will be bad
+        // so we check `greater` first
+        //
+        // most costs will be different that the rest, so we should check
+        // `less` next. and if that's not valid move to the tie breakers.
+        // there are very few ties, but we want to work with the closest tie
+        // breaker to the goal first.
+
         if self.cost_total > other.cost_total {
             Some(std::cmp::Ordering::Greater)
         } else if self.cost_total < other.cost_total || self.cost_from_end < other.cost_from_end {

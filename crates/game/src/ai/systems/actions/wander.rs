@@ -21,7 +21,7 @@ pub struct Wander {
 }
 
 pub fn wander_action(
-    manager: Res<MapManager>,
+    mut manager: ResMut<MapManager>,
     mut ctx: ResMut<GameContext>,
     mut spatial_q: Query<(&mut Transform, &Movement, &Name)>,
     mut action_q: Query<(&Actor, &mut BigBrainActionState, &mut Wander, &ActionSpan)>,
@@ -32,7 +32,7 @@ pub fn wander_action(
         let _guard = span.span().enter();
 
         let rng = ctx.random.get_prng().as_rngcore();
-        let map = manager.get_current_map().expect("No map found");
+        let map = manager.get_current_map_mut().expect("No map found");
 
         let (mut position, movement_component, name) =
             spatial_q.get_mut(*actor).expect("Actor must have spatial components");
@@ -45,12 +45,12 @@ pub fn wander_action(
             Requested => {
                 info!("{} gonna start wandering!", name);
                 *action_state = Executing;
-                wander.path = Some(generate_wander_path(rng, &ai_pos, movement_component.0, map));
+                wander.path = Some(generate_wander_path(rng, ai_pos, movement_component.0, map));
             }
             Executing => {
                 let wander_path = std::mem::take(&mut wander.path);
                 let ai_path = wander_path.and_then(|p| {
-                    if p.is_empty() || !map.can_move_through(p[0], movement_component.0) {
+                    if p.is_empty() || !map.can_place_actor(p[0], movement_component.0) {
                         None
                     } else {
                         Some(p)
@@ -58,7 +58,7 @@ pub fn wander_action(
                 });
 
                 let mut ai_path = ai_path.map_or_else(
-                    || generate_wander_path(rng, &ai_pos, movement_component.0, map),
+                    || generate_wander_path(rng, ai_pos, movement_component.0, map),
                     |p| p,
                 );
 
@@ -69,7 +69,14 @@ pub fn wander_action(
                         info!("{} has reached the end of their wander path!", name);
                     },
                     |next_pt| {
-                        position.set_value(next_pt);
+                        if map.try_move_actor(ai_pos, next_pt, movement_component.0) {
+                            position.set_value(next_pt);
+                        } else {
+                            info!(
+                                "AI is blocked trying to move from {:?} to {:?}",
+                                ai_pos, next_pt
+                            );
+                        }
                     },
                 );
 
@@ -84,13 +91,13 @@ pub fn wander_action(
 
 fn generate_wander_path(
     rng: &mut impl RngCore,
-    ai_pos: &IVec2,
+    ai_pos: IVec2,
     movement_type: u8,
     map_provider: &impl PathProvider,
 ) -> Vec<IVec2> {
     let wander_radius = WANDER_RANGE.sample(rng);
-    let wander_circle = Circle::new(*ai_pos, wander_radius);
+    let wander_circle = Circle::new(ai_pos, wander_radius);
     // Default to the first point in the circle
     let destination = wander_circle.iter().choose(rng).unwrap_or_else(|| wander_circle.points()[0]);
-    PathFinder::Astar.compute(*ai_pos, destination, movement_type, map_provider).unwrap_or_default()
+    PathFinder::Astar.compute(ai_pos, destination, movement_type, map_provider).unwrap_or_default()
 }

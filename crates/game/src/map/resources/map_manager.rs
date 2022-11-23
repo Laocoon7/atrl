@@ -15,6 +15,10 @@ impl MapManager {
         self.current_map.as_ref()
     }
 
+    pub fn get_current_map_mut(&mut self) -> Option<&mut Map> {
+        self.current_map.as_mut()
+    }
+
     pub fn get_or_generate(
         &mut self,
         commands: &mut Commands,
@@ -162,17 +166,9 @@ impl MapManager {
             name,
             starting_position,
             rng,
-            FinalizerBuilder::new(40, 40),
+            // FinalizerBuilder::new(40, 40), You probably wanted:
+            SetBuilder::new().set_value(1),
             user_data,
-        )
-        // .with(FinalizerBuilder::new(1, 4))
-        .with(
-            SetBuilder::new()
-                .with_rect(Rectangle::new(
-                    starting_position.as_ivec2() - IVec2::new(20, 20),
-                    starting_position.as_ivec2() + IVec2::new(20, 20),
-                ))
-                .set_value(1),
         )
         .generate()
         // if Prng::from_entropy().coin() {

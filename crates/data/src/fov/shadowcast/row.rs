@@ -1,4 +1,3 @@
-use super::super::shared::Slope;
 use crate::prelude::*;
 
 pub struct Row {
@@ -12,7 +11,7 @@ impl Row {
         Self { depth, start_slope, end_slope }
     }
 
-    pub const fn next(&self) -> Self {
+    pub fn next(&self) -> Self {
         Self { depth: self.depth + 1, start_slope: self.start_slope, end_slope: self.end_slope }
     }
 
