@@ -144,9 +144,7 @@ impl BresenhamLineInclusiveIter {
 
     /// Return the next point without checking if we are past `end`.
     #[inline]
-    pub fn advance(&mut self) -> impl Point2d {
-        self.0.advance()
-    }
+    pub fn advance(&mut self) -> impl Point2d { self.0.advance() }
 }
 impl Iterator for BresenhamLineInclusiveIter {
     type Item = IVec2;

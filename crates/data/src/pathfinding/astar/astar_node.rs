@@ -21,8 +21,8 @@ pub(super) struct AStarNode {
 impl AStarNode {
     pub fn new(origin: IVec2, destination: IVec2) -> Self {
         let from_end = (DistanceAlg::DiagonalWithCosts(CARDINAL_COST_F32, ORDINAL_COST_F32)
-            .distance2d(origin, destination)
-            * SCALE_F32_TO_U32) as u32;
+            .distance2d(origin, destination) *
+            SCALE_F32_TO_U32) as u32;
 
         Self {
             is_walkable: true,
@@ -45,8 +45,8 @@ impl AStarNode {
         movement_type: u8,
     ) -> Self {
         let cost_from_end = (DistanceAlg::DiagonalWithCosts(CARDINAL_COST_F32, ORDINAL_COST_F32)
-            .distance2d(position, destination)
-            * SCALE_F32_TO_U32) as u32;
+            .distance2d(position, destination) *
+            SCALE_F32_TO_U32) as u32;
 
         let mut s = Self {
             is_walkable: provider.is_walkable(position, movement_type),
@@ -60,21 +60,17 @@ impl AStarNode {
         };
 
         if s.is_walkable {
-            let new_cost_from_start = self.cost_from_start
-                + if is_diagonal { ORDINAL_COST } else { CARDINAL_COST } * s.cost_multiplier;
+            let new_cost_from_start = self.cost_from_start +
+                if is_diagonal { ORDINAL_COST } else { CARDINAL_COST } * s.cost_multiplier;
             s.update_node(self, new_cost_from_start);
         }
 
         s
     }
 
-    pub const fn position(&self) -> IVec2 {
-        self.position
-    }
+    pub const fn position(&self) -> IVec2 { self.position }
 
-    pub const fn get_from_node(&self) -> Option<IVec2> {
-        self.from_node
-    }
+    pub const fn get_from_node(&self) -> Option<IVec2> { self.from_node }
 
     fn update_total(&mut self) {
         if self.is_walkable {
@@ -105,9 +101,9 @@ impl AStarNode {
                 if let Some(neighbor_index) = Self::find_node_with_position(open_nodes, position) {
                     // Update Neighbor
                     let neighbor = open_nodes.get(neighbor_index).unwrap(); // unwrap is safe because we still have a valid index
-                    let new_cost_from_start = self.cost_from_start
-                        + if is_diagonal { ORDINAL_COST } else { CARDINAL_COST }
-                            * neighbor.cost_multiplier;
+                    let new_cost_from_start = self.cost_from_start +
+                        if is_diagonal { ORDINAL_COST } else { CARDINAL_COST } *
+                            neighbor.cost_multiplier;
                     if neighbor.is_walkable && neighbor.cost_from_start > new_cost_from_start {
                         let mut neighbor = open_nodes.remove(neighbor_index).unwrap(); // unwrap is safe because we sill have a valid index
                         neighbor.update_node(self, new_cost_from_start);
@@ -173,9 +169,7 @@ impl AStarNode {
 }
 
 impl PartialEq for AStarNode {
-    fn eq(&self, other: &Self) -> bool {
-        self.position == other.position
-    }
+    fn eq(&self, other: &Self) -> bool { self.position == other.position }
 }
 
 impl PartialOrd for AStarNode {

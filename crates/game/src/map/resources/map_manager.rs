@@ -7,17 +7,11 @@ pub struct MapManager {
 }
 
 impl MapManager {
-    pub fn new() -> Self {
-        Self { current_map: None, loaded_maps: HashMap::new() }
-    }
+    pub fn new() -> Self { Self { current_map: None, loaded_maps: HashMap::new() } }
 
-    pub const fn get_current_map(&self) -> Option<&Map> {
-        self.current_map.as_ref()
-    }
+    pub const fn get_current_map(&self) -> Option<&Map> { self.current_map.as_ref() }
 
-    pub fn get_current_map_mut(&mut self) -> Option<&mut Map> {
-        self.current_map.as_mut()
-    }
+    pub fn get_current_map_mut(&mut self) -> Option<&mut Map> { self.current_map.as_mut() }
 
     pub fn get_or_generate(
         &mut self,
@@ -172,8 +166,8 @@ impl MapManager {
         )
         .generate()
         // if Prng::from_entropy().coin() {
-        //     MapGenerator::new(size, name, starting_position, rng, ScatterBuilder::new(), user_data)
-        //         .with(CellularAutomataBuilder::new())
+        //     MapGenerator::new(size, name, starting_position, rng, ScatterBuilder::new(),
+        // user_data)         .with(CellularAutomataBuilder::new())
         //         .with(FinalizerBuilder::new(1, 2))
         //         .with(
         //             SetBuilder::new()
@@ -185,8 +179,8 @@ impl MapManager {
         //         )
         //         .generate()
         // } else {
-        //     MapGenerator::new(size, name, starting_position, rng, ScatterBuilder::new(), user_data)
-        //         .with(FinalizerBuilder::new(1, 4))
+        //     MapGenerator::new(size, name, starting_position, rng, ScatterBuilder::new(),
+        // user_data)         .with(FinalizerBuilder::new(1, 4))
         //         .with(
         //             SetBuilder::new()
         //                 .with_rect(Rectangle::new(

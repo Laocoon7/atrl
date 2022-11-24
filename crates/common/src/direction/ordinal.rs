@@ -1,10 +1,10 @@
 use crate::prelude::*;
 
 pub const NUM_ORDINAL_DIRECTIONS: usize = 4;
-pub const ALL_ORDINAL_DIRECTION_BITMAP_RAW: u8 = (1 << GridDirection::NorthEast as usize)
-    | (1 << GridDirection::SouthEast as usize)
-    | (1 << GridDirection::SouthWest as usize)
-    | (1 << GridDirection::NorthWest as usize);
+pub const ALL_ORDINAL_DIRECTION_BITMAP_RAW: u8 = (1 << GridDirection::NorthEast as usize) |
+    (1 << GridDirection::SouthEast as usize) |
+    (1 << GridDirection::SouthWest as usize) |
+    (1 << GridDirection::NorthWest as usize);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
 #[repr(u8)]
@@ -148,13 +148,9 @@ impl OrdinalDirection {
         a.direction().bitmap() | b.direction().bitmap()
     }
 
-    pub const fn all() -> OrdinalDirectionIter {
-        OrdinalDirectionIter::new()
-    }
+    pub const fn all() -> OrdinalDirectionIter { OrdinalDirectionIter::new() }
 
-    pub const fn all_directions() -> DirectionOrdinalIter {
-        DirectionOrdinalIter::new()
-    }
+    pub const fn all_directions() -> DirectionOrdinalIter { DirectionOrdinalIter::new() }
 }
 
 impl From<OrdinalDirection> for [i32; 2] {

@@ -8,9 +8,7 @@ pub struct SplashPlugin<T: StateNext> {
 }
 
 impl<T: StateNext> SplashPlugin<T> {
-    pub fn new(state_asset_load: T) -> Self {
-        Self { state_asset_load, ..Default::default() }
-    }
+    pub fn new(state_asset_load: T) -> Self { Self { state_asset_load, ..Default::default() } }
 }
 
 impl<T: StateNext> Plugin for SplashPlugin<T> {

@@ -4,9 +4,7 @@ use crate::prelude::*;
 pub trait Point2d: Clone + Copy {
     #[allow(clippy::new_ret_no_self)]
     /// Construct a IVec2
-    fn new(x: i32, y: i32) -> IVec2 {
-        IVec2::new(x, y)
-    }
+    fn new(x: i32, y: i32) -> IVec2 { IVec2::new(x, y) }
 
     /// Returns x position.
     fn x(&self) -> i32;
@@ -15,39 +13,27 @@ pub trait Point2d: Clone + Copy {
     fn y(&self) -> i32;
 
     /// Returns the grid point offset by the given amount.
-    fn offset(&self, xy: impl Point2d) -> IVec2 {
-        self.add(xy)
-    }
+    fn offset(&self, xy: impl Point2d) -> IVec2 { self.add(xy) }
 
     /// Convert point to `IVec2` (i32).
     #[inline]
-    fn as_ivec2(&self) -> IVec2 {
-        IVec2::new(self.x(), self.y())
-    }
+    fn as_ivec2(&self) -> IVec2 { IVec2::new(self.x(), self.y()) }
 
     /// Convert point to `UVec2` (u32).
     #[inline]
-    fn as_uvec2(&self) -> UVec2 {
-        self.as_ivec2().as_uvec2()
-    }
+    fn as_uvec2(&self) -> UVec2 { self.as_ivec2().as_uvec2() }
 
     /// Convert point to `Vec2` (f32).
     #[inline]
-    fn as_vec2(&self) -> Vec2 {
-        self.as_ivec2().as_vec2()
-    }
+    fn as_vec2(&self) -> Vec2 { self.as_ivec2().as_vec2() }
 
     /// Convert point to `[i32; 2]`.
     #[inline]
-    fn as_array(&self) -> [i32; 2] {
-        self.as_ivec2().to_array()
-    }
+    fn as_array(&self) -> [i32; 2] { self.as_ivec2().to_array() }
 
     /// Get the point's corresponding 1d index.
     #[inline(always)]
-    fn as_index(&self, width: usize) -> usize {
-        self.y() as usize * width + self.x() as usize
-    }
+    fn as_index(&self, width: usize) -> usize { self.y() as usize * width + self.x() as usize }
 
     /// Returns true if the point is valid for the given size.
     #[inline]
@@ -70,9 +56,7 @@ pub trait Point2d: Clone + Copy {
 
     /// Returns distance from another `Point2d`.
     #[inline]
-    fn distance(&self, other: impl Point2d) -> f32 {
-        self.as_vec2().distance(other.as_vec2())
-    }
+    fn distance(&self, other: impl Point2d) -> f32 { self.as_vec2().distance(other.as_vec2()) }
 
     /// The [taxicab distance](https://en.wikipedia.org/wiki/Taxicab_geometry)
     /// between two grid points.
@@ -125,35 +109,28 @@ pub trait Point2d: Clone + Copy {
 
     /// Returns the grid point the given number of spaces above this one.
     #[inline]
-    fn up(&self, amount: i32) -> IVec2 {
-        IVec2::new(self.x(), self.y() + amount)
-    }
+    fn up(&self, amount: i32) -> IVec2 { IVec2::new(self.x(), self.y() + amount) }
 
     /// Returns the grid point the given number of spaces below this one.
     #[inline]
-    fn down(&self, amount: i32) -> IVec2 {
-        IVec2::new(self.x(), self.y() - amount)
-    }
+    fn down(&self, amount: i32) -> IVec2 { IVec2::new(self.x(), self.y() - amount) }
 
     /// Returns the grid point the given number of spaces to the right of
     /// this one.
     #[inline]
-    fn right(&self, amount: i32) -> IVec2 {
-        IVec2::new(self.x() + amount, self.y())
-    }
+    fn right(&self, amount: i32) -> IVec2 { IVec2::new(self.x() + amount, self.y()) }
 
     /// Returns the grid point the given number of spaces to the left of
     /// this one.
     #[inline]
-    fn left(&self, amount: i32) -> IVec2 {
-        IVec2::new(self.x() - amount, self.y())
-    }
+    fn left(&self, amount: i32) -> IVec2 { IVec2::new(self.x() - amount, self.y()) }
 
     ////////////////
     //  Iterator  //
     ////////////////
 
-    /// Returns an iterator over the 8 points adjacent to this one. (N, NE, E, SE, S, SW, W, NW)
+    /// Returns an iterator over the 8 points adjacent to this one. (N, NE, E, SE, S, SW, W,
+    /// NW)
     #[inline]
     fn neighbors_all(&self) -> AdjIterator {
         AdjIterator::new(*self, GridDirection::all().collect())

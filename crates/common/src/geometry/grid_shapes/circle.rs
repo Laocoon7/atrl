@@ -15,9 +15,7 @@ impl Circle {
 }
 
 impl GridShape for Circle {
-    fn get_count(&self) -> usize {
-        self.get_points().len()
-    }
+    fn get_count(&self) -> usize { self.get_points().len() }
 
     fn contains(&self, point: impl Point2d) -> bool {
         self.get_points().contains(&point.as_ivec2())

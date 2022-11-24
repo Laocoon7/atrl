@@ -24,8 +24,8 @@ pub fn fov(
 
             // Tiles
             for (mut tile_vis, mut tile_col, tile_pos) in q_tile.iter_mut() {
-                if visibility_map.get_visible(tile_pos.as_ivec2())
-                    | map.explored_tiles.contains(&tile_pos.as_uvec2())
+                if visibility_map.get_visible(tile_pos.as_ivec2()) |
+                    map.explored_tiles.contains(&tile_pos.as_uvec2())
                 {
                     tile_vis.0 = true;
                     tile_col.0 = *tile_col.0.set_a(1.0);

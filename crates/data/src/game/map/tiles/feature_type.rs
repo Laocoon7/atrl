@@ -31,28 +31,28 @@ impl FeatureType {
         match self {
             Self::None => MovementType::Any as u8,
             Self::StairsDown => {
-                (MovementType::Walk as u8)
-                    | (MovementType::Run as u8)
-                    | (MovementType::Fly as u8)
-                    | (MovementType::Phase as u8)
+                (MovementType::Walk as u8) |
+                    (MovementType::Run as u8) |
+                    (MovementType::Fly as u8) |
+                    (MovementType::Phase as u8)
             }
             Self::StairsUp => {
-                (MovementType::Walk as u8)
-                    | (MovementType::Run as u8)
-                    | (MovementType::Fly as u8)
-                    | (MovementType::Phase as u8)
+                (MovementType::Walk as u8) |
+                    (MovementType::Run as u8) |
+                    (MovementType::Fly as u8) |
+                    (MovementType::Phase as u8)
             }
             Self::DoorClosed => {
-                (MovementType::Walk as u8)
-                    | (MovementType::Run as u8)
-                    | (MovementType::Fly as u8)
-                    | (MovementType::Phase as u8)
+                (MovementType::Walk as u8) |
+                    (MovementType::Run as u8) |
+                    (MovementType::Fly as u8) |
+                    (MovementType::Phase as u8)
             }
             Self::DoorOpen => {
-                (MovementType::Walk as u8)
-                    | (MovementType::Run as u8)
-                    | (MovementType::Fly as u8)
-                    | (MovementType::Phase as u8)
+                (MovementType::Walk as u8) |
+                    (MovementType::Run as u8) |
+                    (MovementType::Fly as u8) |
+                    (MovementType::Phase as u8)
             }
         }
     }

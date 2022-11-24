@@ -8,9 +8,7 @@ pub struct Rectangle {
 }
 
 impl Default for Rectangle {
-    fn default() -> Self {
-        Self::new_with_size(IVec2::ZERO, IVec2::ONE)
-    }
+    fn default() -> Self { Self::new_with_size(IVec2::ZERO, IVec2::ONE) }
 }
 
 impl Rectangle {
@@ -30,24 +28,16 @@ impl Rectangle {
 
 impl Rectangle {
     #[inline]
-    pub const fn width(&self) -> i32 {
-        self.max.x - self.min.x
-    }
+    pub const fn width(&self) -> i32 { self.max.x - self.min.x }
 
     #[inline]
-    pub const fn height(&self) -> i32 {
-        self.max.y - self.min.y
-    }
+    pub const fn height(&self) -> i32 { self.max.y - self.min.y }
 
     #[inline]
-    pub const fn min(&self) -> IVec2 {
-        self.min
-    }
+    pub const fn min(&self) -> IVec2 { self.min }
 
     #[inline]
-    pub const fn max(&self) -> IVec2 {
-        self.max
-    }
+    pub const fn max(&self) -> IVec2 { self.max }
 
     #[inline]
     pub fn is_square(&self) -> bool {
@@ -66,16 +56,14 @@ impl Shape for Rectangle {
 
     #[inline]
     fn contains(&self, point: impl Point2d) -> bool {
-        self.min.x <= point.x()
-            && self.max.x > point.x()
-            && self.min.y <= point.y()
-            && self.max.y > point.y()
+        self.min.x <= point.x() &&
+            self.max.x > point.x() &&
+            self.min.y <= point.y() &&
+            self.max.y > point.y()
     }
 
     #[inline]
-    fn points(&self) -> Vec<IVec2> {
-        vec![self.min, self.max]
-    }
+    fn points(&self) -> Vec<IVec2> { vec![self.min, self.max] }
 
     fn rotate_around(&self, point: impl Point2d, degrees: f32) -> Self
     where
@@ -86,33 +74,21 @@ impl Shape for Rectangle {
     }
 
     #[inline]
-    fn center(&self) -> IVec2 {
-        self.min.mid_point(self.max)
-    }
+    fn center(&self) -> IVec2 { self.min.mid_point(self.max) }
 
     #[inline]
-    fn left(&self) -> i32 {
-        self.min.x.min(self.max.x)
-    }
+    fn left(&self) -> i32 { self.min.x.min(self.max.x) }
 
     #[inline]
-    fn right(&self) -> i32 {
-        self.min.x.max(self.max.x)
-    }
+    fn right(&self) -> i32 { self.min.x.max(self.max.x) }
 
     #[inline]
-    fn top(&self) -> i32 {
-        self.min.y.max(self.max.y)
-    }
+    fn top(&self) -> i32 { self.min.y.max(self.max.y) }
 
     #[inline]
-    fn bottom(&self) -> i32 {
-        self.min.y.min(self.max.y)
-    }
+    fn bottom(&self) -> i32 { self.min.y.min(self.max.y) }
 
-    fn iter(&self) -> ShapeIterator {
-        ShapeIterator::Rectangle(self.into_iter())
-    }
+    fn iter(&self) -> ShapeIterator { ShapeIterator::Rectangle(self.into_iter()) }
 }
 
 impl Rectangle {
@@ -140,9 +116,7 @@ impl Rectangle {
         Polygon::new(vec![self.min, max, self.max, bottom_left])
     }
 
-    pub fn as_ellipse(&self) -> Ellipse {
-        Ellipse::from_points(self.points())
-    }
+    pub fn as_ellipse(&self) -> Ellipse { Ellipse::from_points(self.points()) }
 
     /// Check if this rectangle intersects another rectangle.
     #[inline]
@@ -150,10 +124,10 @@ impl Rectangle {
     pub const fn intersects(&self, other: Self) -> bool {
         // (self.min.cmple(other.max) & self.max.cmpge(other.min)).all()
 
-        self.min.x <= other.max.x
-            && self.max.x >= other.min.x
-            && self.min.y <= other.max.y
-            && self.max.y >= other.min.y
+        self.min.x <= other.max.x &&
+            self.max.x >= other.min.x &&
+            self.min.y <= other.max.y &&
+            self.max.y >= other.min.y
     }
 
     /// Gets a set of all tiles in the rectangle
@@ -178,16 +152,12 @@ impl Rectangle {
     }
 
     /// iterates over all points in the rectangle
-    pub fn iter(&self) -> RectIter {
-        RectIter::new(self.min, self.max)
-    }
+    pub fn iter(&self) -> RectIter { RectIter::new(self.min, self.max) }
 }
 
 impl IntoIterator for Rectangle {
     type Item = IVec2;
     type IntoIter = RectIter;
 
-    fn into_iter(self) -> Self::IntoIter {
-        RectIter::new(self.min, self.max)
-    }
+    fn into_iter(self) -> Self::IntoIter { RectIter::new(self.min, self.max) }
 }

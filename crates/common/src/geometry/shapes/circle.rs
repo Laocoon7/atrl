@@ -17,9 +17,7 @@ impl Circle {
     ///
     /// Distance from center to edge
     #[inline]
-    pub const fn radius(&self) -> u32 {
-        self.radius
-    }
+    pub const fn radius(&self) -> u32 { self.radius }
 }
 
 impl Shape for Circle {
@@ -37,9 +35,7 @@ impl Shape for Circle {
         Self::new(self.center + delta.as_ivec2(), self.radius)
     }
 
-    fn move_to(&self, point: impl Point2d) -> Self {
-        Self::new(point.as_ivec2(), self.radius)
-    }
+    fn move_to(&self, point: impl Point2d) -> Self { Self::new(point.as_ivec2(), self.radius) }
 
     fn contains(&self, point: impl Point2d) -> bool {
         let dist = DistanceAlg::Pythagoras.distance2d(self.center, point).floor() as u32; // .round() ??
@@ -55,34 +51,22 @@ impl Shape for Circle {
     }
 
     #[inline]
-    fn center(&self) -> IVec2 {
-        self.center
-    }
+    fn center(&self) -> IVec2 { self.center }
 
     #[inline]
-    fn left(&self) -> i32 {
-        self.center.x - self.radius as i32
-    }
+    fn left(&self) -> i32 { self.center.x - self.radius as i32 }
 
     #[inline]
-    fn right(&self) -> i32 {
-        self.center.x + self.radius as i32
-    }
+    fn right(&self) -> i32 { self.center.x + self.radius as i32 }
 
     #[inline]
-    fn top(&self) -> i32 {
-        self.center.y - self.radius as i32
-    }
+    fn top(&self) -> i32 { self.center.y - self.radius as i32 }
 
     #[inline]
-    fn bottom(&self) -> i32 {
-        self.center.y + self.radius as i32
-    }
+    fn bottom(&self) -> i32 { self.center.y + self.radius as i32 }
 
     #[inline]
-    fn iter(&self) -> ShapeIterator {
-        ShapeIterator::Circle(self.into_iter())
-    }
+    fn iter(&self) -> ShapeIterator { ShapeIterator::Circle(self.into_iter()) }
 }
 
 impl Circle {
@@ -91,9 +75,7 @@ impl Circle {
     }
 
     /// Create line from center to edge at 0 degrees
-    pub fn as_radius_line(&self) -> Line {
-        Line::from_points(self.points())
-    }
+    pub fn as_radius_line(&self) -> Line { Line::from_points(self.points()) }
 
     pub fn as_horizontal_line(&self) -> Line {
         Line::new((self.left(), self.center.y), (self.right(), self.center.y))

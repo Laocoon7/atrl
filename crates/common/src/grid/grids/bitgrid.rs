@@ -84,34 +84,22 @@ impl GridLayer<bool> for BitGrid {
     }
 
     #[inline]
-    fn width(&self) -> u32 {
-        self.size.width()
-    }
+    fn width(&self) -> u32 { self.size.width() }
 
     #[inline]
-    fn height(&self) -> u32 {
-        self.size.height()
-    }
+    fn height(&self) -> u32 { self.size.height() }
 
     #[inline]
-    fn size(&self) -> UVec2 {
-        self.size
-    }
+    fn size(&self) -> UVec2 { self.size }
 
     #[inline]
-    fn len(&self) -> usize {
-        self.cells.len()
-    }
+    fn len(&self) -> usize { self.cells.len() }
 
     #[inline]
-    fn is_empty(&self) -> bool {
-        self.cells.is_empty()
-    }
+    fn is_empty(&self) -> bool { self.cells.is_empty() }
 
     #[inline]
-    fn in_bounds(&self, point: impl Point2d) -> bool {
-        point.is_valid(self.size())
-    }
+    fn in_bounds(&self, point: impl Point2d) -> bool { point.is_valid(self.size()) }
 
     #[inline]
     fn get_idx_unchecked(&self, point: impl Point2d) -> usize {
@@ -190,19 +178,13 @@ impl GridIterable<bool> for BitGrid {
     type IterChunkMutReturn<'a> = BitChunkMut<'a>;
 
     #[inline]
-    fn iter(&self) -> Self::IterReturn<'_> {
-        self.cells.iter()
-    }
+    fn iter(&self) -> Self::IterReturn<'_> { self.cells.iter() }
 
     #[inline]
-    fn iter_mut(&mut self) -> Self::IterMutReturn<'_> {
-        self.cells.iter_mut()
-    }
+    fn iter_mut(&mut self) -> Self::IterMutReturn<'_> { self.cells.iter_mut() }
 
     #[inline]
-    fn point_iter(&self) -> PointIterRowMajor {
-        self.size.iter()
-    }
+    fn point_iter(&self) -> PointIterRowMajor { self.size.iter() }
 
     #[inline]
     fn enumerate(&self) -> GridEnumerate<Self::IterReturn<'_>> {
@@ -210,9 +192,7 @@ impl GridIterable<bool> for BitGrid {
     }
 
     #[inline]
-    fn rows(&self) -> Self::IterChunkReturn<'_> {
-        self.cells.chunks(self.size.width() as usize)
-    }
+    fn rows(&self) -> Self::IterChunkReturn<'_> { self.cells.chunks(self.size.width() as usize) }
 
     #[inline]
     fn rows_mut(&mut self) -> Self::IterChunkMutReturn<'_> {
@@ -220,9 +200,7 @@ impl GridIterable<bool> for BitGrid {
     }
 
     #[inline]
-    fn cols(&self) -> Self::IterChunkReturn<'_> {
-        self.cells.chunks(self.size.width() as usize)
-    }
+    fn cols(&self) -> Self::IterChunkReturn<'_> { self.cells.chunks(self.size.width() as usize) }
 
     #[inline]
     fn cols_mut(&mut self) -> Self::IterChunkMutReturn<'_> {
@@ -254,16 +232,12 @@ impl Index<usize> for BitGrid {
     type Output = bool;
 
     #[inline]
-    fn index(&self, index: usize) -> &bool {
-        &self.cells[index]
-    }
+    fn index(&self, index: usize) -> &bool { &self.cells[index] }
 }
 
 impl<P: Point2d> Index<P> for BitGrid {
     type Output = bool;
 
     #[inline]
-    fn index(&self, index: P) -> &bool {
-        self.get_unchecked(index)
-    }
+    fn index(&self, index: P) -> &bool { self.get_unchecked(index) }
 }

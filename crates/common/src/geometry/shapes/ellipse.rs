@@ -14,14 +14,10 @@ impl Ellipse {
 
 impl Ellipse {
     #[inline]
-    pub const fn width(&self) -> u32 {
-        self.size.x
-    }
+    pub const fn width(&self) -> u32 { self.size.x }
 
     #[inline]
-    pub const fn height(&self) -> u32 {
-        self.size.y
-    }
+    pub const fn height(&self) -> u32 { self.size.y }
 }
 
 impl Shape for Ellipse {
@@ -41,14 +37,12 @@ impl Shape for Ellipse {
         Self::new(self.center + delta.as_ivec2(), self.size)
     }
 
-    fn move_to(&self, point: impl Point2d) -> Self {
-        Self::new(point, self.size)
-    }
+    fn move_to(&self, point: impl Point2d) -> Self { Self::new(point, self.size) }
 
     fn contains(&self, point: impl Point2d) -> bool {
-        ((point.x() - self.center.x) ^ 2) / ((self.size.x as i32) ^ 2)
-            + ((point.y() - self.center.y) ^ 2) / ((self.size.y as i32) ^ 2)
-            <= 1
+        ((point.x() - self.center.x) ^ 2) / ((self.size.x as i32) ^ 2) +
+            ((point.y() - self.center.y) ^ 2) / ((self.size.y as i32) ^ 2) <=
+            1
     }
 
     /// Returns [top_left, bottom_right]
@@ -57,29 +51,19 @@ impl Shape for Ellipse {
     }
 
     #[inline]
-    fn center(&self) -> IVec2 {
-        self.center
-    }
+    fn center(&self) -> IVec2 { self.center }
 
     #[inline]
-    fn left(&self) -> i32 {
-        self.center.x - (self.size.x as i32) / 2
-    }
+    fn left(&self) -> i32 { self.center.x - (self.size.x as i32) / 2 }
 
     #[inline]
-    fn right(&self) -> i32 {
-        self.center.x + (self.size.x as i32) / 2
-    }
+    fn right(&self) -> i32 { self.center.x + (self.size.x as i32) / 2 }
 
     #[inline]
-    fn top(&self) -> i32 {
-        self.center.y - (self.size.y as i32) / 2
-    }
+    fn top(&self) -> i32 { self.center.y - (self.size.y as i32) / 2 }
 
     #[inline]
-    fn bottom(&self) -> i32 {
-        self.center.y + (self.size.y as i32) / 2
-    }
+    fn bottom(&self) -> i32 { self.center.y + (self.size.y as i32) / 2 }
 }
 
 impl Ellipse {

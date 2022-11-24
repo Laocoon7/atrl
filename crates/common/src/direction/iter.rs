@@ -10,9 +10,7 @@ macro_rules! make_direction_iter {
         /// Iterate over all directions of the respectively-named type of direction
         pub struct $iter_name(Range<u8>);
         impl $iter_name {
-            pub const fn new() -> Self {
-                $iter_name(0..$count as u8)
-            }
+            pub const fn new() -> Self { $iter_name(0..$count as u8) }
         }
 
         impl Iterator for $iter_name {
@@ -29,9 +27,7 @@ macro_rules! make_direction_iter {
         impl IntoIterator for $col_name {
             type Item = $type;
             type IntoIter = $iter_name;
-            fn into_iter(self) -> Self::IntoIter {
-                $iter_name::new()
-            }
+            fn into_iter(self) -> Self::IntoIter { $iter_name::new() }
         }
     };
 }
@@ -50,16 +46,12 @@ macro_rules! make_subdirection_iter {
         pub struct $iter_name($backing_iter_name);
 
         impl $iter_name {
-            pub const fn new() -> Self {
-                Self($backing_iter_name::new())
-            }
+            pub const fn new() -> Self { Self($backing_iter_name::new()) }
         }
 
         impl Iterator for $iter_name {
             type Item = GridDirection;
-            fn next(&mut self) -> Option<Self::Item> {
-                self.0.next().map(|d| d.direction())
-            }
+            fn next(&mut self) -> Option<Self::Item> { self.0.next().map(|d| d.direction()) }
         }
 
         #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
@@ -68,9 +60,7 @@ macro_rules! make_subdirection_iter {
         impl IntoIterator for $col_name {
             type Item = GridDirection;
             type IntoIter = $iter_name;
-            fn into_iter(self) -> Self::IntoIter {
-                $iter_name($backing_col_name.into_iter())
-            }
+            fn into_iter(self) -> Self::IntoIter { $iter_name($backing_col_name.into_iter()) }
         }
     };
 }

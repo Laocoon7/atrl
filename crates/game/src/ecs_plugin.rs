@@ -44,8 +44,9 @@ impl<T: StateNext, R: StateNext + Resource> Plugin for EcsPlugin<T, R> {
             turn_state_ticking: self.turn_state_ticking,
         });
 
-        // TODO: Fov has a problem initially running because player generation moved to this same state
-        // This *should* be fixed once we work that out... But we may need to revisit this at some point.
+        // TODO: Fov has a problem initially running because player generation moved to this same
+        // state This *should* be fixed once we work that out... But we may need to revisit
+        // this at some point.
 
         // We need a `Startup` set to run all the initial systems
         app.add_enter_system_set(self.state_running, ConditionSet::new().with_system(fov).into());

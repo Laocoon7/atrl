@@ -44,18 +44,18 @@ impl Triangle {
             TriangleAngleType::Obtuse
         };
 
-        let side_type = if DistanceAlg::PythagorasSquared.distance2d(points[0], points[1])
-            == DistanceAlg::PythagorasSquared.distance2d(points[1], points[2])
-            && DistanceAlg::PythagorasSquared.distance2d(points[2], points[0])
-                == DistanceAlg::PythagorasSquared.distance2d(points[1], points[2])
+        let side_type = if DistanceAlg::PythagorasSquared.distance2d(points[0], points[1]) ==
+            DistanceAlg::PythagorasSquared.distance2d(points[1], points[2]) &&
+            DistanceAlg::PythagorasSquared.distance2d(points[2], points[0]) ==
+                DistanceAlg::PythagorasSquared.distance2d(points[1], points[2])
         {
             TriangleSideType::Equilateral
-        } else if DistanceAlg::PythagorasSquared.distance2d(points[0], points[1])
-            == DistanceAlg::PythagorasSquared.distance2d(points[1], points[2])
-            || DistanceAlg::PythagorasSquared.distance2d(points[2], points[0])
-                == DistanceAlg::PythagorasSquared.distance2d(points[1], points[2])
-            || DistanceAlg::PythagorasSquared.distance2d(points[2], points[0])
-                == DistanceAlg::PythagorasSquared.distance2d(points[0], points[1])
+        } else if DistanceAlg::PythagorasSquared.distance2d(points[0], points[1]) ==
+            DistanceAlg::PythagorasSquared.distance2d(points[1], points[2]) ||
+            DistanceAlg::PythagorasSquared.distance2d(points[2], points[0]) ==
+                DistanceAlg::PythagorasSquared.distance2d(points[1], points[2]) ||
+            DistanceAlg::PythagorasSquared.distance2d(points[2], points[0]) ==
+                DistanceAlg::PythagorasSquared.distance2d(points[0], points[1])
         {
             TriangleSideType::Isosceles
         } else {
@@ -72,17 +72,11 @@ impl Triangle {
 
 impl Triangle {
     #[inline]
-    pub const fn angles(&self) -> [f32; 3] {
-        self.angles
-    }
+    pub const fn angles(&self) -> [f32; 3] { self.angles }
     #[inline]
-    pub const fn angle_type(&self) -> &TriangleAngleType {
-        &self.angle_type
-    }
+    pub const fn angle_type(&self) -> &TriangleAngleType { &self.angle_type }
     #[inline]
-    pub const fn side_type(&self) -> &TriangleSideType {
-        &self.side_type
-    }
+    pub const fn side_type(&self) -> &TriangleSideType { &self.side_type }
 }
 
 impl Shape for Triangle {
@@ -106,14 +100,10 @@ impl Shape for Triangle {
         s >= 0.0 && t >= 0.0 && (s + t) <= 1.0
     }
 
-    fn points(&self) -> Vec<IVec2> {
-        self.points.to_vec()
-    }
+    fn points(&self) -> Vec<IVec2> { self.points.to_vec() }
 
     #[inline]
-    fn center(&self) -> IVec2 {
-        self.center
-    }
+    fn center(&self) -> IVec2 { self.center }
 }
 
 impl Triangle {

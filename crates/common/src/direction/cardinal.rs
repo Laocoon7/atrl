@@ -1,10 +1,10 @@
 use crate::prelude::*;
 
 pub const NUM_CARDINAL_DIRECTIONS: usize = 4;
-pub const ALL_CARDINAL_DIRECTION_BITMAP_RAW: u8 = (1 << GridDirection::North as usize)
-    | (1 << GridDirection::East as usize)
-    | (1 << GridDirection::South as usize)
-    | (1 << GridDirection::West as usize);
+pub const ALL_CARDINAL_DIRECTION_BITMAP_RAW: u8 = (1 << GridDirection::North as usize) |
+    (1 << GridDirection::East as usize) |
+    (1 << GridDirection::South as usize) |
+    (1 << GridDirection::West as usize);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
 #[repr(u8)]
@@ -130,13 +130,9 @@ impl CardinalDirection {
         }
     }
 
-    pub const fn all() -> CardinalDirectionIter {
-        CardinalDirectionIter::new()
-    }
+    pub const fn all() -> CardinalDirectionIter { CardinalDirectionIter::new() }
 
-    pub const fn all_directions() -> DirectionCardinalIter {
-        DirectionCardinalIter::new()
-    }
+    pub const fn all_directions() -> DirectionCardinalIter { DirectionCardinalIter::new() }
 
     pub const fn combine(self, other: Self) -> Option<OrdinalDirection> {
         OrdinalDirection::from_cardinals(self, other)

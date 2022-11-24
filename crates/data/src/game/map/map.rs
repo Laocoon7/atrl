@@ -134,8 +134,8 @@ pub struct MapPassThroughData {
     pub terrain_layer_entity: Entity,
     pub feature_layer_entity: Entity,
     pub item_layer_entity: Entity,
-    // TODO: Explored tiles should be passed from serialized data for the map on loading, or just a new HashSet
-    //pub explored_tiles: HashSet<UVec2>
+    // TODO: Explored tiles should be passed from serialized data for the map on loading, or just a
+    // new HashSet pub explored_tiles: HashSet<UVec2>
 }
 
 impl From<MapGenData<MapPassThroughData>> for Map {
@@ -220,7 +220,5 @@ impl PathProvider for Map {
         (terrain & feature & movement_type) != 0
     }
 
-    fn cost(&self, _position: IVec2, _movement_type: u8) -> u32 {
-        1
-    }
+    fn cost(&self, _position: IVec2, _movement_type: u8) -> u32 { 1 }
 }

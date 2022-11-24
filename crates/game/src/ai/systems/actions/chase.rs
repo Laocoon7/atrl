@@ -40,12 +40,14 @@ pub fn chase_action(
         let map = manager.get_current_map_mut().expect("No map found"); // TODO: Do we really want to crash the game here or just `error!` `return`?
 
         // This doesnt exist on the original match below because whenever the player comes into view
-        // the `can_see_player` scorer sets the output to be 1, causing the wander action to spin down (1 frame).
-        // Then, the player moves and its the ai turn again. the chase actions boots up and evaluates (2 frames).
-        // After that spin up, when the player, finally moves a 3rd time, the chase action moves into the Executing
+        // the `can_see_player` scorer sets the output to be 1, causing the wander action to spin
+        // down (1 frame). Then, the player moves and its the ai turn again. the chase
+        // actions boots up and evaluates (2 frames). After that spin up, when the player,
+        // finally moves a 3rd time, the chase action moves into the Executing
         // state and moves the AI towards the player.
         //
-        // So this acts like a skip frame, where it sets the action to evaluating, then immediately evaluates
+        // So this acts like a skip frame, where it sets the action to evaluating, then immediately
+        // evaluates
         if *action_state == Requested {
             chase.last_seen_pt = Some(player_pos);
             chase.path = Some(generate_chase_path(ai_pos, player_pos, movement_component.0, map));

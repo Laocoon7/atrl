@@ -55,24 +55,16 @@ pub trait Shape {
     }
 
     /// x of the left most point
-    fn left(&self) -> i32 {
-        self.points().iter().map(|p| p.x).min().unwrap()
-    }
+    fn left(&self) -> i32 { self.points().iter().map(|p| p.x).min().unwrap() }
 
     /// x of the right most point
-    fn right(&self) -> i32 {
-        self.points().iter().map(|p| p.x).max().unwrap()
-    }
+    fn right(&self) -> i32 { self.points().iter().map(|p| p.x).max().unwrap() }
 
     /// y of the top most point
-    fn top(&self) -> i32 {
-        self.points().iter().map(|p| p.y).max().unwrap()
-    }
+    fn top(&self) -> i32 { self.points().iter().map(|p| p.y).max().unwrap() }
 
     /// y of the bottom most point
-    fn bottom(&self) -> i32 {
-        self.points().iter().map(|p| p.y).min().unwrap()
-    }
+    fn bottom(&self) -> i32 { self.points().iter().map(|p| p.y).min().unwrap() }
 
     /// scale the shape by factor (around the center, so the change will be uniform)
     fn scale(&self, factor: f32) -> Self

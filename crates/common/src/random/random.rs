@@ -17,19 +17,13 @@ impl Random {
         Self { prng, prht, noise }
     }
 
-    pub fn from_entropy() -> Self {
-        Self::new(Prng::entropy_u64())
-    }
+    pub fn from_entropy() -> Self { Self::new(Prng::entropy_u64()) }
 
-    pub fn get_prng(&mut self) -> &mut Prng {
-        &mut self.prng
-    }
+    pub fn get_prng(&mut self) -> &mut Prng { &mut self.prng }
 }
 
 impl Default for Random {
-    fn default() -> Self {
-        Self::from_entropy()
-    }
+    fn default() -> Self { Self::from_entropy() }
 }
 
 impl std::fmt::Debug for Random {

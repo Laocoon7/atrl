@@ -15,9 +15,7 @@ pub trait Lerp {
 ///
 /// see [f32::lerp]
 #[inline]
-pub fn flerp(start: f32, end: f32, percent: f32) -> f32 {
-    (end - start).mul_add(percent, start)
-}
+pub fn flerp(start: f32, end: f32, percent: f32) -> f32 { (end - start).mul_add(percent, start) }
 
 macro_rules! impl_lerp {
     ($num_type: ty) => {

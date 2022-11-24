@@ -40,29 +40,19 @@ impl Line {
 impl Line {
     #[allow(clippy::len_without_is_empty)] //use start()==end() to check that
     #[inline]
-    pub const fn len(&self) -> u32 {
-        self.len
-    }
+    pub const fn len(&self) -> u32 { self.len }
 
     #[inline]
-    pub const fn angle(&self) -> f32 {
-        self.angle
-    }
+    pub const fn angle(&self) -> f32 { self.angle }
 
     #[inline]
-    pub const fn start(&self) -> IVec2 {
-        self.start
-    }
+    pub const fn start(&self) -> IVec2 { self.start }
 
     #[inline]
-    pub const fn end(&self) -> IVec2 {
-        self.end
-    }
+    pub const fn end(&self) -> IVec2 { self.end }
 
     #[inline]
-    pub const fn line_type(&self) -> LineType {
-        self.line_type
-    }
+    pub const fn line_type(&self) -> LineType { self.line_type }
 }
 
 impl Shape for Line {
@@ -85,41 +75,29 @@ impl Shape for Line {
                 self.start.x() == point.x && self.start.y() <= point.y && point.y <= self.end.y
             }
             LineType::Angled => {
-                (DistanceAlg::Pythagoras.distance2d(self.start, point)
-                    + DistanceAlg::Pythagoras.distance2d(self.end, point))
-                .floor() as u32
-                    == self.len
+                (DistanceAlg::Pythagoras.distance2d(self.start, point) +
+                    DistanceAlg::Pythagoras.distance2d(self.end, point))
+                .floor() as u32 ==
+                    self.len
             } // TODO: CHECK THIS
         }
     }
 
-    fn points(&self) -> Vec<IVec2> {
-        vec![self.start, self.end]
-    }
+    fn points(&self) -> Vec<IVec2> { vec![self.start, self.end] }
 
-    fn center(&self) -> IVec2 {
-        self.start.mid_point(self.end)
-    }
+    fn center(&self) -> IVec2 { self.start.mid_point(self.end) }
 
     #[inline]
-    fn left(&self) -> i32 {
-        self.start.x()
-    }
+    fn left(&self) -> i32 { self.start.x() }
 
     #[inline]
-    fn right(&self) -> i32 {
-        self.end.x
-    }
+    fn right(&self) -> i32 { self.end.x }
 
     #[inline]
-    fn top(&self) -> i32 {
-        self.start.y()
-    }
+    fn top(&self) -> i32 { self.start.y() }
 
     #[inline]
-    fn bottom(&self) -> i32 {
-        self.end.y
-    }
+    fn bottom(&self) -> i32 { self.end.y }
 
     #[inline]
     fn iter(&self) -> ShapeIterator
@@ -144,20 +122,14 @@ impl Line {
         BresenhamLineInclusiveIter::new(self.start, self.end)
     }
 
-    pub fn as_rect(&self) -> Rectangle {
-        Rectangle::new(self.start, self.end)
-    }
+    pub fn as_rect(&self) -> Rectangle { Rectangle::new(self.start, self.end) }
 
-    pub fn as_circle(&self) -> Circle {
-        Circle::new(self.start, self.len)
-    }
+    pub fn as_circle(&self) -> Circle { Circle::new(self.start, self.len) }
 }
 
 impl IntoIterator for Line {
     type Item = IVec2;
     type IntoIter = BresenhamLineIter;
 
-    fn into_iter(self) -> Self::IntoIter {
-        BresenhamLineIter::new(self.start, self.end)
-    }
+    fn into_iter(self) -> Self::IntoIter { BresenhamLineIter::new(self.start, self.end) }
 }

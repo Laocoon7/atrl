@@ -7,9 +7,7 @@ pub struct SetBuilder<T> {
 }
 
 impl<T> SetBuilder<T> {
-    pub fn new() -> Box<Self> {
-        Box::new(Self { rect: None, value: u32::MAX, _x: PhantomData })
-    }
+    pub fn new() -> Box<Self> { Box::new(Self { rect: None, value: u32::MAX, _x: PhantomData }) }
 
     pub fn with_rect(mut self, rectangle: Rectangle) -> Box<Self> {
         self.rect = Some(rectangle);

@@ -34,10 +34,10 @@ impl TerrainType {
             Self::None => (MovementType::None) as u8,
             Self::Wall => (MovementType::Fly as u8) | (MovementType::Phase as u8),
             Self::Floor => {
-                (MovementType::Walk as u8)
-                    | (MovementType::Run as u8)
-                    | (MovementType::Fly as u8)
-                    | (MovementType::Phase as u8)
+                (MovementType::Walk as u8) |
+                    (MovementType::Run as u8) |
+                    (MovementType::Fly as u8) |
+                    (MovementType::Phase as u8)
             }
             Self::Water => {
                 (MovementType::Swim as u8) | (MovementType::Fly as u8) | (MovementType::Phase as u8)
@@ -77,7 +77,5 @@ impl From<TerrainType> for u32 {
 }
 
 impl From<u32> for TerrainType {
-    fn from(value: u32) -> Self {
-        FromPrimitive::from_u32(value).map_or(Self::None, |v| v)
-    }
+    fn from(value: u32) -> Self { FromPrimitive::from_u32(value).map_or(Self::None, |v| v) }
 }

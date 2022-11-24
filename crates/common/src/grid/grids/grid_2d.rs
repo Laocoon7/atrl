@@ -92,34 +92,22 @@ impl<T: GridParam> GridLayer<T> for Grid<T> {
     }
 
     #[inline]
-    fn width(&self) -> u32 {
-        self.size.width()
-    }
+    fn width(&self) -> u32 { self.size.width() }
 
     #[inline]
-    fn height(&self) -> u32 {
-        self.size.height()
-    }
+    fn height(&self) -> u32 { self.size.height() }
 
     #[inline]
-    fn size(&self) -> UVec2 {
-        self.size
-    }
+    fn size(&self) -> UVec2 { self.size }
 
     #[inline]
-    fn len(&self) -> usize {
-        self.cells.len()
-    }
+    fn len(&self) -> usize { self.cells.len() }
 
     #[inline]
-    fn is_empty(&self) -> bool {
-        self.cells.is_empty()
-    }
+    fn is_empty(&self) -> bool { self.cells.is_empty() }
 
     #[inline]
-    fn in_bounds(&self, pos: impl Point2d) -> bool {
-        pos.is_valid(self.size())
-    }
+    fn in_bounds(&self, pos: impl Point2d) -> bool { pos.is_valid(self.size()) }
 
     #[inline]
     fn get_idx(&self, pos: impl Point2d) -> Option<usize> {
@@ -196,20 +184,14 @@ impl<T: GridParam> GridIterable<T> for Grid<T> {
     type IterChunkMutReturn<'a> = GridChunksMut<'a, T>;
 
     #[inline]
-    fn iter(&self) -> GridIter<T> {
-        self.cells.iter()
-    }
+    fn iter(&self) -> GridIter<T> { self.cells.iter() }
 
     /// A mutable iterator over all elements in the grid.
     #[inline]
-    fn iter_mut(&mut self) -> GridIterMut<T> {
-        self.cells.iter_mut()
-    }
+    fn iter_mut(&mut self) -> GridIterMut<T> { self.cells.iter_mut() }
 
     #[inline]
-    fn point_iter(&self) -> PointIterRowMajor {
-        self.size.iter()
-    }
+    fn point_iter(&self) -> PointIterRowMajor { self.size.iter() }
 
     #[inline]
     fn enumerate(&self) -> GridEnumerate<Self::IterReturn<'_>> {
@@ -217,9 +199,7 @@ impl<T: GridParam> GridIterable<T> for Grid<T> {
     }
 
     #[inline]
-    fn rows(&self) -> Self::IterChunkReturn<'_> {
-        self.cells.chunks(self.size.width() as usize)
-    }
+    fn rows(&self) -> Self::IterChunkReturn<'_> { self.cells.chunks(self.size.width() as usize) }
 
     #[inline]
     fn rows_mut(&mut self) -> Self::IterChunkMutReturn<'_> {
@@ -227,9 +207,7 @@ impl<T: GridParam> GridIterable<T> for Grid<T> {
     }
 
     #[inline]
-    fn cols(&self) -> Self::IterChunkReturn<'_> {
-        self.cells.chunks(self.size.width() as usize)
-    }
+    fn cols(&self) -> Self::IterChunkReturn<'_> { self.cells.chunks(self.size.width() as usize) }
 
     #[inline]
     fn cols_mut(&mut self) -> Self::IterChunkMutReturn<'_> {
@@ -261,16 +239,12 @@ impl<T: GridParam> GridIterable<T> for Grid<T> {
 impl<T: GridParam> std::ops::Deref for Grid<T> {
     type Target = Vec<T>;
 
-    fn deref(&self) -> &Self::Target {
-        &self.cells
-    }
+    fn deref(&self) -> &Self::Target { &self.cells }
 }
 
 // DerefMut
 impl<T: GridParam> std::ops::DerefMut for Grid<T> {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.cells
-    }
+    fn deref_mut(&mut self) -> &mut Self::Target { &mut self.cells }
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -281,30 +255,22 @@ impl<T: Copy + GridParam> Index<usize> for Grid<T> {
     type Output = T;
 
     #[inline]
-    fn index(&self, index: usize) -> &T {
-        &self.cells[index]
-    }
+    fn index(&self, index: usize) -> &T { &self.cells[index] }
 }
 
 impl<T: Copy + GridParam> std::ops::IndexMut<usize> for Grid<T> {
     #[inline]
-    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
-        &mut self.cells[index]
-    }
+    fn index_mut(&mut self, index: usize) -> &mut Self::Output { &mut self.cells[index] }
 }
 
 impl<T: Copy + GridParam, P: Point2d> Index<P> for Grid<T> {
     type Output = T;
 
     #[inline]
-    fn index(&self, index: P) -> &T {
-        self.get_unchecked(index)
-    }
+    fn index(&self, index: P) -> &T { self.get_unchecked(index) }
 }
 
 impl<T: Copy + GridParam, P: Point2d> IndexMut<P> for Grid<T> {
     #[inline]
-    fn index_mut(&mut self, index: P) -> &mut Self::Output {
-        self.get_mut_unchecked(index)
-    }
+    fn index_mut(&mut self, index: P) -> &mut Self::Output { self.get_mut_unchecked(index) }
 }

@@ -6,9 +6,7 @@ pub struct ScatterBuilder<T> {
 }
 
 impl<T> ScatterBuilder<T> {
-    pub fn new() -> Box<Self> {
-        Box::new(Self { rect: None, _x: PhantomData })
-    }
+    pub fn new() -> Box<Self> { Box::new(Self { rect: None, _x: PhantomData }) }
 
     pub fn with_rect(mut self, rectangle: Rectangle) -> Box<Self> {
         self.rect = Some(rectangle);

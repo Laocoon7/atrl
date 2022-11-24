@@ -144,13 +144,9 @@ impl GridDirection {
         }
     }
 
-    pub const fn bitmap_raw(self) -> u8 {
-        1 << self as usize
-    }
+    pub const fn bitmap_raw(self) -> u8 { 1 << self as usize }
 
-    pub const fn bitmap(self) -> DirectionBitmap {
-        DirectionBitmap::new(self.bitmap_raw())
-    }
+    pub const fn bitmap(self) -> DirectionBitmap { DirectionBitmap::new(self.bitmap_raw()) }
 
     pub const fn is_cardinal(self) -> bool {
         matches!(self, Self::North | Self::East | Self::South | Self::West)
@@ -193,9 +189,7 @@ impl GridDirection {
         }
     }
 
-    pub const fn all() -> DirectionIter {
-        DirectionIter::new()
-    }
+    pub const fn all() -> DirectionIter { DirectionIter::new() }
 }
 
 impl From<GridDirection> for [i32; 2] {

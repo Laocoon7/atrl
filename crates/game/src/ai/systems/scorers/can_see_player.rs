@@ -6,9 +6,7 @@ pub struct CanSeePlayer {
 }
 
 impl Default for CanSeePlayer {
-    fn default() -> Self {
-        Self { score_if_true: 1.0 }
-    }
+    fn default() -> Self { Self { score_if_true: 1.0 } }
 }
 
 pub fn can_see_player(

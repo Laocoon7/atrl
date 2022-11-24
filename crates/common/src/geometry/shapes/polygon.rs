@@ -34,14 +34,10 @@ impl Polygon {
 
 impl Polygon {
     #[inline]
-    pub const fn fpoints(&self) -> &Vec<Vec2> {
-        &self.fpoints
-    }
+    pub const fn fpoints(&self) -> &Vec<Vec2> { &self.fpoints }
 
     #[inline]
-    pub const fn is_regular(&self) -> bool {
-        self.is_regular
-    }
+    pub const fn is_regular(&self) -> bool { self.is_regular }
 
     pub fn point_closest_to_center(&self) -> IVec2 {
         let mut list = self.points.clone();
@@ -56,9 +52,7 @@ impl Polygon {
     }
 
     #[inline]
-    pub const fn is_convex(&self) -> bool {
-        self.is_convex
-    }
+    pub const fn is_convex(&self) -> bool { self.is_convex }
 }
 
 impl Shape for Polygon {
@@ -75,14 +69,14 @@ impl Shape for Polygon {
         let mut odd_number_of_nodes = false;
 
         for i in 0..self.fpoints.len() {
-            if (self.fpoints[i].y < fpoint.y && self.fpoints[j].y >= fpoint.y
-                || self.fpoints[j].y < fpoint.y && self.fpoints[i].y >= fpoint.y)
-                && (self.fpoints[i].x <= fpoint.x || self.fpoints[j].x <= fpoint.x)
+            if (self.fpoints[i].y < fpoint.y && self.fpoints[j].y >= fpoint.y ||
+                self.fpoints[j].y < fpoint.y && self.fpoints[i].y >= fpoint.y) &&
+                (self.fpoints[i].x <= fpoint.x || self.fpoints[j].x <= fpoint.x)
             {
-                odd_number_of_nodes ^= ((fpoint.y - self.fpoints[i].y)
-                    / (self.fpoints[j].y - self.fpoints[i].y))
-                    .mul_add(self.fpoints[j].x - self.fpoints[i].x, self.fpoints[i].x)
-                    < fpoint.x;
+                odd_number_of_nodes ^= ((fpoint.y - self.fpoints[i].y) /
+                    (self.fpoints[j].y - self.fpoints[i].y))
+                    .mul_add(self.fpoints[j].x - self.fpoints[i].x, self.fpoints[i].x) <
+                    fpoint.x;
             }
             j = i;
         }
@@ -90,14 +84,10 @@ impl Shape for Polygon {
         odd_number_of_nodes
     }
 
-    fn points(&self) -> Vec<IVec2> {
-        self.points.clone()
-    }
+    fn points(&self) -> Vec<IVec2> { self.points.clone() }
 
     #[inline]
-    fn center(&self) -> IVec2 {
-        self.center
-    }
+    fn center(&self) -> IVec2 { self.center }
 }
 
 impl Polygon {

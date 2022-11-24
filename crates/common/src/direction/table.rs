@@ -53,9 +53,7 @@ macro_rules! make_direction_table {
                 Self { values }
             }
 
-            pub const fn new_array(values: [T; $count]) -> Self {
-                Self { values }
-            }
+            pub const fn new_array(values: [T; $count]) -> Self { Self { values } }
 
             pub fn set(&mut self, direction: $direction_type, value: T) {
                 self.values[direction as usize] = value;
@@ -69,21 +67,13 @@ macro_rules! make_direction_table {
                 &mut self.values[direction as usize]
             }
 
-            pub fn iter(&self) -> DirectionTableIter<T> {
-                self.values.iter()
-            }
+            pub fn iter(&self) -> DirectionTableIter<T> { self.values.iter() }
 
-            pub fn iter_mut(&mut self) -> DirectionTableIterMut<T> {
-                self.values.iter_mut()
-            }
+            pub fn iter_mut(&mut self) -> DirectionTableIterMut<T> { self.values.iter_mut() }
 
-            pub const fn directions(&self) -> $direction_iter {
-                $direction_iter::new()
-            }
+            pub const fn directions(&self) -> $direction_iter { $direction_iter::new() }
 
-            pub fn enumerate(&self) -> $enumerate_type<T> {
-                self.directions().zip(self.iter())
-            }
+            pub fn enumerate(&self) -> $enumerate_type<T> { self.directions().zip(self.iter()) }
 
             pub fn enumerate_mut(&mut self) -> $enumerate_mut_type<T> {
                 self.directions().zip(self.iter_mut())

@@ -14,35 +14,23 @@ pub struct Prng {
 
 #[allow(dead_code)]
 impl Prng {
-    pub fn new(seed: u64) -> Self {
-        Self { seed, rng: Pcg64::seed_from_u64(seed) }
-    }
+    pub fn new(seed: u64) -> Self { Self { seed, rng: Pcg64::seed_from_u64(seed) } }
 
-    pub fn from_entropy() -> Self {
-        Self::new(Pcg64::from_entropy().next_u64())
-    }
+    pub fn from_entropy() -> Self { Self::new(Pcg64::from_entropy().next_u64()) }
 
-    pub fn as_rngcore(&mut self) -> &mut Pcg64 {
-        &mut self.rng
-    }
+    pub fn as_rngcore(&mut self) -> &mut Pcg64 { &mut self.rng }
 
     pub fn advance(&mut self, delta: u128) -> &mut Self {
         self.rng.advance(delta);
         self
     }
 
-    pub const fn seed(&self) -> u64 {
-        self.seed
-    }
+    pub const fn seed(&self) -> u64 { self.seed }
 
-    pub fn coin(&mut self) -> bool {
-        self.max_inclusive(1) == 1
-    }
+    pub fn coin(&mut self) -> bool { self.max_inclusive(1) == 1 }
 
     #[allow(clippy::should_implement_trait)]
-    pub fn next(&mut self) -> u32 {
-        self.rng.next_u32()
-    }
+    pub fn next(&mut self) -> u32 { self.rng.next_u32() }
 
     pub fn max(&mut self, max: u32) -> u32 {
         match max {
@@ -108,37 +96,21 @@ impl Prng {
         self.max_inclusive_u64(end - start) + start
     }
 
-    pub fn next_usize(&mut self) -> usize {
-        self.rng.gen::<usize>()
-    }
+    pub fn next_usize(&mut self) -> usize { self.rng.gen::<usize>() }
 
-    pub fn next_i32(&mut self) -> i32 {
-        self.rng.gen::<i32>()
-    }
+    pub fn next_i32(&mut self) -> i32 { self.rng.gen::<i32>() }
 
-    pub fn next_u32(&mut self) -> u32 {
-        self.rng.next_u32()
-    }
+    pub fn next_u32(&mut self) -> u32 { self.rng.next_u32() }
 
-    pub fn next_u64(&mut self) -> u64 {
-        self.rng.next_u64()
-    }
+    pub fn next_u64(&mut self) -> u64 { self.rng.next_u64() }
 
-    pub fn next_f32(&mut self) -> f32 {
-        (self.next() as f64 / (u32::MAX as u64 + 1) as f64) as f32
-    }
+    pub fn next_f32(&mut self) -> f32 { (self.next() as f64 / (u32::MAX as u64 + 1) as f64) as f32 }
 
-    pub fn next_f64(&mut self) -> f64 {
-        self.next_u64() as f64 / (u64::MAX as u128 + 1) as f64
-    }
+    pub fn next_f64(&mut self) -> f64 { self.next_u64() as f64 / (u64::MAX as u128 + 1) as f64 }
 
-    pub fn entropy() -> u32 {
-        Pcg64::from_entropy().gen::<u32>()
-    }
+    pub fn entropy() -> u32 { Pcg64::from_entropy().gen::<u32>() }
 
-    pub fn entropy_u64() -> u64 {
-        Pcg64::from_entropy().gen::<u64>()
-    }
+    pub fn entropy_u64() -> u64 { Pcg64::from_entropy().gen::<u64>() }
 
     pub fn entropy_f32() -> f32 {
         (Pcg64::from_entropy().gen::<u32>() as f64 / (u32::MAX as u64 + 1) as f64) as f32
@@ -162,14 +134,10 @@ impl Prng {
         self.rng.sample::<D, _>(Standard)
     }
 
-    pub fn choose<'a, T>(&'a mut self, items: &'a [T]) -> Option<&T> {
-        items.choose(&mut self.rng)
-    }
+    pub fn choose<'a, T>(&'a mut self, items: &'a [T]) -> Option<&T> { items.choose(&mut self.rng) }
 }
 
 impl Iterator for Prng {
     type Item = u32;
-    fn next(&mut self) -> Option<Self::Item> {
-        Some(self.next())
-    }
+    fn next(&mut self) -> Option<Self::Item> { Some(self.next()) }
 }
