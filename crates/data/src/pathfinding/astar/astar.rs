@@ -80,6 +80,7 @@ impl PathAlgorithm for AStar {
         }
     }
 }
+
 impl AStar {
     /// This will return a path *WITHOUT* the starting point. It also
     /// does not reverse the path, so it will be in the order of last point -> first point.

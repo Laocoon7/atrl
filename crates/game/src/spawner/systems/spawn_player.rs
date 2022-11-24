@@ -1,6 +1,7 @@
 use crate::prelude::*;
 pub fn spawn_player(mut commands: Commands, tilesets: Tilesets, mut map_manager: ResMut<MapManager>) {
     let world_position = IVec3::ZERO;
+
     let Some(tileset) = tilesets.get_by_id(TILESET_ACTORS_ID) else {
         // crashing here, may make it hard to chase down other issues?
         error!("Couldn't find tilemap_id: {:?}. Refusing to spawn player.", TILESET_ACTORS_ID);
@@ -10,9 +11,11 @@ pub fn spawn_player(mut commands: Commands, tilesets: Tilesets, mut map_manager:
         error!("Couldn't find a current map. Refusing to spawn player.");
         return;
     };
+
     let entity = commands.spawn_empty().id();
     let local_position = UVec2::new(GRID_WIDTH / 2, GRID_HEIGHT / 2);
     let movement_type = MovementType::Walk.as_u8() | MovementType::Swim.as_u8();
+
     if !map.try_add_actor(local_position, entity, movement_type) {
         error!("Couldn't place player actor at {:?}", local_position);
         commands.entity(entity).despawn();
@@ -20,6 +23,7 @@ pub fn spawn_player(mut commands: Commands, tilesets: Tilesets, mut map_manager:
     } else {
         info!("Player spawned at {:?}", local_position);
     }
+
     commands.spawn(PlayerBundle {
         player: Player,
 

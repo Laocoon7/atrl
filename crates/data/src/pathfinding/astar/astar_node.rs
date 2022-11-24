@@ -15,6 +15,7 @@ pub(super) struct AStarNode {
     cost_from_end: u32,
     cost_total: u32,
 }
+
 impl AStarNode {
     pub fn new(origin: IVec2, destination: IVec2) -> Self {
         let from_end = (DistanceAlg::DiagonalWithCosts(CARDINAL_COST_F32, ORDINAL_COST_F32)
@@ -150,9 +151,11 @@ impl AStarNode {
         None
     }
 }
+
 impl PartialEq for AStarNode {
     fn eq(&self, other: &Self) -> bool { self.position == other.position }
 }
+
 impl PartialOrd for AStarNode {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
         // we use this to insert values into a specific list

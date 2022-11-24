@@ -5,7 +5,7 @@ pub struct FinalizerBuilder<T> {
     input_max: u32,
     min: u32,
     max: u32,
-    _x: PhantomData<T>,
+    phantom: PhantomData<T>,
 }
 impl<T> FinalizerBuilder<T> {
     /// `min` is the lowest allowed value on the map
@@ -34,7 +34,7 @@ impl<T> FinalizerBuilder<T> {
             input_max: u32::MAX,
             min,
             max,
-            _x: PhantomData,
+            phantom: PhantomData,
         })
     }
 
@@ -62,6 +62,7 @@ impl<T> MapArchitect<T> for FinalizerBuilder<T> {
             Some(r) => *r,
             None => Rectangle::new((0i32, 0), data.size - UVec2::new(1, 1)),
         };
+
         if !data.grid.in_bounds(rect.min()) || !data.grid.in_bounds(rect.max()) {
             error!(
                 "MapRangeBuilder Rectangle{{ {}, {} }} is outside of bounds for Grid({}, {})",
@@ -72,6 +73,7 @@ impl<T> MapArchitect<T> for FinalizerBuilder<T> {
             );
             return;
         }
+
         rect.for_each(|v| {
             let value = *data.grid.get_unchecked(v);
             let new_value = map_range_u32(

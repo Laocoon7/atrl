@@ -1,13 +1,13 @@
 use crate::prelude::*;
 pub struct ScatterBuilder<T> {
     rect: Option<Rectangle>,
-    _x: PhantomData<T>,
+    phantom: PhantomData<T>,
 }
 impl<T> ScatterBuilder<T> {
     pub fn new() -> Box<Self> {
         Box::new(Self {
             rect: None,
-            _x: PhantomData,
+            phantom: PhantomData,
         })
     }
 
@@ -22,6 +22,7 @@ impl<T> MapArchitect<T> for ScatterBuilder<T> {
             Some(r) => *r,
             None => Rectangle::new((0i32, 0), data.size - UVec2::new(1, 1)),
         };
+
         if !data.grid.in_bounds(rect.min()) || !data.grid.in_bounds(rect.max()) {
             error!(
                 "ScatterBuilder Rectangle{{ {}, {} }} is outside of bounds for Grid({}, {})",
@@ -32,6 +33,7 @@ impl<T> MapArchitect<T> for ScatterBuilder<T> {
             );
             return;
         }
+
         rect.for_each(|v| {
             // TODO: look into different rng function. rng.gen_range() is for only 1 lookup.
             data.grid.set(v, data.rng.gen_range(0..u32::MAX));

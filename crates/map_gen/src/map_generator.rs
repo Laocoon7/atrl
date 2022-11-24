@@ -3,6 +3,7 @@ pub struct MapGenerator<T> {
     map_gen_data: MapGenData<T>,
     builders: Vec<Box<dyn MapArchitect<T>>>,
 }
+
 impl<T> MapGenerator<T> {
     pub fn new(
         size: impl Size2d,

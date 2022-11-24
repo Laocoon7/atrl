@@ -6,23 +6,27 @@ pub enum AssetLoadState {
     Load,
     LoadFailure,
 }
+
 #[derive(Default, Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub enum ConstructState {
     #[default]
     Construct,
     Setup,
 }
+
 #[derive(Default, Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub enum UiState {
     #[default]
     MainMenu,
 }
+
 #[derive(Default, Resource, Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub enum TurnState {
     #[default]
     AwaitingInput,
     Ticking,
 }
+
 #[derive(Default, Clone, Copy, PartialEq, Hash, Eq, Debug)]
 pub enum GameState {
     #[default]
@@ -33,6 +37,7 @@ pub enum GameState {
     InGame,
     Quit,
 }
+
 /// Flow:
 /// 1. Initialize
 /// |-> 2. SplashSetup
@@ -72,6 +77,7 @@ impl StateNext for GameState {
         }
     }
 }
+
 impl StateNext for TurnState {
     fn next(&self) -> Option<Self> {
         match self {
@@ -80,6 +86,7 @@ impl StateNext for TurnState {
         }
     }
 }
+
 impl TurnState {
     pub fn set_next(&self, commands: &mut Commands) {
         let current = &self;

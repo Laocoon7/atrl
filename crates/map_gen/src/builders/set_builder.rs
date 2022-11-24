@@ -2,14 +2,15 @@ use crate::prelude::*;
 pub struct SetBuilder<T> {
     rect: Option<Rectangle>,
     value: u32,
-    _x: PhantomData<T>,
+    phantom: PhantomData<T>,
 }
+
 impl<T> SetBuilder<T> {
     pub fn new() -> Box<Self> {
         Box::new(Self {
             rect: None,
             value: u32::MAX,
-            _x: PhantomData,
+            phantom: PhantomData,
         })
     }
 
@@ -29,6 +30,7 @@ impl<T> MapArchitect<T> for SetBuilder<T> {
             Some(r) => *r,
             None => Rectangle::new((0i32, 0), data.size - UVec2::new(1, 1)),
         };
+
         if !data.grid.in_bounds(rect.min()) || !data.grid.in_bounds(rect.max()) {
             error!(
                 "SetBuilder Rectangle{{ {}, {} }} is outside of bounds for Grid({}, {})",
@@ -39,6 +41,7 @@ impl<T> MapArchitect<T> for SetBuilder<T> {
             );
             return;
         }
+
         rect.for_each(|v| {
             data.grid.set(v, self.value);
         });

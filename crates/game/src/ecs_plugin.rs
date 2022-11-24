@@ -5,10 +5,12 @@ pub enum AtrlStage {
     ConsumeEvents, // process events
     CleanupEvents, // clear events
 }
+
 pub struct EcsPlugin<T, R> {
     pub state_running: T,
     pub turn_state_ticking: R,
 }
+
 impl<T: StateNext, R: StateNext + Resource> EcsPlugin<T, R> {
     pub fn setup_stages(app: &mut App) {
         app.add_stage_after(
@@ -27,6 +29,7 @@ impl<T: StateNext, R: StateNext + Resource> EcsPlugin<T, R> {
         app.init_resource::<Events<OnMapLoaded>>()
             .init_resource::<Events<OnMapTileEnter>>()
             .init_resource::<Events<OnMapTileExit>>();
+
         app.add_system_set_to_stage(
             AtrlStage::CleanupEvents,
             ConditionSet::new()
@@ -45,6 +48,7 @@ impl<T: StateNext, R: StateNext + Resource> Plugin for EcsPlugin<T, R> {
             state_running: self.state_running,
             turn_state_ticking: self.turn_state_ticking,
         });
+
         // TODO: Fov has a problem initially running because player generation moved to this same
         // state This *should* be fixed once we work that out... But we may need to revisit
         // this at some point.
@@ -53,6 +57,7 @@ impl<T: StateNext, R: StateNext + Resource> Plugin for EcsPlugin<T, R> {
             self.state_running,
             ConditionSet::new().with_system(fov).into(),
         );
+
         app.add_system_set_to_stage(
             AtrlStage::ConsumeEvents,
             ConditionSet::new()
@@ -61,6 +66,7 @@ impl<T: StateNext, R: StateNext + Resource> Plugin for EcsPlugin<T, R> {
                 .with_system(fov)
                 .into(),
         );
+
         self.setup_events(app);
     }
 }

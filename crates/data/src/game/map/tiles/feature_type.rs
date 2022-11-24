@@ -23,6 +23,7 @@ pub enum FeatureType {
     DoorClosed,
     DoorOpen,
 }
+
 impl FeatureType {
     /// Movement is allowed if MovementComponent allows any of these types
     pub const fn allowed_movement(&self) -> u8 {
@@ -91,11 +92,13 @@ impl FeatureType {
         }
     }
 }
+
 impl From<FeatureType> for u32 {
     fn from(value: FeatureType) -> Self {
         ToPrimitive::to_u32(&value).expect("Failed to convert `FeatureType` to u32")
     }
 }
+
 impl From<FeatureType> for u64 {
     fn from(value: FeatureType) -> Self {
         ToPrimitive::to_u64(&value).expect("Failed to convert `FeatureType` to u64")

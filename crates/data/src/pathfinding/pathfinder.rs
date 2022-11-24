@@ -3,6 +3,7 @@ use crate::prelude::*;
 pub enum PathFinder {
     Astar,
 }
+
 impl PathFinder {
     pub fn compute(
         &self,

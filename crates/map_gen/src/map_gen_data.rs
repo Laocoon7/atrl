@@ -11,6 +11,7 @@ pub struct MapGenData<T> {
     pub grid: Grid<u32>,
     pub rooms: Vec<Rectangle>,
 }
+
 impl<T> MapGenData<T> {
     pub(crate) fn new(
         size: UVec2,

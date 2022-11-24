@@ -6,14 +6,14 @@ pub struct CellularAutomataBuilder<T> {
 
     number_of_iterations: u32,
 
-    _x: PhantomData<T>,
+    phantom: PhantomData<T>,
 }
 impl<T> CellularAutomataBuilder<T> {
     pub fn new() -> Box<Self> {
         Box::new(Self {
             rect: None,
             number_of_iterations: DEFAULT_ITERATIONS,
-            _x: PhantomData,
+            phantom: PhantomData,
         })
     }
 
@@ -52,6 +52,7 @@ impl<T> MapArchitect<T> for CellularAutomataBuilder<T> {
             Some(r) => *r,
             None => Rectangle::new((0i32, 0), data.size - UVec2::new(1, 1)),
         };
+
         if !data.grid.in_bounds(rect.min()) || !data.grid.in_bounds(rect.max()) {
             error!(
                 "CellularAutomataBuilder Rectangle{{ {}, {} }} is outside of bounds for Grid({}, {})",
@@ -62,6 +63,7 @@ impl<T> MapArchitect<T> for CellularAutomataBuilder<T> {
             );
             return;
         }
+
         for _ in 0..self.number_of_iterations {
             let mut new_tiles = data.grid.clone();
             rect.for_each(|index| {

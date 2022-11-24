@@ -101,6 +101,7 @@ impl Map {
         }
     }
 }
+
 pub struct MapPassThroughData {
     pub world_position: WorldPosition,
     pub random: Random,
@@ -115,6 +116,7 @@ pub struct MapPassThroughData {
     // TODO: Explored tiles should be passed from serialized data for the map on loading, or just a
     // new HashSet pub explored_tiles: HashSet<UVec2>
 }
+
 impl From<MapGenData<MapPassThroughData>> for Map {
     fn from(data: MapGenData<MapPassThroughData>) -> Self {
         let mut terrain_types = Grid::new_default(data.size);
@@ -150,6 +152,7 @@ impl From<MapGenData<MapPassThroughData>> for Map {
         }
     }
 }
+
 impl FovProvider for Map {
     fn is_opaque(&self, position: IVec2, vision_type: u8) -> bool {
         // Check if the player is blind
@@ -167,6 +170,7 @@ impl FovProvider for Map {
         (terrain & feature & (vision_type)) == 0
     }
 }
+
 impl PathProvider for Map {
     fn is_walkable(&self, position: IVec2, movement_type: u8) -> bool {
         // Get the movement types that can move through this terrain:
