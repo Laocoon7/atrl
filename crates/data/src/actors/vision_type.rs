@@ -14,6 +14,7 @@ use crate::prelude::*;
     Serialize,
     Deserialize,
 )]
+
 #[repr(u8)] // this must match with vision component
 #[rustfmt::skip]
 pub enum VisionType {
@@ -26,6 +27,7 @@ pub enum VisionType {
     NotBlind    = !(VisionType::Blind as u8),
     Any         = !0,
 }
+
 impl TryFrom<VisionType> for u8 {
     type Error = String;
 
@@ -36,7 +38,9 @@ impl TryFrom<VisionType> for u8 {
         )
     }
 }
+
 impl VisionType {
     pub fn as_u8(self) -> u8 { self.try_into().unwrap_or(Self::None as u8) }
 }
+
 impl_as_primative!(VisionType);

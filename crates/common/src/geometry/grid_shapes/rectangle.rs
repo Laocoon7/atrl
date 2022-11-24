@@ -1,14 +1,18 @@
 use std::ops::Div;
 
+use super::grid_shape::*;
 use crate::prelude::*;
+
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq)]
 pub struct Rectangle {
     pub min: IVec2,
     pub max: IVec2,
 }
+
 impl Default for Rectangle {
     fn default() -> Self { Self::new_with_size(IVec2::ZERO, IVec2::ONE) }
 }
+
 impl Rectangle {
     #[inline]
     pub fn new(min: impl Point2d, max: impl Point2d) -> Self {
@@ -26,6 +30,7 @@ impl Rectangle {
         Self::new(min, min + size.as_ivec2())
     }
 }
+
 impl Rectangle {
     #[inline]
     pub const fn width(&self) -> i32 { self.max.x - self.min.x }
@@ -45,26 +50,8 @@ impl Rectangle {
         diff.x == diff.y
     }
 }
-impl Shape for Rectangle {
-    fn from_points(points: Vec<impl Point2d>) -> Self
-    where Self: Sized {
-        Self::new(points[0], points[1])
-    }
 
-    #[inline]
-    fn contains(&self, point: impl Point2d) -> bool {
-        self.min.x <= point.x() && self.max.x > point.x() && self.min.y <= point.y() && self.max.y > point.y()
-    }
-
-    #[inline]
-    fn points(&self) -> Vec<IVec2> { vec![self.min, self.max] }
-
-    fn rotate_around(&self, point: impl Point2d, degrees: f32) -> Self
-    where Self: Sized {
-        let points = rotate_points(point, &self.points(), degrees);
-        Self::from_points(points)
-    }
-
+impl Rectangle {
     #[inline]
     fn center(&self) -> IVec2 { self.min.mid_point(self.max) }
 
@@ -79,20 +66,22 @@ impl Shape for Rectangle {
 
     #[inline]
     fn bottom(&self) -> i32 { self.min.y.min(self.max.y) }
-}
-impl Rectangle {
+
     /// Create a circle around the center to the closest edge
+    #[inline]
     pub fn as_smallest_circle(&self) -> Circle {
         let radius = self.width().div(2).min(self.height().div(2)) as u32;
         Circle::new(self.center(), radius)
     }
 
     /// Create a circle around the center to the farthest edge
+    #[inline]
     pub fn as_biggest_circle(&self) -> Circle {
         let radius = self.width().div(2).max(self.height().div(2)) as u32;
         Circle::new(self.center(), radius)
     }
 
+    #[inline]
     pub fn as_triangles(&self) -> (Triangle, Triangle) {
         let max = IVec2::new(self.right(), self.top());
         let min = IVec2::new(self.left(), self.bottom());
@@ -102,17 +91,18 @@ impl Rectangle {
         )
     }
 
+    #[inline]
     pub fn as_polygon(&self) -> Polygon {
         let max = IVec2::new(self.right(), self.top());
         let bottom_left = IVec2::new(self.left(), self.bottom());
         Polygon::new(vec![self.min, max, self.max, bottom_left])
     }
 
-    pub fn as_ellipse(&self) -> Ellipse { Ellipse::from_points(self.points()) }
+    // #[inline]
+    // pub fn as_ellipse(&self) -> Ellipse { Ellipse::from_points(self.points()) }
 
     /// Check if this rectangle intersects another rectangle.
     #[inline]
-    #[must_use]
     pub const fn intersects(&self, other: Self) -> bool {
         // (self.min.cmple(other.max) & self.max.cmpge(other.min)).all()
         self.min.x <= other.max.x &&
@@ -121,10 +111,24 @@ impl Rectangle {
             self.max.y >= other.min.y
     }
 
-    /// Gets a set of all tiles in the rectangle
-    #[must_use]
+    /// Calls a function for each x/y point in the rectangle
+    pub fn for_each<F>(&self, f: F)
+    where F: FnMut(IVec2) {
+        RectIter::new(self.min, self.max).for_each(f);
+    }
+}
+
+impl GridShape for Rectangle {
     #[inline]
-    pub fn point_set(&self) -> HashSet<IVec2> {
+    fn get_count(&self) -> usize { self.get_points().len() }
+
+    #[inline]
+    fn contains(&self, point: impl Point2d) -> bool {
+        self.min.x <= point.x() && self.max.x > point.x() && self.min.y <= point.y() && self.max.y > point.y()
+    }
+
+    #[inline]
+    fn get_points(&self) -> HashSet<IVec2> {
         let mut result = HashSet::new();
         for y in self.min.y..self.max.y {
             for x in self.min.x..self.max.x {
@@ -133,13 +137,8 @@ impl Rectangle {
         }
         result
     }
-
-    /// Calls a function for each x/y point in the rectangle
-    pub fn for_each<F>(&self, f: F)
-    where F: FnMut(IVec2) {
-        RectIter::new(self.min, self.max).for_each(f);
-    }
 }
+
 impl IntoIterator for Rectangle {
     type IntoIter = RectIter;
     type Item = IVec2;
@@ -147,6 +146,7 @@ impl IntoIterator for Rectangle {
     #[inline]
     fn into_iter(self) -> Self::IntoIter { RectIter::new(self.min, self.max) }
 }
+
 impl ShapeIter for Rectangle {
     type Iterator = RectIter;
 

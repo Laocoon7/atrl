@@ -6,6 +6,7 @@ pub enum LineType {
     Vertical,
     Horizontal,
 }
+
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Line {
     len: u32,
@@ -14,6 +15,7 @@ pub struct Line {
     pub(crate) end: IVec2,
     pub(crate) start: IVec2,
 }
+
 impl Line {
     pub fn new(start: impl Point2d, end: impl Point2d) -> Self {
         let start = start.as_ivec2();
@@ -38,6 +40,7 @@ impl Line {
         }
     }
 }
+
 impl Line {
     #[allow(clippy::len_without_is_empty)] // use start()==end() to check that
     #[inline]
@@ -55,6 +58,7 @@ impl Line {
     #[inline]
     pub const fn line_type(&self) -> LineType { self.line_type }
 }
+
 impl Line {
     #[inline]
     pub fn as_rect(&self) -> Rectangle { Rectangle::new(self.start, self.end) }
@@ -65,6 +69,7 @@ impl Line {
     #[inline]
     fn into_iter_exlusive(self) -> BresenhamLineIter { BresenhamLineIter::new(self.start, self.end) }
 }
+
 impl Shape for Line {
     fn from_points(points: Vec<impl Point2d>) -> Self
     where Self: Sized {
@@ -107,6 +112,15 @@ impl Shape for Line {
     #[inline]
     fn bottom(&self) -> i32 { self.end.y }
 }
+
+impl IntoIterator for Line {
+    type IntoIter = BresenhamLineInclusiveIter;
+    type Item = IVec2;
+
+    #[inline]
+    fn into_iter(self) -> Self::IntoIter { BresenhamLineInclusiveIter::new(self.start, self.end) }
+}
+
 //////////////////////////
 // Inclusive of end point
 //////////////////////////
@@ -116,6 +130,7 @@ impl ShapeIter for Line {
     #[inline]
     fn iter(&self) -> Self::Iterator { self.into_iter() }
 }
+
 ////////////////////////
 // Exlusive of end point
 ////////////////////////
@@ -124,11 +139,4 @@ impl ShapeIterExclusive for Line {
 
     #[inline]
     fn iter_exlusive(&self) -> Self::ExlusiveIterator { self.into_iter_exlusive() }
-}
-impl IntoIterator for Line {
-    type IntoIter = BresenhamLineInclusiveIter;
-    type Item = IVec2;
-
-    #[inline]
-    fn into_iter(self) -> Self::IntoIter { BresenhamLineInclusiveIter::new(self.start, self.end) }
 }

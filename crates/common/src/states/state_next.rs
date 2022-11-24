@@ -6,6 +6,7 @@ pub trait StateSetNext {
     fn set_next(&self, commands: &mut Commands);
     fn go_to(&self, commands: &mut Commands, state: impl StateNext);
 }
+
 impl<T: StateNext> StateSetNext for Res<'_, CurrentState<T>> {
     fn set_next(&self, commands: &mut Commands) {
         let current = &self.0;
@@ -26,6 +27,7 @@ impl<T: StateNext> StateSetNext for Res<'_, CurrentState<T>> {
         switch_in_game_state!(commands, state);
     }
 }
+
 impl<T: StateNext> StateSetNext for ResMut<'_, CurrentState<T>> {
     fn set_next(&self, commands: &mut Commands) {
         let current = &self.0;

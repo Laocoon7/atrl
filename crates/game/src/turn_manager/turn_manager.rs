@@ -1,13 +1,14 @@
 use crate::prelude::*;
+
 const TURN_TIME: u32 = 1000;
+
 #[derive(Resource)]
 pub struct TurnManager {
     turn_number: u32,
-
     current_time: u32,
-
     entities: IndexList<(u32, u32, Entity)>,
 }
+
 impl TurnManager {
     // This will go into an `impl FromWorld`
     pub fn new() -> Self {

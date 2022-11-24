@@ -14,6 +14,7 @@ impl<T> MapGenerator<T> {
         user_data: T,
     ) -> Self {
         Self {
+            builders: vec![starter],
             map_gen_data: MapGenData::new(
                 size.as_uvec2(),
                 name.to_string(),
@@ -21,7 +22,6 @@ impl<T> MapGenerator<T> {
                 rng,
                 user_data,
             ),
-            builders: vec![starter],
         }
     }
 

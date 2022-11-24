@@ -27,6 +27,7 @@ mod components {
         prelude::{Component, ReflectComponent},
         reflect::Reflect,
     };
+
     mod ai_component {
         mod ai_component;
         mod ai_type;
@@ -34,6 +35,7 @@ mod components {
         pub use ai_type::*;
     }
     pub use ai_component::*;
+
     mod bundles {
         mod actor_bundle;
         mod player_bundle;
@@ -41,11 +43,13 @@ mod components {
         pub use player_bundle::*;
     }
     pub use bundles::*;
+
     mod movement {
         mod movement;
         pub use movement::*;
     }
     pub use movement::*;
+
     mod position {
         mod local_position;
         mod world_position;
@@ -53,20 +57,22 @@ mod components {
         pub use world_position::*;
     }
     pub use position::*;
+
     mod vision {
         mod vision;
         pub use vision::*;
     }
     pub use vision::*;
+
     mod consumable;
-    mod equipable;
-    mod field_of_view;
-    mod health;
-    mod tags;
     pub use consumable::*;
+    mod equipable;
     pub use equipable::*;
+    mod field_of_view;
     pub use field_of_view::*;
+    mod health;
     pub use health::*;
+    mod tags;
     pub use tags::*;
     mod target_visualizer;
     pub use target_visualizer::*;
@@ -82,32 +88,37 @@ mod game {
             pub use terrain_type::*;
         }
         pub use tiles::*;
+
         mod map;
         pub use map::*;
         mod map_layer;
         pub use map_layer::*;
     }
     pub use map::*;
+
     mod game_context;
     pub use game_context::*;
     mod game_state;
     pub use game_state::*;
 }
+
 pub mod fov {
     mod shadowcast {
         mod shadowcast;
-        pub(crate) use shadowcast::*;
+        pub use shadowcast::*;
         mod quadrant;
         mod row;
     }
     pub(crate) use shadowcast::*;
+
     mod shared {
         mod fov_algorithm;
-        pub(crate) use fov_algorithm::*;
+        pub use fov_algorithm::*;
         mod slope;
         pub use slope::*;
     }
     pub(crate) use shared::*;
+
     mod fov;
     pub use fov::*;
     mod fov_provider;
@@ -123,11 +134,13 @@ mod pathfinding {
         pub use astar::*;
         mod astar_node;
     }
-    pub(crate) use astar::*;
+    pub use astar::*;
+
     mod shared {
         mod path_algorithm;
         pub use path_algorithm::*;
     }
+
     mod pathfinder;
     pub use pathfinder::*;
     mod path_provider;
@@ -137,6 +150,7 @@ mod system_params {
     mod player_param;
     pub use player_param::*;
 }
+
 mod resources {
     mod app_settings;
     pub use app_settings::*;
@@ -149,6 +163,7 @@ mod resources {
     mod font_paths;
     pub use font_paths::*;
 }
+
 mod queries;
 pub mod prelude {
     mod import {
@@ -180,6 +195,7 @@ pub mod prelude {
         };
     }
     pub(crate) use import::*;
+
     mod export {
         pub use crate::pathfinding::PathFinder; // where's the redundancy lint???
         pub use crate::{

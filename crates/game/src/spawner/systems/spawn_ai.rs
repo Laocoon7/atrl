@@ -1,6 +1,11 @@
 use crate::prelude::*;
 
-pub fn spawn_ai(mut commands: Commands, tilesets: Tilesets, mut map_manager: ResMut<MapManager>) {
+pub fn spawn_ai(
+    tilesets: Tilesets,
+    mut commands: Commands,
+    state: Res<CurrentGameState>,
+    mut map_manager: ResMut<MapManager>,
+) {
     let world_position = IVec3::ZERO;
 
     let Some(tileset) = tilesets.get_by_id(TILESET_ACTORS_ID) else {
@@ -67,4 +72,6 @@ pub fn spawn_ai(mut commands: Commands, tilesets: Tilesets, mut map_manager: Res
         },
         thinker,
     ));
+
+    state.set_next(&mut commands);
 }
