@@ -14,15 +14,13 @@ mod import {
     #[cfg(feature = "debug")]
     mod egui {
         pub use bevy_inspector_egui::{
-            bevy_egui::EguiPlugin, bevy_inspector::hierarchy::SelectedEntities, egui, prelude::*,
-            quick::*, DefaultInspectorConfigPlugin,
+            bevy_egui::EguiPlugin, bevy_inspector::hierarchy::SelectedEntities, egui, prelude::*, quick::*,
+            DefaultInspectorConfigPlugin,
         };
     }
     pub use atrl_camera::prelude::*;
     pub use atrl_common::prelude::*;
-    pub use atrl_data::prelude::{
-        AssetLoadState::*, ConstructState::*, TurnState::*, UiState::*, *,
-    };
+    pub use atrl_data::prelude::{AssetLoadState::*, ConstructState::*, TurnState::*, UiState::*, *};
     pub use atrl_game::prelude::*;
     pub use atrl_renderer::prelude::*;
     #[cfg(feature = "debug")]

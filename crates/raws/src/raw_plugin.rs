@@ -1,12 +1,14 @@
 use crate::prelude::*;
 pub struct RawPlugin<T> {
     pub state_asset_load: T,
+    pub state_construct: T,
     pub state_asset_load_failure: T,
     settings: AssetSettings,
 }
 impl<T: StateNext> RawPlugin<T> {
-    pub fn new(state_asset_load: T, state_asset_load_failure: T) -> Self {
+    pub fn new(state_asset_load: T, state_asset_load_failure: T, state_construct: T) -> Self {
         Self {
+            state_construct,
             state_asset_load,
             state_asset_load_failure,
             settings: AssetSettings::default(),
@@ -38,13 +40,13 @@ impl<T: StateNext> Plugin for RawPlugin<T> {
         let failure_state = self.state_asset_load_failure;
         app
             // bevy_tileset
-            .add_plugin(TilesetPlugin::default(),)
+            .add_plugin(TilesetPlugin::default())
             // Progress Tracker
-            .add_plugin(ProgressPlugin::new(self.state_asset_load,),)
+            .add_plugin(ProgressPlugin::new(self.state_asset_load).continue_to(self.state_construct))
             // hold `Handle<Tileset>`s so they don't get unloaded
-            .insert_resource(LoadedTilesets::new(&self.settings,),)
+            .insert_resource(LoadedTilesets::new(&self.settings))
             // hold `Handle<Font>`s so they don't get unloaded
-            .insert_resource(LoadedFonts::new(&self.settings,),);
+            .insert_resource(LoadedFonts::new(&self.settings));
         // Load Assets
         app.add_enter_system_set(
             self.state_asset_load,
@@ -52,9 +54,9 @@ impl<T: StateNext> Plugin for RawPlugin<T> {
                     // Fonts + Tilesets
                     .with_system(
                         move |commands: Commands,
-                              state: Res<CurrentGameState,>,
-                              asset_server: Res<AssetServer,>,
-                              loaded_fonts: ResMut<LoadedFonts,>| {
+                              state: Res<CurrentGameState>,
+                              asset_server: Res<AssetServer>,
+                              loaded_fonts: ResMut<LoadedFonts>| {
                             load_game_fonts(
                                 failure_state,
                                 commands,
@@ -83,6 +85,12 @@ impl<T: StateNext> Plugin for RawPlugin<T> {
                     )
                     .into(),
         )
-        .add_system(check_loaded_assets.run_in_state(self.state_asset_load));
+        .add_system_set(
+            ConditionSet::new()
+                .run_in_state(self.state_asset_load)
+                .with_system(check_loaded_assets.track_progress())
+                .with_system(wait_for_tilesets_to_load.track_progress())
+                .into(),
+        );
     }
 }

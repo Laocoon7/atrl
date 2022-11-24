@@ -42,8 +42,6 @@ mod map {
         pub use load_first_map::*;
         mod update_tilemaps;
         pub use update_tilemaps::*;
-        mod wait_for_tilesets_to_load;
-        pub use wait_for_tilesets_to_load::*;
     }
     pub use systems::*;
     mod map_plugin;
@@ -87,9 +85,7 @@ pub mod prelude {
     mod import {
         pub use atrl_camera::prelude::*;
         pub use atrl_common::prelude::*;
-        pub use atrl_data::prelude::{
-            AssetLoadState::*, ConstructState::*, TurnState::*, UiState::*, *,
-        };
+        pub use atrl_data::prelude::{AssetLoadState::*, ConstructState::*, TurnState::*, UiState::*, *};
         pub use atrl_map_gen::prelude::*;
         pub use atrl_raws::prelude::*;
         pub use atrl_renderer::prelude::*;

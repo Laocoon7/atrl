@@ -89,9 +89,7 @@ fn main() {
             });
     }
 }
-fn filter_by_threshold(span_stats: &SpanStats, threshold: f32) -> bool {
-    span_stats.avg > threshold
-}
+fn filter_by_threshold(span_stats: &SpanStats, threshold: f32) -> bool { span_stats.avg > threshold }
 fn filter_by_pattern(name: &str, pattern: Option<&Regex>) -> bool {
     if let Some(pattern) = pattern {
         pattern.is_match(name)

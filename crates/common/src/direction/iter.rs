@@ -13,9 +13,7 @@ macro_rules! make_direction_iter {
         impl Iterator for $iter_name {
             type Item = $type;
 
-            fn next(&mut self) -> Option<Self::Item> {
-                self.0.next().map(|n| unsafe { mem::transmute(n) })
-            }
+            fn next(&mut self) -> Option<Self::Item> { self.0.next().map(|n| unsafe { mem::transmute(n) }) }
         }
         /// Represents a collection of the respectively-named type of direction
         #[derive(Debug, Clone, Copy, Serialize, Deserialize)]

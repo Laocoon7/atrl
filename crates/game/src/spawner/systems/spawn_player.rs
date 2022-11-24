@@ -1,9 +1,5 @@
 use crate::prelude::*;
-pub fn spawn_player(
-    mut commands: Commands,
-    tilesets: Tilesets,
-    mut map_manager: ResMut<MapManager>,
-) {
+pub fn spawn_player(mut commands: Commands, tilesets: Tilesets, mut map_manager: ResMut<MapManager>) {
     let world_position = IVec3::ZERO;
     let Some(tileset) = tilesets.get_by_id(TILESET_ACTORS_ID) else {
         // crashing here, may make it hard to chase down other issues?

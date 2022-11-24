@@ -8,8 +8,8 @@ pub const DIAGONAL_COST: f32 = 1.41421356237309504880168872420969807856967187537
 pub enum DistanceAlg {
     /// Use the Pythagoras algorithm for determining distance - sqrt(A^2 + B^2)
     Pythagoras,
-    /// Us the Pythagoras algorithm for distance, but omitting the square-root for a faster but
-    /// squared result.
+    /// Us the Pythagoras algorithm for distance, but omitting the square-root for a faster
+    /// but squared result.
     PythagorasSquared,
     /// Use Manhattan distance (distance up plus distance along)
     Manhattan,

@@ -15,17 +15,10 @@ impl Fov {
         let origin = origin.as_ivec2();
         let range = range.into();
         match self {
-            Self::Shadowcast => {
-                Shadowcast::compute_fov(origin, vision_type, range, provider, receiver)
+            Self::Shadowcast => Shadowcast::compute_fov(origin, vision_type, range, provider, receiver),
+            Self::ShadowcastDirection(direction) => {
+                Shadowcast::compute_direction(origin, vision_type, range, provider, receiver, *direction)
             },
-            Self::ShadowcastDirection(direction) => Shadowcast::compute_direction(
-                origin,
-                vision_type,
-                range,
-                provider,
-                receiver,
-                *direction,
-            ),
         }
     }
 }

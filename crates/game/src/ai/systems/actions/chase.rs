@@ -156,13 +156,7 @@ pub fn chase_action(
                                 Color::RED,
                             );
                         } else {
-                            target_visualizer.update(
-                                &mut commands,
-                                &tilesets,
-                                next_pt,
-                                next_pt,
-                                Color::RED,
-                            );
+                            target_visualizer.update(&mut commands, &tilesets, next_pt, next_pt, Color::RED);
                         }
                     }
                     chase_path.pop(); // consume the path point
@@ -187,11 +181,6 @@ fn generate_chase_path(
     movement_type: u8,
     map_provider: &impl PathProvider,
 ) -> Vec<IVec2> {
-    PathFinder::Astar
-        .compute(ai_pos, target_pos, movement_type, true, map_provider)
-        .unwrap_or_default()
+    PathFinder::Astar.compute(ai_pos, target_pos, movement_type, true, map_provider).unwrap_or_default()
 }
-
-const fn can_attack(position: IVec2) -> bool {
-    false
-}
+const fn can_attack(position: IVec2) -> bool { false }

@@ -30,15 +30,8 @@ impl<T: GridParam> GridLayer<T> for Grid<T> {
     }
 
     #[inline(always)]
-    fn blit_clone(
-        &mut self,
-        to: impl Point2d,
-        source: &Self,
-        from: impl Point2d,
-        size: impl Size2d,
-    ) where
-        T: Clone,
-    {
+    fn blit_clone(&mut self, to: impl Point2d, source: &Self, from: impl Point2d, size: impl Size2d)
+    where T: Clone {
         for y in 0..size.height() {
             for x in 0..size.width() {
                 if let Some(val) = source.get((x + from.x() as u32, y + from.y() as u32)) {
@@ -61,15 +54,8 @@ impl<T: GridParam> GridLayer<T> for Grid<T> {
     }
 
     #[inline(always)]
-    fn blit_copy(
-        &mut self,
-        to: impl Point2d,
-        source: &Self,
-        from: impl Point2d,
-        size: impl Size2d,
-    ) where
-        T: Copy,
-    {
+    fn blit_copy(&mut self, to: impl Point2d, source: &Self, from: impl Point2d, size: impl Size2d)
+    where T: Copy {
         for y in 0..size.height() {
             for x in 0..size.width() {
                 if let Some(val) = source.get((x + from.x() as u32, y + from.y() as u32)) {
@@ -132,9 +118,7 @@ impl<T: GridParam> GridLayer<T> for Grid<T> {
     }
 
     #[inline]
-    fn get_idx_unchecked(&self, point: impl Point2d) -> usize {
-        point.as_index(self.width() as usize)
-    }
+    fn get_idx_unchecked(&self, point: impl Point2d) -> usize { point.as_index(self.width() as usize) }
 
     #[inline]
     fn index_to_pt(&self, idx: usize) -> Option<IVec2> {
@@ -154,9 +138,7 @@ impl<T: GridParam> GridLayer<T> for Grid<T> {
     }
 
     #[inline]
-    fn get(&self, index: impl Point2d) -> Option<&T> {
-        self.get_idx(index).map(|idx| &self.cells[idx])
-    }
+    fn get(&self, index: impl Point2d) -> Option<&T> { self.get_idx(index).map(|idx| &self.cells[idx]) }
 
     #[inline]
     fn get_mut(&mut self, index: impl Point2d) -> Option<&mut T> {
@@ -164,9 +146,7 @@ impl<T: GridParam> GridLayer<T> for Grid<T> {
     }
 
     #[inline]
-    fn get_unchecked(&self, index: impl Point2d) -> &T {
-        self.cells.index(self.get_idx_unchecked(index))
-    }
+    fn get_unchecked(&self, index: impl Point2d) -> &T { self.cells.index(self.get_idx_unchecked(index)) }
 
     #[inline]
     fn get_mut_unchecked(&mut self, index: impl Point2d) -> &mut T {
@@ -206,9 +186,7 @@ impl<T: GridParam> GridIterable<T> for Grid<T> {
     fn point_iter(&self) -> PointIterRowMajor { self.size.iter() }
 
     #[inline]
-    fn enumerate(&self) -> GridEnumerate<Self::IterReturn<'_>> {
-        self.point_iter().zip(self.iter())
-    }
+    fn enumerate(&self) -> GridEnumerate<Self::IterReturn<'_>> { self.point_iter().zip(self.iter()) }
 
     #[inline]
     fn rows(&self) -> Self::IterChunkReturn<'_> { self.cells.chunks(self.size.width() as usize) }

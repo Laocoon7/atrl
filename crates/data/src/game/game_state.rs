@@ -9,7 +9,8 @@ pub enum AssetLoadState {
 #[derive(Default, Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub enum ConstructState {
     #[default]
-    MapGen,
+    Construct,
+    Setup,
 }
 #[derive(Default, Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub enum UiState {
@@ -60,12 +61,13 @@ impl StateNext for GameState {
 
             // UI
             Self::Ui(ui_state) => match ui_state {
-                UiState::MainMenu => Some(Self::Construct(ConstructState::MapGen)),
+                UiState::MainMenu => Some(Self::Construct(ConstructState::Construct)),
             },
 
             // Construct
             Self::Construct(construct_state) => match construct_state {
-                ConstructState::MapGen => Some(Self::InGame),
+                ConstructState::Construct => Some(Self::Construct(ConstructState::Setup)),
+                ConstructState::Setup => Some(Self::InGame),
             },
         }
     }

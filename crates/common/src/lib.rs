@@ -167,9 +167,9 @@ pub mod prelude {
     pub(crate) use import::*;
     mod export {
         pub use crate::{
-            common_plugin::*, direction::*, error::*, geometry::*, grid::*, impl_as_primative,
-            impl_default, impl_new, insert_resource, interlop::*, macros::*, random::*,
-            remove_resource, spawn_component, states::*, switch_in_game_state, utils::*,
+            common_plugin::*, direction::*, error::*, geometry::*, grid::*, impl_as_primative, impl_default,
+            impl_new, insert_resource, interlop::*, macros::*, random::*, remove_resource, spawn_component,
+            states::*, switch_in_game_state, utils::*,
         };
     }
     pub use export::*;

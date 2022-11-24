@@ -6,8 +6,7 @@ pub fn menu_button_render(
     menu_button_query: Query<&MenuButton>,
     state_query: Query<&ButtonState>,
 ) -> bool {
-    let state_entity =
-        widget_context.use_state(&mut commands, entity, ButtonState { hovering: false });
+    let state_entity = widget_context.use_state(&mut commands, entity, ButtonState { hovering: false });
     let button_text = menu_button_query.get(entity).unwrap().text.clone();
     let button_image = textures.button.clone();
     let button_image_hover = textures.button_hover.clone();
@@ -35,8 +34,7 @@ pub fn menu_button_render(
         },
     );
     if let Ok(button_state) = state_query.get(state_entity) {
-        let button_image_handle =
-            if button_state.hovering { button_image_hover } else { button_image };
+        let button_image_handle = if button_state.hovering { button_image_hover } else { button_image };
         let parent_id = Some(entity);
         rsx! {
             <NinePatchBundle

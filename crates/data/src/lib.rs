@@ -183,8 +183,8 @@ pub mod prelude {
     mod export {
         pub use crate::pathfinding::PathFinder; // where's the redundancy lint???
         pub use crate::{
-            actors::*, camera::*, components::*, fov::*, game::*, pathfinding::*, queries::*,
-            resources::*, system_params::*,
+            actors::*, camera::*, components::*, fov::*, game::*, pathfinding::*, queries::*, resources::*,
+            system_params::*,
         };
     }
     pub use export::*;

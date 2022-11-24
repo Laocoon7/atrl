@@ -185,9 +185,7 @@ impl Scale {
         print!("{v:5.precision$}{}", self.name);
     }
 
-    pub fn print_with_scale(&self, v: f32, v_scale: f32) {
-        self.print(v * v_scale / self.scale_factor);
-    }
+    pub fn print_with_scale(&self, v: f32, v_scale: f32) { self.print(v * v_scale / self.scale_factor); }
 }
 lazy_static! {
     static ref SYSTEM_NAME: Regex = Regex::new(r#"system: name="([^"]+)""#).unwrap();

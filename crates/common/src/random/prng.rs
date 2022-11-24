@@ -112,12 +112,10 @@ impl Prng {
         (Pcg64::from_entropy().gen::<u32>() as f64 / (u32::MAX as u64 + 1) as f64) as f32
     }
 
-    pub fn entropy_f64() -> f64 {
-        Pcg64::from_entropy().gen::<u64>() as f64 / (u64::MAX as u128 + 1) as f64
-    }
+    pub fn entropy_f64() -> f64 { Pcg64::from_entropy().gen::<u64>() as f64 / (u64::MAX as u128 + 1) as f64 }
 
-    /// Rolls dice, using the classic 3d6 type of format: n is the number of dice, die_type is
-    /// the size of the dice.
+    /// Rolls dice, using the classic 3d6 type of format: n is the number of dice, die_type
+    /// is the size of the dice.
     pub fn roll_dice(&mut self, n: u32, dice_type: u32) -> u32 {
         (0..n).map(|_| self.range(1..dice_type + 1)).sum()
     }

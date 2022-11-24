@@ -3,10 +3,7 @@ pub fn fov(
     manager: Res<MapManager>,
     q_player: Query<(&Transform, &FieldOfView, &Vision), With<Player>>,
     mut q_tile: Query<(&mut TileVisible, &mut TileColor, &TilePos)>,
-    mut q_actors: Query<
-        (Entity, &Transform, &mut Visibility),
-        (With<AIComponent>, Without<Player>),
-    >,
+    mut q_actors: Query<(Entity, &Transform, &mut Visibility), (With<AIComponent>, Without<Player>)>,
 ) {
     let mut visible_actors = Vec::new();
     for (player_pos, fov, vision_component) in q_player.iter() {

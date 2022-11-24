@@ -63,8 +63,7 @@ impl<'de> Deserialize<'de> for Noise {
 
             fn visit_seq<A>(self, mut seq: A) -> core::result::Result<Self::Value, A::Error>
             where A: SeqAccess<'de> {
-                let seed =
-                    seq.next_element()?.ok_or_else(|| de::Error::invalid_length(0, &self))?;
+                let seed = seq.next_element()?.ok_or_else(|| de::Error::invalid_length(0, &self))?;
                 Ok(Noise::new(seed))
             }
 

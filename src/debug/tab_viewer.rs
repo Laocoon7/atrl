@@ -15,8 +15,7 @@ impl egui_dock::TabViewer for TabViewer<'_> {
     fn ui(&mut self, ui: &mut egui::Ui, tab: &mut Self::Tab) {
         match tab {
             DebugWindow::GameView => {
-                (*self.viewport_rect, _) =
-                    ui.allocate_exact_size(ui.max_rect().size(), egui::Sense::hover());
+                (*self.viewport_rect, _) = ui.allocate_exact_size(ui.max_rect().size(), egui::Sense::hover());
             },
             DebugWindow::Hierarchy => {
                 ui.label("Press `1` to hide");
@@ -45,7 +44,5 @@ impl egui_dock::TabViewer for TabViewer<'_> {
 
     fn title(&mut self, window: &mut Self::Tab) -> egui::WidgetText { format!("{window:?}").into() }
 
-    fn clear_background(&self, window: &Self::Tab) -> bool {
-        !matches!(window, DebugWindow::GameView)
-    }
+    fn clear_background(&self, window: &Self::Tab) -> bool { !matches!(window, DebugWindow::GameView) }
 }

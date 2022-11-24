@@ -19,12 +19,9 @@ impl Polygon {
             is_regular: false,
             is_convex,
         };
-        poly.center =
-            IVec2::new(poly.left(), poly.top()).mid_point(IVec2::new(poly.right(), poly.bottom()));
-        let dists: Vec<f32> = points
-            .iter()
-            .map(|p| DistanceAlg::PythagorasSquared.distance2d(*p, poly.center))
-            .collect();
+        poly.center = IVec2::new(poly.left(), poly.top()).mid_point(IVec2::new(poly.right(), poly.bottom()));
+        let dists: Vec<f32> =
+            points.iter().map(|p| DistanceAlg::PythagorasSquared.distance2d(*p, poly.center)).collect();
         poly.is_regular = dists.iter().all(|dist| dist == &dists[0]);
         poly
     }

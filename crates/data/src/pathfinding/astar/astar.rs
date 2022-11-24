@@ -67,17 +67,14 @@ impl PathAlgorithm for AStar {
                         if best_cost > current_cost {
                             best_node_index = index;
                             best_cost = current_cost;
-                            let best_node = current_node;
                         }
                     }
                     index = closed_nodes.next_index(index);
                 }
             }
-            if let Some(best_node) = closed_nodes.remove(best_node_index) {
-                Self::reconstruct_path(best_node, &mut closed_nodes)
-            } else {
-                None
-            }
+            closed_nodes
+                .remove(best_node_index)
+                .and_then(|best_node| Self::reconstruct_path(best_node, &mut closed_nodes))
         } else {
             None
         }

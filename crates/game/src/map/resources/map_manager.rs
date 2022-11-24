@@ -33,11 +33,8 @@ impl MapManager {
             return Ok(*entity);
         }
         // TODO: check deserialize map from world_position
-        let map_seed = game_context.map_manager_random.prht.get(
-            world_position.x,
-            world_position.y,
-            world_position.z,
-        );
+        let map_seed =
+            game_context.map_manager_random.prht.get(world_position.x, world_position.y, world_position.z);
         let mut random = Random::new(map_seed);
         let rng = Box::new(Pcg64::seed_from_u64(random.prng.next_u64()));
         let map_name = format!(
@@ -47,11 +44,7 @@ impl MapManager {
         let tileset = tileset_name.map_or_else(
             || {
                 tileset_id.map_or_else(
-                    || {
-                        tilesets
-                            .get_by_id(&0)
-                            .unwrap_or_else(|| panic!("Couldn't find tilemap_id: {:?}", 0))
-                    },
+                    || tilesets.get_by_id(&0).unwrap_or_else(|| panic!("Couldn't find tilemap_id: {:?}", 0)),
                     |id| {
                         tilesets
                             .get_by_id(&id)
@@ -60,9 +53,7 @@ impl MapManager {
                 )
             },
             |name| {
-                tilesets
-                    .get_by_name(&name)
-                    .unwrap_or_else(|| panic!("Couldn't find tilemap_name: {}", &name))
+                tilesets.get_by_name(&name).unwrap_or_else(|| panic!("Couldn't find tilemap_name: {}", &name))
             },
         );
         let tileset_id = *tileset.id();

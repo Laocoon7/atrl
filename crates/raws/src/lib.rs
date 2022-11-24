@@ -22,6 +22,8 @@ mod systems {
     pub use load_textures::*;
     mod check_loaded_assets;
     pub use check_loaded_assets::*;
+    mod wait_for_tilesets_to_load;
+    pub use wait_for_tilesets_to_load::*;
 }
 mod raw_plugin;
 pub mod prelude {

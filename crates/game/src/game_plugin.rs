@@ -17,11 +17,11 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
         self.setup_states(app);
         app
             // Game Context
-            .insert_resource(game_context,)
+            .insert_resource(game_context)
             // SaveLoad
-            .add_plugin(SaveLoadPlugin,)
+            .add_plugin(SaveLoadPlugin)
             // common loading
-            .add_plugin(CommonPlugin,)
+            .add_plugin(CommonPlugin)
             // Ecs Plugin (Systems)
             .add_plugin(EcsPlugin {
                 state_running: self.state_running,
@@ -29,22 +29,22 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
             },);
         self
             // Raw Files
-            .add_raws(app, self.state_asset_load, self.state_asset_load_failure,)
+            .add_raws(app)
             // Create Camera
-            .add_camera(app,)
+            .add_camera(app)
             // Map Rendering
-            .add_map_plugins(self.state_construct, self.state_running, app,);
+            .add_map_plugins(app);
         app
             // UI
             .add_plugin(UiPlugin {
                 state_asset_load: self.state_asset_load,
-                state_main_menu: self.state_main_menu,
-            },)
+                state_main_menu: self.state_main_menu
+            })
             // Spawner
             // TODO: This needs to run after the map is generated.
-            .add_plugin(SpawnerPlugin { state_construct: self.state_running, },)
+            .add_plugin(SpawnerPlugin { state_construct: self.state_running })
             // Player
-            .add_plugin(PlayerPlugin { state_running: self.state_running, },);
+            .add_plugin(PlayerPlugin { state_running: self.state_running });
     }
 }
 impl<T: StateNext> GamePlugin<T> {
@@ -53,7 +53,7 @@ impl<T: StateNext> GamePlugin<T> {
             .insert_resource(TurnState::AwaitingInput)
             .add_enter_system(
                 GameState::Initializing,
-                switch_in_game_state!(GameState::AssetLoad(AssetLoadState::Load)),
+                switch_in_game_state!(self.state_asset_load),
             );
         self
     }
@@ -67,8 +67,12 @@ impl<T: StateNext> GamePlugin<T> {
         self
     }
 
-    fn add_raws(self, app: &mut App, state_asset_load: T, state_asset_load_failure: T) -> Self {
-        let mut plugin = RawPlugin::new(state_asset_load, state_asset_load_failure);
+    fn add_raws(self, app: &mut App) -> Self {
+        let mut plugin = RawPlugin::new(
+            self.state_asset_load,
+            self.state_asset_load_failure,
+            self.state_construct,
+        );
         for path in get_tileset_paths() {
             plugin = plugin.add_tileset_file(path.as_str());
         }
@@ -79,8 +83,8 @@ impl<T: StateNext> GamePlugin<T> {
         self
     }
 
-    fn add_map_plugins(self, state_construct: T, state_running: T, app: &mut App) -> Self {
-        app.add_plugin(MapPlugin::new(state_construct, state_running))
+    fn add_map_plugins(self, app: &mut App) -> Self {
+        app.add_plugin(MapPlugin::new(self.state_construct, self.state_running))
             .add_plugin(MapRendererPlugin::new([GRID_WIDTH, GRID_HEIGHT]));
         self
     }

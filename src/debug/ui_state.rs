@@ -39,11 +39,9 @@ pub struct DebugUIState {
 impl Default for DebugUIState {
     fn default() -> Self {
         let mut tree = egui_dock::Tree::new(vec![DebugWindow::GameView]);
-        let [game, _inspector] =
-            tree.split_right(NodeIndex::root(), 0.75, vec![DebugWindow::Inspector]);
+        let [game, _inspector] = tree.split_right(NodeIndex::root(), 0.75, vec![DebugWindow::Inspector]);
         let [game, _hierarchy] = tree.split_left(game, 0.2, vec![DebugWindow::Hierarchy]);
-        let [_game, _bottom] =
-            tree.split_below(game, 0.8, vec![DebugWindow::Resources, DebugWindow::Assets]);
+        let [_game, _bottom] = tree.split_below(game, 0.8, vec![DebugWindow::Resources, DebugWindow::Assets]);
         Self {
             tree,
             viewport_rect: egui::Rect::NOTHING,
@@ -56,8 +54,7 @@ impl DebugUIState {
     pub fn update_ui(&mut self) {
         let mut tree = egui_dock::Tree::new(vec![DebugWindow::GameView]);
         let mut game_node = if self.window_visibility.inspector {
-            let [game, _inspector] =
-                tree.split_right(NodeIndex::root(), 0.75, vec![DebugWindow::Inspector]);
+            let [game, _inspector] = tree.split_right(NodeIndex::root(), 0.75, vec![DebugWindow::Inspector]);
             game
         } else {
             NodeIndex(0)

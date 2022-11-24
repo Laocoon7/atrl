@@ -41,10 +41,7 @@ pub fn write_str<Path: Into<PathBuf>>(path: Path, value: &str) -> AtrlResult<()>
         Err(e) => Err(AtrlError::Io(e)),
     }
 }
-pub fn get_files_with_extension<Path: Into<PathBuf>>(
-    path: Path,
-    extension: &str,
-) -> AtrlResult<Vec<String>> {
+pub fn get_files_with_extension<Path: Into<PathBuf>>(path: Path, extension: &str) -> AtrlResult<Vec<String>> {
     get_files_with_extensions(path, vec![extension])
 }
 pub fn get_files_with_extensions<Path: Into<PathBuf>>(

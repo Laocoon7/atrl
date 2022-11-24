@@ -6,14 +6,8 @@ pub trait GridLayer<T: GridParam> {
     fn new_clone(size: impl Size2d, value: T) -> Self
     where T: Clone;
     /// Clone a region of the grid onto a new grid.
-    fn blit_clone(
-        &mut self,
-        to: impl Point2d,
-        source: &Self,
-        from: impl Point2d,
-        size: impl Size2d,
-    ) where
-        T: Clone;
+    fn blit_clone(&mut self, to: impl Point2d, source: &Self, from: impl Point2d, size: impl Size2d)
+    where T: Clone;
     /// Create a new grid with the given size (copy the given value).
     fn new_copy(size: impl Size2d, value: T) -> Self
     where T: Copy;

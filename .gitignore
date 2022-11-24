@@ -1,12 +1,12 @@
-/target
-crates/*/target
 **/*.rs.bk
+/.idea
+
+/benches/target
+docs/.obsidian
+
+# Cargo
+/target
 Cargo.lock
 .cargo/config
+crates/*/target
 .cargo/config.toml
-/.idea
-/.vscode
-/benches/target
-
-
-docs/.obsidian

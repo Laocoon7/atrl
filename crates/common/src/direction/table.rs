@@ -19,25 +19,13 @@ macro_rules! make_direction_table {
       $count:expr
   ) => {
         #[derive(
-            Debug,
-            Default,
-            Clone,
-            Copy,
-            PartialEq,
-            Eq,
-            Hash,
-            PartialOrd,
-            Ord,
-            Serialize,
-            Deserialize,
+            Debug, Default, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize,
         )]
         pub struct $table_type<T> {
             values: [T; $count],
         }
-        pub type $enumerate_type<'a, T> =
-            std::iter::Zip<$direction_iter, DirectionTableIter<'a, T>>;
-        pub type $enumerate_mut_type<'a, T> =
-            std::iter::Zip<$direction_iter, DirectionTableIterMut<'a, T>>;
+        pub type $enumerate_type<'a, T> = std::iter::Zip<$direction_iter, DirectionTableIter<'a, T>>;
+        pub type $enumerate_mut_type<'a, T> = std::iter::Zip<$direction_iter, DirectionTableIterMut<'a, T>>;
         impl<T> $table_type<T> {
             pub fn new_fn<F: FnMut($direction_type) -> T>(mut f: F) -> Self {
                 let values = unsafe {
@@ -56,9 +44,7 @@ macro_rules! make_direction_table {
                 self.values[direction as usize] = value;
             }
 
-            pub const fn get(&self, direction: $direction_type) -> &T {
-                &self.values[direction as usize]
-            }
+            pub const fn get(&self, direction: $direction_type) -> &T { &self.values[direction as usize] }
 
             pub fn get_mut(&mut self, direction: $direction_type) -> &mut T {
                 &mut self.values[direction as usize]
@@ -103,9 +89,7 @@ macro_rules! make_direction_table {
         impl<T> Index<$direction_type> for $table_type<T> {
             type Output = T;
 
-            fn index(&self, index: $direction_type) -> &Self::Output {
-                self.values.index(index as usize)
-            }
+            fn index(&self, index: $direction_type) -> &Self::Output { self.values.index(index as usize) }
         }
         impl<T> IndexMut<$direction_type> for $table_type<T> {
             fn index_mut(&mut self, index: $direction_type) -> &mut Self::Output {

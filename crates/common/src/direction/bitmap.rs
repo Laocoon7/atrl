@@ -31,9 +31,7 @@ impl DirectionBitmap {
 
     pub const fn all_ordinal() -> Self { ALL_ORDINAL_DIRECTIONS_BITMAP }
 
-    pub const fn has(self, direction: Direction) -> bool {
-        self.raw & (1 << direction as usize) != 0
-    }
+    pub const fn has(self, direction: Direction) -> bool { self.raw & (1 << direction as usize) != 0 }
 
     pub const fn is_empty(self) -> bool { self.raw == NO_DIRECTIONS_BITMAP_RAW }
 

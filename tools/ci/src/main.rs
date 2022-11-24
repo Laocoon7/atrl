@@ -43,10 +43,7 @@ fn main() {
         } else {
             println!(
                 "Invalid argument: {arg:?}.\nEnter one of: {}.",
-                arguments[1..]
-                    .iter()
-                    .map(|(s, _)| s)
-                    .fold(arguments[0].0.to_owned(), |c, v| c + ", " + v)
+                arguments[1..].iter().map(|(s, _)| s).fold(arguments[0].0.to_owned(), |c, v| c + ", " + v)
             );
             return;
         }
@@ -75,8 +72,8 @@ fn main() {
         // - See crates/bevy_ecs_compile_fail_tests/README.md
         let _subdir = sh.push_dir("crates/bevy_ecs_compile_fail_tests");
         cmd!(sh, "cargo test --target-dir ../../target").run().expect(
-            "Compiler errors of the ECS compile fail tests seem to be different than expected! \
-             Check locally and compare rust versions.",
+            "Compiler errors of the ECS compile fail tests seem to be different than expected! Check \
+             locally and compare rust versions.",
         );
     }
     if what_to_run.contains(Check::TEST) {
@@ -94,8 +91,6 @@ fn main() {
     }
     if what_to_run.contains(Check::COMPILE_CHECK) {
         // Build examples and check they compile
-        cmd!(sh, "cargo check --workspace")
-            .run()
-            .expect("Please fix failing doc-tests in output above.");
+        cmd!(sh, "cargo check --workspace").run().expect("Please fix failing doc-tests in output above.");
     }
 }

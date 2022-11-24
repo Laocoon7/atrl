@@ -128,9 +128,7 @@ pub struct BresenhamLineInclusiveIter(BresenhamLineIter);
 impl BresenhamLineInclusiveIter {
     /// Creates a new iterator. Yields points `start..=end`.
     #[inline]
-    pub fn new(start: impl Point2d, end: impl Point2d) -> Self {
-        Self(BresenhamLineIter::new(start, end))
-    }
+    pub fn new(start: impl Point2d, end: impl Point2d) -> Self { Self(BresenhamLineIter::new(start, end)) }
 
     /// Return the next point without checking if we are past `end`.
     #[inline]

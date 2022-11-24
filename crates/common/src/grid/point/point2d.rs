@@ -37,9 +37,7 @@ pub trait Point2d: Clone + Copy {
     ////////////////
     /// Adds two points together.
     #[inline]
-    fn add(&self, other: impl Point2d) -> IVec2 {
-        IVec2::new(self.x() + other.x(), self.y() + other.y())
-    }
+    fn add(&self, other: impl Point2d) -> IVec2 { IVec2::new(self.x() + other.x(), self.y() + other.y()) }
     /// Returns distance from another `Point2d`.
     #[inline]
     fn distance(&self, other: impl Point2d) -> f32 { self.as_vec2().distance(other.as_vec2()) }
@@ -51,9 +49,7 @@ pub trait Point2d: Clone + Copy {
     }
     /// Linearly interpolate between points a and b by the amount t.
     #[inline]
-    fn lerp(self, other: impl Point2d, t: f32) -> IVec2 {
-        self.as_vec2().lerp(other.as_vec2(), t).as_ivec2()
-    }
+    fn lerp(self, other: impl Point2d, t: f32) -> IVec2 { self.as_vec2().lerp(other.as_vec2(), t).as_ivec2() }
     ////////////////
     //  Geometry  //
     ////////////////
@@ -79,14 +75,10 @@ pub trait Point2d: Clone + Copy {
     }
     /// Returns the `Cross Product` between two points.
     #[inline]
-    fn cross_product(&self, point: impl Point2d) -> i32 {
-        self.x() * point.y() - self.y() * point.x()
-    }
+    fn cross_product(&self, point: impl Point2d) -> i32 { self.x() * point.y() - self.y() * point.x() }
     /// Returns the `Dot Product` between two points.
     #[inline]
-    fn dot_product(&self, point: impl Point2d) -> i32 {
-        self.x() * point.x() + self.y() * point.y()
-    }
+    fn dot_product(&self, point: impl Point2d) -> i32 { self.x() * point.x() + self.y() * point.y() }
     /// Returns the grid point the given number of spaces above this one.
     #[inline]
     fn up(&self, amount: i32) -> IVec2 { IVec2::new(self.x(), self.y() + amount) }
@@ -107,15 +99,14 @@ pub trait Point2d: Clone + Copy {
     /// Returns an iterator over the 8 points adjacent to this one. (N, NE, E, SE, S, SW, W,
     /// NW)
     #[inline]
-    fn neighbors_all(&self) -> AdjIterator {
-        AdjIterator::new(*self, GridDirection::all().collect())
-    }
+    fn neighbors_all(&self) -> AdjIterator { AdjIterator::new(*self, GridDirection::all().collect()) }
     /// Returns an iterator over the 4 points cardinal - adjacent to this one. (N, E, S, W)
     #[inline]
     fn neighbors_cardinal(&self) -> AdjIterator {
         AdjIterator::new(*self, CardinalDirection::all_directions().collect())
     }
-    /// Returns an iterator over the 4 points ordinal - adjacent to this one. (NE, SE, SW, NW)
+    /// Returns an iterator over the 4 points ordinal - adjacent to this one. (NE, SE, SW,
+    /// NW)
     #[inline]
     fn neighbors_ordinal(&self) -> AdjIterator {
         AdjIterator::new(*self, OrdinalDirection::all_directions().collect())

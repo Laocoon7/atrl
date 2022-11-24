@@ -54,8 +54,7 @@ impl<T> MapArchitect<T> for CellularAutomataBuilder<T> {
         };
         if !data.grid.in_bounds(rect.min()) || !data.grid.in_bounds(rect.max()) {
             error!(
-                "CellularAutomataBuilder Rectangle{{ {}, {} }} is outside of bounds for Grid({}, \
-                 {})",
+                "CellularAutomataBuilder Rectangle{{ {}, {} }} is outside of bounds for Grid({}, {})",
                 rect.min(),
                 rect.max(),
                 data.grid.width(),

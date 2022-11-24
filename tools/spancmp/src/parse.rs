@@ -47,9 +47,7 @@ impl SkipperWrapper {
     fn skip(&self) { let _ = self.reader.borrow_mut().seek_relative(1); }
 }
 impl Read for SkipperWrapper {
-    fn read(&mut self, buf: &mut [u8]) -> Result<usize, std::io::Error> {
-        self.reader.borrow_mut().read(buf)
-    }
+    fn read(&mut self, buf: &mut [u8]) -> Result<usize, std::io::Error> { self.reader.borrow_mut().read(buf) }
 }
 pub fn read_trace(file: String) -> HashMap<String, SpanStats> {
     let file = File::open(file).unwrap();

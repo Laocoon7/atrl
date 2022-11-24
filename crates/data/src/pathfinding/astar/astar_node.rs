@@ -97,21 +97,15 @@ impl AStarNode {
                     // Update Neighbor
                     let neighbor = open_nodes.get(neighbor_index).unwrap(); // unwrap is safe because we still have a valid index
                     let new_cost_from_start = self.cost_from_start +
-                        if is_diagonal { ORDINAL_COST } else { CARDINAL_COST } *
-                            neighbor.cost_multiplier;
+                        if is_diagonal { ORDINAL_COST } else { CARDINAL_COST } * neighbor.cost_multiplier;
                     if neighbor.is_walkable && neighbor.cost_from_start > new_cost_from_start {
                         let mut neighbor = open_nodes.remove(neighbor_index).unwrap(); // unwrap is safe because we sill have a valid index
                         neighbor.update_node(self, new_cost_from_start);
                         Self::insert_ordered(open_nodes, neighbor);
                     }
                 } else {
-                    let new_neighbor = self.create_neighbor(
-                        position,
-                        is_diagonal,
-                        destination,
-                        provider,
-                        movement_type,
-                    );
+                    let new_neighbor =
+                        self.create_neighbor(position, is_diagonal, destination, provider, movement_type);
                     if new_neighbor.is_walkable {
                         Self::insert_ordered(open_nodes, new_neighbor);
                     }

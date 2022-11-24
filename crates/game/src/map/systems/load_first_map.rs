@@ -2,9 +2,11 @@ use crate::prelude::*;
 pub fn load_first_map(
     tilesets: Tilesets,
     mut commands: Commands,
+    state: Res<CurrentGameState>,
     mut game_context: ResMut<GameContext>,
     mut map_manager: ResMut<MapManager>,
 ) {
+    println!("load_first_map");
     let length = (TILESET_TERRAIN_IDS_TABLE.len() - 1) as u32;
     let tileset_id = Prng::from_entropy().range(0..length) as usize;
     let tileset_id = TILESET_TERRAIN_IDS_TABLE[tileset_id];
@@ -18,4 +20,5 @@ pub fn load_first_map(
     ) {
         error!("{}", e);
     }
+    state.set_next(&mut commands)
 }
