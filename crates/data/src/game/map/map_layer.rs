@@ -5,6 +5,7 @@ pub enum MapLayer {
     Items,
     Actors,
     Player,
+    UI,
 }
 
 impl From<MapLayer> for f32 {

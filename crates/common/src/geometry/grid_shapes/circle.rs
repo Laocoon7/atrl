@@ -1,6 +1,6 @@
-use crate::prelude::*;
 use super::grid_shape::*;
 use super::line::Line;
+use crate::prelude::*;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq)]
 pub struct Circle {
@@ -10,10 +10,7 @@ pub struct Circle {
 
 impl Circle {
     pub fn new<R: Into<u32>>(center: impl Point2d, radius: R) -> Self {
-        Self {
-            center: center.as_ivec2(),
-            radius: radius.into(),
-        }
+        Self { center: center.as_ivec2(), radius: radius.into() }
     }
 }
 
@@ -34,19 +31,31 @@ impl GridShape for Circle {
         let mut y = self.radius as i32;
 
         loop {
-            let line = Line::new((self.center.x + x, self.center.y + y), (self.center.x - x, self.center.y + y));
+            let line = Line::new(
+                (self.center.x + x, self.center.y + y),
+                (self.center.x - x, self.center.y + y),
+            );
             for point in line.get_points() {
                 discovered.insert(point);
             }
-            let line = Line::new((self.center.x - x, self.center.y - y), (self.center.x + x, self.center.y - y));
+            let line = Line::new(
+                (self.center.x - x, self.center.y - y),
+                (self.center.x + x, self.center.y - y),
+            );
             for point in line.get_points() {
                 discovered.insert(point);
             }
-            let line = Line::new((self.center.x + y, self.center.y + x), (self.center.x - x, self.center.y + x));
+            let line = Line::new(
+                (self.center.x + y, self.center.y + x),
+                (self.center.x - x, self.center.y + x),
+            );
             for point in line.get_points() {
                 discovered.insert(point);
             }
-            let line = Line::new((self.center.x + y, self.center.y - x), (self.center.x - x, self.center.y - x));
+            let line = Line::new(
+                (self.center.x + y, self.center.y - x),
+                (self.center.x - x, self.center.y - x),
+            );
             for point in line.get_points() {
                 discovered.insert(point);
             }

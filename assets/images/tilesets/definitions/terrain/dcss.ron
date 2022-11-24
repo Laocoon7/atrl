@@ -1,6 +1,6 @@
 (
     name: Some("dcss"),
-    id: 1,
+    id: 2,
     tiles: {
         0: "../tiles/dcss/empty.ron",
         1: "../tiles/dcss/terrain/floor.ron",

@@ -21,10 +21,13 @@ pub struct Wander {
 }
 
 pub fn wander_action(
+    mut commands: Commands,
     mut manager: ResMut<MapManager>,
     mut ctx: ResMut<GameContext>,
     mut spatial_q: Query<(&mut Transform, &Movement, &Name)>,
     mut action_q: Query<(&Actor, &mut BigBrainActionState, &mut Wander, &ActionSpan)>,
+    mut target_q: Query<&mut TargetVisualizer>,
+    tilesets: Tilesets,
 ) {
     use BigBrainActionState::*;
 
@@ -40,6 +43,9 @@ pub fn wander_action(
 
         match *action_state {
             Cancelled => {
+                if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
+                    target_visualizer.clear(&mut commands);
+                }
                 *action_state = Failure;
             }
             Requested => {
@@ -71,6 +77,25 @@ pub fn wander_action(
                     |next_pt| {
                         if map.try_move_actor(ai_pos, next_pt, movement_component.0) {
                             position.set_value(next_pt);
+                            if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
+                                if ai_path.len() > 0 {
+                                    target_visualizer.update(
+                                        &mut commands,
+                                        &tilesets,
+                                        next_pt,
+                                        ai_path[0],
+                                        Color::WHITE,
+                                    );
+                                } else {
+                                    target_visualizer.update(
+                                        &mut commands,
+                                        &tilesets,
+                                        next_pt,
+                                        next_pt,
+                                        Color::WHITE,
+                                    );
+                                }
+                            }
                         } else {
                             info!(
                                 "AI is blocked trying to move from {:?} to {:?}",

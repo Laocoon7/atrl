@@ -17,10 +17,13 @@ pub struct ChaseActor {
 }
 
 pub fn chase_action(
+    mut commands: Commands,
     mut manager: ResMut<MapManager>,
     player_q: Query<(Entity, &Transform), With<Player>>,
     mut action_q: Query<(&Actor, &mut ActionState, &mut ChaseActor, &ActionSpan)>,
     mut ai_q: Query<(&mut Transform, &FieldOfView, &Vision, &Movement, &Name), Without<Player>>,
+    mut target_q: Query<&mut TargetVisualizer>,
+    tilesets: Tilesets,
 ) {
     use ActionState::*;
 
@@ -53,6 +56,9 @@ pub fn chase_action(
 
         match *action_state {
             Cancelled => {
+                if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
+                    target_visualizer.clear(&mut commands);
+                }
                 info!("{} cancelled chase!", name);
                 *action_state = Failure;
             }
@@ -276,6 +282,25 @@ pub fn chase_action(
                 //if distance > DIAGONAL_COST {
                 if map.try_move_actor(ai_pos, next_pt, movement_component.0) {
                     position.set_value(next_pt);
+                    if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
+                        if chase_path.len() > 0 {
+                            target_visualizer.update(
+                                &mut commands,
+                                &tilesets,
+                                next_pt,
+                                chase_path[0],
+                                Color::RED,
+                            );
+                        } else {
+                            target_visualizer.update(
+                                &mut commands,
+                                &tilesets,
+                                next_pt,
+                                next_pt,
+                                Color::RED,
+                            );
+                        }
+                    }
                     chase_path.pop(); // consume the path point
                 } else {
                     info!("AI is blocked trying to move from {:?} to {:?}", ai_pos, next_pt);

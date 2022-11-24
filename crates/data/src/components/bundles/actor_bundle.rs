@@ -11,6 +11,8 @@ pub struct ActorBundle {
     pub vision_component: Vision,
     pub movement_component: Movement,
 
+    pub target_visualizer: TargetVisualizer,
+
     #[bundle]
     pub sprite: SpriteSheetBundle,
 }

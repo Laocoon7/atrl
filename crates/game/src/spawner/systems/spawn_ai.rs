@@ -3,9 +3,9 @@ use crate::prelude::*;
 pub fn spawn_ai(mut commands: Commands, tilesets: Tilesets, mut map_manager: ResMut<MapManager>) {
     let world_position = IVec3::ZERO;
 
-    let Some(tileset) = tilesets.get_by_id(TILESET_ACTORS_OGRE_ID) else {
+    let Some(tileset) = tilesets.get_by_id(TILESET_ACTORS_ID) else {
         // let's not crash the program just because we can't spawn an ai.
-        error!("Couldn't find tilemap_id: {:?}. Refusing to spawn ai.", TILESET_ACTORS_OGRE_ID);
+        error!("Couldn't find tilemap_id: {:?}. Refusing to spawn ai.", TILESET_ACTORS_ID);
         return;
     };
 
@@ -45,7 +45,7 @@ pub fn spawn_ai(mut commands: Commands, tilesets: Tilesets, mut map_manager: Res
             sprite: SpriteSheetBundle {
                 sprite: TextureAtlasSprite {
                     color: Color::RED,
-                    index: 0,
+                    index: TILE_ACTOR_OGRE_ID,
                     custom_size: Some(Vec2::ONE),
                     ..Default::default()
                 },
@@ -61,6 +61,7 @@ pub fn spawn_ai(mut commands: Commands, tilesets: Tilesets, mut map_manager: Res
             fov: FieldOfView(8),
             vision_component: Vision(VisionType::Normal.as_u8()),
             movement_component: Movement(movement_type),
+            target_visualizer: TargetVisualizer::default(),
         },
         thinker,
     ));

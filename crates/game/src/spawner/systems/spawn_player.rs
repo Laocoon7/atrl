@@ -7,9 +7,9 @@ pub fn spawn_player(
 ) {
     let world_position = IVec3::ZERO;
 
-    let Some(tileset) = tilesets.get_by_id(TILESET_ACTORS_OGRE_ID) else {
+    let Some(tileset) = tilesets.get_by_id(TILESET_ACTORS_ID) else {
         // crashing here, may make it hard to chase down other issues?
-        error!("Couldn't find tilemap_id: {:?}. Refusing to spawn player.", TILESET_ACTORS_OGRE_ID);
+        error!("Couldn't find tilemap_id: {:?}. Refusing to spawn player.", TILESET_ACTORS_ID);
         return;
     };
 
@@ -41,7 +41,7 @@ pub fn spawn_player(
             sprite: SpriteSheetBundle {
                 sprite: TextureAtlasSprite {
                     color: Color::YELLOW,
-                    index: 0,
+                    index: TILE_ACTOR_OGRE_ID,
                     custom_size: Some(Vec2::ONE),
                     ..Default::default()
                 },
@@ -57,6 +57,7 @@ pub fn spawn_player(
             fov: FieldOfView(16),
             vision_component: Vision(VisionType::Normal.as_u8()),
             movement_component: Movement(movement_type),
+            target_visualizer: TargetVisualizer::default(),
         },
         input_manager: InputManagerBundle {
             input_map: PlayerBundle::default_input_map(),

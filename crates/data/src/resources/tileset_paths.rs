@@ -10,6 +10,9 @@
 
 use crate::prelude::*;
 
+/////////////////////////////////////////////////////////////////////
+/// MISSING
+/////////////////////////////////////////////////////////////////////
 // Tileset Names (Match filename to infile name)
 #[cfg(feature = "debug")] // Show TODO to catch bugs in debug mod
 pub const TILESET_MISSING_NAME: &str = "missing_debug";
@@ -18,19 +21,35 @@ pub const TILESET_MISSING_NAME: &str = "missing";
 pub const TILESET_MISSING_ID: &TilesetId = &0;
 
 /////////////////////////////////////////////////////////////////////
+/// CURSOR
+/////////////////////////////////////////////////////////////////////
+pub const TILESET_CURSOR_NAME: &str = "cursor";
+pub const TILESET_CURSOR_ID: &TilesetId = &1;
+
+#[rustfmt::skip] // pretty tables
+pub const TILESET_CURSOR_NAME_TABLE: &[&str] = &[
+    TILESET_CURSOR_NAME,
+];
+
+#[rustfmt::skip] // pretty tables
+pub const TILESET_CURSOR_IDS_TABLE: &[u8] = &[
+    *TILESET_CURSOR_ID,
+];
+
+/////////////////////////////////////////////////////////////////////
 /// ACTORS
 /////////////////////////////////////////////////////////////////////
-pub const TILESET_ACTORS_OGRE_NAME: &str = "ogre";
-pub const TILESET_ACTORS_OGRE_ID: &TilesetId = &50;
+pub const TILESET_ACTORS_NAME: &str = "actors";
+pub const TILESET_ACTORS_ID: &TilesetId = &3;
 
 #[rustfmt::skip] // pretty tables
 pub const TILESET_ACTORS_NAME_TABLE: &[&str] = &[
-    TILESET_ACTORS_OGRE_NAME,
+    TILESET_ACTORS_NAME,
 ];
 
 #[rustfmt::skip] // pretty tables
 pub const TILESET_ACTORS_IDS_TABLE: &[u8] = &[
-    *TILESET_ACTORS_OGRE_ID,
+    *TILESET_ACTORS_ID,
 ];
 
 /////////////////////////////////////////////////////////////////////
@@ -68,17 +87,17 @@ pub const TILESET_FEATURES_IDS_TABLE: &[u8] = &[
 /////////////////////////////////////////////////////////////////////
 /// TERRAIN
 /////////////////////////////////////////////////////////////////////
-pub const TILESET_TERRAIN_DCSS_NAME: &str = "dcss";
-pub const TILESET_TERRAIN_DCSS_ID: &TilesetId = &1;
+pub const TILESET_TERRAIN_NAME: &str = "dcss";
+pub const TILESET_TERRAIN_ID: &TilesetId = &2;
 
 #[rustfmt::skip] // pretty tables
 pub const TILESET_TERRAIN_NAME_TABLE: &[&str] = &[
-    TILESET_TERRAIN_DCSS_NAME,
+    TILESET_TERRAIN_NAME,
 ];
 
 #[rustfmt::skip] // pretty tables
 pub const TILESET_TERRAIN_IDS_TABLE: &[u8] = &[
-    *TILESET_TERRAIN_DCSS_ID,
+    *TILESET_TERRAIN_ID,
 ];
 
 /////////////////////////////////////////////////////////////////////
@@ -91,6 +110,11 @@ pub fn get_tileset_paths() -> Vec<String> {
 
     // add the "missing" tileset
     ret.push(format!("{DEFINITIONS_FOLDER}{TILESET_MISSING_NAME}{RON_EXT}"));
+
+    // add the "cursor" tilesets
+    for name in TILESET_CURSOR_NAME_TABLE {
+        ret.push(format!("{DEFINITIONS_FOLDER}{TILESET_CURSOR_FOLDER}{name}{RON_EXT}"));
+    }
 
     // add the "actors" tilesets
     for name in TILESET_ACTORS_NAME_TABLE {
@@ -126,6 +150,7 @@ const RON_EXT: &str = ".ron";
 const DEFINITIONS_FOLDER: &str = "images/tilesets/definitions/";
 
 // Tileset sub folders
+const TILESET_CURSOR_FOLDER: &str = "cursor/";
 const TILESET_ACTORS_FOLDER: &str = "actors/";
 const TILESET_FEATURES_FOLDER: &str = "features/";
 const TILESET_ITEMS_FOLDER: &str = "items/";

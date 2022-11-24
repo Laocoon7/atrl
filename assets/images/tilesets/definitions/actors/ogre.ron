@@ -1,7 +1,0 @@
-(
-    name: Some("ogre"),
-    id: 50,
-    tiles: {
-        0: "../tiles/dcss/actors/ogre.ron",
-    }
-)

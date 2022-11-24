@@ -167,7 +167,7 @@ impl MapManager {
             starting_position,
             rng,
             // FinalizerBuilder::new(40, 40), You probably wanted:
-            SetBuilder::new().set_value(1),
+            SetBuilder::new().set_value(TILE_TERRAIN_FLOOR_ID as u32),
             user_data,
         )
         .generate()

@@ -77,6 +77,8 @@ mod components {
     pub use field_of_view::*;
     pub use health::*;
     pub use tags::*;
+    mod target_visualizer;
+    pub use target_visualizer::*;
 }
 
 mod game {
@@ -159,6 +161,8 @@ mod system_params {
 mod resources {
     mod app_settings;
     pub use app_settings::*;
+    mod tile_ids;
+    pub use tile_ids::*;
     mod tileset_paths;
     pub use tileset_paths::*;
     mod timer;
