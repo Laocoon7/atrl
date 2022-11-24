@@ -1,5 +1,4 @@
 use crate::prelude::*;
-
 pub fn entity_in_fov(
     map: &Map,
     fov: &FieldOfView,

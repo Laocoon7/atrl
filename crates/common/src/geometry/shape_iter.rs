@@ -1,12 +1,10 @@
 use crate::prelude::*;
-
 #[derive(Debug, Clone)]
 pub enum ShapeIterator {
     Rectangle(RectIter),
     Line(BresenhamLineIter),
     Circle(BresenhamCircleIter),
 }
-
 impl Iterator for ShapeIterator {
     type Item = IVec2;
 
@@ -18,12 +16,10 @@ impl Iterator for ShapeIterator {
         }
     }
 }
-
 #[derive(Debug, Clone)]
 pub enum ShapeIteratorExclusive {
     Line(BresenhamLineInclusiveIter),
 }
-
 impl Iterator for ShapeIteratorExclusive {
     type Item = IVec2;
 

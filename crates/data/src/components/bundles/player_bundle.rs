@@ -1,5 +1,4 @@
 use crate::prelude::*;
-
 #[derive(Bundle)]
 pub struct PlayerBundle {
     pub player: Player,
@@ -9,14 +8,12 @@ pub struct PlayerBundle {
     #[bundle]
     pub input_manager: InputManagerBundle<PlayerAction>,
 }
-
 impl PlayerBundle {
     pub fn default_input_map() -> InputMap<PlayerAction> {
         // This allows us to replace `ArpgAction::Up` with `Up`,
         // significantly reducing boilerplate
         use PlayerAction::*;
         let mut input_map = InputMap::default();
-
         /////////////////////////////
         // Movement
         /////////////////////////////
@@ -41,7 +38,6 @@ impl PlayerBundle {
             .insert(GamepadButtonType::DPadDown, South,)
             .insert(GamepadButtonType::DPadLeft, West,)
             .insert(GamepadButtonType::DPadRight, East,);
-
         input_map
             // Numpad
             .insert(KeyCode::Numpad7, NorthWest,)
@@ -52,14 +48,12 @@ impl PlayerBundle {
             .insert(KeyCode::Numpad2, South,)
             .insert(KeyCode::Numpad1, SouthWest,)
             .insert(KeyCode::Numpad4, West,);
-
         /////////////////////////////
         // Actions
         /////////////////////////////
         input_map
             // Waiting
             .insert(KeyCode::Numpad5, Wait,);
-
         input_map
     }
 }

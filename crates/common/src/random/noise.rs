@@ -1,13 +1,11 @@
 use std::fmt::{self, Debug};
 
 use crate::prelude::*;
-
 #[derive(Clone)]
 pub struct Noise {
     seed: u32,
     perlin: Perlin,
 }
-
 #[allow(dead_code)]
 impl Noise {
     pub fn new(seed: u32) -> Self {
@@ -20,7 +18,6 @@ impl Noise {
         let x = x.into();
         let y = y.into();
         let z = z.into();
-
         self.perlin.get([x, y, z])
     }
 
@@ -36,12 +33,10 @@ impl Noise {
         let min = min.into();
         let max = max.into();
         let value = self.get(x, y, z);
-
         // min + (value - -1) * (max - min) / (1 - -1)
         ((value + 1.0) * (max - min)).mul_add(0.5, min)
     }
 }
-
 impl Serialize for Noise {
     fn serialize<S>(&self, serializer: S) -> core::result::Result<S::Ok, S::Error>
     where S: serde::Serializer {
@@ -50,7 +45,6 @@ impl Serialize for Noise {
         state.end()
     }
 }
-
 impl<'de> Deserialize<'de> for Noise {
     fn deserialize<D>(deserializer: D) -> core::result::Result<Self, D::Error>
     where D: Deserializer<'de> {
@@ -59,9 +53,7 @@ impl<'de> Deserialize<'de> for Noise {
         enum Field {
             Seed,
         }
-
         struct NoiseVisitor;
-
         impl<'de> Visitor<'de> for NoiseVisitor {
             type Value = Noise;
 
@@ -86,19 +78,17 @@ impl<'de> Deserialize<'de> for Noise {
                                 return Err(de::Error::duplicate_field("seed"));
                             }
                             seed = Some(map.next_value()?);
-                        }
+                        },
                     }
                 }
                 let seed = seed.ok_or_else(|| de::Error::missing_field("seed"))?;
                 Ok(Noise::new(seed))
             }
         }
-
         const FIELDS: &[&str] = &["seed"];
         deserializer.deserialize_struct("Noise", FIELDS, NoiseVisitor)
     }
 }
-
 impl Debug for Noise {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.write_fmt(format_args!("Noise {{ seed:{} }}", self.seed))

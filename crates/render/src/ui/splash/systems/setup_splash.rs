@@ -1,8 +1,6 @@
 use crate::prelude::*;
-
 #[derive(Component)]
 pub struct OnSplashScreen;
-
 pub fn setup_splash(
     timer: f32,
     mut commands: Commands,
@@ -13,7 +11,6 @@ pub fn setup_splash(
     if let Ok((_root_entity, mut widget_context)) = ctx.get_single_mut() {
         font_mapping.set_default(asset_server.load("fonts/lato/lato-light.kayak_font"));
         let splash_image = asset_server.load("images/splash.png");
-
         widget_context.add_plugin(KayakWidgetsContextPlugin);
         let parent_id = None;
         rsx! {
@@ -35,9 +32,7 @@ pub fn setup_splash(
                 />
             </KayakAppBundle>
         }
-
         commands.insert_resource(SplashTimer(Timer::from_seconds(timer, TimerMode::Once)));
     }
 }
-
 pub fn countdown(time: Res<Time>, mut timer: ResMut<SplashTimer>) { timer.tick(time.delta()); }

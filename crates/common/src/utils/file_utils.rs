@@ -4,7 +4,6 @@ pub use std::{
 };
 
 use crate::prelude::*;
-
 pub fn read_str<Path: Into<PathBuf>>(path: Path) -> AtrlResult<String> {
     let path: PathBuf = path.into();
     match std::fs::read_to_string(path) {
@@ -12,14 +11,12 @@ pub fn read_str<Path: Into<PathBuf>>(path: Path) -> AtrlResult<String> {
         Err(e) => Err(AtrlError::Io(e)),
     }
 }
-
 pub fn write_str<Path: Into<PathBuf>>(path: Path, value: &str) -> AtrlResult<()> {
     let path: PathBuf = path.into();
     let path_string = match path.to_str() {
         Some(s) => s.to_string(),
         None => return Err(AtrlError::NotAString),
     };
-
     match path.try_exists() {
         Ok(b) => {
             if !b {
@@ -30,7 +27,7 @@ pub fn write_str<Path: Into<PathBuf>>(path: Path, value: &str) -> AtrlResult<()>
                         if let Err(e) = std::fs::create_dir_all(dir) {
                             return Err(AtrlError::Io(e));
                         }
-                    }
+                    },
                     None => return Err(AtrlError::NotADir(path_string)),
                 };
             }
@@ -40,18 +37,16 @@ pub fn write_str<Path: Into<PathBuf>>(path: Path, value: &str) -> AtrlResult<()>
                 Ok(_) => Ok(()),
                 Err(e) => Err(AtrlError::Io(e)),
             }
-        }
+        },
         Err(e) => Err(AtrlError::Io(e)),
     }
 }
-
 pub fn get_files_with_extension<Path: Into<PathBuf>>(
     path: Path,
     extension: &str,
 ) -> AtrlResult<Vec<String>> {
     get_files_with_extensions(path, vec![extension])
 }
-
 pub fn get_files_with_extensions<Path: Into<PathBuf>>(
     path: Path,
     extensions: Vec<&str>,
@@ -108,7 +103,6 @@ pub fn get_files_with_extensions<Path: Into<PathBuf>>(
     }
     Ok(ret)
 }
-
 pub fn strip_extension(path: &str) -> Option<String> {
     let path = Path::new(path);
     path.with_extension("").to_str().map(|p| p.to_string())

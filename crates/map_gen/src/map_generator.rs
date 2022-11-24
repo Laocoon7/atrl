@@ -1,10 +1,8 @@
 use crate::prelude::*;
-
 pub struct MapGenerator<T> {
     map_gen_data: MapGenData<T>,
     builders: Vec<Box<dyn MapArchitect<T>>>,
 }
-
 impl<T> MapGenerator<T> {
     pub fn new(
         size: impl Size2d,
@@ -33,11 +31,9 @@ impl<T> MapGenerator<T> {
 
     pub fn generate(mut self) -> MapGenData<T> {
         info!("Generating map with {} builders", self.builders.len());
-
         for builder in self.builders.iter_mut() {
             builder.generate(&mut self.map_gen_data);
         }
-
         self.map_gen_data
     }
 }

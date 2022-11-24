@@ -1,14 +1,16 @@
 use crate::prelude::*;
-
 pub struct RawPlugin<T> {
     pub state_asset_load: T,
     pub state_asset_load_failure: T,
     settings: AssetSettings,
 }
-
 impl<T: StateNext> RawPlugin<T> {
     pub fn new(state_asset_load: T, state_asset_load_failure: T) -> Self {
-        Self { state_asset_load, state_asset_load_failure, settings: AssetSettings::default() }
+        Self {
+            state_asset_load,
+            state_asset_load_failure,
+            settings: AssetSettings::default(),
+        }
     }
 
     pub fn add_tileset_file(mut self, file: &str) -> Self {
@@ -31,11 +33,9 @@ impl<T: StateNext> RawPlugin<T> {
         self
     }
 }
-
 impl<T: StateNext> Plugin for RawPlugin<T> {
     fn build(&self, app: &mut App) {
         let failure_state = self.state_asset_load_failure;
-
         app
             // bevy_tileset
             .add_plugin(TilesetPlugin::default(),)
@@ -45,7 +45,6 @@ impl<T: StateNext> Plugin for RawPlugin<T> {
             .insert_resource(LoadedTilesets::new(&self.settings,),)
             // hold `Handle<Font>`s so they don't get unloaded
             .insert_resource(LoadedFonts::new(&self.settings,),);
-
         // Load Assets
         app.add_enter_system_set(
             self.state_asset_load,

@@ -1,6 +1,5 @@
 //! helper to extract span stats from a chrome trace file
 //! spec: <https://docs.google.com/document/d/1CvAClvFfyA5R-PhYUmn5OOQtYMH4h6I0nSsKchNAySU/preview#heading=h.puwqg050lyuy>
-
 use std::ops::Div;
 
 use clap::Parser;
@@ -9,10 +8,8 @@ use regex::Regex;
 use termcolor::{ColorChoice, StandardStream};
 
 use crate::pretty::{print_spanstats, set_bold, simplify_name};
-
 mod parse;
 mod pretty;
-
 #[derive(Parser, Debug)]
 struct Args {
     #[arg(short, long, default_value_t = 0.0)]
@@ -31,19 +28,15 @@ struct Args {
     /// Optional, second trace to compare
     second_trace: Option<String>,
 }
-
 fn main() {
     let cli = Args::parse();
-
     // Setup stdout to support colors
     let mut stdout = StandardStream::stdout(ColorChoice::Auto);
-
     // Read the first trace file
     let reference = read_trace(cli.trace);
     if let Some(comparison) = cli.second_trace {
         // Read the second trace file
         let mut comparison = read_trace(comparison);
-
         reference
             .iter()
             .filter(|(_, stats)| filter_by_threshold(stats, cli.threshold))
@@ -96,11 +89,9 @@ fn main() {
             });
     }
 }
-
 fn filter_by_threshold(span_stats: &SpanStats, threshold: f32) -> bool {
     span_stats.avg > threshold
 }
-
 fn filter_by_pattern(name: &str, pattern: Option<&Regex>) -> bool {
     if let Some(pattern) = pattern {
         pattern.is_match(name)
@@ -108,7 +99,6 @@ fn filter_by_pattern(name: &str, pattern: Option<&Regex>) -> bool {
         true
     }
 }
-
 #[derive(Debug)]
 pub struct SpanStats {
     pub count: usize,
@@ -116,11 +106,16 @@ pub struct SpanStats {
     pub min: f32,
     pub max: f32,
 }
-
 impl Default for SpanStats {
-    fn default() -> Self { Self { count: 0, avg: 0.0, min: f32::MAX, max: 0.0 } }
+    fn default() -> Self {
+        Self {
+            count: 0,
+            avg: 0.0,
+            min: f32::MAX,
+            max: 0.0,
+        }
+    }
 }
-
 impl SpanStats {
     fn add_span(&mut self, duration: f32) {
         if duration < self.min {
@@ -133,14 +128,12 @@ impl SpanStats {
         self.count += 1;
     }
 }
-
 pub struct SpanRelative {
     count: f32,
     avg: f32,
     min: f32,
     max: f32,
 }
-
 impl Div for &SpanStats {
     type Output = SpanRelative;
 

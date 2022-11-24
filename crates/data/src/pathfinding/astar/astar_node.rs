@@ -1,11 +1,9 @@
 use crate::prelude::*;
-
 const SCALE_F32_TO_U32: f32 = 10.0;
 const CARDINAL_COST_F32: f32 = 1.0;
 const ORDINAL_COST_F32: f32 = 1.4;
 const CARDINAL_COST: u32 = (CARDINAL_COST_F32 * SCALE_F32_TO_U32) as u32;
 const ORDINAL_COST: u32 = (ORDINAL_COST_F32 * SCALE_F32_TO_U32) as u32;
-
 #[derive(Debug)]
 pub(super) struct AStarNode {
     is_walkable: bool,
@@ -17,13 +15,11 @@ pub(super) struct AStarNode {
     cost_from_end: u32,
     cost_total: u32,
 }
-
 impl AStarNode {
     pub fn new(origin: IVec2, destination: IVec2) -> Self {
         let from_end = (DistanceAlg::DiagonalWithCosts(CARDINAL_COST_F32, ORDINAL_COST_F32)
             .distance2d(origin, destination) *
             SCALE_F32_TO_U32) as u32;
-
         Self {
             is_walkable: true,
             position: origin,
@@ -47,7 +43,6 @@ impl AStarNode {
         let cost_from_end = (DistanceAlg::DiagonalWithCosts(CARDINAL_COST_F32, ORDINAL_COST_F32)
             .distance2d(position, destination) *
             SCALE_F32_TO_U32) as u32;
-
         let mut s = Self {
             is_walkable: provider.is_walkable(position, movement_type),
             position,
@@ -58,13 +53,11 @@ impl AStarNode {
             cost_from_end,
             cost_total: u32::MAX,
         };
-
         if s.is_walkable {
             let new_cost_from_start = self.cost_from_start +
                 if is_diagonal { ORDINAL_COST } else { CARDINAL_COST } * s.cost_multiplier;
             s.update_node(self, new_cost_from_start);
         }
-
         s
     }
 
@@ -133,21 +126,17 @@ impl AStarNode {
     fn insert_ordered(list: &mut IndexList<Self>, node_to_insert: Self) {
         let mut iter_index = list.first_index();
         let mut found_index = None;
-
         while iter_index.is_some() {
             if let Some(current_node) = list.get(iter_index) {
                 if node_to_insert > *current_node {
                     iter_index = list.next_index(iter_index);
                     continue;
                 }
-
                 found_index = Some(iter_index);
                 break;
             }
-
             iter_index = list.next_index(iter_index);
         }
-
         match found_index {
             Some(next_index) => list.insert_before(next_index, node_to_insert),
             None => list.insert_last(node_to_insert),
@@ -156,7 +145,6 @@ impl AStarNode {
 
     pub fn find_node_with_position(list: &IndexList<Self>, position: IVec2) -> Option<Index> {
         let mut index = list.first_index();
-
         while index.is_some() {
             if let Some(node) = list.get(index) {
                 if position == node.position {
@@ -165,15 +153,12 @@ impl AStarNode {
             }
             index = list.next_index(index);
         }
-
         None
     }
 }
-
 impl PartialEq for AStarNode {
     fn eq(&self, other: &Self) -> bool { self.position == other.position }
 }
-
 impl PartialOrd for AStarNode {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
         // we use this to insert values into a specific list
@@ -189,7 +174,6 @@ impl PartialOrd for AStarNode {
         // `less` next. and if that's not valid move to the tie breakers.
         // there are very few ties, but we want to work with the closest tie
         // breaker to the goal first.
-
         if self.cost_total > other.cost_total {
             Some(std::cmp::Ordering::Greater)
         } else if self.cost_total < other.cost_total || self.cost_from_end < other.cost_from_end {

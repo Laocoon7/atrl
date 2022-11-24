@@ -1,11 +1,8 @@
 // FoV implementation taken from:
 // https://www.albertford.com/shadowcasting/
-
 use super::{quadrant::*, row::*};
 use crate::prelude::*;
-
 pub struct Shadowcast;
-
 impl FovAlgorithm for Shadowcast {
     fn compute_fov(
         origin: IVec2,
@@ -15,7 +12,6 @@ impl FovAlgorithm for Shadowcast {
         receiver: &mut impl FovReceiver,
     ) {
         receiver.set_visible(origin);
-
         CardinalDirection::all().enumerate().for_each(|(_index, direction)| {
             let mut quadrant = Quadrant::new(direction, origin, vision_type, provider, receiver);
             let mut first_row = Row::new(1, Slope::new(-1, 1), Slope::new(1, 1));
@@ -23,7 +19,6 @@ impl FovAlgorithm for Shadowcast {
         });
     }
 }
-
 impl Shadowcast {
     pub fn compute_direction(
         origin: IVec2,
@@ -34,7 +29,6 @@ impl Shadowcast {
         direction: CardinalDirection,
     ) {
         receiver.set_visible(origin);
-
         let mut quadrant = Quadrant::new(direction, origin, vision_type, provider, receiver);
         let mut first_row = Row::new(1, Slope::new(-1, 1), Slope::new(1, 1));
         Self::scan_recursive(range, &mut quadrant, &mut first_row);
@@ -42,25 +36,21 @@ impl Shadowcast {
 
     fn scan_recursive(range: u32, quadrant: &mut Quadrant, row: &mut Row) {
         let mut prev_tile = None;
-
         for tile in row.tiles() {
             // compare the squares, it's faster!
             if DistanceAlg::PythagorasSquared.distance2d(IVec2::ZERO, tile) > range.pow(2) as f32 {
                 continue;
             }
-
             // Should we reveal the tile?
             if quadrant.is_opaque(tile) | row.is_symmetric(tile) {
                 quadrant.set_visible(tile);
             }
-
             // handle the current row based on vision angles around the previous tile
             if let Some(prev_tile) = prev_tile {
                 // did we *just* hit floor after traveling through walls?
                 if quadrant.is_opaque(prev_tile) & quadrant.is_clear(tile) {
                     row.calc_starting_slope(tile)
                 }
-
                 // did we *just* hit a wall after traveling through floors?
                 if quadrant.is_clear(prev_tile) & quadrant.is_opaque(tile) {
                     let mut next_row = row.next();
@@ -71,7 +61,6 @@ impl Shadowcast {
             // setup for next tile
             prev_tile = Some(tile);
         }
-
         // if our last tile was floor, we can see down another row
         if let Some(prev_tile) = prev_tile {
             if quadrant.is_clear(prev_tile) {

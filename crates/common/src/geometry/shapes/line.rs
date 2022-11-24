@@ -1,5 +1,4 @@
 use crate::prelude::*;
-
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq)]
 pub enum LineType {
     Point,
@@ -7,7 +6,6 @@ pub enum LineType {
     Vertical,
     Horizontal,
 }
-
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Line {
     len: u32,
@@ -16,7 +14,6 @@ pub struct Line {
     pub(crate) end: IVec2,
     pub(crate) start: IVec2,
 }
-
 impl Line {
     pub fn new(start: impl Point2d, end: impl Point2d) -> Self {
         let start = start.as_ivec2();
@@ -30,15 +27,19 @@ impl Line {
         } else {
             LineType::Angled
         };
-
         let len = DistanceAlg::Pythagoras.distance2d(start, end).floor() as u32; // round() ??
         let angle = start.angle_to(end);
-        Self { start, end, len, line_type, angle }
+        Self {
+            start,
+            end,
+            len,
+            line_type,
+            angle,
+        }
     }
 }
-
 impl Line {
-    #[allow(clippy::len_without_is_empty)] //use start()==end() to check that
+    #[allow(clippy::len_without_is_empty)] // use start()==end() to check that
     #[inline]
     pub const fn len(&self) -> u32 { self.len }
 
@@ -54,7 +55,6 @@ impl Line {
     #[inline]
     pub const fn line_type(&self) -> LineType { self.line_type }
 }
-
 impl Shape for Line {
     fn from_points(points: Vec<impl Point2d>) -> Self
     where Self: Sized {
@@ -68,16 +68,16 @@ impl Shape for Line {
             LineType::Point => self.start == point,
             LineType::Horizontal => {
                 self.start.y() == point.y && self.start.x() <= point.x && point.x <= self.end.x
-            }
+            },
             LineType::Vertical => {
                 self.start.x() == point.x && self.start.y() <= point.y && point.y <= self.end.y
-            }
+            },
             LineType::Angled => {
                 (DistanceAlg::Pythagoras.distance2d(self.start, point) +
                     DistanceAlg::Pythagoras.distance2d(self.end, point))
                 .floor() as u32 ==
                     self.len
-            } // TODO: CHECK THIS
+            }, // TODO: CHECK THIS
         }
     }
 
@@ -109,7 +109,6 @@ impl Shape for Line {
         ShapeIteratorExclusive::Line(self.into_iter_exlusive())
     }
 }
-
 impl Line {
     #[inline]
     fn into_iter_exlusive(self) -> BresenhamLineInclusiveIter {
@@ -120,10 +119,9 @@ impl Line {
 
     pub fn as_circle(&self) -> Circle { Circle::new(self.start, self.len) }
 }
-
 impl IntoIterator for Line {
-    type Item = IVec2;
     type IntoIter = BresenhamLineIter;
+    type Item = IVec2;
 
     fn into_iter(self) -> Self::IntoIter { BresenhamLineIter::new(self.start, self.end) }
 }

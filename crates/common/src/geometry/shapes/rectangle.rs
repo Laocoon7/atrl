@@ -1,22 +1,23 @@
-use crate::prelude::*;
 use std::ops::Div;
 
+use crate::prelude::*;
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq)]
 pub struct Rectangle {
     pub min: IVec2,
     pub max: IVec2,
 }
-
 impl Default for Rectangle {
     fn default() -> Self { Self::new_with_size(IVec2::ZERO, IVec2::ONE) }
 }
-
 impl Rectangle {
     #[inline]
     pub fn new(min: impl Point2d, max: impl Point2d) -> Self {
         let min = min.as_ivec2();
         let max = max.as_ivec2();
-        Self { min: min.min(max), max: min.max(max) }
+        Self {
+            min: min.min(max),
+            max: min.max(max),
+        }
     }
 
     #[inline]
@@ -25,7 +26,6 @@ impl Rectangle {
         Self::new(min, min + size.as_ivec2())
     }
 }
-
 impl Rectangle {
     #[inline]
     pub const fn width(&self) -> i32 { self.max.x - self.min.x }
@@ -45,7 +45,6 @@ impl Rectangle {
         diff.x == diff.y
     }
 }
-
 impl Shape for Rectangle {
     fn from_points(points: Vec<impl Point2d>) -> Self
     where Self: Sized {
@@ -86,7 +85,6 @@ impl Shape for Rectangle {
 
     fn iter(&self) -> ShapeIterator { ShapeIterator::Rectangle(self.into_iter()) }
 }
-
 impl Rectangle {
     /// Create a circle around the center to the closest edge
     pub fn as_smallest_circle(&self) -> Circle {
@@ -103,7 +101,10 @@ impl Rectangle {
     pub fn as_triangles(&self) -> (Triangle, Triangle) {
         let max = IVec2::new(self.right(), self.top());
         let min = IVec2::new(self.left(), self.bottom());
-        (Triangle::new(self.min(), max, min), Triangle::new(self.max(), max, min))
+        (
+            Triangle::new(self.min(), max, min),
+            Triangle::new(self.max(), max, min),
+        )
     }
 
     pub fn as_polygon(&self) -> Polygon {
@@ -119,7 +120,6 @@ impl Rectangle {
     #[must_use]
     pub const fn intersects(&self, other: Self) -> bool {
         // (self.min.cmple(other.max) & self.max.cmpge(other.min)).all()
-
         self.min.x <= other.max.x &&
             self.max.x >= other.min.x &&
             self.min.y <= other.max.y &&
@@ -148,10 +148,9 @@ impl Rectangle {
     /// iterates over all points in the rectangle
     pub fn iter(&self) -> RectIter { RectIter::new(self.min, self.max) }
 }
-
 impl IntoIterator for Rectangle {
-    type Item = IVec2;
     type IntoIter = RectIter;
+    type Item = IVec2;
 
     fn into_iter(self) -> Self::IntoIter { RectIter::new(self.min, self.max) }
 }

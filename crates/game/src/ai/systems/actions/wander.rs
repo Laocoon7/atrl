@@ -1,16 +1,15 @@
-use crate::prelude::*;
-use bevy::render::once_cell::sync::Lazy;
-use rand::distributions::Uniform;
 use std::{collections::VecDeque, ops::RangeInclusive};
 
-static WANDER_RANGE: Lazy<Uniform<u32>> = Lazy::new(|| Uniform::new_inclusive(3, 10));
+use bevy::render::once_cell::sync::Lazy;
+use rand::distributions::Uniform;
 
+use crate::prelude::*;
+static WANDER_RANGE: Lazy<Uniform<u32>> = Lazy::new(|| Uniform::new_inclusive(3, 10));
 #[derive(Debug, Reflect, Default, Clone, PartialEq, Eq)]
 pub enum WanderFailureBehavior {
     #[default]
     Wait,
 }
-
 // could be used for temporary storage for multi turn actions
 #[derive(Debug, Reflect, Default, Component, Clone, Eq, PartialEq)]
 #[reflect(Component)]
@@ -19,7 +18,6 @@ pub struct Wander {
     // What to do if entity has no available places to move
     fail_behavior: WanderFailureBehavior,
 }
-
 pub fn wander_action(
     mut commands: Commands,
     mut manager: ResMut<MapManager>,
@@ -30,29 +28,25 @@ pub fn wander_action(
     tilesets: Tilesets,
 ) {
     use BigBrainActionState::*;
-
     for (Actor(actor), mut action_state, mut wander, span) in action_q.iter_mut() {
         let _guard = span.span().enter();
-
         let rng = ctx.random.get_prng().as_rngcore();
         let map = manager.get_current_map_mut().expect("No map found");
-
         let (mut position, movement_component, name) =
             spatial_q.get_mut(*actor).expect("Actor must have spatial components");
         let ai_pos = position.get();
-
         match *action_state {
             Cancelled => {
                 if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
                     target_visualizer.clear(&mut commands);
                 }
                 *action_state = Failure;
-            }
+            },
             Requested => {
                 info!("{} gonna start wandering!", name);
                 *action_state = Executing;
                 wander.path = Some(generate_wander_path(rng, ai_pos, movement_component.0, map));
-            }
+            },
             Executing => {
                 let wander_path = std::mem::take(&mut wander.path);
                 let ai_path = wander_path.and_then(|p| {
@@ -62,12 +56,10 @@ pub fn wander_action(
                         Some(p)
                     }
                 });
-
                 let mut ai_path = ai_path.map_or_else(
                     || generate_wander_path(rng, ai_pos, movement_component.0, map),
                     |p| p,
                 );
-
                 ai_path.pop().map_or_else(
                     || {
                         // We have reached the end of our trail!
@@ -104,16 +96,14 @@ pub fn wander_action(
                         }
                     },
                 );
-
                 wander.path = Some(ai_path);
-            }
+            },
 
             // Init | Success | Failure
-            _ => {}
+            _ => {},
         }
     }
 }
-
 fn generate_wander_path(
     rng: &mut impl RngCore,
     ai_pos: IVec2,

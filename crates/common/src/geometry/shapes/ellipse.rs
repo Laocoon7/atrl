@@ -1,17 +1,17 @@
 use crate::prelude::*;
-
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq)]
 pub struct Ellipse {
     center: IVec2,
     size: UVec2,
 }
-
 impl Ellipse {
     pub fn new(center: impl Point2d, size: impl Size2d) -> Self {
-        Self { center: center.as_ivec2(), size: size.as_uvec2() }
+        Self {
+            center: center.as_ivec2(),
+            size: size.as_uvec2(),
+        }
     }
 }
-
 impl Ellipse {
     #[inline]
     pub const fn width(&self) -> u32 { self.size.x }
@@ -19,7 +19,6 @@ impl Ellipse {
     #[inline]
     pub const fn height(&self) -> u32 { self.size.y }
 }
-
 impl Shape for Ellipse {
     /// must be [top_left, bottom_right]
     fn from_points(points: Vec<impl Point2d>) -> Self
@@ -45,7 +44,10 @@ impl Shape for Ellipse {
 
     /// Returns [top_left, bottom_right]
     fn points(&self) -> Vec<IVec2> {
-        vec![IVec2::new(self.left(), self.top()), IVec2::new(self.right(), self.bottom())]
+        vec![
+            IVec2::new(self.left(), self.top()),
+            IVec2::new(self.right(), self.bottom()),
+        ]
     }
 
     #[inline]
@@ -63,7 +65,6 @@ impl Shape for Ellipse {
     #[inline]
     fn bottom(&self) -> i32 { self.center.y + (self.size.y as i32) / 2 }
 }
-
 impl Ellipse {
     pub fn as_rect(&self) -> Rectangle {
         Rectangle::new((self.left(), self.top()), (self.right(), self.bottom()))
@@ -79,7 +80,10 @@ impl Ellipse {
 
     /// Create line from center to right edge at 0 degrees
     pub fn as_radius_line(&self) -> Line {
-        Line::new((self.center.x, self.center.y), (self.right(), self.center.y))
+        Line::new(
+            (self.center.x, self.center.y),
+            (self.right(), self.center.y),
+        )
     }
 
     pub fn as_circle(&self) -> Option<Circle> {

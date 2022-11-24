@@ -1,6 +1,6 @@
-use crate::prelude::*;
 use bevy::math::Vec3Swizzles;
 
+use crate::prelude::*;
 #[derive(
     Reflect,
     Component,
@@ -18,7 +18,6 @@ use bevy::math::Vec3Swizzles;
 )]
 #[reflect(Component)]
 pub struct WorldPosition(pub IVec3);
-
 impl WorldPosition {
     pub fn xy(&self) -> IVec2 { (**self).xy() }
 }

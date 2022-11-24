@@ -1,6 +1,6 @@
-use crate::prelude::*;
 use bevy::diagnostic::{Diagnostics, EntityCountDiagnosticsPlugin, FrameTimeDiagnosticsPlugin};
 
+use crate::prelude::*;
 /// This system will then change the title during execution
 pub fn set_debug_title(
     mut windows: ResMut<Windows>,
@@ -18,7 +18,6 @@ pub fn set_debug_title(
                 .unwrap_or_default(),
             state.0
         );
-
         window.set_title(title);
     }
 }

@@ -1,7 +1,6 @@
 use atrl_common::prelude::grid_shapes::GridShape;
 
 use crate::prelude::*;
-
 #[derive(Component, Default)]
 pub struct TargetVisualizer {
     start: Option<IVec2>,
@@ -9,10 +8,13 @@ pub struct TargetVisualizer {
 
     entity_list: Vec<Entity>,
 }
-
 impl TargetVisualizer {
     pub fn new(start: impl Point2d, end: impl Point2d) -> Self {
-        Self { start: Some(start.as_ivec2()), end: Some(end.as_ivec2()), entity_list: Vec::new() }
+        Self {
+            start: Some(start.as_ivec2()),
+            end: Some(end.as_ivec2()),
+            entity_list: Vec::new(),
+        }
     }
 
     pub fn update(
@@ -27,17 +29,13 @@ impl TargetVisualizer {
         let end = end.as_ivec2();
         self.start = Some(start);
         self.end = Some(end);
-
         // TODO: reuse entities updating position...
         self.clear(commands);
-
         let Some(tileset) = tilesets.get_by_id(TILESET_CURSOR_ID) else {
             error!("Couldn't find tilemap_id: {:?}. Refusing to draw TargetVisualizer.", TILESET_CURSOR_ID);
             return;
         };
-
         let line = grid_shapes::Line::new(start, end);
-
         for point in line.get_points() {
             self.entity_list.push(
                 commands
@@ -72,7 +70,6 @@ impl TargetVisualizer {
     pub fn get(&self) -> Option<(IVec2, IVec2)> {
         let Some(start) = self.start else {return None;};
         let Some(end) = self.end else {return None;};
-
         Some((start, end))
     }
 }

@@ -1,5 +1,4 @@
 use crate::prelude::*;
-
 pub struct MapGenData<T> {
     pub user_data: T,
 
@@ -12,7 +11,6 @@ pub struct MapGenData<T> {
     pub grid: Grid<u32>,
     pub rooms: Vec<Rectangle>,
 }
-
 impl<T> MapGenData<T> {
     pub(crate) fn new(
         size: UVec2,

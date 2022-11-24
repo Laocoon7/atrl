@@ -1,8 +1,7 @@
-use crate::prelude::*;
-
 use num_derive::{FromPrimitive, ToPrimitive};
 use num_traits::{FromPrimitive, ToPrimitive};
 
+use crate::prelude::*;
 #[derive(
     Reflect,
     FromReflect,
@@ -26,7 +25,6 @@ pub enum TerrainType {
     Wall,
     Water,
 }
-
 impl TerrainType {
     /// Movement is allowed if MovementComponent allows any of these types
     pub const fn allowed_movement(&self) -> u8 {
@@ -38,10 +36,10 @@ impl TerrainType {
                     (MovementType::Run as u8) |
                     (MovementType::Fly as u8) |
                     (MovementType::Phase as u8)
-            }
+            },
             Self::Water => {
                 (MovementType::Swim as u8) | (MovementType::Fly as u8) | (MovementType::Phase as u8)
-            }
+            },
         }
     }
 
@@ -52,10 +50,10 @@ impl TerrainType {
             Self::Wall => VisionType::XRay as u8,
             Self::Floor => {
                 (VisionType::Normal as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
-            }
+            },
             Self::Water => {
                 (VisionType::Normal as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
-            }
+            },
         }
     }
 
@@ -69,13 +67,11 @@ impl TerrainType {
         }
     }
 }
-
 impl From<TerrainType> for u32 {
     fn from(value: TerrainType) -> Self {
         ToPrimitive::to_u32(&value).expect("Failed to convert `TerrainType` to `u32`")
     }
 }
-
 impl From<u32> for TerrainType {
     fn from(value: u32) -> Self { FromPrimitive::from_u32(value).map_or(Self::None, |v| v) }
 }

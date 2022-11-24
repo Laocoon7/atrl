@@ -1,16 +1,13 @@
 use atrl_common::prelude::grid_shapes::GridShape;
 
 use crate::prelude::*;
-
 #[derive(Clone, Component, Debug)]
 pub struct CanSeePlayer {
     pub score_if_true: f32,
 }
-
 impl Default for CanSeePlayer {
     fn default() -> Self { Self { score_if_true: 1.0 } }
 }
-
 pub fn can_see_player(
     manager: Res<MapManager>,
     player_q: Query<(Entity, &Transform), With<Player>>,
@@ -24,7 +21,6 @@ pub fn can_see_player(
                 if let Some(map) = manager.get_current_map() {
                     let player_pos = player_transform.get();
                     let ai_pos = ai_transform.get();
-
                     // If the player is within the FOV range of the AI, check line of sight
                     let line = grid_shapes::Line::new(ai_pos, player_pos).get_points();
                     if line.len() < fov.0 as usize {

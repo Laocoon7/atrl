@@ -1,10 +1,8 @@
 use crate::prelude::*;
-
 pub struct AIPlugin<T, R> {
     pub state_running: T,
     pub turn_state_ticking: R,
 }
-
 impl<T: StateNext, R: StateNext + Resource> Plugin for AIPlugin<T, R> {
     fn build(&self, app: &mut App) {
         app.add_plugin(BigBrainPlugin,)

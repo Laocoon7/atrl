@@ -1,24 +1,19 @@
 use crate::prelude::*;
-
 const TURN_TIME: u32 = 1000;
-
 #[derive(Resource)]
 pub struct TurnManager {
     turn_number: u32,
 
     current_time: u32,
-    
+
     entities: IndexList<(u32, u32, Entity)>,
 }
-
 impl TurnManager {
     // This will go into an `impl FromWorld`
     pub fn new() -> Self {
         Self {
             turn_number: 0,
-
             current_time: 0,
-
             entities: IndexList::new(),
         }
     }
@@ -74,7 +69,7 @@ impl TurnManager {
             // we are at least to turn_number:current_time
             self.turn_number = turn_number;
             self.current_time = current_time;
-            return Some(entity)
+            return Some(entity);
         }
         None
     }
@@ -88,7 +83,6 @@ impl TurnManager {
         if next_time >= TURN_TIME {
             current_turn += 1;
         }
-
         if let Some(index) = self.get_index_after_time(current_turn, next_time) {
             self.entities.insert_before(index, (current_turn, next_time, entity));
         } else {
@@ -100,7 +94,9 @@ impl TurnManager {
         let mut index = self.entities.first_index();
         while index.is_some() {
             if let Some((current_turn_number, current_time, _entity)) = self.entities.get(index) {
-                if *current_turn_number > turn_number || (*current_turn_number == turn_number && *current_time > time) {
+                if *current_turn_number > turn_number ||
+                    (*current_turn_number == turn_number && *current_time > time)
+                {
                     return Some(index);
                 }
             }

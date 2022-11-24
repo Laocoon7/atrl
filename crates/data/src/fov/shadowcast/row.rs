@@ -1,18 +1,24 @@
 use crate::prelude::*;
-
 pub struct Row {
     depth: u32,
     start_slope: Slope,
     end_slope: Slope,
 }
-
 impl Row {
     pub const fn new(depth: u32, start_slope: Slope, end_slope: Slope) -> Self {
-        Self { depth, start_slope, end_slope }
+        Self {
+            depth,
+            start_slope,
+            end_slope,
+        }
     }
 
     pub fn next(&self) -> Self {
-        Self { depth: self.depth + 1, start_slope: self.start_slope, end_slope: self.end_slope }
+        Self {
+            depth: self.depth + 1,
+            start_slope: self.start_slope,
+            end_slope: self.end_slope,
+        }
     }
 
     pub fn calc_starting_slope(&mut self, tile: IVec2) { self.start_slope = Self::slope(tile) }
@@ -34,13 +40,11 @@ impl Row {
             (tile.y as f64 <= self.depth as f64 * self.end_slope.value())
     }
 }
-
 pub struct RowIter {
     depth: u32,
     max_col: i32,
     current_col: i32,
 }
-
 impl Iterator for RowIter {
     type Item = IVec2;
 

@@ -1,6 +1,6 @@
-use crate::prelude::*;
 use bevy::app::AppExit;
 
+use crate::prelude::*;
 pub fn setup_main_menu(
     mut commands: Commands,
     textures: Res<TextureAssets>,
@@ -11,10 +11,8 @@ pub fn setup_main_menu(
     if let Ok(entity) = ui_camera.get_single() {
         info!("Setting up main menu");
         font_mapping.set_default(asset_server.load("fonts/lato/lato-light.kayak_font"));
-
         let mut widget_context = KayakRootContext::new();
         widget_context.add_plugin(KayakWidgetsContextPlugin);
-
         // Main Menu Widget
         widget_context.add_widget_data::<MenuWidget, MainMenuState>();
         widget_context.add_widget_system(
@@ -22,7 +20,6 @@ pub fn setup_main_menu(
             widget_update::<MenuWidget, MainMenuState>,
             menu_widget_render,
         );
-
         // Menu Buttons
         widget_context.add_widget_data::<MenuButton, ButtonState>();
         widget_context.add_widget_system(
@@ -30,7 +27,6 @@ pub fn setup_main_menu(
             widget_update::<MenuButton, ButtonState>,
             menu_button_render,
         );
-
         let handle_click_close = OnEvent::new(
             move |In((event_dispatcher_context, _, event, _entity)): In<(
                 EventDispatcherContext,
@@ -45,7 +41,6 @@ pub fn setup_main_menu(
                 (event_dispatcher_context, event)
             },
         );
-
         let continue_click = OnEvent::new(
             move |In((event_dispatcher_context, _, mut event, _entity)): In<(
                 EventDispatcherContext,
@@ -63,11 +58,9 @@ pub fn setup_main_menu(
                 (event_dispatcher_context, event)
             },
         );
-
         let parent_id = None;
         let panel1_image = textures.ui_panel.clone();
         let logo_image = textures.logo.clone();
-
         rsx! {
             <KayakAppBundle>
                 <NinePatchBundle
@@ -121,7 +114,6 @@ pub fn setup_main_menu(
                 </NinePatchBundle>
             </KayakAppBundle>
         }
-
         commands.entity(entity).insert(widget_context);
     }
 }

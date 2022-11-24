@@ -1,11 +1,9 @@
 use crate::prelude::*;
-
 #[derive(Debug, Clone, Copy, Hash, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
 pub enum GridAxis {
     X,
     Y,
 }
-
 impl GridAxis {
     #[inline]
     pub const fn other(self) -> Self {

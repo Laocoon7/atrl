@@ -1,11 +1,9 @@
 use crate::prelude::*;
-
 pub const NUM_ORDINAL_DIRECTIONS: usize = 4;
 pub const ALL_ORDINAL_DIRECTION_BITMAP_RAW: u8 = (1 << GridDirection::NorthEast as usize) |
     (1 << GridDirection::SouthEast as usize) |
     (1 << GridDirection::SouthWest as usize) |
     (1 << GridDirection::NorthWest as usize);
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
 #[repr(u8)]
 pub enum OrdinalDirection {
@@ -14,7 +12,6 @@ pub enum OrdinalDirection {
     SouthWest,
     NorthWest,
 }
-
 impl OrdinalDirection {
     pub fn from_unit_coord(coord: impl Point2d + std::fmt::Debug) -> Self {
         match [coord.x(), coord.y()] {
@@ -133,8 +130,7 @@ impl OrdinalDirection {
     }
 
     pub const fn to_cardinals(self) -> (CardinalDirection, CardinalDirection) {
-        use self::CardinalDirection::*;
-        use self::OrdinalDirection::*;
+        use self::{CardinalDirection::*, OrdinalDirection::*};
         match self {
             NorthEast => (North, East),
             SouthEast => (East, South),
@@ -152,7 +148,6 @@ impl OrdinalDirection {
 
     pub const fn all_directions() -> DirectionOrdinalIter { DirectionOrdinalIter::new() }
 }
-
 impl From<OrdinalDirection> for [i32; 2] {
     fn from(o: OrdinalDirection) -> [i32; 2] {
         use self::OrdinalDirection::*;
@@ -175,7 +170,6 @@ impl From<OrdinalDirection> for (i32, i32) {
         }
     }
 }
-
 impl Distribution<OrdinalDirection> for Standard {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> OrdinalDirection {
         let index = rng.gen_range(0..NUM_ORDINAL_DIRECTIONS as u8);

@@ -1,5 +1,4 @@
 use crate::prelude::*;
-
 // This is the list of "things in the game I want to be able to do based on input"
 #[derive(Actionlike, PartialEq, Eq, Clone, Copy, Hash, Debug)]
 pub enum PlayerAction {
@@ -15,7 +14,6 @@ pub enum PlayerAction {
 
     Wait,
 }
-
 impl PlayerAction {
     // Lists like this can be very useful for quickly matching subsets of actions
     pub const DIRECTIONS: [Self; 8] = [

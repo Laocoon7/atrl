@@ -1,5 +1,4 @@
 use crate::prelude::*;
-
 #[derive(Copy, Clone)]
 pub struct GamePlugin<T> {
     /// Asset loading happens in this state. When it finishes it transitions to
@@ -11,14 +10,11 @@ pub struct GamePlugin<T> {
     pub state_main_menu: T,
     pub state_running: T,
 }
-
 impl<T: StateNext> Plugin for GamePlugin<T> {
     fn build(&self, app: &mut App) {
         let game_context = GameContext::default();
-
         // set entry state
         self.setup_states(app);
-
         app
             // Game Context
             .insert_resource(game_context,)
@@ -31,7 +27,6 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
                 state_running: self.state_running,
                 turn_state_ticking: TurnState::Ticking,
             },);
-
         self
             // Raw Files
             .add_raws(app, self.state_asset_load, self.state_asset_load_failure,)
@@ -39,7 +34,6 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
             .add_camera(app,)
             // Map Rendering
             .add_map_plugins(self.state_construct, self.state_running, app,);
-
         app
             // UI
             .add_plugin(UiPlugin {
@@ -53,7 +47,6 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
             .add_plugin(PlayerPlugin { state_running: self.state_running, },);
     }
 }
-
 impl<T: StateNext> GamePlugin<T> {
     fn setup_states(self, app: &mut App) -> Self {
         app.add_loopless_state(GameState::Initializing)
@@ -62,7 +55,6 @@ impl<T: StateNext> GamePlugin<T> {
                 GameState::Initializing,
                 switch_in_game_state!(GameState::AssetLoad(AssetLoadState::Load)),
             );
-
         self
     }
 
@@ -72,30 +64,24 @@ impl<T: StateNext> GamePlugin<T> {
                 .with_id(CameraId::Map)
                 .with_position(Vec2::ZERO),
         ));
-
         self
     }
 
     fn add_raws(self, app: &mut App, state_asset_load: T, state_asset_load_failure: T) -> Self {
         let mut plugin = RawPlugin::new(state_asset_load, state_asset_load_failure);
-
         for path in get_tileset_paths() {
             plugin = plugin.add_tileset_file(path.as_str());
         }
-
         for path in get_font_paths() {
             plugin = plugin.add_font_file(path.as_str());
         }
-
         app.add_plugin(plugin);
-
         self
     }
 
     fn add_map_plugins(self, state_construct: T, state_running: T, app: &mut App) -> Self {
         app.add_plugin(MapPlugin::new(state_construct, state_running))
             .add_plugin(MapRendererPlugin::new([GRID_WIDTH, GRID_HEIGHT]));
-
         self
     }
 }

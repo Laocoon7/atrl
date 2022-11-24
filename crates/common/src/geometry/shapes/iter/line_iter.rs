@@ -1,12 +1,10 @@
 use crate::prelude::*;
-
 //////////////////////////////////////////////////////////////////////////////////////////
 /// Bresenham Algo
 //////////////////////////////////////////////////////////////////////////////////////////
 
 #[derive(Debug, Clone)]
 struct Octant(u8);
-
 /// Line-drawing iterator
 #[derive(Debug, Clone)]
 pub struct BresenhamLineIter {
@@ -18,33 +16,27 @@ pub struct BresenhamLineIter {
     diff: i32,
     octant: Octant,
 }
-
 impl Octant {
     /// adapted from <http://codereview.stackexchange.com/a/95551>
     #[inline]
     fn from_points(start: impl Point2d, end: impl Point2d) -> Self {
         let mut dx = end.x() - start.x();
         let mut dy = end.y() - start.y();
-
         let mut octant = 0;
-
         if dy < 0 {
             dx = -dx;
             dy = -dy;
             octant += 4;
         }
-
         if dx < 0 {
             let tmp = dx;
             dx = dy;
             dy = -tmp;
             octant += 2;
         }
-
         if dx < dy {
             octant += 1;
         }
-
         Self(octant)
     }
 
@@ -79,42 +71,41 @@ impl Octant {
         }
     }
 }
-
 impl BresenhamLineIter {
     /// Creates a new iterator.Yields intermediate points between `start`
     /// and `end`. Does include `start` but not `end`.
     #[inline]
     pub fn new(start: impl Point2d, end: impl Point2d) -> Self {
         let octant = Octant::from_points(start, end);
-
         let start = octant.to_octant(start);
         let end = octant.to_octant(end);
-
         let dx = end.x() - start.x();
         let dy = end.y() - start.y();
-
-        Self { x: start.x(), y: start.y(), dx, dy, x1: end.x(), diff: dy - dx, octant }
+        Self {
+            x: start.x(),
+            y: start.y(),
+            dx,
+            dy,
+            x1: end.x(),
+            diff: dy - dx,
+            octant,
+        }
     }
 
     /// Return the next point without checking if we are past `end`.
     #[inline]
     pub fn advance(&mut self) -> IVec2 {
         let p = IVec2::new(self.x, self.y);
-
         if self.diff >= 0 {
             self.y += 1;
             self.diff -= self.dx;
         }
-
         self.diff += self.dy;
-
         // loop inc
         self.x += 1;
-
         self.octant.from_octant(p)
     }
 }
-
 impl Iterator for BresenhamLineIter {
     type Item = IVec2;
 
@@ -127,7 +118,6 @@ impl Iterator for BresenhamLineIter {
         }
     }
 }
-
 //////////////////////////////////////////////////////////////////////////////////////////
 /// Bresenham inclusive Algo
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -158,13 +148,11 @@ impl Iterator for BresenhamLineInclusiveIter {
         }
     }
 }
-
 #[cfg(test)]
 mod tests {
     #[cfg(test)]
     mod line {
         use crate::prelude::*;
-
         #[test]
         fn line_vertical() {
             let mut canvas = Canvas::new([11, 11]);
@@ -174,7 +162,6 @@ mod tests {
             }
             canvas.print();
         }
-
         #[test]
         fn line_horizontal() {
             let mut canvas = Canvas::new([11, 11]);
@@ -184,7 +171,6 @@ mod tests {
             }
             canvas.print();
         }
-
         #[test]
         fn line_diagonal() {
             let mut canvas = Canvas::new([10, 10]);
@@ -194,7 +180,6 @@ mod tests {
             }
             canvas.print();
         }
-
         #[test]
         fn line_multi() {
             let mut canvas = Canvas::new([11, 7]);
@@ -210,11 +195,9 @@ mod tests {
             canvas.print();
         }
     }
-
     #[cfg(test)]
     mod bresenham {
         use crate::prelude::*;
-
         #[test]
         fn line_diagonal() {
             let mut canvas = Canvas::new([10, 10]);
@@ -225,11 +208,9 @@ mod tests {
             canvas.print();
         }
     }
-
     #[cfg(test)]
     mod bresenham_inclusive {
         use crate::prelude::*;
-
         #[test]
         fn line_diagonal() {
             let mut canvas = Canvas::new([10, 10]);

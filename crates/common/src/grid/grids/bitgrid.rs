@@ -1,19 +1,17 @@
-use crate::prelude::*;
-use bitvec::slice;
 use std::ops::Index;
 
+use bitvec::slice;
+
+use crate::prelude::*;
 pub type BitIter<'a> = slice::Iter<'a, usize, Lsb0>;
 pub type BitIterMut<'a> = slice::IterMut<'a, usize, Lsb0>;
-
 pub type BitChunk<'a> = slice::Chunks<'a, usize, Lsb0>;
 pub type BitChunkMut<'a> = slice::ChunksMut<'a, usize, Lsb0>;
-
 #[derive(Serialize, Deserialize, Default, Debug, Clone, Hash, PartialEq, Eq)]
 pub struct BitGrid {
     pub size: UVec2,
     pub cells: BitVec,
 }
-
 impl GridLayer<bool> for BitGrid {
     type MutableReturn<'a> = BitRef<'a, bitvec::ptr::Mut>;
 
@@ -23,7 +21,10 @@ impl GridLayer<bool> for BitGrid {
         let count = size.count();
         let mut cells = BitVec::with_capacity(count);
         cells.resize(count, value);
-        Self { cells, size: size.as_uvec2() }
+        Self {
+            cells,
+            size: size.as_uvec2(),
+        }
     }
 
     #[inline(always)]
@@ -51,7 +52,10 @@ impl GridLayer<bool> for BitGrid {
         let count = size.count();
         let mut cells = BitVec::with_capacity(count);
         cells.resize_with(count, |_| value);
-        Self { cells, size: size.as_uvec2() }
+        Self {
+            cells,
+            size: size.as_uvec2(),
+        }
     }
 
     #[inline(always)]
@@ -76,7 +80,10 @@ impl GridLayer<bool> for BitGrid {
     #[inline(always)]
     fn new_default(size: impl Size2d) -> Self {
         let count = size.count();
-        Self { cells: bitvec![0_usize; count], size: size.as_uvec2() }
+        Self {
+            cells: bitvec![0_usize; count],
+            size: size.as_uvec2(),
+        }
     }
 
     #[inline(always)]
@@ -86,7 +93,10 @@ impl GridLayer<bool> for BitGrid {
         for coord in size.iter() {
             cells.push(f(coord));
         }
-        Self { size: size.as_uvec2(), cells }
+        Self {
+            size: size.as_uvec2(),
+            cells,
+        }
     }
 
     #[inline]
@@ -176,12 +186,11 @@ impl GridLayer<bool> for BitGrid {
         self.cells.replace(index, value)
     }
 }
-
 impl GridIterable<bool> for BitGrid {
-    type IterReturn<'a> = BitIter<'a>;
-    type IterMutReturn<'a> = BitIterMut<'a>;
-    type IterChunkReturn<'a> = BitChunk<'a>;
     type IterChunkMutReturn<'a> = BitChunkMut<'a>;
+    type IterChunkReturn<'a> = BitChunk<'a>;
+    type IterMutReturn<'a> = BitIterMut<'a>;
+    type IterReturn<'a> = BitIter<'a>;
 
     #[inline]
     fn iter(&self) -> Self::IterReturn<'_> { self.cells.iter() }
@@ -229,18 +238,15 @@ impl GridIterable<bool> for BitGrid {
         return self.cells[x..].iter().step_by(w);
     }
 }
-
 ///////////////////////////////////////////////////////////////////////////
 // Indexing
 ///////////////////////////////////////////////////////////////////////////
-
 impl Index<usize> for BitGrid {
     type Output = bool;
 
     #[inline]
     fn index(&self, index: usize) -> &bool { &self.cells[index] }
 }
-
 impl<P: Point2d> Index<P> for BitGrid {
     type Output = bool;
 

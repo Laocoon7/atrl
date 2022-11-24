@@ -1,17 +1,16 @@
 use crate::prelude::*;
-
 pub struct VisibilityMap {
     grid: Grid<u8>,
 }
-
 impl VisibilityMap {
     pub fn new(size: impl Size2d) -> Self {
         let mut width = size.width() / 8;
         if size.width() % 8 != 0 {
             width += 1;
         }
-
-        Self { grid: Grid::new_default([width, size.height()]) }
+        Self {
+            grid: Grid::new_default([width, size.height()]),
+        }
     }
 
     fn get_byte_index(&self, position: IVec2) -> Option<(IVec2, u8)> {
@@ -24,7 +23,6 @@ impl VisibilityMap {
         }
     }
 }
-
 impl FovReceiver for VisibilityMap {
     fn get_visible(&self, position: IVec2) -> bool {
         if let Some((byte_index, bit_index)) = self.get_byte_index(position) {
@@ -39,7 +37,6 @@ impl FovReceiver for VisibilityMap {
         if let Some((byte_index, bit_index)) = self.get_byte_index(position) {
             // get old byte, and set the bit index
             let byte = *self.grid.get_unchecked(byte_index) | (1 << bit_index);
-
             self.grid.set_unchecked(byte_index, byte);
         }
     }

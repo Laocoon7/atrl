@@ -1,5 +1,4 @@
 use crate::prelude::*;
-
 pub fn load_game_textures(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.insert_resource(TextureAssets {
         button: asset_server.load("images/ui/button.png"),

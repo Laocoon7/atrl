@@ -1,12 +1,9 @@
 use crate::prelude::*;
-
 #[derive(Default, Clone, Eq, PartialEq, Component)]
 pub struct MenuButton {
     pub text: String,
 }
-
 impl Widget for MenuButton {}
-
 #[derive(Bundle)]
 pub struct MenuButtonBundle {
     pub styles: KStyle,
@@ -14,7 +11,6 @@ pub struct MenuButtonBundle {
     pub on_event: OnEvent,
     pub widget_name: WidgetName,
 }
-
 impl Default for MenuButtonBundle {
     fn default() -> Self {
         Self {

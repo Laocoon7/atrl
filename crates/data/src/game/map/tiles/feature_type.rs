@@ -1,5 +1,4 @@
 use crate::prelude::*;
-
 #[derive(
     Reflect,
     FromReflect,
@@ -24,7 +23,6 @@ pub enum FeatureType {
     DoorClosed,
     DoorOpen,
 }
-
 impl FeatureType {
     /// Movement is allowed if MovementComponent allows any of these types
     pub const fn allowed_movement(&self) -> u8 {
@@ -35,25 +33,25 @@ impl FeatureType {
                     (MovementType::Run as u8) |
                     (MovementType::Fly as u8) |
                     (MovementType::Phase as u8)
-            }
+            },
             Self::StairsUp => {
                 (MovementType::Walk as u8) |
                     (MovementType::Run as u8) |
                     (MovementType::Fly as u8) |
                     (MovementType::Phase as u8)
-            }
+            },
             Self::DoorClosed => {
                 (MovementType::Walk as u8) |
                     (MovementType::Run as u8) |
                     (MovementType::Fly as u8) |
                     (MovementType::Phase as u8)
-            }
+            },
             Self::DoorOpen => {
                 (MovementType::Walk as u8) |
                     (MovementType::Run as u8) |
                     (MovementType::Fly as u8) |
                     (MovementType::Phase as u8)
-            }
+            },
         }
     }
 
@@ -63,16 +61,16 @@ impl FeatureType {
             Self::None => VisionType::None as u8,
             Self::StairsDown => {
                 (VisionType::Normal as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
-            }
+            },
             Self::StairsUp => {
                 (VisionType::Normal as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
-            }
+            },
             Self::DoorClosed => {
                 (VisionType::Normal as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
-            }
+            },
             Self::DoorOpen => {
                 (VisionType::Normal as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
-            }
+            },
         }
     }
 
@@ -82,24 +80,22 @@ impl FeatureType {
             Self::None => VisionType::Any as u8,
             Self::StairsDown => {
                 (VisionType::Normal as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
-            }
+            },
             Self::StairsUp => {
                 (VisionType::Normal as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
-            }
+            },
             Self::DoorClosed => VisionType::XRay as u8,
             Self::DoorOpen => {
                 (VisionType::Normal as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
-            }
+            },
         }
     }
 }
-
 impl From<FeatureType> for u32 {
     fn from(value: FeatureType) -> Self {
         ToPrimitive::to_u32(&value).expect("Failed to convert `FeatureType` to u32")
     }
 }
-
 impl From<FeatureType> for u64 {
     fn from(value: FeatureType) -> Self {
         ToPrimitive::to_u64(&value).expect("Failed to convert `FeatureType` to u64")

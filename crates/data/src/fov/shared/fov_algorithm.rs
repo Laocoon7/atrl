@@ -1,5 +1,4 @@
 use crate::prelude::*;
-
 pub trait FovAlgorithm {
     fn compute_fov(
         origin: IVec2,

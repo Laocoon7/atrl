@@ -1,5 +1,4 @@
 use crate::prelude::*;
-
 /// Rotate `points` around the `center` by `degrees`
 ///
 /// The resulting points at the same distance but at +degrees angle

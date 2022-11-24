@@ -1,5 +1,4 @@
 use crate::prelude::*;
-
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct Polygon {
     points: Vec<IVec2>,
@@ -8,7 +7,6 @@ pub struct Polygon {
     center: IVec2,
     is_convex: bool,
 }
-
 impl Polygon {
     pub fn new(points: Vec<impl Point2d>) -> Self {
         let points: Vec<IVec2> = points.into_iter().map(|p| p.as_ivec2()).collect();
@@ -31,7 +29,6 @@ impl Polygon {
         poly
     }
 }
-
 impl Polygon {
     #[inline]
     pub const fn fpoints(&self) -> &Vec<Vec2> { &self.fpoints }
@@ -54,7 +51,6 @@ impl Polygon {
     #[inline]
     pub const fn is_convex(&self) -> bool { self.is_convex }
 }
-
 impl Shape for Polygon {
     fn from_points(points: Vec<impl Point2d>) -> Self
     where Self: Sized {
@@ -65,7 +61,6 @@ impl Shape for Polygon {
         let fpoint = point.as_vec2();
         let mut j = self.fpoints.len() - 1;
         let mut odd_number_of_nodes = false;
-
         for i in 0..self.fpoints.len() {
             if (self.fpoints[i].y < fpoint.y && self.fpoints[j].y >= fpoint.y ||
                 self.fpoints[j].y < fpoint.y && self.fpoints[i].y >= fpoint.y) &&
@@ -78,7 +73,6 @@ impl Shape for Polygon {
             }
             j = i;
         }
-
         odd_number_of_nodes
     }
 
@@ -87,7 +81,6 @@ impl Shape for Polygon {
     #[inline]
     fn center(&self) -> IVec2 { self.center }
 }
-
 impl Polygon {
     /// Creates a circle using the point closest to the center
     pub fn as_inner_circle(&self) -> Circle {
@@ -130,12 +123,14 @@ impl Polygon {
         for p in self.points.windows(2) {
             output.push(Triangle::new(p[0], p[1], self.center));
         }
-        output.push(Triangle::new(*self.points.last().unwrap(), self.points[0], self.center));
-
+        output.push(Triangle::new(
+            *self.points.last().unwrap(),
+            self.points[0],
+            self.center,
+        ));
         Some(output)
     }
 }
-
 fn is_convex(points: &Vec<IVec2>) -> bool {
     let mut prev = 0;
     for i in 0..points.len() {

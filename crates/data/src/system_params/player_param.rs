@@ -1,5 +1,4 @@
 use crate::prelude::*;
-
 #[derive(SystemParam)]
 pub struct PlayerQuery<'w, 's> {
     pub entity: Query<'w, 's, Entity, With<Player>>,

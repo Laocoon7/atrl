@@ -1,5 +1,4 @@
 use crate::prelude::*;
-
 pub fn player_input(
     state: Res<TurnState>,
     mut commands: Commands,
@@ -12,7 +11,6 @@ pub fn player_input(
                 if let Some(direction) = input_direction.direction() {
                     let last_position = position.get();
                     let new_position = last_position + direction.coord();
-
                     if let Some(map) = manager.get_current_map_mut() {
                         if map.try_move_actor(last_position, new_position, movement_component.0) {
                             position.set_value(new_position);
@@ -24,7 +22,6 @@ pub fn player_input(
                             info!("{:?} is blocked!", new_position);
                         }
                     }
-
                     state.set_next(&mut commands);
                 }
             }

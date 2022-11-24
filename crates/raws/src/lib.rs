@@ -3,7 +3,6 @@
 #![allow(clippy::type_complexity)]
 #![allow(clippy::too_many_arguments)] // Bevy has a lot of arguments, so we shush clippy
 #![allow(unused_imports)] // TODO: REMOVE ME
-
 mod resources {
     mod loaded_tilesets;
     pub use loaded_tilesets::*;
@@ -14,7 +13,6 @@ mod resources {
     mod asset_settings;
     pub use asset_settings::*;
 }
-
 mod systems {
     mod load_tilesets;
     pub use load_tilesets::*;
@@ -25,35 +23,25 @@ mod systems {
     mod check_loaded_assets;
     pub use check_loaded_assets::*;
 }
-
 mod raw_plugin;
-
 pub mod prelude {
     mod internal {
         pub use crate::systems::*;
     }
     pub(crate) use internal::*;
-
     mod import {
         pub use atrl_common::prelude::*;
         pub use atrl_data::prelude::*;
-
         pub use bevy::prelude::*;
+        pub use bevy_tileset::prelude::*;
         pub use iyes_loopless::prelude::*;
         pub use iyes_progress::prelude::*;
-
-        pub use kayak_ui::prelude::*;
-        pub use kayak_ui::widgets::*;
-
-        pub use bevy_tileset::prelude::*;
-
+        pub use kayak_ui::{prelude::*, widgets::*};
         pub use smart_default::SmartDefault;
     }
     pub(crate) use import::*;
-
     mod export {
-        pub use crate::raw_plugin::*;
-        pub use crate::resources::*;
+        pub use crate::{raw_plugin::*, resources::*};
     }
     pub use export::*;
 }

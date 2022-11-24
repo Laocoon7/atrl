@@ -1,7 +1,5 @@
 use crate::prelude::*;
-
 pub type AtrlResult<T> = std::result::Result<T, AtrlError>;
-
 #[derive(Error, Debug)]
 pub enum AtrlError {
     #[error("{} is not a directory,", .0)]

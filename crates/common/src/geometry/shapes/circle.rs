@@ -1,17 +1,17 @@
 use crate::prelude::*;
-
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq)]
 pub struct Circle {
     center: IVec2,
     radius: u32,
 }
-
 impl Circle {
     pub fn new(center: impl Point2d, radius: u32) -> Self {
-        Self { center: center.as_ivec2(), radius }
+        Self {
+            center: center.as_ivec2(),
+            radius,
+        }
     }
 }
-
 impl Circle {
     /// Radius of circle
     ///
@@ -19,7 +19,6 @@ impl Circle {
     #[inline]
     pub const fn radius(&self) -> u32 { self.radius }
 }
-
 impl Shape for Circle {
     /// must be [center, edge]
     fn from_points(points: Vec<impl Point2d>) -> Self
@@ -66,7 +65,6 @@ impl Shape for Circle {
     #[inline]
     fn iter(&self) -> ShapeIterator { ShapeIterator::Circle(self.into_iter()) }
 }
-
 impl Circle {
     pub fn as_rect(&self) -> Rectangle {
         Rectangle::new((self.left(), self.top()), (self.right(), self.bottom()))
@@ -87,10 +85,9 @@ impl Circle {
         Ellipse::new(self.center, [self.radius * 2, self.radius * 2])
     }
 }
-
 impl IntoIterator for Circle {
-    type Item = IVec2;
     type IntoIter = BresenhamCircleIter;
+    type Item = IVec2;
 
     fn into_iter(self) -> Self::IntoIter {
         BresenhamCircleIter::new(self.center, self.radius as i32)

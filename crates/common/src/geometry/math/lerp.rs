@@ -1,5 +1,4 @@
 #![allow(clippy::use_self)]
-
 pub trait Lerp {
     /// calculate the point at `percent` between `self` and `end`
     ///
@@ -9,14 +8,12 @@ pub trait Lerp {
     /// internally the values are cast as f32 and rounded before being returned
     fn lerp(self, end: Self, percent: f32) -> Self;
 }
-
 /// This method has to be separate and named differently because
 /// f32::lerp already exists but is unstable
 ///
 /// see [f32::lerp]
 #[inline]
 pub fn flerp(start: f32, end: f32, percent: f32) -> f32 { (end - start).mul_add(percent, start) }
-
 macro_rules! impl_lerp {
     ($num_type: ty) => {
         impl Lerp for $num_type {
@@ -29,7 +26,6 @@ macro_rules! impl_lerp {
         }
     };
 }
-
 impl_lerp!(u8);
 impl_lerp!(i8);
 impl_lerp!(u16);

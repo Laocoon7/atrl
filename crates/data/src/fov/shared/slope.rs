@@ -4,7 +4,6 @@ pub struct Slope {
     pub y: i32,
     pub x: i32,
 }
-
 impl Slope {
     #[inline]
     pub const fn new(y: i32, x: i32) -> Self { Self { y, x } }

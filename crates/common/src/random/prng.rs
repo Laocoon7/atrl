@@ -1,20 +1,22 @@
-use crate::prelude::*;
-
 use std::ops::RangeBounds;
 
-use rand::RngCore;
-use rand::{Rng as RandRng, SeedableRng};
+use rand::{Rng as RandRng, RngCore, SeedableRng};
 use rand_pcg::Pcg64;
 
+use crate::prelude::*;
 #[derive(Serialize, Deserialize, Clone)]
 pub struct Prng {
     seed: u64,
     rng: Pcg64,
 }
-
 #[allow(dead_code)]
 impl Prng {
-    pub fn new(seed: u64) -> Self { Self { seed, rng: Pcg64::seed_from_u64(seed) } }
+    pub fn new(seed: u64) -> Self {
+        Self {
+            seed,
+            rng: Pcg64::seed_from_u64(seed),
+        }
+    }
 
     pub fn from_entropy() -> Self { Self::new(Pcg64::from_entropy().next_u64()) }
 
@@ -43,11 +45,9 @@ impl Prng {
         if max == 0 {
             return max;
         }
-
         let top = max as u64 + 1;
         let buckets = (u32::MAX as u64 / top).max(1);
         let limit = (buckets * top).max(1);
-
         let mut x;
         loop {
             x = self.next() as u64;
@@ -55,7 +55,6 @@ impl Prng {
                 break;
             }
         }
-
         (x / buckets) as u32
     }
 
@@ -75,11 +74,9 @@ impl Prng {
         if max == 0 {
             return max;
         }
-
         let top = max as u128 + 1;
         let buckets = (u64::MAX as u128 / top).max(1);
         let limit = (buckets * top).max(1);
-
         let mut x;
         loop {
             x = self.next_u64() as u128;
@@ -87,7 +84,6 @@ impl Prng {
                 break;
             }
         }
-
         (x / buckets) as u64
     }
 
@@ -134,8 +130,8 @@ impl Prng {
 
     pub fn choose<'a, T>(&'a mut self, items: &'a [T]) -> Option<&T> { items.choose(&mut self.rng) }
 }
-
 impl Iterator for Prng {
     type Item = u32;
+
     fn next(&mut self) -> Option<Self::Item> { Some(self.next()) }
 }

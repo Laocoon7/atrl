@@ -1,5 +1,4 @@
 use crate::prelude::*;
-
 // This needs to impl FromWorld not derive reflect
 #[derive(Component, Clone)]
 pub struct Map {
@@ -28,7 +27,6 @@ pub struct Map {
 }
 // OPTIMIZE: All pub fn should check / convert position to usize index
 // then switch to unchecked indexing grid[index] on private functions
-
 impl Map {
     pub fn try_add_actor(
         &mut self,
@@ -115,14 +113,12 @@ impl Map {
         if self.has_actor(to) {
             return;
         }
-
         if let Some(actor) = self.get_actor(from) {
             self.remove_actor(from);
             self.add_actor(to, actor);
         }
     }
 }
-
 pub struct MapPassThroughData {
     pub world_position: WorldPosition,
     pub random: Random,
@@ -137,18 +133,15 @@ pub struct MapPassThroughData {
     // TODO: Explored tiles should be passed from serialized data for the map on loading, or just a
     // new HashSet pub explored_tiles: HashSet<UVec2>
 }
-
 impl From<MapGenData<MapPassThroughData>> for Map {
     fn from(data: MapGenData<MapPassThroughData>) -> Self {
         let mut terrain_types = Grid::new_default(data.size);
-
         for y in 0..data.size.height() {
             for x in 0..data.size.width() {
                 let v = *data.grid.get_unchecked((x, y));
                 terrain_types.set((x, y), v.into());
             }
         }
-
         Self {
             size: data.size,
             update_all: true,
@@ -175,32 +168,27 @@ impl From<MapGenData<MapPassThroughData>> for Map {
         }
     }
 }
-
 impl FovProvider for Map {
     fn is_opaque(&self, position: IVec2, vision_type: u8) -> bool {
         // Check if the player is blind
         if (vision_type & VisionType::Blind as u8) != 0 {
             return false;
         }
-
         // Get the vision types that can see through this terrain:
         // None by default (if there's no terrain, there's nothing to see)
         let terrain = self
             .terrain_types
             .get(position)
             .map_or(VisionType::None.as_u8(), |t| t.vision_penetrates());
-
         // Get the vision types that can see through this feature:
         // Any by default (if there's no feature, don't block vision)
         let feature = self
             .feature_types
             .get(position)
             .map_or(VisionType::Any.as_u8(), |f| f.vision_penetrates());
-
         (terrain & feature & (vision_type)) == 0
     }
 }
-
 impl PathProvider for Map {
     fn is_walkable(&self, position: IVec2, movement_type: u8) -> bool {
         // Get the movement types that can move through this terrain:
@@ -209,14 +197,12 @@ impl PathProvider for Map {
             .terrain_types
             .get(position)
             .map_or(MovementType::None.as_u8(), |t| t.allowed_movement());
-
         // Get the movement types that can move through this feature:
         // Any by default (if there's no feature, don't block movement)
         let feature = self
             .feature_types
             .get(position)
             .map_or(MovementType::Any.as_u8(), |f| f.allowed_movement());
-
         (terrain & feature & movement_type) != 0
     }
 

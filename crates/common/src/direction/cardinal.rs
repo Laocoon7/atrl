@@ -1,11 +1,9 @@
 use crate::prelude::*;
-
 pub const NUM_CARDINAL_DIRECTIONS: usize = 4;
 pub const ALL_CARDINAL_DIRECTION_BITMAP_RAW: u8 = (1 << GridDirection::North as usize) |
     (1 << GridDirection::East as usize) |
     (1 << GridDirection::South as usize) |
     (1 << GridDirection::West as usize);
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
 #[repr(u8)]
 pub enum CardinalDirection {
@@ -14,7 +12,6 @@ pub enum CardinalDirection {
     South,
     West,
 }
-
 impl CardinalDirection {
     pub fn from_unit_coord(coord: impl Point2d + std::fmt::Debug) -> Self {
         match [coord.x(), coord.y()] {
@@ -138,7 +135,6 @@ impl CardinalDirection {
         OrdinalDirection::from_cardinals(self, other)
     }
 }
-
 impl From<CardinalDirection> for [i32; 2] {
     fn from(c: CardinalDirection) -> [i32; 2] {
         use self::CardinalDirection::*;
@@ -161,18 +157,15 @@ impl From<CardinalDirection> for (i32, i32) {
         }
     }
 }
-
 impl FromIterator<CardinalDirection> for &[CardinalDirection] {
     fn from_iter<T: IntoIterator<Item = CardinalDirection>>(iter: T) -> Self {
         let mut v = Vec::new();
         for d in iter {
             v.push(d);
         }
-
         Box::leak(v.into_boxed_slice())
     }
 }
-
 impl Distribution<CardinalDirection> for Standard {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> CardinalDirection {
         let index = rng.gen_range(0..NUM_CARDINAL_DIRECTIONS as u8);

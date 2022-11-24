@@ -1,5 +1,4 @@
 use crate::prelude::*;
-
 pub struct FinalizerBuilder<T> {
     rect: Option<Rectangle>,
     input_min: u32,
@@ -8,7 +7,6 @@ pub struct FinalizerBuilder<T> {
     max: u32,
     _x: PhantomData<T>,
 }
-
 impl<T> FinalizerBuilder<T> {
     /// `min` is the lowest allowed value on the map
     /// `max` is the highest allowed value on the map
@@ -23,7 +21,6 @@ impl<T> FinalizerBuilder<T> {
     ///   .with(BspBuilder()) // returns 0 for empty and 1 for wall
     ///   .with(FinalizerBuilder(TerrainType::Empty, TerrainType::Wall as u32).from(0, 1))
     ///   .generate();
-    ///
     /// // Combine all the map layers:
     /// let final_map = MapGenerator()
     ///   // Copy the rooms layer over the final map at a specific rectangle
@@ -31,7 +28,14 @@ impl<T> FinalizerBuilder<T> {
     ///   .generate();
     /// ```
     pub fn new(min: u32, max: u32) -> Box<Self> {
-        Box::new(Self { rect: None, input_min: 0, input_max: u32::MAX, min, max, _x: PhantomData })
+        Box::new(Self {
+            rect: None,
+            input_min: 0,
+            input_max: u32::MAX,
+            min,
+            max,
+            _x: PhantomData,
+        })
     }
 
     /// `min` is the lowest value currently on the map
@@ -52,14 +56,12 @@ impl<T> FinalizerBuilder<T> {
         Box::new(self)
     }
 }
-
 impl<T> MapArchitect<T> for FinalizerBuilder<T> {
     fn generate(&mut self, data: &mut MapGenData<T>) {
         let rect = match &self.rect {
             Some(r) => *r,
             None => Rectangle::new((0i32, 0), data.size - UVec2::new(1, 1)),
         };
-
         if !data.grid.in_bounds(rect.min()) || !data.grid.in_bounds(rect.max()) {
             error!(
                 "MapRangeBuilder Rectangle{{ {}, {} }} is outside of bounds for Grid({}, {})",
@@ -70,11 +72,13 @@ impl<T> MapArchitect<T> for FinalizerBuilder<T> {
             );
             return;
         }
-
         rect.for_each(|v| {
             let value = *data.grid.get_unchecked(v);
-            let new_value =
-                map_range_u32(value, (self.input_min, self.input_max), (self.min, self.max + 1));
+            let new_value = map_range_u32(
+                value,
+                (self.input_min, self.input_max),
+                (self.min, self.max + 1),
+            );
             data.grid.set(v, new_value);
         });
     }

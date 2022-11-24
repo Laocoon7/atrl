@@ -1,7 +1,7 @@
-use crate::prelude::*;
 use bevy::render::camera::Viewport;
 use bevy_inspector_egui::bevy_egui;
 
+use crate::prelude::*;
 // make camera only render to view not obstructed by UI
 pub fn set_camera_viewport(
     cams: Cameras,
@@ -12,16 +12,13 @@ pub fn set_camera_viewport(
 ) {
     let cam_entity = cams.get_camera_entity(0).unwrap();
     let mut cam = cameras.get_mut(cam_entity).unwrap();
-
     if !my_app.window_visibility.overall {
         cam.viewport = None;
     } else {
         let window = windows.primary();
         let scale_factor = window.scale_factor() * egui_settings.scale_factor;
-
         let viewport_pos = my_app.viewport_rect.left_top().to_vec2() * scale_factor as f32;
         let viewport_size = my_app.viewport_rect.size() * scale_factor as f32;
-
         cam.viewport = Some(Viewport {
             depth: 0.0..1.0,
             physical_size: UVec2::new(viewport_size.x as u32, viewport_size.y as u32),

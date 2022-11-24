@@ -1,5 +1,4 @@
 use crate::prelude::*;
-
 #[derive(Debug, Clone)]
 pub struct CameraSettings {
     pub(crate) left: f32,
@@ -17,7 +16,6 @@ pub struct CameraSettings {
     pub(crate) window_origin: WindowOrigin,
     pub(crate) render_target: Option<RenderTarget>,
 }
-
 impl CameraSettings {
     pub fn new() -> Self { Self::default() }
 
@@ -87,7 +85,6 @@ impl CameraSettings {
         self
     }
 }
-
 impl Default for CameraSettings {
     fn default() -> Self {
         Self {
@@ -106,36 +103,32 @@ impl Default for CameraSettings {
         }
     }
 }
-
 impl From<CameraSettings> for Camera2dBundle {
     fn from(settings: CameraSettings) -> Self {
         let target = settings.render_target.map_or_else(RenderTarget::default, |t| t);
         let near = 0.0;
         let far = 1000.0;
-
         let transform = match settings.position {
             Some(vec) => Transform::from_translation(vec.extend(far - 0.1)),
             None => {
                 let x = (settings.left + settings.right) * 0.5;
                 let y = (settings.bottom + settings.top) * 0.5;
                 Transform::from_xyz(x, y, far - 0.1)
-            }
+            },
         };
-
         let clear_color_config =
             settings.clear_color.map_or(ClearColorConfig::Default, ClearColorConfig::Custom);
-
         Self {
             camera: Camera {
                 viewport: settings.viewport,
-                //priority: (),
-                //is_active: (),
-                //computed: (),
+                // priority: (),
+                // is_active: (),
+                // computed: (),
                 target,
-                //hdr: ()
+                // hdr: ()
                 ..Default::default()
             },
-            //camera_render_graph: (),
+            // camera_render_graph: (),
             projection: OrthographicProjection {
                 left: settings.left,
                 right: settings.right,
@@ -147,12 +140,14 @@ impl From<CameraSettings> for Camera2dBundle {
                 scaling_mode: settings.scaling_mode,
                 scale: settings.scale,
             },
-            //visible_entities: (),
-            //frustum: (),
+            // visible_entities: (),
+            // frustum: (),
             transform,
-            //global_transform: (),
-            camera_2d: Camera2d { clear_color: clear_color_config },
-            //tonemapping: ()
+            // global_transform: (),
+            camera_2d: Camera2d {
+                clear_color: clear_color_config,
+            },
+            // tonemapping: ()
             ..Default::default()
         }
     }

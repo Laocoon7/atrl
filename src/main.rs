@@ -2,10 +2,8 @@
 #![allow(clippy::type_complexity)]
 #![allow(clippy::too_many_arguments)] // Bevy has a lot of arguments, so we shush clippy
 #![allow(unused_imports)] // TODO: REMOVE ME
-
 pub(crate) mod prelude;
 use crate::prelude::*;
-
 #[cfg(feature = "debug")]
 pub(crate) mod debug {
     mod systems {
@@ -19,7 +17,6 @@ pub(crate) mod debug {
         pub use window_title::*;
     }
     pub use systems::*;
-
     mod debug_egui_plugin;
     mod debug_plugin;
     mod tab_viewer;
@@ -29,17 +26,13 @@ pub(crate) mod debug {
     pub use tab_viewer::*;
     pub use ui_state::*;
 }
-
 fn main() {
     let mut app = App::new();
-
     // Default Plugins
     default_plugins(&mut app).insert_resource(ClearColor(Color::BLACK));
-
     // anything we don't need in release versions
     #[cfg(feature = "debug")]
     app.add_plugin(debug::DebugPlugin);
-
     // game related
     app.add_plugin(GamePlugin {
         state_running: GameState::InGame,
@@ -48,10 +41,8 @@ fn main() {
         state_asset_load: GameState::AssetLoad(Load),
         state_asset_load_failure: GameState::AssetLoad(LoadFailure),
     });
-
     app.run();
 }
-
 fn default_plugins(app: &mut App) -> &mut App {
     let defaults = DefaultPlugins
         .set(WindowPlugin {
@@ -72,14 +63,13 @@ fn default_plugins(app: &mut App) -> &mut App {
         .set(ImagePlugin::default_nearest())
         .build()
         .disable::<bevy::log::LogPlugin>();
-
     app.add_plugins(defaults);
-
     #[cfg(feature = "release")]
     defaults.add_before::<bevy::asset::AssetPlugin, _>(bevy_embedded_assets::EmbeddedAssetPlugin);
-
     #[cfg(not(feature = "debug"))]
-    app.add_plugin(bevy::log::LogPlugin { level: bevy::log::Level::WARN, ..Default::default() });
-
+    app.add_plugin(bevy::log::LogPlugin {
+        level: bevy::log::Level::WARN,
+        ..Default::default()
+    });
     app
 }

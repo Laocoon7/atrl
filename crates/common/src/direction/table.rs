@@ -1,13 +1,13 @@
-use std::mem;
-use std::mem::MaybeUninit;
-use std::ops::{Index, IndexMut};
-use std::slice;
+use std::{
+    mem,
+    mem::MaybeUninit,
+    ops::{Index, IndexMut},
+    slice,
+};
 
 use crate::prelude::*;
-
 pub type DirectionTableIter<'a, T> = slice::Iter<'a, T>;
 pub type DirectionTableIterMut<'a, T> = slice::IterMut<'a, T>;
-
 macro_rules! make_direction_table {
     (
       $table_type:ident,
@@ -34,13 +34,10 @@ macro_rules! make_direction_table {
         pub struct $table_type<T> {
             values: [T; $count],
         }
-
         pub type $enumerate_type<'a, T> =
             std::iter::Zip<$direction_iter, DirectionTableIter<'a, T>>;
-
         pub type $enumerate_mut_type<'a, T> =
             std::iter::Zip<$direction_iter, DirectionTableIterMut<'a, T>>;
-
         impl<T> $table_type<T> {
             pub fn new_fn<F: FnMut($direction_type) -> T>(mut f: F) -> Self {
                 let values = unsafe {
@@ -79,7 +76,6 @@ macro_rules! make_direction_table {
                 self.directions().zip(self.iter_mut())
             }
         }
-
         impl<T: Clone> $table_type<T> {
             pub fn new_clone(value: T) -> Self {
                 let values = unsafe {
@@ -92,7 +88,6 @@ macro_rules! make_direction_table {
                 Self { values }
             }
         }
-
         impl<T: Default> $table_type<T> {
             pub fn new_default() -> Self {
                 let values = unsafe {
@@ -105,14 +100,13 @@ macro_rules! make_direction_table {
                 Self { values }
             }
         }
-
         impl<T> Index<$direction_type> for $table_type<T> {
             type Output = T;
+
             fn index(&self, index: $direction_type) -> &Self::Output {
                 self.values.index(index as usize)
             }
         }
-
         impl<T> IndexMut<$direction_type> for $table_type<T> {
             fn index_mut(&mut self, index: $direction_type) -> &mut Self::Output {
                 self.values.index_mut(index as usize)
@@ -120,7 +114,6 @@ macro_rules! make_direction_table {
         }
     };
 }
-
 make_direction_table!(
     DirectionTable,
     DirectionTableEnumerate,

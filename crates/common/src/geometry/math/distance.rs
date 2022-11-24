@@ -1,10 +1,8 @@
 use std::ops::Sub;
 
 use crate::prelude::*;
-
 const CARDINAL_COST: f32 = 1.0;
 pub const DIAGONAL_COST: f32 = 1.4142135623730950488016887242096980785696718753769480731766797379;
-
 /// Enumeration of available 2D Distance algorithms
 #[allow(clippy::module_name_repetitions)]
 pub enum DistanceAlg {
@@ -22,7 +20,6 @@ pub enum DistanceAlg {
     /// Use a diagonal distance, the max of the x and y distances
     DiagonalWithCosts(f32, f32),
 }
-
 impl DistanceAlg {
     /// Provides a 2D distance between points, using the specified algorithm.
 
@@ -38,22 +35,18 @@ impl DistanceAlg {
         }
     }
 }
-
 /// Calculates a Pythagoras distance between two points.
 fn distance2d_pythagoras(start: impl Point2d, end: impl Point2d) -> f32 {
     let distance_squared = distance2d_pythagoras_squared(start, end);
     f32::sqrt(distance_squared)
 }
-
 /// Calculates a Pythagoras distance between two points, and skips the square root for speed.
 fn distance2d_pythagoras_squared(start: impl Point2d, end: impl Point2d) -> f32 {
     let start = start.as_vec2();
     let end = end.as_vec2();
-
     let distance = (start.max(end) - start.min(end)).powf(2.0);
     distance.x + distance.y
 }
-
 /// Calculates a Manhattan distance between two points
 fn distance2d_manhattan(start: impl Point2d, end: impl Point2d) -> f32 {
     let start = start.as_vec2();
@@ -61,27 +54,22 @@ fn distance2d_manhattan(start: impl Point2d, end: impl Point2d) -> f32 {
     let distance = start.max(end) - start.min(end);
     distance.x + distance.y
 }
-
 /// Calculates a Chebyshev distance between two points
 /// See: [GameProgramming/Heuristics](http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html)
 fn distance2d_chebyshev(start: impl Point2d, end: impl Point2d) -> f32 {
     // distance2d_diagonal_with_costs(start, end, 1.0, 1.0)
     let start = start.as_vec2();
     let end = end.as_vec2();
-
     start.sub(end).abs().max_element()
 }
-
 // Calculates a diagonal distance
 fn distance2d_diagonal(start: impl Point2d, end: impl Point2d) -> f32 {
     distance2d_diagonal_with_costs(start, end, CARDINAL_COST, DIAGONAL_COST)
 }
-
 // Calculates a diagonal distance
 fn distance2d_diagonal_with_costs(start: impl Point2d, end: impl Point2d, d1: f32, d2: f32) -> f32 {
     let start = start.as_vec2();
     let end = end.as_vec2();
-
     let distance = start.sub(end).abs();
     d1.mul_add(distance.max_element(), (d2 - d1) * distance.min_element())
 }

@@ -1,5 +1,4 @@
 use crate::prelude::*;
-
 /// TODO:
 ///
 /// the function has a cognitive complexity of (28/25)
@@ -15,32 +14,28 @@ pub fn update_tilemaps(
         if !map.update_all && map.update_tiles.is_empty() {
             continue;
         }
-
         // Get storages
         let terrain_storage = match q_storage.get(map.terrain_layer_entity) {
             Ok(s) => s,
             Err(e) => {
                 error!("{}", e);
                 continue;
-            }
+            },
         };
-
         let feature_storage = match q_storage.get(map.feature_layer_entity) {
             Ok(s) => s,
             Err(e) => {
                 error!("{}", e);
                 continue;
-            }
+            },
         };
-
         let item_storage = match q_storage.get(map.item_layer_entity) {
             Ok(s) => s,
             Err(e) => {
                 error!("{}", e);
                 continue;
-            }
+            },
         };
-
         let mut check_next = Vec::new();
         if map.update_all {
             for y in 0..map.size.height() {
@@ -54,7 +49,6 @@ pub fn update_tilemaps(
                             check_next.push(UVec2::new(x, y));
                         }
                     }
-
                     if let Some(entity) = feature_storage.get(&tile_pos) {
                         if let Ok(mut tile_texture_index) = q_tiles.get_mut(entity) {
                             let index = (*map.feature_types.get_unchecked((x, y))).into();
@@ -63,7 +57,6 @@ pub fn update_tilemaps(
                             check_next.push(UVec2::new(x, y));
                         }
                     }
-
                     if let Some(entity) = item_storage.get(&tile_pos) {
                         if let Ok(mut tile_texture_index) = q_tiles.get_mut(entity) {
                             // TODO: Display Items
@@ -77,7 +70,6 @@ pub fn update_tilemaps(
                     }
                 }
             }
-
             for v in check_next.into_iter() {
                 map.update_tiles.insert(v);
             }
@@ -93,7 +85,6 @@ pub fn update_tilemaps(
                         map.update_tiles.insert(UVec2::new(tile_pos.x, tile_pos.y));
                     }
                 }
-
                 if let Some(entity) = feature_storage.get(&tile_pos) {
                     if let Ok(mut tile_texture_index) = q_tiles.get_mut(entity) {
                         tile_texture_index.0 = (*map.feature_types.get_unchecked(position)).into();
@@ -101,7 +92,6 @@ pub fn update_tilemaps(
                         map.update_tiles.insert(UVec2::new(tile_pos.x, tile_pos.y));
                     }
                 }
-
                 if let Some(entity) = item_storage.get(&tile_pos) {
                     if let Ok(mut tile_texture_index) = q_tiles.get_mut(entity) {
                         // TODO: Display Items

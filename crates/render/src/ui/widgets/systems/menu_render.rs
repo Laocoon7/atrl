@@ -1,5 +1,4 @@
 use crate::prelude::*;
-
 pub fn menu_widget_render(
     In((widget_context, entity)): In<(KayakWidgetContext, Entity)>,
     mut commands: Commands,
@@ -7,7 +6,6 @@ pub fn menu_widget_render(
     query2: Query<(&KChildren, &MenuWidget)>,
 ) -> bool {
     let state_entity = widget_context.use_state(&mut commands, entity, MainMenuState::default());
-
     if let Ok(state) = query.get(state_entity) {
         // Activate Children if show is true
         if let Ok((children, _)) = query2.get(entity) {
@@ -16,6 +14,5 @@ pub fn menu_widget_render(
             }
         }
     }
-
     true
 }

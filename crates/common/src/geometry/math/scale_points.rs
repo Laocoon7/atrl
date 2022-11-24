@@ -1,5 +1,4 @@
 use crate::prelude::*;
-
 /// Scale `points` (move them towards or away) around the `center` by `factor`
 ///
 /// The resulting points distance will be points[x].distance(center) * factor but at the same
