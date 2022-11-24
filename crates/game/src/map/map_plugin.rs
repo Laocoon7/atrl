@@ -15,7 +15,7 @@ impl<T: StateNext> MapPlugin<T> {
 impl<T: StateNext> Plugin for MapPlugin<T> {
     fn build(&self, app: &mut App) {
         app.insert_resource(MapManager::default())
-            .add_exit_system_set(
+            .add_enter_system_set(
                 self.state_construct,
                 ConditionSet::new().with_system(load_first_map).into(),
             )

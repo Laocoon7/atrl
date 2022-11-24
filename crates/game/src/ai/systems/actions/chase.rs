@@ -183,4 +183,4 @@ fn generate_chase_path(
 ) -> Vec<IVec2> {
     PathFinder::Astar.compute(ai_pos, target_pos, movement_type, true, map_provider).unwrap_or_default()
 }
-const fn can_attack(position: IVec2) -> bool { false }
+const fn can_attack(_position: IVec2) -> bool { false }

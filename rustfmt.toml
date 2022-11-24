@@ -1,9 +1,8 @@
-# Wrap all comments and lines to 80 characters
 array_width                  = 60
 attr_fn_like_width           = 70
 binop_separator              = "Back"
 blank_lines_lower_bound      = 0
-blank_lines_upper_bound      = 0
+blank_lines_upper_bound      = 1
 brace_style                  = "SameLineWhere"
 chain_width                  = 100
 color                        = "Auto"
