@@ -39,6 +39,7 @@ fn main() {
         state_main_menu: GameState::Ui(MainMenu),
         state_asset_load: GameState::AssetLoad(Load),
         state_construct: GameState::Construct(Construct),
+        state_construct_setup: GameState::Construct(Setup),
         state_asset_load_failure: GameState::AssetLoad(LoadFailure),
     });
     app.run();

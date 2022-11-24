@@ -7,14 +7,19 @@ pub struct GamePlugin<T> {
     pub state_asset_load_failure: T,
 
     pub state_construct: T,
+    pub state_construct_setup: T,
+
     pub state_main_menu: T,
     pub state_running: T,
 }
+
 impl<T: StateNext> Plugin for GamePlugin<T> {
     fn build(&self, app: &mut App) {
         let game_context = GameContext::default();
+
         // set entry state
         self.setup_states(app);
+
         app
             // Game Context
             .insert_resource(game_context)
@@ -26,7 +31,8 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
             .add_plugin(EcsPlugin {
                 state_running: self.state_running,
                 turn_state_ticking: TurnState::Ticking,
-            },);
+            });
+
         self
             // Raw Files
             .add_raws(app)
@@ -34,6 +40,7 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
             .add_camera(app)
             // Map Rendering
             .add_map_plugins(app);
+
         app
             // UI
             .add_plugin(UiPlugin {
@@ -41,12 +48,12 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
                 state_main_menu: self.state_main_menu
             })
             // Spawner
-            // TODO: This needs to run after the map is generated.
-            .add_plugin(SpawnerPlugin { state_construct: self.state_running })
+            .add_plugin(SpawnerPlugin { state_construct_setup: self.state_construct_setup })
             // Player
             .add_plugin(PlayerPlugin { state_running: self.state_running });
     }
 }
+
 impl<T: StateNext> GamePlugin<T> {
     fn setup_states(self, app: &mut App) -> Self {
         app.add_loopless_state(GameState::Initializing)
