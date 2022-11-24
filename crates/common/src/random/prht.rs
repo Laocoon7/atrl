@@ -31,9 +31,7 @@ impl Prht {
 
 impl Serialize for Prht {
     fn serialize<S,>(&self, serializer: S,) -> core::result::Result<S::Ok, S::Error,>
-    where
-        S: serde::Serializer,
-    {
+    where S: serde::Serializer {
         let mut state = serializer.serialize_struct("Prht", 1,)?;
         state.serialize_field("seed", &self.seed,)?;
         state.end()
@@ -42,9 +40,7 @@ impl Serialize for Prht {
 
 impl<'de,> Deserialize<'de,> for Prht {
     fn deserialize<D,>(deserializer: D,) -> core::result::Result<Self, D::Error,>
-    where
-        D: Deserializer<'de,>,
-    {
+    where D: Deserializer<'de,> {
         #[derive(Deserialize,)]
         #[serde(field_identifier, rename_all = "lowercase")]
         enum Field {
@@ -81,18 +77,14 @@ impl<'de,> Deserialize<'de,> for Prht {
             }
 
             fn visit_seq<A,>(self, mut seq: A,) -> core::result::Result<Self::Value, A::Error,>
-            where
-                A: SeqAccess<'de,>,
-            {
+            where A: SeqAccess<'de,> {
                 let seed =
                     seq.next_element()?.ok_or_else(|| de::Error::invalid_length(0, &self,),)?;
                 Ok(Prht::new(seed,),)
             }
 
             fn visit_map<A,>(self, mut map: A,) -> core::result::Result<Self::Value, A::Error,>
-            where
-                A: MapAccess<'de,>,
-            {
+            where A: MapAccess<'de,> {
                 let mut seed = None;
                 while let Some(key,) = map.next_key()? {
                     match key {

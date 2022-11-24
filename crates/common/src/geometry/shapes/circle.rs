@@ -23,9 +23,7 @@ impl Circle {
 impl Shape for Circle {
     /// must be [center, edge]
     fn from_points(points: Vec<impl Point2d,>,) -> Self
-    where
-        Self: Sized,
-    {
+    where Self: Sized {
         debug_assert!(points.len() >= 2);
         let radius = DistanceAlg::Pythagoras.distance2d(points[0], points[1],).floor() as u32; // .round() ??
         Self::new(points[0], radius,)

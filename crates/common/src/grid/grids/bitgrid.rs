@@ -19,9 +19,7 @@ impl GridLayer<bool,> for BitGrid {
 
     #[inline(always)]
     fn new_clone(size: impl Size2d, value: bool,) -> Self
-    where
-        bool: Clone,
-    {
+    where bool: Clone {
         let count = size.count();
         let mut cells = BitVec::with_capacity(count,);
         cells.resize(count, value,);
@@ -30,7 +28,11 @@ impl GridLayer<bool,> for BitGrid {
 
     #[inline(always)]
     fn blit_clone(
-        &mut self, to: impl Point2d, source: &Self, from: impl Point2d, size: impl Size2d,
+        &mut self,
+        to: impl Point2d,
+        source: &Self,
+        from: impl Point2d,
+        size: impl Size2d,
     ) where
         bool: Clone,
     {
@@ -45,9 +47,7 @@ impl GridLayer<bool,> for BitGrid {
 
     #[inline(always)]
     fn new_copy(size: impl Size2d, value: bool,) -> Self
-    where
-        bool: Copy,
-    {
+    where bool: Copy {
         let count = size.count();
         let mut cells = BitVec::with_capacity(count,);
         cells.resize_with(count, |_| value,);
@@ -55,8 +55,13 @@ impl GridLayer<bool,> for BitGrid {
     }
 
     #[inline(always)]
-    fn blit_copy(&mut self, to: impl Point2d, source: &Self, from: impl Point2d, size: impl Size2d,)
-    where
+    fn blit_copy(
+        &mut self,
+        to: impl Point2d,
+        source: &Self,
+        from: impl Point2d,
+        size: impl Size2d,
+    ) where
         bool: Copy,
     {
         for y in 0..size.height() {

@@ -48,9 +48,7 @@ impl Rectangle {
 
 impl Shape for Rectangle {
     fn from_points(points: Vec<impl Point2d,>,) -> Self
-    where
-        Self: Sized,
-    {
+    where Self: Sized {
         Self::new(points[0], points[1],)
     }
 
@@ -66,9 +64,7 @@ impl Shape for Rectangle {
     fn points(&self,) -> Vec<IVec2,> { vec![self.min, self.max] }
 
     fn rotate_around(&self, point: impl Point2d, degrees: f32,) -> Self
-    where
-        Self: Sized,
-    {
+    where Self: Sized {
         let points = rotate_points(point, &self.points(), degrees,);
         Self::from_points(points,)
     }
@@ -145,9 +141,7 @@ impl Rectangle {
 
     /// Calls a function for each x/y point in the rectangle
     pub fn for_each<F,>(&self, f: F,)
-    where
-        F: FnMut(IVec2,),
-    {
+    where F: FnMut(IVec2,) {
         RectIter::new(self.min, self.max,).for_each(f,);
     }
 

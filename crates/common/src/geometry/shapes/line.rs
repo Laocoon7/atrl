@@ -57,9 +57,7 @@ impl Line {
 
 impl Shape for Line {
     fn from_points(points: Vec<impl Point2d,>,) -> Self
-    where
-        Self: Sized,
-    {
+    where Self: Sized {
         debug_assert!(points.len() >= 2);
         Self::new(points[0], points[1],)
     }
@@ -101,17 +99,13 @@ impl Shape for Line {
 
     #[inline]
     fn iter(&self,) -> ShapeIterator
-    where
-        Self: std::fmt::Debug,
-    {
+    where Self: std::fmt::Debug {
         ShapeIterator::Line(self.into_iter(),)
     }
 
     #[inline]
     fn iter_exlusive(&self,) -> ShapeIteratorExclusive
-    where
-        Self: std::fmt::Debug,
-    {
+    where Self: std::fmt::Debug {
         ShapeIteratorExclusive::Line(self.into_iter_exlusive(),)
     }
 }

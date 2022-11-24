@@ -130,9 +130,7 @@ impl Prng {
 
     /// Sample a new value, using the given distribution.
     pub fn sample<D,>(&mut self,) -> D
-    where
-        rand::distributions::Standard: rand::distributions::Distribution<D,>,
-    {
+    where rand::distributions::Standard: rand::distributions::Distribution<D,> {
         self.rng.sample::<D, _>(Standard,)
     }
 

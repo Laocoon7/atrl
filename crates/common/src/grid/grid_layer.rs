@@ -2,13 +2,11 @@ use crate::prelude::*;
 
 pub trait GridLayer<T: GridParam,> {
     type MutableReturn<'a,>
-    where
-        Self: 'a;
+    where Self: 'a;
 
     /// Create a new grid layer with the given size (clone the given value).
     fn new_clone(size: impl Size2d, value: T,) -> Self
-    where
-        T: Clone;
+    where T: Clone;
 
     /// Clone a region of the grid onto a new grid.
     fn blit_clone(
@@ -22,19 +20,16 @@ pub trait GridLayer<T: GridParam,> {
 
     /// Create a new grid with the given size (copy the given value).
     fn new_copy(size: impl Size2d, value: T,) -> Self
-    where
-        T: Copy;
+    where T: Copy;
 
     /// Copy a region from another grid into this grid.
     fn blit_copy(
         &mut self, to: impl Point2d, source: &Self, from: impl Point2d, size: impl Size2d,
-    ) where
-        T: Copy;
+    ) where T: Copy;
 
     /// Create a new grid with the given size and default values.
     fn new_default(size: impl Size2d,) -> Self
-    where
-        T: Default;
+    where T: Default;
 
     fn new_fn(size: impl Size2d, f: impl Fn(IVec2,) -> T,) -> Self;
 

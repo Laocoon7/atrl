@@ -82,9 +82,7 @@ impl Triangle {
 
 impl Shape for Triangle {
     fn from_points(points: Vec<impl Point2d,>,) -> Self
-    where
-        Self: Sized,
-    {
+    where Self: Sized {
         Self::new(points[0], points[1], points[2],)
     }
 

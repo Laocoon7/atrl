@@ -22,9 +22,7 @@ impl<T: GridParam,> GridLayer<T,> for Grid<T,> {
 
     #[inline(always)]
     fn new_clone(size: impl Size2d, value: T,) -> Self
-    where
-        T: Clone,
-    {
+    where T: Clone {
         let count = size.count();
         let mut cells = Vec::with_capacity(count,);
         cells.resize(count, value,);
@@ -33,7 +31,11 @@ impl<T: GridParam,> GridLayer<T,> for Grid<T,> {
 
     #[inline(always)]
     fn blit_clone(
-        &mut self, to: impl Point2d, source: &Self, from: impl Point2d, size: impl Size2d,
+        &mut self,
+        to: impl Point2d,
+        source: &Self,
+        from: impl Point2d,
+        size: impl Size2d,
     ) where
         T: Clone,
     {
@@ -48,9 +50,7 @@ impl<T: GridParam,> GridLayer<T,> for Grid<T,> {
 
     #[inline(always)]
     fn new_copy(size: impl Size2d, value: T,) -> Self
-    where
-        T: Copy,
-    {
+    where T: Copy {
         let count = size.count();
         let mut cells = Vec::with_capacity(count,);
         cells.resize_with(count, || value,);
@@ -58,8 +58,13 @@ impl<T: GridParam,> GridLayer<T,> for Grid<T,> {
     }
 
     #[inline(always)]
-    fn blit_copy(&mut self, to: impl Point2d, source: &Self, from: impl Point2d, size: impl Size2d,)
-    where
+    fn blit_copy(
+        &mut self,
+        to: impl Point2d,
+        source: &Self,
+        from: impl Point2d,
+        size: impl Size2d,
+    ) where
         T: Copy,
     {
         for y in 0..size.height() {
@@ -73,9 +78,7 @@ impl<T: GridParam,> GridLayer<T,> for Grid<T,> {
 
     #[inline(always)]
     fn new_default(size: impl Size2d,) -> Self
-    where
-        T: Default,
-    {
+    where T: Default {
         let count = size.count();
         let mut cells = Vec::new();
         cells.resize_with(count, Default::default,);

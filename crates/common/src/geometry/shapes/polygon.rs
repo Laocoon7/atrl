@@ -57,9 +57,7 @@ impl Polygon {
 
 impl Shape for Polygon {
     fn from_points(points: Vec<impl Point2d,>,) -> Self
-    where
-        Self: Sized,
-    {
+    where Self: Sized {
         Self::new(points,)
     }
 

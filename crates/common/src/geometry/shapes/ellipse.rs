@@ -23,9 +23,7 @@ impl Ellipse {
 impl Shape for Ellipse {
     /// must be [top_left, bottom_right]
     fn from_points(points: Vec<impl Point2d,>,) -> Self
-    where
-        Self: Sized,
-    {
+    where Self: Sized {
         debug_assert!(points.len() >= 2);
         let width = points[1].x() - points[0].x();
         let height = points[1].y() - points[0].x();
