@@ -1,5 +1,5 @@
 use crate::prelude::*;
 
-#[derive(Reflect, Component, Debug, Default, Deref, DerefMut)]
+#[derive(Reflect, Component, Debug, Default, Deref, DerefMut,)]
 #[reflect(Component)]
-pub struct Movement(pub u8);
+pub struct Movement(pub u8,);

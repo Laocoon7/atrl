@@ -31,24 +31,24 @@ fn main() {
     // - Local runs use whatever the default Rust is locally
 
     let arguments = [
-        ("lints", Check::FORMAT | Check::CLIPPY),
-        ("test", Check::TEST),
-        ("compile", Check::COMPILE_FAIL | Check::BENCH_CHECK | Check::COMPILE_CHECK),
-        ("format", Check::FORMAT),
-        ("clippy", Check::CLIPPY),
-        ("compile-fail", Check::COMPILE_FAIL),
-        ("bench-check", Check::BENCH_CHECK),
+        ("lints", Check::FORMAT | Check::CLIPPY,),
+        ("test", Check::TEST,),
+        ("compile", Check::COMPILE_FAIL | Check::BENCH_CHECK | Check::COMPILE_CHECK,),
+        ("format", Check::FORMAT,),
+        ("clippy", Check::CLIPPY,),
+        ("compile-fail", Check::COMPILE_FAIL,),
+        ("bench-check", Check::BENCH_CHECK,),
     ];
 
-    let what_to_run = if let Some(arg) = std::env::args().nth(1).as_deref() {
-        if let Some((_, check)) = arguments.iter().find(|(str, _)| *str == arg) {
+    let what_to_run = if let Some(arg,) = std::env::args().nth(1,).as_deref() {
+        if let Some((_, check,),) = arguments.iter().find(|(str, _,)| *str == arg,) {
             *check
         } else {
             println!(
                 "Invalid argument: {arg:?}.\nEnter one of: {}.",
                 arguments[1..]
                     .iter()
-                    .map(|(s, _)| s)
+                    .map(|(s, _,)| s)
                     .fold(arguments[0].0.to_owned(), |c, v| c + ", " + v)
             );
             return;
@@ -59,49 +59,49 @@ fn main() {
 
     let sh = Shell::new().unwrap();
 
-    if what_to_run.contains(Check::FORMAT) {
+    if what_to_run.contains(Check::FORMAT,) {
         // See if any code needs to be formatted
         cmd!(sh, "cargo fmt --all -- --check")
             .run()
-            .expect("Please run 'cargo fmt --all' to format your code.");
+            .expect("Please run 'cargo fmt --all' to format your code.",);
     }
 
-    if what_to_run.contains(Check::CLIPPY) {
+    if what_to_run.contains(Check::CLIPPY,) {
         // See if clippy has any complaints.
         // - Type complexity must be ignored because we use huge templates for queries
         cmd!(sh, "cargo clippy --workspace --all-targets --all-features -- {CLIPPY_FLAGS...}")
             .run()
-            .expect("Please fix clippy errors in output above.");
+            .expect("Please fix clippy errors in output above.",);
     }
 
-    if what_to_run.contains(Check::COMPILE_FAIL) {
+    if what_to_run.contains(Check::COMPILE_FAIL,) {
         // Run UI tests (they do not get executed with the workspace tests)
         // - See crates/bevy_ecs_compile_fail_tests/README.md
-        let _subdir = sh.push_dir("crates/bevy_ecs_compile_fail_tests");
+        let _subdir = sh.push_dir("crates/bevy_ecs_compile_fail_tests",);
         cmd!(sh, "cargo test --target-dir ../../target")
             .run()
             .expect("Compiler errors of the ECS compile fail tests seem to be different than expected! Check locally and compare rust versions.");
     }
 
-    if what_to_run.contains(Check::TEST) {
+    if what_to_run.contains(Check::TEST,) {
         // Run tests (except doc tests and without building examples)
         cmd!(sh, "cargo test --workspace --lib --bins --tests --benches")
             .run()
-            .expect("Please fix failing tests in output above.");
+            .expect("Please fix failing tests in output above.",);
     }
 
-    if what_to_run.contains(Check::COMPILE_FAIL) {
-        let _subdir = sh.push_dir("benches");
+    if what_to_run.contains(Check::COMPILE_FAIL,) {
+        let _subdir = sh.push_dir("benches",);
         // Check that benches are building
         cmd!(sh, "cargo check --benches --target-dir ../target")
             .run()
-            .expect("Failed to check the benches.");
+            .expect("Failed to check the benches.",);
     }
 
-    if what_to_run.contains(Check::COMPILE_CHECK) {
+    if what_to_run.contains(Check::COMPILE_CHECK,) {
         // Build examples and check they compile
         cmd!(sh, "cargo check --workspace")
             .run()
-            .expect("Please fix failing doc-tests in output above.");
+            .expect("Please fix failing doc-tests in output above.",);
     }
 }

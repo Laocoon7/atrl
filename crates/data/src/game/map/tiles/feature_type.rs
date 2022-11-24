@@ -27,7 +27,7 @@ pub enum FeatureType {
 
 impl FeatureType {
     /// Movement is allowed if MovementComponent allows any of these types
-    pub const fn allowed_movement(&self) -> u8 {
+    pub const fn allowed_movement(&self,) -> u8 {
         match self {
             Self::None => MovementType::Any as u8,
             Self::StairsDown => {
@@ -58,7 +58,7 @@ impl FeatureType {
     }
 
     /// The tile is visible to these vision types (but not necessarily explored)
-    pub const fn allowed_vision(&self) -> u8 {
+    pub const fn allowed_vision(&self,) -> u8 {
         match self {
             Self::None => VisionType::None as u8,
             Self::StairsDown => {
@@ -77,7 +77,7 @@ impl FeatureType {
     }
 
     /// The tile is considered opaque unless VisionComponent includes one of these types
-    pub const fn vision_penetrates(&self) -> u8 {
+    pub const fn vision_penetrates(&self,) -> u8 {
         match self {
             Self::None => VisionType::Any as u8,
             Self::StairsDown => {
@@ -94,14 +94,14 @@ impl FeatureType {
     }
 }
 
-impl From<FeatureType> for u32 {
-    fn from(value: FeatureType) -> Self {
-        ToPrimitive::to_u32(&value).expect("Failed to convert `FeatureType` to u32")
+impl From<FeatureType,> for u32 {
+    fn from(value: FeatureType,) -> Self {
+        ToPrimitive::to_u32(&value,).expect("Failed to convert `FeatureType` to u32",)
     }
 }
 
-impl From<FeatureType> for u64 {
-    fn from(value: FeatureType) -> Self {
-        ToPrimitive::to_u64(&value).expect("Failed to convert `FeatureType` to u64")
+impl From<FeatureType,> for u64 {
+    fn from(value: FeatureType,) -> Self {
+        ToPrimitive::to_u64(&value,).expect("Failed to convert `FeatureType` to u64",)
     }
 }

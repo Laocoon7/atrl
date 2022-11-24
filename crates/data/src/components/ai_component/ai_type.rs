@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-#[derive(Reflect, Default)]
+#[derive(Reflect, Default,)]
 pub enum AIType {
     #[default]
     Player,

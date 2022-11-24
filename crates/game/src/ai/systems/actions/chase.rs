@@ -1,43 +1,43 @@
 use crate::prelude::*;
 use big_brain::actions::ActionState;
 
-#[derive(Debug, Default, Clone)]
+#[derive(Debug, Default, Clone,)]
 pub enum ChaseActorFailureBehavior {
     #[default]
     Wait,
 }
 
-#[derive(Debug, Default, Component, Clone)]
+#[derive(Debug, Default, Component, Clone,)]
 // could be used for temporary storage for multi turn actions
 pub struct ChaseActor {
-    path: Option<Vec<IVec2>>,
-    last_seen_pt: Option<IVec2>,
+    path: Option<Vec<IVec2,>,>,
+    last_seen_pt: Option<IVec2,>,
     // What to do if entity reaches last seen player position
     fail_behavior: ChaseActorFailureBehavior,
 }
 
 pub fn chase_action(
     mut commands: Commands,
-    mut manager: ResMut<MapManager>,
-    player_q: Query<(Entity, &Transform), With<Player>>,
-    mut action_q: Query<(&Actor, &mut ActionState, &mut ChaseActor, &ActionSpan)>,
-    mut ai_q: Query<(&mut Transform, &FieldOfView, &Vision, &Movement, &Name), Without<Player>>,
-    mut target_q: Query<&mut TargetVisualizer>,
+    mut manager: ResMut<MapManager,>,
+    player_q: Query<(Entity, &Transform,), With<Player,>,>,
+    mut action_q: Query<(&Actor, &mut ActionState, &mut ChaseActor, &ActionSpan,),>,
+    mut ai_q: Query<(&mut Transform, &FieldOfView, &Vision, &Movement, &Name,), Without<Player,>,>,
+    mut target_q: Query<&mut TargetVisualizer,>,
     tilesets: Tilesets,
 ) {
     use ActionState::*;
 
-    for (Actor(actor), mut action_state, mut chase, span) in action_q.iter_mut() {
+    for (Actor(actor,), mut action_state, mut chase, span,) in action_q.iter_mut() {
         let _guard = span.span().enter();
 
-        let (_player_entity, player_transform) = player_q.single();
-        let (mut position, fov, vision, movement_component, name) =
-            ai_q.get_mut(*actor).expect("Actor must have required components"); // TODO: Do we really want to crash the game here or just `error!` `return`?
+        let (_player_entity, player_transform,) = player_q.single();
+        let (mut position, fov, vision, movement_component, name,) =
+            ai_q.get_mut(*actor,).expect("Actor must have required components",); // TODO: Do we really want to crash the game here or just `error!` `return`?
 
         let ai_pos = position.get();
         let player_pos = player_transform.get();
 
-        let map = manager.get_current_map_mut().expect("No map found"); // TODO: Do we really want to crash the game here or just `error!` `return`?
+        let map = manager.get_current_map_mut().expect("No map found",); // TODO: Do we really want to crash the game here or just `error!` `return`?
 
         // This doesnt exist on the original match below because whenever the player comes into view
         // the `can_see_player` scorer sets the output to be 1, causing the wander action to spin
@@ -49,8 +49,8 @@ pub fn chase_action(
         // So this acts like a skip frame, where it sets the action to evaluating, then immediately
         // evaluates
         if *action_state == Requested {
-            chase.last_seen_pt = Some(player_pos);
-            chase.path = Some(generate_chase_path(ai_pos, player_pos, movement_component.0, map));
+            chase.last_seen_pt = Some(player_pos,);
+            chase.path = Some(generate_chase_path(ai_pos, player_pos, movement_component.0, map,),);
 
             *action_state = Executing;
             info!("{} gonna start chasing!", name);
@@ -58,8 +58,8 @@ pub fn chase_action(
 
         match *action_state {
             Cancelled => {
-                if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
-                    target_visualizer.clear(&mut commands);
+                if let Ok(mut target_visualizer,) = target_q.get_mut(*actor,) {
+                    target_visualizer.clear(&mut commands,);
                 }
                 info!("{} cancelled chase!", name);
                 *action_state = Failure;
@@ -328,6 +328,6 @@ fn generate_chase_path(
     target_pos: IVec2,
     movement_type: u8,
     map_provider: &impl PathProvider,
-) -> Vec<IVec2> {
-    PathFinder::Astar.compute(ai_pos, target_pos, movement_type, map_provider).unwrap_or_default()
+) -> Vec<IVec2,> {
+    PathFinder::Astar.compute(ai_pos, target_pos, movement_type, map_provider,).unwrap_or_default()
 }

@@ -1,6 +1,6 @@
 use bevy::reflect::{FromReflect, Reflect};
 
-#[derive(Reflect, FromReflect, Default, Debug)]
+#[derive(Reflect, FromReflect, Default, Debug,)]
 pub enum EquipmentSlot {
     #[default]
     Head,

@@ -10,15 +10,15 @@ pub struct PointIterRowMajor {
 }
 
 impl PointIterRowMajor {
-    pub fn new(size: impl Size2d) -> Self {
-        Self { size: size.as_uvec2(), coord: IVec2::new(0, 0) }
+    pub fn new(size: impl Size2d,) -> Self {
+        Self { size: size.as_uvec2(), coord: IVec2::new(0, 0,), }
     }
 }
 
 impl Iterator for PointIterRowMajor {
     type Item = IVec2;
 
-    fn next(&mut self) -> Option<Self::Item> {
+    fn next(&mut self,) -> Option<Self::Item,> {
         if self.coord.y == self.size.height() as i32 {
             return None;
         }
@@ -30,7 +30,7 @@ impl Iterator for PointIterRowMajor {
             self.coord.y += 1;
         }
 
-        Some(coord)
+        Some(coord,)
     }
 }
 
@@ -38,23 +38,23 @@ impl Iterator for PointIterRowMajor {
 // Adjacent Iter
 ////////////////////////////////////////////////////////////
 
-#[derive(Debug)]
-pub struct AdjIterator<'a> {
+#[derive(Debug,)]
+pub struct AdjIterator<'a,> {
     i: usize,
     p: IVec2,
     arr: &'a [GridDirection],
 }
 
-impl<'a> AdjIterator<'a> {
-    pub fn new(p: impl Point2d, arr: &'a [GridDirection]) -> Self {
-        Self { i: 0, p: p.as_ivec2(), arr }
+impl<'a,> AdjIterator<'a,> {
+    pub fn new(p: impl Point2d, arr: &'a [GridDirection],) -> Self {
+        Self { i: 0, p: p.as_ivec2(), arr, }
     }
 }
 
-impl<'a> Iterator for AdjIterator<'a> {
+impl<'a,> Iterator for AdjIterator<'a,> {
     type Item = IVec2;
 
-    fn next(&mut self) -> Option<Self::Item> {
+    fn next(&mut self,) -> Option<Self::Item,> {
         if self.i >= self.arr.len() {
             return None;
         };
@@ -62,6 +62,6 @@ impl<'a> Iterator for AdjIterator<'a> {
         let p = self.p + self.arr[self.i].coord();
         self.i += 1;
 
-        Some(p)
+        Some(p,)
     }
 }

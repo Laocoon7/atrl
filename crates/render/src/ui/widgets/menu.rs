@@ -1,11 +1,11 @@
 use crate::prelude::*;
 
-#[derive(Debug, Component, Default, Eq, PartialEq, Clone)]
+#[derive(Debug, Component, Default, Eq, PartialEq, Clone,)]
 pub struct MenuWidget;
 
 impl Widget for MenuWidget {}
 
-#[derive(Bundle)]
+#[derive(Bundle,)]
 pub struct MenuBundle {
     pub styles: KStyle,
     pub children: KChildren,

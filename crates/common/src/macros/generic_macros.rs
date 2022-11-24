@@ -27,12 +27,12 @@ macro_rules! impl_default {
 macro_rules! insert_resource {
     ($r:expr) => {
         |mut commands: Commands| {
-            commands.insert_resource($r);
+            commands.insert_resource($r,);
         }
     };
 
     ($commands:ident, $r:expr) => {
-        $commands.insert_resource($r);
+        $commands.insert_resource($r,);
     };
 }
 
@@ -53,12 +53,12 @@ macro_rules! remove_resource {
 macro_rules! spawn_component {
     ($c:expr) => {
         |mut commands: Commands| {
-            commands.spawn($c);
+            commands.spawn($c,);
         }
     };
 
     ($commands:ident, $c:expr) => {
-        $commands.spawn($c);
+        $commands.spawn($c,);
     };
 }
 
@@ -69,43 +69,43 @@ macro_rules! spawn_component {
 /// Despawn all entities with a specific marker component
 ///
 /// Useful when exiting states
-pub fn despawn_with<T: Component>(mut cmd: Commands, q: Query<Entity, With<T>>) {
+pub fn despawn_with<T: Component,>(mut cmd: Commands, q: Query<Entity, With<T,>,>,) {
     for e in q.iter() {
-        cmd.entity(e).despawn();
+        cmd.entity(e,).despawn();
     }
 }
 
 /// Despawn all entities with a specific marker component
 ///
 /// Useful when exiting states
-pub fn despawn_children<T: Component>(mut cmd: Commands, q: Query<Entity, With<T>>) {
+pub fn despawn_children<T: Component,>(mut cmd: Commands, q: Query<Entity, With<T,>,>,) {
     for e in q.iter() {
-        cmd.entity(e).despawn_descendants();
+        cmd.entity(e,).despawn_descendants();
     }
 }
 
 /// Despawn all entities with a specific marker component
 ///
 /// Useful when exiting states
-pub fn despawn_with_recursive<T: Component>(mut cmd: Commands, q: Query<Entity, With<T>>) {
+pub fn despawn_with_recursive<T: Component,>(mut cmd: Commands, q: Query<Entity, With<T,>,>,) {
     for e in q.iter() {
-        cmd.entity(e).despawn_recursive();
+        cmd.entity(e,).despawn_recursive();
     }
 }
 
 /// Remove a component type from all entities that have it
-pub fn remove_from_all<T: Component>(mut cmd: Commands, q: Query<Entity, With<T>>) {
+pub fn remove_from_all<T: Component,>(mut cmd: Commands, q: Query<Entity, With<T,>,>,) {
     for e in q.iter() {
-        cmd.entity(e).remove::<T>();
+        cmd.entity(e,).remove::<T>();
     }
 }
 
 /// Remove a component type from any entities with some other component
-pub fn remove_from_all_with<T: Component, W: Component>(
+pub fn remove_from_all_with<T: Component, W: Component,>(
     mut cmd: Commands,
-    q: Query<Entity, (With<T>, With<W>)>,
+    q: Query<Entity, (With<T,>, With<W,>,),>,
 ) {
     for e in q.iter() {
-        cmd.entity(e).remove::<T>();
+        cmd.entity(e,).remove::<T>();
     }
 }

@@ -3,23 +3,23 @@ use bevy::app::AppExit;
 
 pub fn setup_main_menu(
     mut commands: Commands,
-    textures: Res<TextureAssets>,
-    asset_server: Res<AssetServer>,
-    mut font_mapping: ResMut<FontMapping>,
-    ui_camera: Query<Entity, With<UICamera>>,
+    textures: Res<TextureAssets,>,
+    asset_server: Res<AssetServer,>,
+    mut font_mapping: ResMut<FontMapping,>,
+    ui_camera: Query<Entity, With<UICamera,>,>,
 ) {
-    if let Ok(entity) = ui_camera.get_single() {
+    if let Ok(entity,) = ui_camera.get_single() {
         info!("Setting up main menu");
-        font_mapping.set_default(asset_server.load("fonts/lato/lato-light.kayak_font"));
+        font_mapping.set_default(asset_server.load("fonts/lato/lato-light.kayak_font",),);
 
         let mut widget_context = KayakRootContext::new();
-        widget_context.add_plugin(KayakWidgetsContextPlugin);
+        widget_context.add_plugin(KayakWidgetsContextPlugin,);
 
         // Main Menu Widget
         widget_context.add_widget_data::<MenuWidget, MainMenuState>();
         widget_context.add_widget_system(
             MenuWidget::default().get_name(),
-            widget_update::<MenuWidget, MainMenuState>,
+            widget_update::<MenuWidget, MainMenuState,>,
             menu_widget_render,
         );
 
@@ -27,40 +27,40 @@ pub fn setup_main_menu(
         widget_context.add_widget_data::<MenuButton, ButtonState>();
         widget_context.add_widget_system(
             MenuButton::default().get_name(),
-            widget_update::<MenuButton, ButtonState>,
+            widget_update::<MenuButton, ButtonState,>,
             menu_button_render,
         );
 
         let handle_click_close = OnEvent::new(
-            move |In((event_dispatcher_context, _, event, _entity)): In<(
+            move |In((event_dispatcher_context, _, event, _entity,),): In<(
                 EventDispatcherContext,
                 WidgetState,
                 Event,
                 Entity,
-            )>,
-                  mut exit: EventWriter<AppExit>| {
-                if let EventType::Click(..) = event.event_type {
-                    exit.send(AppExit);
+            ),>,
+                  mut exit: EventWriter<AppExit,>| {
+                if let EventType::Click(..,) = event.event_type {
+                    exit.send(AppExit,);
                 }
-                (event_dispatcher_context, event)
+                (event_dispatcher_context, event,)
             },
         );
 
         let continue_click = OnEvent::new(
-            move |In((event_dispatcher_context, _, mut event, _entity)): In<(
+            move |In((event_dispatcher_context, _, mut event, _entity,),): In<(
                 EventDispatcherContext,
                 WidgetState,
                 Event,
                 Entity,
-            )>,
+            ),>,
                   mut commands: Commands,
-                  game_state: Res<CurrentGameState>| {
+                  game_state: Res<CurrentGameState,>| {
                 event.prevent_default();
                 event.stop_propagation();
-                if let EventType::Click(..) = event.event_type {
-                    game_state.set_next(&mut commands);
+                if let EventType::Click(..,) = event.event_type {
+                    game_state.set_next(&mut commands,);
                 }
-                (event_dispatcher_context, event)
+                (event_dispatcher_context, event,)
             },
         );
 
@@ -122,6 +122,6 @@ pub fn setup_main_menu(
             </KayakAppBundle>
         }
 
-        commands.entity(entity).insert(widget_context);
+        commands.entity(entity,).insert(widget_context,);
     }
 }

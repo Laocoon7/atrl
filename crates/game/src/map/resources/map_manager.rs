@@ -1,35 +1,35 @@
 use crate::prelude::*;
 
-#[derive(Default, Resource)]
+#[derive(Default, Resource,)]
 pub struct MapManager {
-    pub current_map: Option<Map>,
-    loaded_maps: HashMap<WorldPosition, Entity>,
+    pub current_map: Option<Map,>,
+    loaded_maps: HashMap<WorldPosition, Entity,>,
 }
 
 impl MapManager {
-    pub fn new() -> Self { Self { current_map: None, loaded_maps: HashMap::new() } }
+    pub fn new() -> Self { Self { current_map: None, loaded_maps: HashMap::new(), } }
 
-    pub const fn get_current_map(&self) -> Option<&Map> { self.current_map.as_ref() }
+    pub const fn get_current_map(&self,) -> Option<&Map,> { self.current_map.as_ref() }
 
-    pub fn get_current_map_mut(&mut self) -> Option<&mut Map> { self.current_map.as_mut() }
+    pub fn get_current_map_mut(&mut self,) -> Option<&mut Map,> { self.current_map.as_mut() }
 
     pub fn get_or_generate(
         &mut self,
         commands: &mut Commands,
-        game_context: &mut ResMut<GameContext>,
-        tileset_name: Option<String>,
-        tileset_id: Option<u8>,
+        game_context: &mut ResMut<GameContext,>,
+        tileset_name: Option<String,>,
+        tileset_id: Option<u8,>,
         tilesets: &Tilesets,
         world_position: WorldPosition,
-    ) -> AtrlResult<Entity> {
+    ) -> AtrlResult<Entity,> {
         info!("MapManager::get_or_generate({:?})", world_position);
 
-        if !game_context.is_valid_world_position(world_position) {
-            return Err(AtrlError::InvalidWorldPosition(*world_position));
+        if !game_context.is_valid_world_position(world_position,) {
+            return Err(AtrlError::InvalidWorldPosition(*world_position,),);
         }
 
-        if let Some(entity) = self.loaded_maps.get(&world_position) {
-            return Ok(*entity);
+        if let Some(entity,) = self.loaded_maps.get(&world_position,) {
+            return Ok(*entity,);
         }
 
         // TODO: check deserialize map from world_position
@@ -38,8 +38,8 @@ impl MapManager {
             world_position.y,
             world_position.z,
         );
-        let mut random = Random::new(map_seed);
-        let rng = Box::new(Pcg64::seed_from_u64(random.prng.next_u64()));
+        let mut random = Random::new(map_seed,);
+        let rng = Box::new(Pcg64::seed_from_u64(random.prng.next_u64(),),);
 
         let map_name =
             format!("Map ({}, {}, {})", world_position.x, world_position.y, world_position.z);
@@ -49,20 +49,20 @@ impl MapManager {
                 tileset_id.map_or_else(
                     || {
                         tilesets
-                            .get_by_id(&0)
-                            .unwrap_or_else(|| panic!("Couldn't find tilemap_id: {:?}", 0))
+                            .get_by_id(&0,)
+                            .unwrap_or_else(|| panic!("Couldn't find tilemap_id: {:?}", 0),)
                     },
                     |id| {
                         tilesets
-                            .get_by_id(&id)
-                            .unwrap_or_else(|| panic!("Couldn't find tilemap_id: {:?}", id))
+                            .get_by_id(&id,)
+                            .unwrap_or_else(|| panic!("Couldn't find tilemap_id: {:?}", id),)
                     },
                 )
             },
             |name| {
                 tilesets
-                    .get_by_name(&name)
-                    .unwrap_or_else(|| panic!("Couldn't find tilemap_name: {}", &name))
+                    .get_by_name(&name,)
+                    .unwrap_or_else(|| panic!("Couldn't find tilemap_name: {}", &name),)
             },
         );
 
@@ -73,9 +73,9 @@ impl MapManager {
         let item_layer_entity = commands.spawn_empty().id();
 
         let map = Map::from(Self::generate_map(
-            [GRID_WIDTH, GRID_HEIGHT],
+            [GRID_WIDTH, GRID_HEIGHT,],
             &map_name,
-            (GRID_WIDTH / 2, GRID_HEIGHT / 2),
+            (GRID_WIDTH / 2, GRID_HEIGHT / 2,),
             rng,
             MapPassThroughData {
                 world_position,
@@ -89,47 +89,47 @@ impl MapManager {
                 feature_layer_entity,
                 item_layer_entity,
             },
-        ));
+        ),);
 
         create_tilemap_on_entity(
             commands,
             terrain_layer_entity,
-            [GRID_WIDTH, GRID_HEIGHT],
-            f32::from(MapLayer::Terrain),
+            [GRID_WIDTH, GRID_HEIGHT,],
+            f32::from(MapLayer::Terrain,),
             tileset,
             1.0,
         );
         create_tilemap_on_entity(
             commands,
             feature_layer_entity,
-            [GRID_WIDTH, GRID_HEIGHT],
-            f32::from(MapLayer::Features),
+            [GRID_WIDTH, GRID_HEIGHT,],
+            f32::from(MapLayer::Features,),
             tileset,
             1.0,
         );
         create_tilemap_on_entity(
             commands,
             item_layer_entity,
-            [GRID_WIDTH, GRID_HEIGHT],
-            f32::from(MapLayer::Items),
+            [GRID_WIDTH, GRID_HEIGHT,],
+            f32::from(MapLayer::Items,),
             tileset,
             1.0,
         );
 
-        commands.entity(terrain_layer_entity).insert(Name::new(format!(
+        commands.entity(terrain_layer_entity,).insert(Name::new(format!(
             "TerrainLayer ({}, {}, {})",
             world_position.x, world_position.y, world_position.z
-        )));
-        commands.entity(feature_layer_entity).insert(Name::new(format!(
+        ),),);
+        commands.entity(feature_layer_entity,).insert(Name::new(format!(
             "FeatureLayer ({}, {}, {})",
             world_position.x, world_position.y, world_position.z
-        )));
-        commands.entity(item_layer_entity).insert(Name::new(format!(
+        ),),);
+        commands.entity(item_layer_entity,).insert(Name::new(format!(
             "ItemLayer ({}, {}, {})",
             world_position.x, world_position.y, world_position.z
-        )));
+        ),),);
 
-        self.current_map = Some(map.clone());
+        self.current_map = Some(map.clone(),);
 
         let map_entity = commands
             .spawn((
@@ -137,31 +137,31 @@ impl MapManager {
                 Name::new(format!(
                     "Map ({}, {}, {})",
                     world_position.x, world_position.y, world_position.z
-                )),
+                ),),
                 SpatialBundle::default(),
-            ))
-            .add_child(terrain_layer_entity)
-            .add_child(feature_layer_entity)
-            .add_child(item_layer_entity)
+            ),)
+            .add_child(terrain_layer_entity,)
+            .add_child(feature_layer_entity,)
+            .add_child(item_layer_entity,)
             .id();
 
-        Ok(map_entity)
+        Ok(map_entity,)
     }
 
     fn generate_map(
         size: impl Size2d,
         name: &str,
         starting_position: impl Point2d,
-        rng: Box<dyn RngCore>,
+        rng: Box<dyn RngCore,>,
         user_data: MapPassThroughData,
-    ) -> MapGenData<MapPassThroughData> {
+    ) -> MapGenData<MapPassThroughData,> {
         MapGenerator::new(
             size,
             name,
             starting_position,
             rng,
             // FinalizerBuilder::new(40, 40), You probably wanted:
-            SetBuilder::new().set_value(TILE_TERRAIN_FLOOR_ID as u32),
+            SetBuilder::new().set_value(TILE_TERRAIN_FLOOR_ID as u32,),
             user_data,
         )
         .generate()
@@ -204,9 +204,9 @@ impl MapManager {
         world_position: WorldPosition,
         local_position: UVec2,
         size: impl Size2d,
-        q_map: Query<&Map>,
-    ) -> Grid<TerrainType> {
-        let mut grid = Grid::new_default(size);
+        q_map: Query<&Map,>,
+    ) -> Grid<TerrainType,> {
+        let mut grid = Grid::new_default(size,);
 
         let half_size = size.as_ivec2() / 2;
         let local_position = local_position.as_ivec2();
@@ -227,16 +227,16 @@ impl MapManager {
                 world_position.0.x - 1,
                 world_position.0.y - 1,
                 world_position.0.z,
-            ));
-            if let Some(entity) = self.loaded_maps.get(&sw_pos) {
-                if let Ok(map) = q_map.get(*entity) {
+            ),);
+            if let Some(entity,) = self.loaded_maps.get(&sw_pos,) {
+                if let Ok(map,) = q_map.get(*entity,) {
                     let start_x = GRID_WIDTH as i32 + left;
                     let end_x = GRID_WIDTH as i32;
                     let start_y = GRID_HEIGHT as i32 + bottom;
                     let end_y = GRID_HEIGHT as i32;
-                    let bounds = ((start_x, start_y), (end_x, end_y));
+                    let bounds = ((start_x, start_y,), (end_x, end_y,),);
                     grid.blit_copy(
-                        (index_x, index_y),
+                        (index_x, index_y,),
                         &map.terrain_types,
                         bounds.0,
                         bounds.1.as_ivec2() - bounds.0.as_ivec2(),
@@ -252,16 +252,16 @@ impl MapManager {
                 world_position.0.x,
                 world_position.0.y - 1,
                 world_position.0.z,
-            ));
-            if let Some(entity) = self.loaded_maps.get(&s_pos) {
-                if let Ok(map) = q_map.get(*entity) {
-                    let start_x = left.max(0);
-                    let end_x = right.min(GRID_WIDTH as i32 - 1);
+            ),);
+            if let Some(entity,) = self.loaded_maps.get(&s_pos,) {
+                if let Ok(map,) = q_map.get(*entity,) {
+                    let start_x = left.max(0,);
+                    let end_x = right.min(GRID_WIDTH as i32 - 1,);
                     let start_y = GRID_HEIGHT as i32 + bottom;
                     let end_y = GRID_HEIGHT as i32;
-                    let bounds = ((start_x, start_y), (end_x, end_y));
+                    let bounds = ((start_x, start_y,), (end_x, end_y,),);
                     grid.blit_copy(
-                        (index_x, index_y),
+                        (index_x, index_y,),
                         &map.terrain_types,
                         bounds.0,
                         bounds.1.as_ivec2() - bounds.0.as_ivec2(),
@@ -277,16 +277,16 @@ impl MapManager {
                 world_position.0.x + 1,
                 world_position.0.y - 1,
                 world_position.0.z,
-            ));
-            if let Some(entity) = self.loaded_maps.get(&se_pos) {
-                if let Ok(map) = q_map.get(*entity) {
+            ),);
+            if let Some(entity,) = self.loaded_maps.get(&se_pos,) {
+                if let Ok(map,) = q_map.get(*entity,) {
                     let start_x = 0;
                     let end_x = right - GRID_WIDTH as i32;
                     let start_y = GRID_HEIGHT as i32 + bottom;
                     let end_y = GRID_HEIGHT as i32;
-                    let bounds = ((start_x, start_y), (end_x, end_y));
+                    let bounds = ((start_x, start_y,), (end_x, end_y,),);
                     grid.blit_copy(
-                        (index_x, index_y),
+                        (index_x, index_y,),
                         &map.terrain_types,
                         bounds.0,
                         bounds.1.as_ivec2() - bounds.0.as_ivec2(),
@@ -303,16 +303,16 @@ impl MapManager {
                 world_position.0.x - 1,
                 world_position.0.y,
                 world_position.0.z,
-            ));
-            if let Some(entity) = self.loaded_maps.get(&w_pos) {
-                if let Ok(map) = q_map.get(*entity) {
+            ),);
+            if let Some(entity,) = self.loaded_maps.get(&w_pos,) {
+                if let Ok(map,) = q_map.get(*entity,) {
                     let start_x = GRID_WIDTH as i32 + left;
                     let end_x = GRID_WIDTH as i32;
-                    let start_y = bottom.max(0);
-                    let end_y = top.min(GRID_HEIGHT as i32 - 1);
-                    let bounds = ((start_x, start_y), (end_x, end_y));
+                    let start_y = bottom.max(0,);
+                    let end_y = top.min(GRID_HEIGHT as i32 - 1,);
+                    let bounds = ((start_x, start_y,), (end_x, end_y,),);
                     grid.blit_copy(
-                        (index_x, index_y),
+                        (index_x, index_y,),
                         &map.terrain_types,
                         bounds.0,
                         bounds.1.as_ivec2() - bounds.0.as_ivec2(),
@@ -324,16 +324,16 @@ impl MapManager {
         index_x += written_x;
         // 5
         let e_pos =
-            WorldPosition(IVec3::new(world_position.0.x, world_position.0.y, world_position.0.z));
-        if let Some(entity) = self.loaded_maps.get(&e_pos) {
-            if let Ok(map) = q_map.get(*entity) {
-                let start_x = left.max(0);
-                let end_x = right.min(GRID_WIDTH as i32 - 1);
-                let start_y = bottom.max(0);
-                let end_y = top.min(GRID_HEIGHT as i32 - 1);
-                let bounds = ((start_x, start_y), (end_x, end_y));
+            WorldPosition(IVec3::new(world_position.0.x, world_position.0.y, world_position.0.z,),);
+        if let Some(entity,) = self.loaded_maps.get(&e_pos,) {
+            if let Ok(map,) = q_map.get(*entity,) {
+                let start_x = left.max(0,);
+                let end_x = right.min(GRID_WIDTH as i32 - 1,);
+                let start_y = bottom.max(0,);
+                let end_y = top.min(GRID_HEIGHT as i32 - 1,);
+                let bounds = ((start_x, start_y,), (end_x, end_y,),);
                 grid.blit_copy(
-                    (index_x, index_y),
+                    (index_x, index_y,),
                     &map.terrain_types,
                     bounds.0,
                     bounds.1.as_ivec2() - bounds.0.as_ivec2(),
@@ -348,16 +348,16 @@ impl MapManager {
                 world_position.0.x + 1,
                 world_position.0.y,
                 world_position.0.z,
-            ));
-            if let Some(entity) = self.loaded_maps.get(&e_pos) {
-                if let Ok(map) = q_map.get(*entity) {
+            ),);
+            if let Some(entity,) = self.loaded_maps.get(&e_pos,) {
+                if let Ok(map,) = q_map.get(*entity,) {
                     let start_x = 0;
                     let end_x = right - GRID_WIDTH as i32;
-                    let start_y = bottom.max(0);
-                    let end_y = top.min(GRID_HEIGHT as i32 - 1);
-                    let bounds = ((start_x, start_y), (end_x, end_y));
+                    let start_y = bottom.max(0,);
+                    let end_y = top.min(GRID_HEIGHT as i32 - 1,);
+                    let bounds = ((start_x, start_y,), (end_x, end_y,),);
                     grid.blit_copy(
-                        (index_x, index_y),
+                        (index_x, index_y,),
                         &map.terrain_types,
                         bounds.0,
                         bounds.1.as_ivec2() - bounds.0.as_ivec2(),
@@ -374,16 +374,16 @@ impl MapManager {
                 world_position.0.x - 1,
                 world_position.0.y + 1,
                 world_position.0.z,
-            ));
-            if let Some(entity) = self.loaded_maps.get(&nw_pos) {
-                if let Ok(map) = q_map.get(*entity) {
+            ),);
+            if let Some(entity,) = self.loaded_maps.get(&nw_pos,) {
+                if let Ok(map,) = q_map.get(*entity,) {
                     let start_x = GRID_WIDTH as i32 + left;
                     let end_x = GRID_WIDTH as i32;
                     let start_y = 0;
                     let end_y = top - GRID_HEIGHT as i32;
-                    let bounds = ((start_x, start_y), (end_x, end_y));
+                    let bounds = ((start_x, start_y,), (end_x, end_y,),);
                     grid.blit_copy(
-                        (index_x, index_y),
+                        (index_x, index_y,),
                         &map.terrain_types,
                         bounds.0,
                         bounds.1.as_ivec2() - bounds.0.as_ivec2(),
@@ -399,16 +399,16 @@ impl MapManager {
                 world_position.0.x,
                 world_position.0.y + 1,
                 world_position.0.z,
-            ));
-            if let Some(entity) = self.loaded_maps.get(&n_pos) {
-                if let Ok(map) = q_map.get(*entity) {
-                    let start_x = left.max(0);
-                    let end_x = right.min(GRID_WIDTH as i32 - 1);
+            ),);
+            if let Some(entity,) = self.loaded_maps.get(&n_pos,) {
+                if let Ok(map,) = q_map.get(*entity,) {
+                    let start_x = left.max(0,);
+                    let end_x = right.min(GRID_WIDTH as i32 - 1,);
                     let start_y = 0;
                     let end_y = top - GRID_HEIGHT as i32;
-                    let bounds = ((start_x, start_y), (end_x, end_y));
+                    let bounds = ((start_x, start_y,), (end_x, end_y,),);
                     grid.blit_copy(
-                        (index_x, index_y),
+                        (index_x, index_y,),
                         &map.terrain_types,
                         bounds.0,
                         bounds.1.as_ivec2() - bounds.0.as_ivec2(),
@@ -424,16 +424,16 @@ impl MapManager {
                 world_position.0.x + 1,
                 world_position.0.y + 1,
                 world_position.0.z,
-            ));
-            if let Some(entity) = self.loaded_maps.get(&ne_pos) {
-                if let Ok(map) = q_map.get(*entity) {
+            ),);
+            if let Some(entity,) = self.loaded_maps.get(&ne_pos,) {
+                if let Ok(map,) = q_map.get(*entity,) {
                     let start_x = 0i32;
                     let end_x = right - GRID_WIDTH as i32;
                     let start_y = 0;
                     let end_y = top - GRID_HEIGHT as i32;
-                    let bounds = ((start_x, start_y), (end_x, end_y));
+                    let bounds = ((start_x, start_y,), (end_x, end_y,),);
                     grid.blit_copy(
-                        (index_x, index_y),
+                        (index_x, index_y,),
                         &map.terrain_types,
                         bounds.0,
                         bounds.1.as_ivec2() - bounds.0.as_ivec2(),

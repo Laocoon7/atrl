@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone,)]
 #[allow(clippy::module_name_repetitions)]
 pub struct RectIter {
     offset: IVec2,
@@ -11,18 +11,18 @@ pub struct RectIter {
 }
 
 impl RectIter {
-    pub fn new(min: impl Point2d, max: impl Point2d) -> Self {
+    pub fn new(min: impl Point2d, max: impl Point2d,) -> Self {
         let min = min.as_ivec2();
         let max = max.as_ivec2();
         let size = max - min;
-        Self { min, max_offset: size, offset: IVec2::ZERO }
+        Self { min, max_offset: size, offset: IVec2::ZERO, }
     }
 }
 
 impl Iterator for RectIter {
     type Item = IVec2;
 
-    fn next(&mut self) -> Option<Self::Item> {
+    fn next(&mut self,) -> Option<Self::Item,> {
         if self.offset.y > self.max_offset.y {
             return None;
         }
@@ -34,12 +34,12 @@ impl Iterator for RectIter {
             self.offset.y += 1;
         }
 
-        Some(self.min + p)
+        Some(self.min + p,)
     }
 }
 
-impl From<Rectangle> for RectIter {
-    fn from(rect: Rectangle) -> Self { rect.into_iter() }
+impl From<Rectangle,> for RectIter {
+    fn from(rect: Rectangle,) -> Self { rect.into_iter() }
 }
 
 #[cfg(test)]
@@ -48,7 +48,7 @@ mod test {
 
     #[test]
     fn test_rect_iter() {
-        let rect = Rectangle::new((39, 21), (41, 23));
+        let rect = Rectangle::new((39, 21,), (41, 23,),);
         assert_eq!(rect.iter().count(), 9);
     }
 }

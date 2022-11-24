@@ -5,5 +5,5 @@ pub struct MapRendererSettings {
 }
 
 impl MapRendererSettings {
-    pub fn new(chunk_size: impl Size2d) -> Self { Self { chunk_size: chunk_size.as_uvec2() } }
+    pub fn new(chunk_size: impl Size2d,) -> Self { Self { chunk_size: chunk_size.as_uvec2(), } }
 }

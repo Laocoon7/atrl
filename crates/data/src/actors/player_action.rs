@@ -1,7 +1,7 @@
 use crate::prelude::*;
 
 // This is the list of "things in the game I want to be able to do based on input"
-#[derive(Actionlike, PartialEq, Eq, Clone, Copy, Hash, Debug)]
+#[derive(Actionlike, PartialEq, Eq, Clone, Copy, Hash, Debug,)]
 pub enum PlayerAction {
     // Movement
     NorthWest,
@@ -29,16 +29,16 @@ impl PlayerAction {
         Self::West,
     ];
 
-    pub const fn direction(self) -> Option<GridDirection> {
+    pub const fn direction(self,) -> Option<GridDirection,> {
         match self {
-            Self::NorthWest => Some(GridDirection::NorthWest),
-            Self::North => Some(GridDirection::North),
-            Self::NorthEast => Some(GridDirection::NorthEast),
-            Self::East => Some(GridDirection::East),
-            Self::SouthEast => Some(GridDirection::SouthEast),
-            Self::South => Some(GridDirection::South),
-            Self::SouthWest => Some(GridDirection::SouthWest),
-            Self::West => Some(GridDirection::West),
+            Self::NorthWest => Some(GridDirection::NorthWest,),
+            Self::North => Some(GridDirection::North,),
+            Self::NorthEast => Some(GridDirection::NorthEast,),
+            Self::East => Some(GridDirection::East,),
+            Self::SouthEast => Some(GridDirection::SouthEast,),
+            Self::South => Some(GridDirection::South,),
+            Self::SouthWest => Some(GridDirection::SouthWest,),
+            Self::West => Some(GridDirection::West,),
             _ => None,
         }
     }

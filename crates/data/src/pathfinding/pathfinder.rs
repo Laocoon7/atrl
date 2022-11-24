@@ -12,11 +12,11 @@ impl PathFinder {
         destination: impl Point2d,
         movement_type: u8,
         provider: &impl PathProvider,
-    ) -> Option<Vec<IVec2>> {
+    ) -> Option<Vec<IVec2,>,> {
         let origin = origin.as_ivec2();
         let destination = destination.as_ivec2();
         match self {
-            Self::Astar => AStar::compute_path(origin, destination, movement_type, provider),
+            Self::Astar => AStar::compute_path(origin, destination, movement_type, provider,),
         }
     }
 }

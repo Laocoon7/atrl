@@ -1,40 +1,40 @@
 use crate::prelude::*;
 
-pub type CurrentGameState = CurrentState<GameState>;
+pub type CurrentGameState = CurrentState<GameState,>;
 
-#[derive(Default, Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Default, Clone, Copy, PartialEq, Eq, Hash, Debug,)]
 pub enum AssetLoadState {
     #[default]
     Load,
     LoadFailure,
 }
 
-#[derive(Default, Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Default, Clone, Copy, PartialEq, Eq, Hash, Debug,)]
 pub enum ConstructState {
     #[default]
     MapGen,
 }
 
-#[derive(Default, Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Default, Clone, Copy, PartialEq, Eq, Hash, Debug,)]
 pub enum UiState {
     #[default]
     MainMenu,
 }
 
-#[derive(Default, Resource, Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Default, Resource, Clone, Copy, PartialEq, Eq, Hash, Debug,)]
 pub enum TurnState {
     #[default]
     AwaitingInput,
     Ticking,
 }
 
-#[derive(Default, Clone, Copy, PartialEq, Hash, Eq, Debug)]
+#[derive(Default, Clone, Copy, PartialEq, Hash, Eq, Debug,)]
 pub enum GameState {
     #[default]
     Initializing,
-    AssetLoad(AssetLoadState),
-    Ui(UiState),
-    Construct(ConstructState),
+    AssetLoad(AssetLoadState,),
+    Ui(UiState,),
+    Construct(ConstructState,),
     InGame,
     Quit,
 }
@@ -56,42 +56,42 @@ pub enum GameState {
  */
 
 impl StateNext for GameState {
-    fn next(&self) -> Option<Self> {
+    fn next(&self,) -> Option<Self,> {
         match self {
-            Self::Initializing => Some(Self::AssetLoad(AssetLoadState::Load)),
-            Self::InGame => Some(Self::Ui(UiState::MainMenu)),
+            Self::Initializing => Some(Self::AssetLoad(AssetLoadState::Load,),),
+            Self::InGame => Some(Self::Ui(UiState::MainMenu,),),
             Self::Quit => None,
 
             // Assets
-            Self::AssetLoad(asset_state) => match asset_state {
-                AssetLoadState::Load => Some(Self::Ui(UiState::MainMenu)),
-                AssetLoadState::LoadFailure => Some(Self::Quit),
+            Self::AssetLoad(asset_state,) => match asset_state {
+                AssetLoadState::Load => Some(Self::Ui(UiState::MainMenu,),),
+                AssetLoadState::LoadFailure => Some(Self::Quit,),
             },
 
             // UI
-            Self::Ui(ui_state) => match ui_state {
-                UiState::MainMenu => Some(Self::Construct(ConstructState::MapGen)),
+            Self::Ui(ui_state,) => match ui_state {
+                UiState::MainMenu => Some(Self::Construct(ConstructState::MapGen,),),
             },
 
             // Construct
-            Self::Construct(construct_state) => match construct_state {
-                ConstructState::MapGen => Some(Self::InGame),
+            Self::Construct(construct_state,) => match construct_state {
+                ConstructState::MapGen => Some(Self::InGame,),
             },
         }
     }
 }
 
 impl StateNext for TurnState {
-    fn next(&self) -> Option<Self> {
+    fn next(&self,) -> Option<Self,> {
         match self {
-            Self::AwaitingInput => Some(Self::Ticking),
-            Self::Ticking => Some(Self::AwaitingInput),
+            Self::AwaitingInput => Some(Self::Ticking,),
+            Self::Ticking => Some(Self::AwaitingInput,),
         }
     }
 }
 
 impl TurnState {
-    pub fn set_next(&self, commands: &mut Commands) {
+    pub fn set_next(&self, commands: &mut Commands,) {
         let current = &self;
 
         current.next().map_or_else(
@@ -100,7 +100,7 @@ impl TurnState {
             },
             |next| {
                 bevy::log::info!("transitioning turnstate from {:?} to {:?}", current, next);
-                commands.insert_resource(next);
+                commands.insert_resource(next,);
             },
         )
     }

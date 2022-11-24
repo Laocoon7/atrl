@@ -30,11 +30,11 @@ pub const FONT_MISSING_ID: &FontId = &0;
 /////////////////////////////////////////////////////////////////////
 
 /// This function is used during tileset loading
-pub fn get_font_paths() -> Vec<String> {
+pub fn get_font_paths() -> Vec<String,> {
     let mut ret = Vec::new();
 
     // add the "missing" tileset
-    ret.push(format!("{DEFINITIONS_FOLDER}{TILESET_MISSING_NAME}{RON_EXT}"));
+    ret.push(format!("{DEFINITIONS_FOLDER}{TILESET_MISSING_NAME}{RON_EXT}"),);
 
     ret
 }
