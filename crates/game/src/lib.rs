@@ -91,6 +91,11 @@ mod systems {
     pub use perform_healing::*;
 }
 
+mod turn_manager {
+    mod turn_manager;
+    pub use turn_manager::*;
+}
+
 mod ecs_plugin;
 mod game_plugin;
 
@@ -106,6 +111,7 @@ pub mod prelude {
 
         pub use big_brain::actions::ActionState as BigBrainActionState;
         pub use big_brain::prelude::*;
+        pub use index_list::{IndexList, Index};
         pub use iyes_loopless::prelude::*;
         pub use leafwing_input_manager::{action_state::ActionState, prelude::*};
 

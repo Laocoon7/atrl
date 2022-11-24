@@ -302,6 +302,7 @@ dependencies = [
  "bevy_ecs_tilemap",
  "bevy_tileset",
  "big-brain",
+ "index_list",
  "iyes_loopless",
  "leafwing-input-manager",
  "num-traits",
