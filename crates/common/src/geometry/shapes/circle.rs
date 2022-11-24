@@ -17,12 +17,16 @@ impl Circle {
     ///
     /// Distance from center to edge
     #[inline]
-    pub const fn radius(&self) -> u32 { self.radius }
+    pub const fn radius(&self) -> u32 {
+        self.radius
+    }
 }
 impl Shape for Circle {
     /// must be [center, edge]
     fn from_points(points: Vec<impl Point2d>) -> Self
-    where Self: Sized {
+    where
+        Self: Sized,
+    {
         debug_assert!(points.len() >= 2);
         let radius = DistanceAlg::Pythagoras.distance2d(points[0], points[1]).floor() as u32; // .round() ??
         Self::new(points[0], radius)
@@ -32,7 +36,9 @@ impl Shape for Circle {
         Self::new(self.center + delta.as_ivec2(), self.radius)
     }
 
-    fn move_to(&self, point: impl Point2d) -> Self { Self::new(point.as_ivec2(), self.radius) }
+    fn move_to(&self, point: impl Point2d) -> Self {
+        Self::new(point.as_ivec2(), self.radius)
+    }
 
     fn contains(&self, point: impl Point2d) -> bool {
         let dist = DistanceAlg::Pythagoras.distance2d(self.center, point).floor() as u32; // .round() ??
@@ -48,22 +54,29 @@ impl Shape for Circle {
     }
 
     #[inline]
-    fn center(&self) -> IVec2 { self.center }
+    fn center(&self) -> IVec2 {
+        self.center
+    }
 
     #[inline]
-    fn left(&self) -> i32 { self.center.x - self.radius as i32 }
+    fn left(&self) -> i32 {
+        self.center.x - self.radius as i32
+    }
 
     #[inline]
-    fn right(&self) -> i32 { self.center.x + self.radius as i32 }
+    fn right(&self) -> i32 {
+        self.center.x + self.radius as i32
+    }
 
     #[inline]
-    fn top(&self) -> i32 { self.center.y - self.radius as i32 }
+    fn top(&self) -> i32 {
+        self.center.y - self.radius as i32
+    }
 
     #[inline]
-    fn bottom(&self) -> i32 { self.center.y + self.radius as i32 }
-
-    #[inline]
-    fn iter(&self) -> ShapeIterator { ShapeIterator::Circle(self.into_iter()) }
+    fn bottom(&self) -> i32 {
+        self.center.y + self.radius as i32
+    }
 }
 impl Circle {
     pub fn as_rect(&self) -> Rectangle {
@@ -71,7 +84,9 @@ impl Circle {
     }
 
     /// Create line from center to edge at 0 degrees
-    pub fn as_radius_line(&self) -> Line { Line::from_points(self.points()) }
+    pub fn as_radius_line(&self) -> Line {
+        Line::from_points(self.points())
+    }
 
     pub fn as_horizontal_line(&self) -> Line {
         Line::new((self.left(), self.center.y), (self.right(), self.center.y))
@@ -89,7 +104,17 @@ impl IntoIterator for Circle {
     type IntoIter = BresenhamCircleIter;
     type Item = IVec2;
 
+    #[inline]
     fn into_iter(self) -> Self::IntoIter {
         BresenhamCircleIter::new(self.center, self.radius as i32)
+    }
+}
+
+impl ShapeIter for Circle {
+    type Iterator = BresenhamCircleIter;
+
+    #[inline]
+    fn iter(&self) -> Self::Iterator {
+        self.into_iter()
     }
 }

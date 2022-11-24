@@ -76,10 +76,7 @@ impl Map {
     }
 
     pub fn has_actor(&self, position: impl Point2d) -> bool {
-        match self.actors.get(position) {
-            Some(opt) => opt.is_some(),
-            None => false,
-        }
+        self.actors.get(position).map_or(false, |opt| opt.is_some())
     }
 
     fn add_actor(&mut self, position: impl Point2d, actor: Entity) {
@@ -87,10 +84,7 @@ impl Map {
     }
 
     fn remove_actor(&mut self, position: impl Point2d) -> Option<Entity> {
-        match self.actors.set(position, None) {
-            Some(opt) => opt,
-            None => None,
-        }
+        self.actors.set(position, None).and_then(|opt| opt)
     }
 
     pub fn get_actor(&self, position: impl Point2d) -> Option<Entity> {
@@ -206,5 +200,7 @@ impl PathProvider for Map {
         (terrain & feature & movement_type) != 0
     }
 
-    fn cost(&self, _position: IVec2, _movement_type: u8) -> u32 { 1 }
+    fn cost(&self, _position: IVec2, _movement_type: u8) -> u32 {
+        1
+    }
 }

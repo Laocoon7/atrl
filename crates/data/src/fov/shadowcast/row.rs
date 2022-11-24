@@ -13,7 +13,7 @@ impl Row {
         }
     }
 
-    pub fn next(&self) -> Self {
+    pub const fn next(&self) -> Self {
         Self {
             depth: self.depth + 1,
             start_slope: self.start_slope,
@@ -21,11 +21,17 @@ impl Row {
         }
     }
 
-    pub fn calc_starting_slope(&mut self, tile: IVec2) { self.start_slope = Self::slope(tile) }
+    pub fn calc_starting_slope(&mut self, tile: IVec2) {
+        self.start_slope = Self::slope(tile)
+    }
 
-    pub fn calc_ending_slope(&mut self, tile: IVec2) { self.end_slope = Self::slope(tile) }
+    pub fn calc_ending_slope(&mut self, tile: IVec2) {
+        self.end_slope = Self::slope(tile)
+    }
 
-    const fn slope(tile: IVec2) -> Slope { Slope::new(2 * tile.y - 1, 2 * tile.x) }
+    const fn slope(tile: IVec2) -> Slope {
+        Slope::new(2 * tile.y - 1, 2 * tile.x)
+    }
 
     pub fn tiles(&self) -> RowIter {
         RowIter {
@@ -36,8 +42,8 @@ impl Row {
     }
 
     pub fn is_symmetric(&self, tile: IVec2) -> bool {
-        (tile.y as f64 >= self.depth as f64 * self.start_slope.value()) &
-            (tile.y as f64 <= self.depth as f64 * self.end_slope.value())
+        (tile.y as f64 >= self.depth as f64 * self.start_slope.value())
+            & (tile.y as f64 <= self.depth as f64 * self.end_slope.value())
     }
 }
 pub struct RowIter {

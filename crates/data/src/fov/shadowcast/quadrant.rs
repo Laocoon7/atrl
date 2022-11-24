@@ -34,16 +34,16 @@ impl<'a> Quadrant<'a> {
     }
 
     // mark this tile as visible
-    pub fn set_visible(&mut self, tile: IVec2) { self.receiver.set_visible(self.transform(tile)); }
+    pub fn set_visible(&mut self, tile: IVec2) {
+        self.receiver.set_visible(self.transform(tile));
+    }
 
     // check if this tile is opaque
     pub fn is_opaque(&self, tile: IVec2) -> bool {
-        if self.provider.is_opaque(self.transform(tile), self.vision) {
-            true
-        } else {
-            false
-        }
+        self.provider.is_opaque(self.transform(tile), self.vision)
     }
 
-    pub fn is_clear(&self, tile: IVec2) -> bool { !self.is_opaque(tile) }
+    pub fn is_clear(&self, tile: IVec2) -> bool {
+        !self.is_opaque(tile)
+    }
 }

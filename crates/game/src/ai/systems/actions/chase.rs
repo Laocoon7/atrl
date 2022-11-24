@@ -92,7 +92,7 @@ pub fn chase_action(
                     };
                     // Do we have a place we are chasing to?
                     if let Some(path) = &chase.path {
-                        if path.len() == 0 {
+                        if path.is_empty() {
                             // we don't have a valid path because:
                             // we are at the end of the chase, and we don't see the player.
                             //
@@ -147,7 +147,7 @@ pub fn chase_action(
                     // we were moved!
                     position.set_value(next_pt);
                     if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
-                        if chase_path.len() > 0 {
+                        if !chase_path.is_empty() {
                             target_visualizer.update(
                                 &mut commands,
                                 &tilesets,
@@ -191,4 +191,7 @@ fn generate_chase_path(
         .compute(ai_pos, target_pos, movement_type, true, map_provider)
         .unwrap_or_default()
 }
-fn can_attack(position: IVec2) -> bool { false }
+
+const fn can_attack(position: IVec2) -> bool {
+    false
+}

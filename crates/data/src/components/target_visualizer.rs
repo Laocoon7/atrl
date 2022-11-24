@@ -67,7 +67,7 @@ impl TargetVisualizer {
         }
     }
 
-    pub fn get(&self) -> Option<(IVec2, IVec2)> {
+    pub const fn get(&self) -> Option<(IVec2, IVec2)> {
         let Some(start) = self.start else {return None;};
         let Some(end) = self.end else {return None;};
         Some((start, end))

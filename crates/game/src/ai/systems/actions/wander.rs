@@ -70,7 +70,7 @@ pub fn wander_action(
                         if map.try_move_actor(ai_pos, next_pt, movement_component.0) {
                             position.set_value(next_pt);
                             if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
-                                if ai_path.len() > 0 {
+                                if !ai_path.is_empty() {
                                     target_visualizer.update(
                                         &mut commands,
                                         &tilesets,

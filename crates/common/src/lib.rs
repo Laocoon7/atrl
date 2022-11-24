@@ -66,6 +66,8 @@ mod geometry {
     pub use shape::*;
     mod shape_iter;
     pub use shape_iter::*;
+    mod shape_iter_exclusive;
+    pub use shape_iter_exclusive::*;
 }
 mod grid {
     mod point {
