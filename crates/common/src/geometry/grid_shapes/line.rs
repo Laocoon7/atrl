@@ -16,14 +16,20 @@ impl Line {
             end: end.as_ivec2(),
         }
     }
+
+    #[inline]
+    fn into_iter_exlusive(self) -> BresenhamLineIter { BresenhamLineIter::new(self.start, self.end) }
 }
 
 impl GridShape for Line {
+    #[inline]
     fn get_count(&self) -> usize { self.get_points().len() }
 
+    #[inline]
     fn contains(&self, point: impl Point2d) -> bool { self.get_points().contains(&point.as_ivec2()) }
 
-    fn get_points(&self) -> HashSet<IVec2> {
+    #[inline]
+    fn get_gpoints(&self) -> HashSet<IVec2> {
         let mut discovered = HashSet::new();
         let max_delta = self.start.sub(self.end).abs().max_element();
         for step in 0..=max_delta {
@@ -32,4 +38,32 @@ impl GridShape for Line {
         }
         discovered
     }
+}
+
+impl IntoIterator for Line {
+    type IntoIter = BresenhamLineInclusiveIter;
+    type Item = IVec2;
+
+    #[inline]
+    fn into_iter(self) -> Self::IntoIter { BresenhamLineInclusiveIter::new(self.start, self.end) }
+}
+
+//////////////////////////
+// Inclusive of end point
+//////////////////////////
+impl ShapeIter for Line {
+    type Iterator = BresenhamLineInclusiveIter;
+
+    #[inline]
+    fn iter(&self) -> Self::Iterator { self.into_iter() }
+}
+
+////////////////////////
+// Exlusive of end point
+////////////////////////
+impl ShapeIterExclusive for Line {
+    type ExlusiveIterator = BresenhamLineIter;
+
+    #[inline]
+    fn iter_exlusive(&self) -> Self::ExlusiveIterator { self.into_iter_exlusive() }
 }
