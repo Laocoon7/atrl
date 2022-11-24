@@ -72,6 +72,8 @@ impl AStarNode {
 
     pub const fn get_from_node(&self) -> Option<IVec2> { self.from_node }
 
+    pub const fn get_cost_from_end(&self) -> u32 { self.cost_from_end }
+
     fn update_total(&mut self) {
         if self.is_walkable {
             self.cost_total = self.cost_from_start + self.cost_from_end;

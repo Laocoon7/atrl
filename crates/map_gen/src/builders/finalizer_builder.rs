@@ -2,8 +2,8 @@ use crate::prelude::*;
 
 pub struct FinalizerBuilder<T> {
     rect: Option<Rectangle>,
-    from_min: u32,
-    from_max: u32,
+    input_min: u32,
+    input_max: u32,
     min: u32,
     max: u32,
     _x: PhantomData<T>,
@@ -31,7 +31,7 @@ impl<T> FinalizerBuilder<T> {
     ///   .generate();
     /// ```
     pub fn new(min: u32, max: u32) -> Box<Self> {
-        Box::new(Self { rect: None, from_min: 0, from_max: u32::MAX, min, max, _x: PhantomData })
+        Box::new(Self { rect: None, input_min: 0, input_max: u32::MAX, min, max, _x: PhantomData })
     }
 
     /// `min` is the lowest value currently on the map
@@ -41,9 +41,9 @@ impl<T> FinalizerBuilder<T> {
     /// others may set the values to between 0, u32::MAX
     /// make sure to pick the correct values being inputted
     /// based on the previous builders used.
-    pub fn from(mut self, min: u32, max: u32) -> Box<Self> {
-        self.from_min = min;
-        self.from_max = max;
+    pub fn with_input_values(mut self, min: u32, max: u32) -> Box<Self> {
+        self.input_min = min;
+        self.input_max = max;
         Box::new(self)
     }
 
@@ -74,7 +74,7 @@ impl<T> MapArchitect<T> for FinalizerBuilder<T> {
         rect.for_each(|v| {
             let value = *data.grid.get_unchecked(v);
             let new_value =
-                map_range_u32(value, (self.from_min, self.from_max), (self.min, self.max));
+                map_range_u32(value, (self.input_min, self.input_max), (self.min, self.max + 1));
             data.grid.set(v, new_value);
         });
     }

@@ -161,10 +161,24 @@ impl MapManager {
             starting_position,
             rng,
             // FinalizerBuilder::new(40, 40), You probably wanted:
-            SetBuilder::new().set_value(TILE_TERRAIN_FLOOR_ID as u32),
+            ScatterBuilder::new(),
             user_data,
         )
+        .with(CellularAutomataBuilder::new())
+        .with(FinalizerBuilder::new(1, 2))
         .generate()
+
+        //MapGenerator::new(
+        //    size,
+        //    name,
+        //    starting_position,
+        //    rng,
+        //    // FinalizerBuilder::new(40, 40), You probably wanted:
+        //    SetBuilder::new().set_value(TILE_TERRAIN_FLOOR_ID as u32),
+        //    user_data,
+        //)
+        //.generate()
+
         // if Prng::from_entropy().coin() {
         //     MapGenerator::new(size, name, starting_position, rng, ScatterBuilder::new(),
         // user_data)         .with(CellularAutomataBuilder::new())

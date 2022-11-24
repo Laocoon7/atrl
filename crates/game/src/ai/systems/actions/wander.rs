@@ -124,5 +124,7 @@ fn generate_wander_path(
     let wander_circle = Circle::new(ai_pos, wander_radius);
     // Default to the first point in the circle
     let destination = wander_circle.iter().choose(rng).unwrap_or_else(|| wander_circle.points()[0]);
-    PathFinder::Astar.compute(ai_pos, destination, movement_type, map_provider).unwrap_or_default()
+    PathFinder::Astar
+        .compute(ai_pos, destination, movement_type, false, map_provider)
+        .unwrap_or_default()
 }

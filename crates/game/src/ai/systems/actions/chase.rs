@@ -143,6 +143,13 @@ pub fn chase_action(
                     return;
                 };
 
+                if chase_path.len() < 1 {
+                    // previous update path failed...
+                    error!("AI could not find a path for chasing.");
+                    *action_state = ActionState::Failure;
+                    return;
+                }
+
                 // We have a path > 1 and we are not in range to attack.
                 println!("Chase path: {:?}", chase_path);
                 let next_pt = chase_path[chase_path.len() - 1]; // wish we had a Vec::peek()
@@ -190,7 +197,9 @@ fn generate_chase_path(
     movement_type: u8,
     map_provider: &impl PathProvider,
 ) -> Vec<IVec2> {
-    PathFinder::Astar.compute(ai_pos, target_pos, movement_type, map_provider).unwrap_or_default()
+    PathFinder::Astar
+        .compute(ai_pos, target_pos, movement_type, true, map_provider)
+        .unwrap_or_default()
 }
 
 fn can_attack(position: IVec2) -> bool { false }

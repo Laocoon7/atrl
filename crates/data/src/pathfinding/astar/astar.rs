@@ -9,6 +9,7 @@ impl PathAlgorithm for AStar {
         origin: IVec2,
         destination: IVec2,
         movement_type: u8,
+        partial_path_on_failure: bool,
         provider: &impl PathProvider,
     ) -> Option<Vec<IVec2>> {
         // create open/closed lists
@@ -61,7 +62,33 @@ impl PathAlgorithm for AStar {
                 closed_nodes.insert_last(current_node);
             }
         }
-        None
+        // No path found.
+        if partial_path_on_failure {
+            let mut index = closed_nodes.first_index();
+            let mut best_node_index = index;
+            if let Some(best_node) = closed_nodes.get(best_node_index) {
+                let mut best_cost = best_node.get_cost_from_end();
+                index = closed_nodes.next_index(index);
+                while index.is_some() {
+                    if let Some(current_node) = closed_nodes.get(index) {
+                        let current_cost = current_node.get_cost_from_end();
+                        if best_cost > current_cost {
+                            best_node_index = index;
+                            best_cost = current_cost;
+                            let best_node = current_node;
+                        }
+                    }
+                    index = closed_nodes.next_index(index);
+                }
+            }
+            if let Some(best_node) = closed_nodes.remove(best_node_index) {
+                Self::reconstruct_path(best_node, &mut closed_nodes)
+            } else {
+                None
+            }
+        } else {
+            None
+        }
     }
 }
 
