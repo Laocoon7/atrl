@@ -29,7 +29,7 @@ impl GridShape for Line {
     fn contains(&self, point: impl Point2d) -> bool { self.get_points().contains(&point.as_ivec2()) }
 
     #[inline]
-    fn get_gpoints(&self) -> HashSet<IVec2> {
+    fn get_points(&self) -> HashSet<IVec2> {
         let mut discovered = HashSet::new();
         let max_delta = self.start.sub(self.end).abs().max_element();
         for step in 0..=max_delta {
