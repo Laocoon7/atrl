@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq,)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq)]
 pub enum LineType {
     Point,
     Angled,
@@ -8,7 +8,7 @@ pub enum LineType {
     Horizontal,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq,)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Line {
     len: u32,
     angle: f32,
@@ -18,7 +18,7 @@ pub struct Line {
 }
 
 impl Line {
-    pub fn new(start: impl Point2d, end: impl Point2d,) -> Self {
+    pub fn new(start: impl Point2d, end: impl Point2d) -> Self {
         let start = start.as_ivec2();
         let end = end.as_ivec2();
         let line_type = if start == end {
@@ -31,38 +31,38 @@ impl Line {
             LineType::Angled
         };
 
-        let len = DistanceAlg::Pythagoras.distance2d(start, end,).floor() as u32; // round() ??
-        let angle = start.angle_to(end,);
-        Self { start, end, len, line_type, angle, }
+        let len = DistanceAlg::Pythagoras.distance2d(start, end).floor() as u32; // round() ??
+        let angle = start.angle_to(end);
+        Self { start, end, len, line_type, angle }
     }
 }
 
 impl Line {
     #[allow(clippy::len_without_is_empty)] //use start()==end() to check that
     #[inline]
-    pub const fn len(&self,) -> u32 { self.len }
+    pub const fn len(&self) -> u32 { self.len }
 
     #[inline]
-    pub const fn angle(&self,) -> f32 { self.angle }
+    pub const fn angle(&self) -> f32 { self.angle }
 
     #[inline]
-    pub const fn start(&self,) -> IVec2 { self.start }
+    pub const fn start(&self) -> IVec2 { self.start }
 
     #[inline]
-    pub const fn end(&self,) -> IVec2 { self.end }
+    pub const fn end(&self) -> IVec2 { self.end }
 
     #[inline]
-    pub const fn line_type(&self,) -> LineType { self.line_type }
+    pub const fn line_type(&self) -> LineType { self.line_type }
 }
 
 impl Shape for Line {
-    fn from_points(points: Vec<impl Point2d,>,) -> Self
+    fn from_points(points: Vec<impl Point2d>) -> Self
     where Self: Sized {
         debug_assert!(points.len() >= 2);
-        Self::new(points[0], points[1],)
+        Self::new(points[0], points[1])
     }
 
-    fn contains(&self, point: impl Point2d,) -> bool {
+    fn contains(&self, point: impl Point2d) -> bool {
         let point = point.as_ivec2();
         match self.line_type {
             LineType::Point => self.start == point,
@@ -73,57 +73,57 @@ impl Shape for Line {
                 self.start.x() == point.x && self.start.y() <= point.y && point.y <= self.end.y
             }
             LineType::Angled => {
-                (DistanceAlg::Pythagoras.distance2d(self.start, point,) +
-                    DistanceAlg::Pythagoras.distance2d(self.end, point,))
+                (DistanceAlg::Pythagoras.distance2d(self.start, point) +
+                    DistanceAlg::Pythagoras.distance2d(self.end, point))
                 .floor() as u32 ==
                     self.len
             } // TODO: CHECK THIS
         }
     }
 
-    fn points(&self,) -> Vec<IVec2,> { vec![self.start, self.end] }
+    fn points(&self) -> Vec<IVec2> { vec![self.start, self.end] }
 
-    fn center(&self,) -> IVec2 { self.start.mid_point(self.end,) }
-
-    #[inline]
-    fn left(&self,) -> i32 { self.start.x() }
+    fn center(&self) -> IVec2 { self.start.mid_point(self.end) }
 
     #[inline]
-    fn right(&self,) -> i32 { self.end.x }
+    fn left(&self) -> i32 { self.start.x() }
 
     #[inline]
-    fn top(&self,) -> i32 { self.start.y() }
+    fn right(&self) -> i32 { self.end.x }
 
     #[inline]
-    fn bottom(&self,) -> i32 { self.end.y }
+    fn top(&self) -> i32 { self.start.y() }
 
     #[inline]
-    fn iter(&self,) -> ShapeIterator
+    fn bottom(&self) -> i32 { self.end.y }
+
+    #[inline]
+    fn iter(&self) -> ShapeIterator
     where Self: std::fmt::Debug {
-        ShapeIterator::Line(self.into_iter(),)
+        ShapeIterator::Line(self.into_iter())
     }
 
     #[inline]
-    fn iter_exlusive(&self,) -> ShapeIteratorExclusive
+    fn iter_exlusive(&self) -> ShapeIteratorExclusive
     where Self: std::fmt::Debug {
-        ShapeIteratorExclusive::Line(self.into_iter_exlusive(),)
+        ShapeIteratorExclusive::Line(self.into_iter_exlusive())
     }
 }
 
 impl Line {
     #[inline]
-    fn into_iter_exlusive(self,) -> BresenhamLineInclusiveIter {
-        BresenhamLineInclusiveIter::new(self.start, self.end,)
+    fn into_iter_exlusive(self) -> BresenhamLineInclusiveIter {
+        BresenhamLineInclusiveIter::new(self.start, self.end)
     }
 
-    pub fn as_rect(&self,) -> Rectangle { Rectangle::new(self.start, self.end,) }
+    pub fn as_rect(&self) -> Rectangle { Rectangle::new(self.start, self.end) }
 
-    pub fn as_circle(&self,) -> Circle { Circle::new(self.start, self.len,) }
+    pub fn as_circle(&self) -> Circle { Circle::new(self.start, self.len) }
 }
 
 impl IntoIterator for Line {
     type Item = IVec2;
     type IntoIter = BresenhamLineIter;
 
-    fn into_iter(self,) -> Self::IntoIter { BresenhamLineIter::new(self.start, self.end,) }
+    fn into_iter(self) -> Self::IntoIter { BresenhamLineIter::new(self.start, self.end) }
 }

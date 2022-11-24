@@ -1,5 +1,5 @@
 pub trait AsPrimatives {
-    fn as_u8(&self,) -> u8;
+    fn as_u8(&self) -> u8;
 }
 
 #[macro_export]

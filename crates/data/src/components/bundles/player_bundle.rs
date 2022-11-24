@@ -1,17 +1,17 @@
 use crate::prelude::*;
 
-#[derive(Bundle,)]
+#[derive(Bundle)]
 pub struct PlayerBundle {
     pub player: Player,
 
     #[bundle]
     pub actor: ActorBundle,
     #[bundle]
-    pub input_manager: InputManagerBundle<PlayerAction,>,
+    pub input_manager: InputManagerBundle<PlayerAction>,
 }
 
 impl PlayerBundle {
-    pub fn default_input_map() -> InputMap<PlayerAction,> {
+    pub fn default_input_map() -> InputMap<PlayerAction> {
         // This allows us to replace `ArpgAction::Up` with `Up`,
         // significantly reducing boilerplate
         use PlayerAction::*;

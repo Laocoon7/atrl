@@ -1,36 +1,36 @@
 use crate::prelude::*;
 use big_brain::actions::ActionState;
 
-#[derive(Debug, Default, Clone,)]
+#[derive(Debug, Default, Clone)]
 pub enum ChaseActorFailureBehavior {
     #[default]
     Wait,
 }
 
-#[derive(Debug, Default, Component, Clone,)]
+#[derive(Debug, Default, Component, Clone)]
 // could be used for temporary storage for multi turn actions
 pub struct ChaseActor {
-    path: Option<Vec<IVec2,>,>,
-    last_seen_pt: Option<IVec2,>,
+    path: Option<Vec<IVec2>>,
+    last_seen_pt: Option<IVec2>,
     // What to do if entity reaches last seen player position
     fail_behavior: ChaseActorFailureBehavior,
 }
 
 pub fn chase_action(
     mut commands: Commands,
-    mut manager: ResMut<MapManager,>,
-    player_q: Query<(Entity, &Transform,), With<Player,>,>,
-    mut action_q: Query<(&Actor, &mut ActionState, &mut ChaseActor, &ActionSpan,),>,
-    mut ai_q: Query<(&mut Transform, &FieldOfView, &Vision, &Movement, &Name,), Without<Player,>,>,
-    mut target_q: Query<&mut TargetVisualizer,>,
+    mut manager: ResMut<MapManager>,
+    player_q: Query<(Entity, &Transform), With<Player>>,
+    mut action_q: Query<(&Actor, &mut ActionState, &mut ChaseActor, &ActionSpan)>,
+    mut ai_q: Query<(&mut Transform, &FieldOfView, &Vision, &Movement, &Name), Without<Player>>,
+    mut target_q: Query<&mut TargetVisualizer>,
     tilesets: Tilesets,
 ) {
     use ActionState::*;
 
-    for (Actor(actor,), mut action_state, mut chase, span,) in action_q.iter_mut() {
+    for (Actor(actor), mut action_state, mut chase, span) in action_q.iter_mut() {
         let _guard = span.span().enter();
 
-        let (_player_entity, player_transform,) = player_q.single();
+        let (_player_entity, player_transform) = player_q.single();
         let Ok((mut position, fov, vision, movement_component, name,)) =
             ai_q.get_mut(*actor,) else {
                 error!("Actor must have required components");
@@ -55,8 +55,8 @@ pub fn chase_action(
         // So this acts like a skip frame, where it sets the action to evaluating, then immediately
         // evaluates
         if *action_state == Requested {
-            chase.last_seen_pt = Some(player_pos,);
-            chase.path = Some(generate_chase_path(ai_pos, player_pos, movement_component.0, map,),);
+            chase.last_seen_pt = Some(player_pos);
+            chase.path = Some(generate_chase_path(ai_pos, player_pos, movement_component.0, map));
 
             *action_state = Executing;
             info!("{} gonna start chasing!", name);
@@ -64,8 +64,8 @@ pub fn chase_action(
 
         match *action_state {
             Cancelled => {
-                if let Ok(mut target_visualizer,) = target_q.get_mut(*actor,) {
-                    target_visualizer.clear(&mut commands,);
+                if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
+                    target_visualizer.clear(&mut commands);
                 }
                 info!("{} cancelled chase!", name);
                 *action_state = Failure;
@@ -75,17 +75,17 @@ pub fn chase_action(
 
                 // if update_path_target is_some() update the path
                 // otherwise we will assume chase.path is valid
-                let update_path_target = if entity_in_fov(map, fov, vision, ai_pos, player_pos,) {
+                let update_path_target = if entity_in_fov(map, fov, vision, ai_pos, player_pos) {
                     // we saw the player, update the last seen position
-                    chase.last_seen_pt = Some(player_pos,);
-                    if can_attack(player_pos,) {
+                    chase.last_seen_pt = Some(player_pos);
+                    if can_attack(player_pos) {
                         // We should attack instead of moving!
                         *action_state = ActionState::Failure;
                         return;
                     }
                     // always update when we can see the player
                     // so treat it as we don't have a valid path
-                    Some(player_pos,)
+                    Some(player_pos)
                 } else {
                     let Some(last_seen_position) = chase.last_seen_pt else {
                         // How did we get here?
@@ -96,17 +96,44 @@ pub fn chase_action(
                         return;
                     };
 
-                    Some(last_seen_position,)
+                    // Do we have a place we are chasing to?
+                    if let Some(path) = &chase.path {
+                        if path.len() == 0 {
+                            // we don't have a valid path because:
+                            // we are at the end of the chase, and we don't see the player.
+                            //
+                            // SWITCH TO WANDER_STATE
+                            //
+                            // We can technically still move towards this point here
+                            // but I'm not sure how to switch from chase -> wander
+                            // I'll try this for now:
+                            *action_state = ActionState::Failure;
+                            return;
+                        } else if map.can_place_actor(path[path.len() - 1], movement_component.0) {
+                            // we have a valid path, and the next step is also valid!
+                            // we only check to make sure this is valid to see if we need to
+                            // try re-generating a path. this move will be checked again
+                            // as we actually try to move there.
+                            None
+                        } else {
+                            // we have a valid path
+                            // but something is blocking us.. Actor/New Feature/Etc
+                            // update the path to try to get around this thing...
+                            Some(last_seen_position)
+                        }
+                    } else {
+                        Some(last_seen_position)
+                    }
                 };
 
                 // update the path if necessary!
-                if let Some(target_position,) = update_path_target {
+                if let Some(target_position) = update_path_target {
                     chase.path = Some(generate_chase_path(
                         ai_pos,
                         target_position,
                         movement_component.0,
                         map,
-                    ),);
+                    ));
                 }
 
                 let Some(mut chase_path) = std::mem::take(&mut chase.path) else {
@@ -119,10 +146,10 @@ pub fn chase_action(
                 // We have a path > 1 and we are not in range to attack.
                 println!("Chase path: {:?}", chase_path);
                 let next_pt = chase_path[chase_path.len() - 1]; // wish we had a Vec::peek()
-                if map.try_move_actor(ai_pos, next_pt, movement_component.0,) {
+                if map.try_move_actor(ai_pos, next_pt, movement_component.0) {
                     // we were moved!
-                    position.set_value(next_pt,);
-                    if let Ok(mut target_visualizer,) = target_q.get_mut(*actor,) {
+                    position.set_value(next_pt);
+                    if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
                         if chase_path.len() > 0 {
                             target_visualizer.update(
                                 &mut commands,
@@ -146,7 +173,7 @@ pub fn chase_action(
                     info!("AI is blocked trying to move from {:?} to {:?}", ai_pos, next_pt);
                 }
 
-                chase.path = Some(chase_path,);
+                chase.path = Some(chase_path);
             }
 
             // Init | Success | Failure
@@ -162,8 +189,8 @@ fn generate_chase_path(
     target_pos: IVec2,
     movement_type: u8,
     map_provider: &impl PathProvider,
-) -> Vec<IVec2,> {
-    PathFinder::Astar.compute(ai_pos, target_pos, movement_type, map_provider,).unwrap_or_default()
+) -> Vec<IVec2> {
+    PathFinder::Astar.compute(ai_pos, target_pos, movement_type, map_provider).unwrap_or_default()
 }
 
-fn can_attack(position: IVec2,) -> bool { false }
+fn can_attack(position: IVec2) -> bool { false }

@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-#[derive(Bundle,)]
+#[derive(Bundle)]
 pub struct ActorBundle {
     pub name: Name,
     pub health: Health,

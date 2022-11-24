@@ -6,5 +6,5 @@ pub trait PathAlgorithm {
         destination: IVec2,
         movement_type: u8,
         provider: &impl PathProvider,
-    ) -> Option<Vec<IVec2,>,>;
+    ) -> Option<Vec<IVec2>>;
 }

@@ -8,6 +8,6 @@ pub enum MapLayer {
     UI,
 }
 
-impl From<MapLayer,> for f32 {
-    fn from(value: MapLayer,) -> Self { (value as u16 * 2 - 1) as Self } // spread the map layers out incase we need extra layers.
+impl From<MapLayer> for f32 {
+    fn from(value: MapLayer) -> Self { (value as u16 * 2 - 1) as Self } // spread the map layers out incase we need extra layers.
 }

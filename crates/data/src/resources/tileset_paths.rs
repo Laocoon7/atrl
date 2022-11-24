@@ -105,35 +105,35 @@ pub const TILESET_TERRAIN_IDS_TABLE: &[u8] = &[
 /////////////////////////////////////////////////////////////////////
 
 /// This function is used during tileset loading
-pub fn get_tileset_paths() -> Vec<String,> {
+pub fn get_tileset_paths() -> Vec<String> {
     let mut ret = Vec::new();
 
     // add the "missing" tileset
-    ret.push(format!("{DEFINITIONS_FOLDER}{TILESET_MISSING_NAME}{RON_EXT}"),);
+    ret.push(format!("{DEFINITIONS_FOLDER}{TILESET_MISSING_NAME}{RON_EXT}"));
 
     // add the "cursor" tilesets
     for name in TILESET_CURSOR_NAME_TABLE {
-        ret.push(format!("{DEFINITIONS_FOLDER}{TILESET_CURSOR_FOLDER}{name}{RON_EXT}"),);
+        ret.push(format!("{DEFINITIONS_FOLDER}{TILESET_CURSOR_FOLDER}{name}{RON_EXT}"));
     }
 
     // add the "actors" tilesets
     for name in TILESET_ACTORS_NAME_TABLE {
-        ret.push(format!("{DEFINITIONS_FOLDER}{TILESET_ACTORS_FOLDER}{name}{RON_EXT}"),);
+        ret.push(format!("{DEFINITIONS_FOLDER}{TILESET_ACTORS_FOLDER}{name}{RON_EXT}"));
     }
 
     // add the "features" tilesets
     for name in TILESET_FEATURES_NAME_TABLE {
-        ret.push(format!("{DEFINITIONS_FOLDER}{TILESET_FEATURES_FOLDER}{name}{RON_EXT}"),);
+        ret.push(format!("{DEFINITIONS_FOLDER}{TILESET_FEATURES_FOLDER}{name}{RON_EXT}"));
     }
 
     // add the "items" tilesets
     for name in TILESET_ITEMS_NAME_TABLE {
-        ret.push(format!("{DEFINITIONS_FOLDER}{TILESET_ITEMS_FOLDER}{name}{RON_EXT}"),);
+        ret.push(format!("{DEFINITIONS_FOLDER}{TILESET_ITEMS_FOLDER}{name}{RON_EXT}"));
     }
 
     // add the "terrain" tilesets
     for name in TILESET_TERRAIN_NAME_TABLE {
-        ret.push(format!("{DEFINITIONS_FOLDER}{TILESET_TERRAIN_FOLDER}{name}{RON_EXT}"),);
+        ret.push(format!("{DEFINITIONS_FOLDER}{TILESET_TERRAIN_FOLDER}{name}{RON_EXT}"));
     }
 
     ret

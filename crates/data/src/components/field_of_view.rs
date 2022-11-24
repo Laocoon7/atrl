@@ -1,5 +1,5 @@
 use crate::prelude::*;
 
-#[derive(Reflect, Component, Default, Deref, DerefMut,)]
+#[derive(Reflect, Component, Default, Deref, DerefMut)]
 #[reflect(Component)]
-pub struct FieldOfView(pub u8,);
+pub struct FieldOfView(pub u8);

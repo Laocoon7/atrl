@@ -1,15 +1,15 @@
 use crate::prelude::*;
 
-pub struct FinalizerBuilder<T,> {
-    rect: Option<Rectangle,>,
+pub struct FinalizerBuilder<T> {
+    rect: Option<Rectangle>,
     from_min: u32,
     from_max: u32,
     min: u32,
     max: u32,
-    _x: PhantomData<T,>,
+    _x: PhantomData<T>,
 }
 
-impl<T,> FinalizerBuilder<T,> {
+impl<T> FinalizerBuilder<T> {
     /// `min` is the lowest allowed value on the map
     /// `max` is the highest allowed value on the map
     /// normally these should be set to
@@ -30,8 +30,8 @@ impl<T,> FinalizerBuilder<T,> {
     ///   .with(MapFromLayerBuilder().add_layer(rooms).with_rect(Rectangle::new((20, 10), (30, 50))))
     ///   .generate();
     /// ```
-    pub fn new(min: u32, max: u32,) -> Box<Self,> {
-        Box::new(Self { rect: None, from_min: 0, from_max: u32::MAX, min, max, _x: PhantomData, },)
+    pub fn new(min: u32, max: u32) -> Box<Self> {
+        Box::new(Self { rect: None, from_min: 0, from_max: u32::MAX, min, max, _x: PhantomData })
     }
 
     /// `min` is the lowest value currently on the map
@@ -41,26 +41,26 @@ impl<T,> FinalizerBuilder<T,> {
     /// others may set the values to between 0, u32::MAX
     /// make sure to pick the correct values being inputted
     /// based on the previous builders used.
-    pub fn from(mut self, min: u32, max: u32,) -> Box<Self,> {
+    pub fn from(mut self, min: u32, max: u32) -> Box<Self> {
         self.from_min = min;
         self.from_max = max;
-        Box::new(self,)
+        Box::new(self)
     }
 
-    pub fn with_rect(mut self, rectangle: Rectangle,) -> Box<Self,> {
-        self.rect = Some(rectangle,);
-        Box::new(self,)
+    pub fn with_rect(mut self, rectangle: Rectangle) -> Box<Self> {
+        self.rect = Some(rectangle);
+        Box::new(self)
     }
 }
 
-impl<T,> MapArchitect<T,> for FinalizerBuilder<T,> {
-    fn generate(&mut self, data: &mut MapGenData<T,>,) {
+impl<T> MapArchitect<T> for FinalizerBuilder<T> {
+    fn generate(&mut self, data: &mut MapGenData<T>) {
         let rect = match &self.rect {
-            Some(r,) => *r,
-            None => Rectangle::new((0i32, 0,), data.size - UVec2::new(1, 1,),),
+            Some(r) => *r,
+            None => Rectangle::new((0i32, 0), data.size - UVec2::new(1, 1)),
         };
 
-        if !data.grid.in_bounds(rect.min(),) || !data.grid.in_bounds(rect.max(),) {
+        if !data.grid.in_bounds(rect.min()) || !data.grid.in_bounds(rect.max()) {
             error!(
                 "MapRangeBuilder Rectangle{{ {}, {} }} is outside of bounds for Grid({}, {})",
                 rect.min(),
@@ -72,10 +72,10 @@ impl<T,> MapArchitect<T,> for FinalizerBuilder<T,> {
         }
 
         rect.for_each(|v| {
-            let value = *data.grid.get_unchecked(v,);
+            let value = *data.grid.get_unchecked(v);
             let new_value =
-                map_range_u32(value, (self.from_min, self.from_max,), (self.min, self.max,),);
-            data.grid.set(v, new_value,);
-        },);
+                map_range_u32(value, (self.from_min, self.from_max), (self.min, self.max));
+            data.grid.set(v, new_value);
+        });
     }
 }

@@ -1,19 +1,19 @@
 use crate::prelude::*;
 
-pub struct MapPlugin<T,> {
+pub struct MapPlugin<T> {
     pub state_construct: T,
     pub state_running: T,
 }
 
-impl<T: StateNext,> MapPlugin<T,> {
+impl<T: StateNext> MapPlugin<T> {
     #[inline(always)]
-    pub const fn new(state_construct: T, state_running: T,) -> Self {
-        Self { state_construct, state_running, }
+    pub const fn new(state_construct: T, state_running: T) -> Self {
+        Self { state_construct, state_running }
     }
 }
 
-impl<T: StateNext,> Plugin for MapPlugin<T,> {
-    fn build(&self, app: &mut App,) {
+impl<T: StateNext> Plugin for MapPlugin<T> {
+    fn build(&self, app: &mut App) {
         app.insert_resource(MapManager::default(),)
             .add_exit_system_set(
                 self.state_construct,

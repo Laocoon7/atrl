@@ -2,7 +2,7 @@ use crate::prelude::*;
 
 pub struct SaveLoadPlugin;
 impl Plugin for SaveLoadPlugin {
-    fn build(&self, app: &mut App,) {
+    fn build(&self, app: &mut App) {
         app
             // -- Tags -- //
             .register_type::<Player>()

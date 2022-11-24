@@ -1,12 +1,12 @@
 use crate::prelude::*;
 
-pub struct AIPlugin<T, R,> {
+pub struct AIPlugin<T, R> {
     pub state_running: T,
     pub turn_state_ticking: R,
 }
 
-impl<T: StateNext, R: StateNext + Resource,> Plugin for AIPlugin<T, R,> {
-    fn build(&self, app: &mut App,) {
+impl<T: StateNext, R: StateNext + Resource> Plugin for AIPlugin<T, R> {
+    fn build(&self, app: &mut App) {
         app.add_plugin(BigBrainPlugin,)
             // Scoring Systems
             .add_system_set_to_stage(

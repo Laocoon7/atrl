@@ -3,7 +3,7 @@ use crate::prelude::*;
 /// An implementation of [Bresenham's circle algorithm].
 /// [Bresenham's circle algorithm]: http://members.chello.at/~easyfilter/bresenham.html
 /// Derived from the line_drawing crate, but specialized to use BTerm's types.
-#[derive(Debug, Clone,)]
+#[derive(Debug, Clone)]
 pub struct BresenhamCircleIter {
     x: i32,
     y: i32,
@@ -22,7 +22,7 @@ impl BresenhamCircleIter {
     /// * `radius` - the radius of the desired circle.
     #[inline]
     #[allow(dead_code)]
-    pub fn new(center: impl Point2d, radius: i32,) -> Self {
+    pub fn new(center: impl Point2d, radius: i32) -> Self {
         Self {
             y: 0,
             radius,
@@ -38,13 +38,13 @@ impl Iterator for BresenhamCircleIter {
     type Item = IVec2;
 
     #[inline]
-    fn next(&mut self,) -> Option<Self::Item,> {
+    fn next(&mut self) -> Option<Self::Item> {
         if self.x < 0 {
             let point = match self.quadrant {
-                1 => (self.center.x - self.x, self.center.y + self.y,),
-                2 => (self.center.x - self.y, self.center.y - self.x,),
-                3 => (self.center.x + self.x, self.center.y - self.y,),
-                4 => (self.center.x + self.y, self.center.y + self.x,),
+                1 => (self.center.x - self.x, self.center.y + self.y),
+                2 => (self.center.x - self.y, self.center.y - self.x),
+                3 => (self.center.x + self.x, self.center.y - self.y),
+                4 => (self.center.x + self.y, self.center.y + self.x),
                 _ => unreachable!(),
             }
             .as_ivec2();
@@ -66,7 +66,7 @@ impl Iterator for BresenhamCircleIter {
 
             self.quadrant = self.quadrant % 4 + 1;
 
-            Some(point,)
+            Some(point)
         } else {
             None
         }
@@ -91,8 +91,8 @@ impl BresenhamCircleNoDiagIter {
     /// * `radius` - the radius of the circle
     #[inline]
     #[allow(dead_code)]
-    pub fn new(center: impl Point2d, radius: i32,) -> Self {
-        Self { center: center.as_ivec2(), x: -radius, y: 0, error: 0, quadrant: 1, }
+    pub fn new(center: impl Point2d, radius: i32) -> Self {
+        Self { center: center.as_ivec2(), x: -radius, y: 0, error: 0, quadrant: 1 }
     }
 }
 
@@ -100,13 +100,13 @@ impl Iterator for BresenhamCircleNoDiagIter {
     type Item = IVec2;
 
     #[inline]
-    fn next(&mut self,) -> Option<Self::Item,> {
+    fn next(&mut self) -> Option<Self::Item> {
         if self.x < 0 {
             let point = match self.quadrant {
-                1 => (self.center.x - self.x, self.center.y + self.y,),
-                2 => (self.center.x - self.y, self.center.y - self.x,),
-                3 => (self.center.x + self.x, self.center.y - self.y,),
-                4 => (self.center.x + self.y, self.center.y + self.x,),
+                1 => (self.center.x - self.x, self.center.y + self.y),
+                2 => (self.center.x - self.y, self.center.y - self.x),
+                3 => (self.center.x + self.x, self.center.y - self.y),
+                4 => (self.center.x + self.y, self.center.y + self.x),
                 _ => unreachable!(),
             }
             .as_ivec2();
@@ -125,7 +125,7 @@ impl Iterator for BresenhamCircleNoDiagIter {
 
             self.quadrant = self.quadrant % 4 + 1;
 
-            Some(point,)
+            Some(point)
         } else {
             None
         }

@@ -6,27 +6,25 @@ pub struct Canvas {
 }
 
 impl Canvas {
-    pub fn new(size: impl Size2d,) -> Self {
-        let string = str::repeat(" ", size.count(),);
-        Self { size: size.as_uvec2(), string, }
+    pub fn new(size: impl Size2d) -> Self {
+        let string = str::repeat(" ", size.count());
+        Self { size: size.as_uvec2(), string }
     }
 
-    pub fn put(&mut self, pos: impl Point2d, glyph: char,) {
-        let i = self.to_index(pos,);
-        self.string.replace_range(i..i + 1, std::str::from_utf8(&[glyph as u8,],).unwrap(),);
+    pub fn put(&mut self, pos: impl Point2d, glyph: char) {
+        let i = self.to_index(pos);
+        self.string.replace_range(i..i + 1, std::str::from_utf8(&[glyph as u8]).unwrap());
     }
 
-    fn to_index(&self, point: impl Point2d,) -> usize {
-        point.as_index(self.size.width() as usize,)
-    }
+    fn to_index(&self, point: impl Point2d) -> usize { point.as_index(self.size.width() as usize) }
 
-    pub fn print(&self,) {
+    pub fn print(&self) {
         let width = self.size.width();
-        (0..width).for_each(|i| print!("{}", i),);
+        (0..width).for_each(|i| print!("{}", i));
         println!();
 
-        let chars: Vec<_,> = self.string.replace(' ', ".",).chars().collect();
-        for (i, line,) in chars.chunks(self.size.x as usize,).enumerate() {
+        let chars: Vec<_> = self.string.replace(' ', ".").chars().collect();
+        for (i, line) in chars.chunks(self.size.x as usize).enumerate() {
             println!("{:>3} {}", i, String::from_iter(line.iter()));
         }
     }
@@ -38,11 +36,11 @@ mod tests {
 
     #[test]
     fn print_test() {
-        let mut canvas = Canvas::new([10, 5,],);
-        canvas.put((1, 1,), '*',);
-        canvas.put((2, 2,), '*',);
-        canvas.put((3, 3,), '*',);
-        canvas.put((4, 4,), '*',);
+        let mut canvas = Canvas::new([10, 5]);
+        canvas.put((1, 1), '*');
+        canvas.put((2, 2), '*');
+        canvas.put((3, 3), '*');
+        canvas.put((4, 4), '*');
 
         canvas.print();
     }

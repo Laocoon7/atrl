@@ -4,40 +4,40 @@ use crate::prelude::*;
 pub trait Point2d: Clone + Copy {
     #[allow(clippy::new_ret_no_self)]
     /// Construct a IVec2
-    fn new(x: i32, y: i32,) -> IVec2 { IVec2::new(x, y,) }
+    fn new(x: i32, y: i32) -> IVec2 { IVec2::new(x, y) }
 
     /// Returns x position.
-    fn x(&self,) -> i32;
+    fn x(&self) -> i32;
 
     /// Returns y position.
-    fn y(&self,) -> i32;
+    fn y(&self) -> i32;
 
     /// Returns the grid point offset by the given amount.
-    fn offset(&self, xy: impl Point2d,) -> IVec2 { self.add(xy,) }
+    fn offset(&self, xy: impl Point2d) -> IVec2 { self.add(xy) }
 
     /// Convert point to `IVec2` (i32).
     #[inline]
-    fn as_ivec2(&self,) -> IVec2 { IVec2::new(self.x(), self.y(),) }
+    fn as_ivec2(&self) -> IVec2 { IVec2::new(self.x(), self.y()) }
 
     /// Convert point to `UVec2` (u32).
     #[inline]
-    fn as_uvec2(&self,) -> UVec2 { self.as_ivec2().as_uvec2() }
+    fn as_uvec2(&self) -> UVec2 { self.as_ivec2().as_uvec2() }
 
     /// Convert point to `Vec2` (f32).
     #[inline]
-    fn as_vec2(&self,) -> Vec2 { self.as_ivec2().as_vec2() }
+    fn as_vec2(&self) -> Vec2 { self.as_ivec2().as_vec2() }
 
     /// Convert point to `[i32; 2]`.
     #[inline]
-    fn as_array(&self,) -> [i32; 2] { self.as_ivec2().to_array() }
+    fn as_array(&self) -> [i32; 2] { self.as_ivec2().to_array() }
 
     /// Get the point's corresponding 1d index.
     #[inline(always)]
-    fn as_index(&self, width: usize,) -> usize { self.y() as usize * width + self.x() as usize }
+    fn as_index(&self, width: usize) -> usize { self.y() as usize * width + self.x() as usize }
 
     /// Returns true if the point is valid for the given size.
     #[inline]
-    fn is_valid(&self, size: impl Size2d,) -> bool {
+    fn is_valid(&self, size: impl Size2d) -> bool {
         let x = self.x();
         let y = self.y();
 
@@ -50,80 +50,80 @@ pub trait Point2d: Clone + Copy {
 
     /// Adds two points together.
     #[inline]
-    fn add(&self, other: impl Point2d,) -> IVec2 {
-        IVec2::new(self.x() + other.x(), self.y() + other.y(),)
+    fn add(&self, other: impl Point2d) -> IVec2 {
+        IVec2::new(self.x() + other.x(), self.y() + other.y())
     }
 
     /// Returns distance from another `Point2d`.
     #[inline]
-    fn distance(&self, other: impl Point2d,) -> f32 { self.as_vec2().distance(other.as_vec2(),) }
+    fn distance(&self, other: impl Point2d) -> f32 { self.as_vec2().distance(other.as_vec2()) }
 
     /// The [taxicab distance](https://en.wikipedia.org/wiki/Taxicab_geometry)
     /// between two grid points.
     #[inline]
-    fn taxi_dist(self, other: impl Point2d,) -> f32 {
-        DistanceAlg::Manhattan.distance2d(self.as_vec2(), other.as_vec2(),)
+    fn taxi_dist(self, other: impl Point2d) -> f32 {
+        DistanceAlg::Manhattan.distance2d(self.as_vec2(), other.as_vec2())
     }
 
     /// Linearly interpolate between points a and b by the amount t.
     #[inline]
-    fn lerp(self, other: impl Point2d, t: f32,) -> IVec2 {
-        self.as_vec2().lerp(other.as_vec2(), t,).as_ivec2()
+    fn lerp(self, other: impl Point2d, t: f32) -> IVec2 {
+        self.as_vec2().lerp(other.as_vec2(), t).as_ivec2()
     }
 
     ////////////////
     //  Geometry  //
     ////////////////
     #[inline]
-    fn from_angle(center: impl Point2d, distance: f32, degrees: f32,) -> IVec2 {
+    fn from_angle(center: impl Point2d, distance: f32, degrees: f32) -> IVec2 {
         let rads = degrees.to_radians();
         let x = (distance * rads.cos()).floor() as i32; // .round() ??
         let y = (distance * rads.sin()).floor() as i32;
 
-        IVec2::new(center.x() + x, center.y() + y,)
+        IVec2::new(center.x() + x, center.y() + y)
     }
 
     #[inline]
-    fn angle_to(&self, point: impl Point2d,) -> f32 {
+    fn angle_to(&self, point: impl Point2d) -> f32 {
         let x = (point.x() - self.x()) as f32;
         let y = (point.y() - self.y()) as f32;
-        y.atan2(x,).to_degrees()
+        y.atan2(x).to_degrees()
     }
 
     #[inline]
-    fn mid_point(&self, point: impl Point2d,) -> IVec2 {
-        IVec2 { x: (self.x() + point.x()) / 2, y: (self.y() + point.y()) / 2, }
+    fn mid_point(&self, point: impl Point2d) -> IVec2 {
+        IVec2 { x: (self.x() + point.x()) / 2, y: (self.y() + point.y()) / 2 }
     }
 
     /// Returns the `Cross Product` between two points.
     #[inline]
-    fn cross_product(&self, point: impl Point2d,) -> i32 {
+    fn cross_product(&self, point: impl Point2d) -> i32 {
         self.x() * point.y() - self.y() * point.x()
     }
 
     /// Returns the `Dot Product` between two points.
     #[inline]
-    fn dot_product(&self, point: impl Point2d,) -> i32 {
+    fn dot_product(&self, point: impl Point2d) -> i32 {
         self.x() * point.x() + self.y() * point.y()
     }
 
     /// Returns the grid point the given number of spaces above this one.
     #[inline]
-    fn up(&self, amount: i32,) -> IVec2 { IVec2::new(self.x(), self.y() + amount,) }
+    fn up(&self, amount: i32) -> IVec2 { IVec2::new(self.x(), self.y() + amount) }
 
     /// Returns the grid point the given number of spaces below this one.
     #[inline]
-    fn down(&self, amount: i32,) -> IVec2 { IVec2::new(self.x(), self.y() - amount,) }
+    fn down(&self, amount: i32) -> IVec2 { IVec2::new(self.x(), self.y() - amount) }
 
     /// Returns the grid point the given number of spaces to the right of
     /// this one.
     #[inline]
-    fn right(&self, amount: i32,) -> IVec2 { IVec2::new(self.x() + amount, self.y(),) }
+    fn right(&self, amount: i32) -> IVec2 { IVec2::new(self.x() + amount, self.y()) }
 
     /// Returns the grid point the given number of spaces to the left of
     /// this one.
     #[inline]
-    fn left(&self, amount: i32,) -> IVec2 { IVec2::new(self.x() - amount, self.y(),) }
+    fn left(&self, amount: i32) -> IVec2 { IVec2::new(self.x() - amount, self.y()) }
 
     ////////////////
     //  Iterator  //
@@ -132,20 +132,20 @@ pub trait Point2d: Clone + Copy {
     /// Returns an iterator over the 8 points adjacent to this one. (N, NE, E, SE, S, SW, W,
     /// NW)
     #[inline]
-    fn neighbors_all(&self,) -> AdjIterator {
-        AdjIterator::new(*self, GridDirection::all().collect(),)
+    fn neighbors_all(&self) -> AdjIterator {
+        AdjIterator::new(*self, GridDirection::all().collect())
     }
 
     /// Returns an iterator over the 4 points cardinal - adjacent to this one. (N, E, S, W)
     #[inline]
-    fn neighbors_cardinal(&self,) -> AdjIterator {
-        AdjIterator::new(*self, CardinalDirection::all_directions().collect(),)
+    fn neighbors_cardinal(&self) -> AdjIterator {
+        AdjIterator::new(*self, CardinalDirection::all_directions().collect())
     }
 
     /// Returns an iterator over the 4 points ordinal - adjacent to this one. (NE, SE, SW, NW)
     #[inline]
-    fn neighbors_ordinal(&self,) -> AdjIterator {
-        AdjIterator::new(*self, OrdinalDirection::all_directions().collect(),)
+    fn neighbors_ordinal(&self) -> AdjIterator {
+        AdjIterator::new(*self, OrdinalDirection::all_directions().collect())
     }
 }
 
@@ -155,22 +155,22 @@ mod tests {
 
     #[test]
     fn taxi() {
-        let a = (10, 10,);
-        let b = (20, 20,);
+        let a = (10, 10);
+        let b = (20, 20);
 
-        let dist = Point2d::taxi_dist(a, b,);
+        let dist = Point2d::taxi_dist(a, b);
         assert_eq!(dist, 20.);
     }
 
     #[test]
     fn adj() {
-        let points: Vec<IVec2,> = (10, 10,).neighbors_cardinal().collect();
+        let points: Vec<IVec2> = (10, 10).neighbors_cardinal().collect();
         assert!(points.contains(&IVec2::new(10, 9)));
         assert!(points.contains(&IVec2::new(9, 10)));
         assert!(points.contains(&IVec2::new(11, 10)));
         assert!(points.contains(&IVec2::new(10, 11)));
 
-        let points: Vec<IVec2,> = (10, 10,).neighbors_all().collect();
+        let points: Vec<IVec2> = (10, 10).neighbors_all().collect();
         assert!(points.contains(&IVec2::new(10, 9)));
         assert!(points.contains(&IVec2::new(9, 10)));
         assert!(points.contains(&IVec2::new(11, 10)));

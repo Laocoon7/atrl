@@ -28,16 +28,16 @@ pub enum VisionType {
     Any         = !0,
 }
 
-impl TryFrom<VisionType,> for u8 {
+impl TryFrom<VisionType> for u8 {
     type Error = String;
 
-    fn try_from(value: VisionType,) -> Result<Self, Self::Error,> {
-        value.to_u8().map_or(Err("Failed to convert `VisionType` to `u8`".to_string(),), Ok,)
+    fn try_from(value: VisionType) -> Result<Self, Self::Error> {
+        value.to_u8().map_or(Err("Failed to convert `VisionType` to `u8`".to_string()), Ok)
     }
 }
 
 impl VisionType {
-    pub fn as_u8(self,) -> u8 { self.try_into().unwrap_or(Self::None as u8,) }
+    pub fn as_u8(self) -> u8 { self.try_into().unwrap_or(Self::None as u8) }
 }
 
 impl_as_primative!(VisionType);

@@ -34,25 +34,25 @@ fn main() {
     let mut app = App::new();
 
     // Default Plugins
-    default_plugins(&mut app,).insert_resource(ClearColor(Color::BLACK,),);
+    default_plugins(&mut app).insert_resource(ClearColor(Color::BLACK));
 
     // anything we don't need in release versions
     #[cfg(feature = "debug")]
-    app.add_plugin(debug::DebugPlugin,);
+    app.add_plugin(debug::DebugPlugin);
 
     // game related
     app.add_plugin(GamePlugin {
         state_running: GameState::InGame,
-        state_main_menu: GameState::Ui(MainMenu,),
-        state_construct: GameState::Construct(MapGen,),
-        state_asset_load: GameState::AssetLoad(Load,),
-        state_asset_load_failure: GameState::AssetLoad(LoadFailure,),
-    },);
+        state_main_menu: GameState::Ui(MainMenu),
+        state_construct: GameState::Construct(MapGen),
+        state_asset_load: GameState::AssetLoad(Load),
+        state_asset_load_failure: GameState::AssetLoad(LoadFailure),
+    });
 
     app.run();
 }
 
-fn default_plugins(app: &mut App,) -> &mut App {
+fn default_plugins(app: &mut App) -> &mut App {
     let defaults = DefaultPlugins
         .set(WindowPlugin {
             window: WindowDescriptor {
@@ -68,18 +68,18 @@ fn default_plugins(app: &mut App,) -> &mut App {
                 ..Default::default()
             },
             ..Default::default()
-        },)
-        .set(ImagePlugin::default_nearest(),)
+        })
+        .set(ImagePlugin::default_nearest())
         .build()
         .disable::<bevy::log::LogPlugin>();
 
-    app.add_plugins(defaults,);
+    app.add_plugins(defaults);
 
     #[cfg(feature = "release")]
-    defaults.add_before::<bevy::asset::AssetPlugin, _>(bevy_embedded_assets::EmbeddedAssetPlugin,);
+    defaults.add_before::<bevy::asset::AssetPlugin, _>(bevy_embedded_assets::EmbeddedAssetPlugin);
 
     #[cfg(not(feature = "debug"))]
-    app.add_plugin(bevy::log::LogPlugin { level: bevy::log::Level::WARN, ..Default::default() },);
+    app.add_plugin(bevy::log::LogPlugin { level: bevy::log::Level::WARN, ..Default::default() });
 
     app
 }

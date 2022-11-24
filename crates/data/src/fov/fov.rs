@@ -2,11 +2,11 @@ use crate::prelude::*;
 
 pub enum Fov {
     Shadowcast,
-    ShadowcastDirection(CardinalDirection,),
+    ShadowcastDirection(CardinalDirection),
 }
 
 impl Fov {
-    pub fn compute<Range: Into<u32,>,>(
+    pub fn compute<Range: Into<u32>>(
         &self,
         origin: impl Point2d,
         vision_type: u8,
@@ -18,9 +18,9 @@ impl Fov {
         let range = range.into();
         match self {
             Self::Shadowcast => {
-                Shadowcast::compute_fov(origin, vision_type, range, provider, receiver,)
+                Shadowcast::compute_fov(origin, vision_type, range, provider, receiver)
             }
-            Self::ShadowcastDirection(direction,) => Shadowcast::compute_direction(
+            Self::ShadowcastDirection(direction) => Shadowcast::compute_direction(
                 origin,
                 vision_type,
                 range,

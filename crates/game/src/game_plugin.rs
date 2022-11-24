@@ -1,7 +1,7 @@
 use crate::prelude::*;
 
-#[derive(Copy, Clone,)]
-pub struct GamePlugin<T,> {
+#[derive(Copy, Clone)]
+pub struct GamePlugin<T> {
     /// Asset loading happens in this state. When it finishes it transitions to
     /// [`state_construct`]
     pub state_asset_load: T,
@@ -12,12 +12,12 @@ pub struct GamePlugin<T,> {
     pub state_running: T,
 }
 
-impl<T: StateNext,> Plugin for GamePlugin<T,> {
-    fn build(&self, app: &mut App,) {
+impl<T: StateNext> Plugin for GamePlugin<T> {
+    fn build(&self, app: &mut App) {
         let game_context = GameContext::default();
 
         // set entry state
-        self.setup_states(app,);
+        self.setup_states(app);
 
         app
             // Game Context
@@ -54,10 +54,10 @@ impl<T: StateNext,> Plugin for GamePlugin<T,> {
     }
 }
 
-impl<T: StateNext,> GamePlugin<T,> {
-    fn setup_states(self, app: &mut App,) -> Self {
-        app.add_loopless_state(GameState::Initializing,)
-            .insert_resource(TurnState::AwaitingInput,)
+impl<T: StateNext> GamePlugin<T> {
+    fn setup_states(self, app: &mut App) -> Self {
+        app.add_loopless_state(GameState::Initializing)
+            .insert_resource(TurnState::AwaitingInput)
             .add_enter_system(
                 GameState::Initializing,
                 switch_in_game_state!(GameState::AssetLoad(AssetLoadState::Load)),
@@ -66,35 +66,35 @@ impl<T: StateNext,> GamePlugin<T,> {
         self
     }
 
-    fn add_camera(self, app: &mut App,) -> Self {
+    fn add_camera(self, app: &mut App) -> Self {
         app.add_plugin(CameraPlugin::new(
-            CameraSettings::new_dimensions(GRID_WIDTH as f32, GRID_HEIGHT as f32,)
-                .with_id(CameraId::Map,)
-                .with_position(Vec2::ZERO,),
-        ),);
+            CameraSettings::new_dimensions(GRID_WIDTH as f32, GRID_HEIGHT as f32)
+                .with_id(CameraId::Map)
+                .with_position(Vec2::ZERO),
+        ));
 
         self
     }
 
-    fn add_raws(self, app: &mut App, state_asset_load: T, state_asset_load_failure: T,) -> Self {
-        let mut plugin = RawPlugin::new(state_asset_load, state_asset_load_failure,);
+    fn add_raws(self, app: &mut App, state_asset_load: T, state_asset_load_failure: T) -> Self {
+        let mut plugin = RawPlugin::new(state_asset_load, state_asset_load_failure);
 
         for path in get_tileset_paths() {
-            plugin = plugin.add_tileset_file(path.as_str(),);
+            plugin = plugin.add_tileset_file(path.as_str());
         }
 
         for path in get_font_paths() {
-            plugin = plugin.add_font_file(path.as_str(),);
+            plugin = plugin.add_font_file(path.as_str());
         }
 
-        app.add_plugin(plugin,);
+        app.add_plugin(plugin);
 
         self
     }
 
-    fn add_map_plugins(self, state_construct: T, state_running: T, app: &mut App,) -> Self {
-        app.add_plugin(MapPlugin::new(state_construct, state_running,),)
-            .add_plugin(MapRendererPlugin::new([GRID_WIDTH, GRID_HEIGHT,],),);
+    fn add_map_plugins(self, state_construct: T, state_running: T, app: &mut App) -> Self {
+        app.add_plugin(MapPlugin::new(state_construct, state_running))
+            .add_plugin(MapRendererPlugin::new([GRID_WIDTH, GRID_HEIGHT]));
 
         self
     }

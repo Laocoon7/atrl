@@ -29,7 +29,7 @@ pub enum TerrainType {
 
 impl TerrainType {
     /// Movement is allowed if MovementComponent allows any of these types
-    pub const fn allowed_movement(&self,) -> u8 {
+    pub const fn allowed_movement(&self) -> u8 {
         match self {
             Self::None => (MovementType::None) as u8,
             Self::Wall => (MovementType::Fly as u8) | (MovementType::Phase as u8),
@@ -46,7 +46,7 @@ impl TerrainType {
     }
 
     /// The tile is opaque except to these vision types
-    pub const fn vision_penetrates(&self,) -> u8 {
+    pub const fn vision_penetrates(&self) -> u8 {
         match self {
             Self::None => VisionType::None as u8,
             Self::Wall => VisionType::XRay as u8,
@@ -60,7 +60,7 @@ impl TerrainType {
     }
 
     /// Movement cost per tile
-    pub const fn get_movement_cost(&self,) -> f32 {
+    pub const fn get_movement_cost(&self) -> f32 {
         match self {
             Self::None => 0.0,
             Self::Wall => 0.0,
@@ -70,12 +70,12 @@ impl TerrainType {
     }
 }
 
-impl From<TerrainType,> for u32 {
-    fn from(value: TerrainType,) -> Self {
-        ToPrimitive::to_u32(&value,).expect("Failed to convert `TerrainType` to `u32`",)
+impl From<TerrainType> for u32 {
+    fn from(value: TerrainType) -> Self {
+        ToPrimitive::to_u32(&value).expect("Failed to convert `TerrainType` to `u32`")
     }
 }
 
-impl From<u32,> for TerrainType {
-    fn from(value: u32,) -> Self { FromPrimitive::from_u32(value,).map_or(Self::None, |v| v,) }
+impl From<u32> for TerrainType {
+    fn from(value: u32) -> Self { FromPrimitive::from_u32(value).map_or(Self::None, |v| v) }
 }
