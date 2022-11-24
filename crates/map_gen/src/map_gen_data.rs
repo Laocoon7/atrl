@@ -4,8 +4,8 @@ pub struct MapGenData<T> {
 
     pub size: UVec2,
     pub name: String,
-    pub starting_position: UVec2,
     pub rng: Box<dyn RngCore>,
+    pub starting_position: UVec2,
     pub exit_positions: Vec<UVec2>,
 
     pub grid: Grid<u32>,

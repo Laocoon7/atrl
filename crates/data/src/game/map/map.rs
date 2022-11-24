@@ -103,8 +103,8 @@ impl Map {
 }
 
 pub struct MapPassThroughData {
-    pub world_position: WorldPosition,
     pub random: Random,
+    pub world_position: WorldPosition,
 
     pub terrain_tileset_id: u8,
     pub feature_tileset_id: u8,
@@ -126,6 +126,7 @@ impl From<MapGenData<MapPassThroughData>> for Map {
                 terrain_types.set((x, y), v.into());
             }
         }
+
         Self {
             size: data.size,
             update_all: true,

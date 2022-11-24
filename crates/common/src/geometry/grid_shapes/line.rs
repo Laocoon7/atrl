@@ -7,6 +7,7 @@ pub struct Line {
     start: IVec2,
     end: IVec2,
 }
+
 impl Line {
     pub fn new(start: impl Point2d, end: impl Point2d) -> Self {
         println!("Line from: {:?} to: {:?}", start.as_ivec2(), end.as_ivec2());
@@ -16,6 +17,7 @@ impl Line {
         }
     }
 }
+
 impl GridShape for Line {
     fn get_count(&self) -> usize { self.get_points().len() }
 

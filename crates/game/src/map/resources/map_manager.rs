@@ -29,9 +29,11 @@ impl MapManager {
         if !game_context.is_valid_world_position(world_position) {
             return Err(AtrlError::InvalidWorldPosition(*world_position));
         }
+
         if let Some(entity) = self.loaded_maps.get(&world_position) {
             return Ok(*entity);
         }
+
         // TODO: check deserialize map from world_position
         let map_seed =
             game_context.map_manager_random.prht.get(world_position.x, world_position.y, world_position.z);
@@ -41,6 +43,7 @@ impl MapManager {
             "Map ({}, {}, {})",
             world_position.x, world_position.y, world_position.z
         );
+
         let tileset = tileset_name.map_or_else(
             || {
                 tileset_id.map_or_else(
@@ -56,10 +59,12 @@ impl MapManager {
                 tilesets.get_by_name(&name).unwrap_or_else(|| panic!("Couldn't find tilemap_name: {}", &name))
             },
         );
+
         let tileset_id = *tileset.id();
         let terrain_layer_entity = commands.spawn_empty().id();
         let feature_layer_entity = commands.spawn_empty().id();
         let item_layer_entity = commands.spawn_empty().id();
+
         let map = Map::from(Self::generate_map(
             [GRID_WIDTH, GRID_HEIGHT],
             &map_name,
@@ -78,6 +83,7 @@ impl MapManager {
                 item_layer_entity,
             },
         ));
+
         create_tilemap_on_entity(
             commands,
             terrain_layer_entity,
@@ -102,6 +108,7 @@ impl MapManager {
             tileset,
             1.0,
         );
+
         commands.entity(terrain_layer_entity).insert(Name::new(format!(
             "TerrainLayer ({}, {}, {})",
             world_position.x, world_position.y, world_position.z
@@ -114,7 +121,9 @@ impl MapManager {
             "ItemLayer ({}, {}, {})",
             world_position.x, world_position.y, world_position.z
         )));
+
         self.current_map = Some(map.clone());
+
         let map_entity = commands
             .spawn((
                 map,
@@ -204,12 +213,14 @@ impl MapManager {
         q_map: Query<&Map>,
     ) -> Grid<TerrainType> {
         let mut grid = Grid::new_default(size);
+
         let half_size = size.as_ivec2() / 2;
         let local_position = local_position.as_ivec2();
         let left = local_position.x - half_size.x;
         let right = local_position.x + half_size.x;
         let bottom = local_position.y - half_size.y;
         let top = local_position.y + half_size.y;
+
         let mut index_x = 0;
         let mut written_x = 0;
         let mut index_y = 0;
@@ -221,6 +232,7 @@ impl MapManager {
                 world_position.0.y - 1,
                 world_position.0.z,
             ));
+
             if let Some(entity) = self.loaded_maps.get(&sw_pos) {
                 if let Ok(map) = q_map.get(*entity) {
                     let start_x = GRID_WIDTH as i32 + left;
@@ -239,6 +251,7 @@ impl MapManager {
             }
         }
         index_x += written_x;
+
         // 2
         if bottom < 0 {
             let s_pos = WorldPosition(IVec3::new(
@@ -246,6 +259,7 @@ impl MapManager {
                 world_position.0.y - 1,
                 world_position.0.z,
             ));
+
             if let Some(entity) = self.loaded_maps.get(&s_pos) {
                 if let Ok(map) = q_map.get(*entity) {
                     let start_x = left.max(0);
@@ -264,6 +278,7 @@ impl MapManager {
             }
         }
         index_x += written_x;
+
         // 3
         if right >= GRID_WIDTH as i32 && bottom < 0 {
             let se_pos = WorldPosition(IVec3::new(
@@ -271,6 +286,7 @@ impl MapManager {
                 world_position.0.y - 1,
                 world_position.0.z,
             ));
+
             if let Some(entity) = self.loaded_maps.get(&se_pos) {
                 if let Ok(map) = q_map.get(*entity) {
                     let start_x = 0;
@@ -290,6 +306,7 @@ impl MapManager {
         }
         index_x = 0;
         index_y += written_y;
+
         // 4
         if left < 0 {
             let w_pos = WorldPosition(IVec3::new(
@@ -297,6 +314,7 @@ impl MapManager {
                 world_position.0.y,
                 world_position.0.z,
             ));
+
             if let Some(entity) = self.loaded_maps.get(&w_pos) {
                 if let Ok(map) = q_map.get(*entity) {
                     let start_x = GRID_WIDTH as i32 + left;
@@ -315,12 +333,14 @@ impl MapManager {
             }
         }
         index_x += written_x;
+
         // 5
         let e_pos = WorldPosition(IVec3::new(
             world_position.0.x,
             world_position.0.y,
             world_position.0.z,
         ));
+
         if let Some(entity) = self.loaded_maps.get(&e_pos) {
             if let Ok(map) = q_map.get(*entity) {
                 let start_x = left.max(0);
@@ -338,6 +358,7 @@ impl MapManager {
             }
         }
         index_x += written_x;
+
         // 6
         if right >= GRID_WIDTH as i32 {
             let e_pos = WorldPosition(IVec3::new(
@@ -345,6 +366,7 @@ impl MapManager {
                 world_position.0.y,
                 world_position.0.z,
             ));
+
             if let Some(entity) = self.loaded_maps.get(&e_pos) {
                 if let Ok(map) = q_map.get(*entity) {
                     let start_x = 0;
@@ -364,6 +386,7 @@ impl MapManager {
         }
         index_x = 0;
         index_y += written_y;
+
         // 7
         if left < 0 && top >= GRID_HEIGHT as i32 {
             let nw_pos = WorldPosition(IVec3::new(
@@ -371,6 +394,7 @@ impl MapManager {
                 world_position.0.y + 1,
                 world_position.0.z,
             ));
+
             if let Some(entity) = self.loaded_maps.get(&nw_pos) {
                 if let Ok(map) = q_map.get(*entity) {
                     let start_x = GRID_WIDTH as i32 + left;
@@ -389,6 +413,7 @@ impl MapManager {
             }
         }
         index_x += written_x;
+
         // 8
         if top >= GRID_HEIGHT as i32 {
             let n_pos = WorldPosition(IVec3::new(
@@ -396,6 +421,7 @@ impl MapManager {
                 world_position.0.y + 1,
                 world_position.0.z,
             ));
+
             if let Some(entity) = self.loaded_maps.get(&n_pos) {
                 if let Ok(map) = q_map.get(*entity) {
                     let start_x = left.max(0);
@@ -414,6 +440,7 @@ impl MapManager {
             }
         }
         index_x += written_x;
+
         // 9
         if right >= GRID_WIDTH as i32 && top >= GRID_HEIGHT as i32 {
             let ne_pos = WorldPosition(IVec3::new(
@@ -421,6 +448,7 @@ impl MapManager {
                 world_position.0.y + 1,
                 world_position.0.z,
             ));
+
             if let Some(entity) = self.loaded_maps.get(&ne_pos) {
                 if let Ok(map) = q_map.get(*entity) {
                     let start_x = 0i32;
@@ -437,6 +465,7 @@ impl MapManager {
                 }
             }
         }
+
         grid
     }
 }

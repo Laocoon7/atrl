@@ -1,6 +1,7 @@
 use std::{collections::VecDeque, ops::RangeInclusive};
 
 use bevy::render::once_cell::sync::Lazy;
+use big_brain::actions::ActionState;
 use rand::distributions::Uniform;
 
 use crate::prelude::*;
@@ -10,6 +11,7 @@ pub enum WanderFailureBehavior {
     #[default]
     Wait,
 }
+
 // could be used for temporary storage for multi turn actions
 #[derive(Debug, Reflect, Default, Component, Clone, Eq, PartialEq)]
 #[reflect(Component)]
@@ -18,23 +20,35 @@ pub struct Wander {
     // What to do if entity has no available places to move
     fail_behavior: WanderFailureBehavior,
 }
+
 pub fn wander_action(
     mut commands: Commands,
     mut manager: ResMut<MapManager>,
     mut ctx: ResMut<GameContext>,
     mut spatial_q: Query<(&mut Transform, &Movement, &Name)>,
-    mut action_q: Query<(&Actor, &mut BigBrainActionState, &mut Wander, &ActionSpan)>,
+    mut action_q: Query<(&Actor, &mut ActionState, &mut Wander, &ActionSpan)>,
     mut target_q: Query<&mut TargetVisualizer>,
     tilesets: Tilesets,
 ) {
-    use BigBrainActionState::*;
+    use ActionState::*;
+
     for (Actor(actor), mut action_state, mut wander, span) in action_q.iter_mut() {
         let _guard = span.span().enter();
+
         let rng = ctx.random.get_prng().as_rngcore();
-        let map = manager.get_current_map_mut().expect("No map found");
-        let (mut position, movement_component, name) =
-            spatial_q.get_mut(*actor).expect("Actor must have spatial components");
+        let Some(map) = manager.get_current_map_mut() else {
+            error!("No map found");
+            return
+        };
+
+        let Ok((mut position, movement_component, name)) =
+        spatial_q.get_mut(*actor,) else {
+                error!("Actor must have spatial components");
+                return
+            };
+
         let ai_pos = position.get();
+
         match *action_state {
             Cancelled => {
                 if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
@@ -56,10 +70,12 @@ pub fn wander_action(
                         Some(p)
                     }
                 });
+
                 let mut ai_path = ai_path.map_or_else(
                     || generate_wander_path(rng, ai_pos, movement_component.0, map),
                     |p| p,
                 );
+
                 ai_path.pop().map_or_else(
                     || {
                         // We have reached the end of our trail!
@@ -112,6 +128,7 @@ fn generate_wander_path(
 ) -> Vec<IVec2> {
     let wander_radius = WANDER_RANGE.sample(rng);
     let wander_circle = Circle::new(ai_pos, wander_radius);
+
     // Default to the first point in the circle
     let destination = wander_circle.iter().choose(rng).unwrap_or_else(|| wander_circle.points()[0]);
     PathFinder::Astar

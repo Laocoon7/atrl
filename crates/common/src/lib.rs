@@ -30,6 +30,7 @@ mod geometry {
         pub use scale_points::*;
     }
     pub use math::*;
+
     pub mod grid_shapes {
         mod circle;
         pub use circle::*;
@@ -37,7 +38,11 @@ mod geometry {
         pub use grid_shape::*;
         mod line;
         pub use line::*;
+        mod rectangle;
+        pub use rectangle::*;
     }
+    pub use grid_shapes::*;
+
     mod shapes {
         mod iter {
             mod line_iter;
@@ -48,20 +53,16 @@ mod geometry {
             pub use rect_iter::*;
         }
         pub use iter::*;
-        mod circle;
+
         mod ellipse;
-        mod line;
-        mod polygon;
-        mod rectangle;
-        mod triangle;
-        pub use circle::*;
         pub use ellipse::*;
-        pub use line::*;
+        mod polygon;
         pub use polygon::*;
-        pub use rectangle::*;
+        mod triangle;
         pub use triangle::*;
     }
     pub use shapes::*;
+
     mod shape;
     pub use shape::*;
     mod shape_iter;
@@ -79,6 +80,7 @@ mod grid {
         pub use point2d_iter::*;
     }
     pub use point::*;
+
     mod grids {
         mod grid_2d;
         pub use grid_2d::*;
@@ -86,6 +88,7 @@ mod grid {
         pub use bitgrid::*;
     }
     pub use grids::*;
+
     mod axis;
     pub use axis::*;
     mod size2d;
@@ -97,6 +100,7 @@ mod grid {
     mod grid_iterable;
     pub use grid_iterable::*;
 }
+
 mod macros {
     mod generic_macros;
     mod switch_in_game_state;
@@ -105,6 +109,7 @@ mod macros {
     mod primative;
     pub use primative::*;
 }
+
 mod random {
     mod noise;
     mod prht;
@@ -116,10 +121,12 @@ mod random {
 
     pub use self::noise::*;
 }
+
 mod states {
     mod state_next;
     pub use state_next::*;
 }
+
 mod utils {
     mod file_utils;
     pub use file_utils::*;
@@ -130,9 +137,11 @@ mod utils {
     mod canvas;
     pub use canvas::*;
 }
+
 mod common_plugin;
 mod error;
 mod interlop;
+
 pub mod prelude {
     mod import {
         pub use bevy::{
@@ -165,6 +174,7 @@ pub mod prelude {
         pub use xxhash_rust::xxh3::*;
     }
     pub(crate) use import::*;
+
     mod export {
         pub use crate::{
             common_plugin::*, direction::*, error::*, geometry::*, grid::*, impl_as_primative, impl_default,

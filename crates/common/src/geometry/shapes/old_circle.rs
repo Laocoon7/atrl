@@ -4,6 +4,7 @@ pub struct Circle {
     center: IVec2,
     radius: u32,
 }
+
 impl Circle {
     pub fn new(center: impl Point2d, radius: u32) -> Self {
         Self {
@@ -12,6 +13,7 @@ impl Circle {
         }
     }
 }
+
 impl Circle {
     /// Radius of circle
     ///
@@ -19,6 +21,7 @@ impl Circle {
     #[inline]
     pub const fn radius(&self) -> u32 { self.radius }
 }
+
 impl Shape for Circle {
     /// must be [center, edge]
     fn from_points(points: Vec<impl Point2d>) -> Self
@@ -62,6 +65,7 @@ impl Shape for Circle {
     #[inline]
     fn bottom(&self) -> i32 { self.center.y + self.radius as i32 }
 }
+
 impl Circle {
     pub fn as_rect(&self) -> Rectangle {
         Rectangle::new((self.left(), self.top()), (self.right(), self.bottom()))
@@ -80,6 +84,7 @@ impl Circle {
 
     pub fn as_ellipse(&self) -> Ellipse { Ellipse::new(self.center, [self.radius * 2, self.radius * 2]) }
 }
+
 impl IntoIterator for Circle {
     type IntoIter = BresenhamCircleIter;
     type Item = IVec2;
@@ -87,6 +92,7 @@ impl IntoIterator for Circle {
     #[inline]
     fn into_iter(self) -> Self::IntoIter { BresenhamCircleIter::new(self.center, self.radius as i32) }
 }
+
 impl ShapeIter for Circle {
     type Iterator = BresenhamCircleIter;
 

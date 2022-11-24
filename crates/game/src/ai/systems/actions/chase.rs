@@ -6,6 +6,7 @@ pub enum ChaseActorFailureBehavior {
     #[default]
     Wait,
 }
+
 #[derive(Debug, Default, Component, Clone)]
 // could be used for temporary storage for multi turn actions
 pub struct ChaseActor {
@@ -14,30 +15,35 @@ pub struct ChaseActor {
     // What to do if entity reaches last seen player position
     fail_behavior: ChaseActorFailureBehavior,
 }
+
 pub fn chase_action(
+    tilesets: Tilesets,
     mut commands: Commands,
     mut manager: ResMut<MapManager>,
+    mut target_q: Query<&mut TargetVisualizer>,
     player_q: Query<(Entity, &Transform), With<Player>>,
     mut action_q: Query<(&Actor, &mut ActionState, &mut ChaseActor, &ActionSpan)>,
     mut ai_q: Query<(&mut Transform, &FieldOfView, &Vision, &Movement, &Name), Without<Player>>,
-    mut target_q: Query<&mut TargetVisualizer>,
-    tilesets: Tilesets,
 ) {
     use ActionState::*;
+
     for (Actor(actor), mut action_state, mut chase, span) in action_q.iter_mut() {
         let _guard = span.span().enter();
+
         let (_player_entity, player_transform) = player_q.single();
         let Ok((mut position, fov, vision, movement_component, name,)) =
             ai_q.get_mut(*actor,) else {
                 error!("Actor must have required components");
                 return
             };
+
         let ai_pos = position.get();
         let player_pos = player_transform.get();
         let Some(map) = manager.get_current_map_mut() else {
             error!("No map found");
             return
         };
+
         // This doesnt exist on the original match below because whenever the player comes into view
         // the `can_see_player` scorer sets the output to be 1, causing the wander action to spin
         // down (1 frame). Then, the player moves and its the ai turn again. the chase
@@ -73,11 +79,13 @@ pub fn chase_action(
                 let update_path_target = if entity_in_fov(map, fov, vision, ai_pos, player_pos) {
                     // we saw the player, update the last seen position
                     chase.last_seen_pt = Some(player_pos);
+
                     if can_attack(player_pos) {
                         // We should attack instead of moving!
                         *action_state = ActionState::Failure;
                         return;
                     }
+
                     // always update when we can see the player
                     // so treat it as we don't have a valid path
                     Some(player_pos)
@@ -90,6 +98,7 @@ pub fn chase_action(
                         *action_state = ActionState::Failure;
                         return;
                     };
+
                     // Do we have a place we are chasing to?
                     if let Some(path) = &chase.path {
                         if path.is_empty() {
@@ -119,6 +128,7 @@ pub fn chase_action(
                         Some(last_seen_position)
                     }
                 };
+
                 // update the path if necessary!
                 if let Some(target_position) = update_path_target {
                     chase.path = Some(generate_chase_path(
@@ -128,24 +138,28 @@ pub fn chase_action(
                         map,
                     ));
                 }
+
                 let Some(mut chase_path) = std::mem::take(&mut chase.path) else {
                     // previous update path failed...
                     error!("AI could not find a path for chasing.");
                     *action_state = ActionState::Failure;
                     return;
                 };
+
                 if chase_path.len() < 1 {
                     // previous update path failed...
                     error!("AI could not find a path for chasing.");
                     *action_state = ActionState::Failure;
                     return;
                 }
+
                 // We have a path > 1 and we are not in range to attack.
                 println!("Chase path: {:?}", chase_path);
                 let next_pt = chase_path[chase_path.len() - 1]; // wish we had a Vec::peek()
                 if map.try_move_actor(ai_pos, next_pt, movement_component.0) {
                     // we were moved!
                     position.set_value(next_pt);
+
                     if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
                         if !chase_path.is_empty() {
                             target_visualizer.update(
@@ -176,11 +190,12 @@ pub fn chase_action(
     }
 }
 fn generate_chase_path(
-    ai_pos: IVec2, // removed & they are copy
+    ai_pos: IVec2,
     target_pos: IVec2,
     movement_type: u8,
     map_provider: &impl PathProvider,
 ) -> Vec<IVec2> {
     PathFinder::Astar.compute(ai_pos, target_pos, movement_type, true, map_provider).unwrap_or_default()
 }
+
 const fn can_attack(_position: IVec2) -> bool { false }

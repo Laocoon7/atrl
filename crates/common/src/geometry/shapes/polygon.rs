@@ -80,14 +80,14 @@ impl Shape for Polygon {
 }
 impl Polygon {
     /// Creates a circle using the point closest to the center
-    pub fn as_inner_circle(&self) -> Circle {
-        Circle::from_points(vec![self.center, self.point_closest_to_center()])
-    }
+    // pub fn as_inner_circle(&self) -> Circle {
+    //     Circle::from_points(vec![self.center, self.point_closest_to_center()])
+    // }
 
     /// Creates a circle using the point farthest to the center
-    pub fn as_outer_circle(&self) -> Circle {
-        Circle::from_points(vec![self.center, self.point_farthest_from_center()])
-    }
+    // pub fn as_outer_circle(&self) -> Circle {
+    //     Circle::from_points(vec![self.center, self.point_farthest_from_center()])
+    // }
 
     /// Creates a circle using the average point distance from the center
     pub fn as_avg_circle(&self) -> Circle {
@@ -98,13 +98,13 @@ impl Polygon {
     }
 
     /// If the polygon is regular then it returns a circle from center to the first point
-    pub fn as_circle(&self) -> Option<Circle> {
-        if self.is_regular {
-            Some(Circle::from_points(vec![self.center, self.points[0]]))
-        } else {
-            None
-        }
-    }
+    // pub fn as_circle(&self) -> Option<Circle> {
+    //     if self.is_regular {
+    //         Some(Circle::from_points(vec![self.center, self.points[0]]))
+    //     } else {
+    //         None
+    //     }
+    // }
 
     pub fn as_rect(&self) -> Rectangle {
         Rectangle::new((self.left(), self.top()), (self.right(), self.bottom()))
