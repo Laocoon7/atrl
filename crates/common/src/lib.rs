@@ -40,6 +40,8 @@ mod geometry {
         pub use line::*;
         mod rectangle;
         pub use rectangle::*;
+        mod triangle;
+        pub use triangle::*;
     }
     pub use grid_shapes::*;
 
