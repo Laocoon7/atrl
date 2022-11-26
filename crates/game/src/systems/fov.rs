@@ -1,8 +1,8 @@
 use crate::prelude::*;
 pub fn fov(
     manager: Res<MapManager>,
-    q_player: Query<(&Transform, &FieldOfView, &Vision), With<Player>>,
     mut q_tile: Query<(&mut TileVisible, &mut TileColor, &TilePos)>,
+    q_player: Query<(&Transform, &FieldOfView, &Vision), With<Player>>,
     mut q_actors: Query<(&Transform, &mut Visibility), (With<AIComponent>, Without<Player>)>,
 ) {
     for (player_pos, fov, vision_component) in q_player.iter() {

@@ -6,12 +6,15 @@ pub const ALL_DIRECTIONS_BITMAP_RAW: u8 = 0xff;
 pub const ALL_DIRECTIONS_BITMAP: DirectionBitmap = DirectionBitmap {
     raw: ALL_DIRECTIONS_BITMAP_RAW,
 };
+
 pub const NO_DIRECTIONS_BITMAP: DirectionBitmap = DirectionBitmap {
     raw: NO_DIRECTIONS_BITMAP_RAW,
 };
+
 pub const ALL_CARDINAL_DIRECTIONS_BITMAP: DirectionBitmap = DirectionBitmap {
     raw: ALL_CARDINAL_DIRECTION_BITMAP_RAW,
 };
+
 pub const ALL_ORDINAL_DIRECTIONS_BITMAP: DirectionBitmap = DirectionBitmap {
     raw: ALL_ORDINAL_DIRECTION_BITMAP_RAW,
 };
@@ -20,6 +23,7 @@ pub const ALL_ORDINAL_DIRECTIONS_BITMAP: DirectionBitmap = DirectionBitmap {
 pub struct DirectionBitmap {
     pub raw: u8,
 }
+
 impl DirectionBitmap {
     pub const fn new(raw: u8) -> Self { Self { raw } }
 
@@ -41,22 +45,27 @@ impl DirectionBitmap {
 
     pub const fn or(self, rhs: Self) -> Self { Self::new(self.raw | rhs.raw) }
 }
+
 impl Default for DirectionBitmap {
     fn default() -> Self { Self::empty() }
 }
+
 impl BitOr for DirectionBitmap {
     type Output = Self;
 
     fn bitor(self, rhs: Self) -> Self { self.or(rhs) }
 }
+
 impl BitOrAssign for DirectionBitmap {
     fn bitor_assign(&mut self, rhs: Self) { self.raw |= rhs.raw; }
 }
+
 impl BitAnd for DirectionBitmap {
     type Output = Self;
 
     fn bitand(self, rhs: Self) -> Self { self.and(rhs) }
 }
+
 impl BitAndAssign for DirectionBitmap {
     fn bitand_assign(&mut self, rhs: Self) { self.raw &= rhs.raw; }
 }

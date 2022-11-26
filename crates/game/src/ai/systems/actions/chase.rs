@@ -1,19 +1,11 @@
 use big_brain::actions::ActionState;
 
 use crate::prelude::*;
-#[derive(Debug, Default, Clone)]
-pub enum ChaseActorFailureBehavior {
-    #[default]
-    Wait,
-}
 
 #[derive(Debug, Default, Component, Clone)]
-// could be used for temporary storage for multi turn actions
 pub struct ChaseActor {
     path: Option<Vec<IVec2>>,
     last_seen_pt: Option<IVec2>,
-    // What to do if entity reaches last seen player position
-    fail_behavior: ChaseActorFailureBehavior,
 }
 
 pub fn chase_action(
@@ -64,6 +56,7 @@ pub fn chase_action(
             *action_state = Executing;
             info!("{} gonna start chasing!", name);
         }
+
         match *action_state {
             Cancelled => {
                 if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
@@ -146,31 +139,37 @@ pub fn chase_action(
                     return;
                 };
 
-                if chase_path.len() < 1 {
-                    // previous update path failed...
-                    error!("AI could not find a path for chasing.");
-                    *action_state = ActionState::Failure;
-                    return;
-                }
-
                 // We have a path > 1 and we are not in range to attack.
                 println!("Chase path: {:?}", chase_path);
-                let next_pt = chase_path[chase_path.len() - 1]; // wish we had a Vec::peek()
-                if map.try_move_actor(ai_pos, next_pt, movement_component.0) {
+
+                // What do we do if there is no next_pt?
+                let Some(next_pt) = chase_path.last() else { // wish we had a Vec::peek()
+                    error!("AI could not find a path for chasing.");
+                    *action_state = ActionState::Failure;
+                    return
+                };
+
+                if map.try_move_actor(ai_pos, *next_pt, movement_component.0) {
                     // we were moved!
-                    position.set_value(next_pt);
+                    position.set_value(*next_pt);
 
                     if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
                         if !chase_path.is_empty() {
                             target_visualizer.update(
                                 &mut commands,
                                 &tilesets,
-                                next_pt,
+                                *next_pt,
                                 chase_path[0],
                                 Color::RED,
                             );
                         } else {
-                            target_visualizer.update(&mut commands, &tilesets, next_pt, next_pt, Color::RED);
+                            target_visualizer.update(
+                                &mut commands,
+                                &tilesets,
+                                *next_pt,
+                                *next_pt,
+                                Color::RED,
+                            );
                         }
                     }
                     chase_path.pop(); // consume the path point
@@ -180,12 +179,14 @@ pub fn chase_action(
                         ai_pos, next_pt
                     );
                 }
+
                 chase.path = Some(chase_path);
             },
 
             // Init | Success | Failure
             _ => {},
         }
+
         info!("Chase action output: {:?}\n", action_state);
     }
 }

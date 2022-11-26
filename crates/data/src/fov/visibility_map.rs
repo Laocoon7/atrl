@@ -1,13 +1,17 @@
 use crate::prelude::*;
+
+#[derive(Debug, Clone)]
 pub struct VisibilityMap {
     grid: Grid<u8>,
 }
+
 impl VisibilityMap {
     pub fn new(size: impl Size2d) -> Self {
         let mut width = size.width() / 8;
         if size.width() % 8 != 0 {
             width += 1;
         }
+
         Self {
             grid: Grid::new_default([width, size.height()]),
         }
@@ -22,7 +26,10 @@ impl VisibilityMap {
             None
         }
     }
+
+    pub fn iter(&self) -> std::slice::Iter<u8> { self.grid.iter() }
 }
+
 impl FovReceiver for VisibilityMap {
     fn get_visible(&self, position: IVec2) -> bool {
         if let Some((byte_index, bit_index)) = self.get_byte_index(position) {

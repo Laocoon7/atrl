@@ -22,13 +22,13 @@ pub struct Wander {
 }
 
 pub fn wander_action(
+    tilesets: Tilesets,
     mut commands: Commands,
-    mut manager: ResMut<MapManager>,
     mut ctx: ResMut<GameContext>,
+    mut manager: ResMut<MapManager>,
+    mut target_q: Query<&mut TargetVisualizer>,
     mut spatial_q: Query<(&mut Transform, &Movement, &Name)>,
     mut action_q: Query<(&Actor, &mut ActionState, &mut Wander, &ActionSpan)>,
-    mut target_q: Query<&mut TargetVisualizer>,
-    tilesets: Tilesets,
 ) {
     use ActionState::*;
 

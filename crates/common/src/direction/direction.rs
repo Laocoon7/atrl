@@ -12,11 +12,13 @@ pub enum GridDirection {
     West,
     NorthWest,
 }
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
 pub enum DirectionType {
     Cardinal(CardinalDirection),
     Ordinal(OrdinalDirection),
 }
+
 impl GridDirection {
     pub fn from_unit_coord<P>(coord: impl Point2d + std::fmt::Debug) -> Self {
         match [coord.x(), coord.y()] {
@@ -190,6 +192,7 @@ impl GridDirection {
 
     pub const fn all() -> DirectionIter { DirectionIter::new() }
 }
+
 impl From<GridDirection> for [i32; 2] {
     fn from(d: GridDirection) -> [i32; 2] {
         use self::GridDirection::*;
@@ -205,6 +208,7 @@ impl From<GridDirection> for [i32; 2] {
         }
     }
 }
+
 impl From<GridDirection> for (i32, i32) {
     fn from(d: GridDirection) -> (i32, i32) {
         use self::GridDirection::*;
@@ -220,6 +224,7 @@ impl From<GridDirection> for (i32, i32) {
         }
     }
 }
+
 impl FromIterator<GridDirection> for &[GridDirection] {
     fn from_iter<T: IntoIterator<Item = GridDirection>>(iter: T) -> Self {
         let mut v = Vec::new();
@@ -229,6 +234,7 @@ impl FromIterator<GridDirection> for &[GridDirection] {
         Box::leak(v.into_boxed_slice())
     }
 }
+
 impl Distribution<GridDirection> for Standard {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> GridDirection {
         let index = rng.gen_range(0..NUM_DIRECTIONS as u8);

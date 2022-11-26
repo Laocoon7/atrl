@@ -4,6 +4,7 @@ pub const ALL_CARDINAL_DIRECTION_BITMAP_RAW: u8 = (1 << GridDirection::North as 
     (1 << GridDirection::East as usize) |
     (1 << GridDirection::South as usize) |
     (1 << GridDirection::West as usize);
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
 #[repr(u8)]
 pub enum CardinalDirection {
@@ -12,6 +13,7 @@ pub enum CardinalDirection {
     South,
     West,
 }
+
 impl CardinalDirection {
     pub fn from_unit_coord(coord: impl Point2d + std::fmt::Debug) -> Self {
         match [coord.x(), coord.y()] {
@@ -134,7 +136,27 @@ impl CardinalDirection {
     pub const fn combine(self, other: Self) -> Option<OrdinalDirection> {
         OrdinalDirection::from_cardinals(self, other)
     }
+
+    pub fn from_degrees(degrees: f32) -> Self {
+        match degrees {
+            d if d > 0.0 && d <= 90.0 => Self::South,
+            d if d > 90.0 && d <= 180.0 => Self::West,
+            d if d > 180.0 && d <= 270.0 => Self::North,
+            // d if d > 90.0 && d < 180.0 => self.right90().right90(),
+            // d if d > 180.0 && d < 270.0 => self.right90().right90().right90(),
+            // d if d > 270.0 && d < 360.0 => self.right90().right90().right90().right90(),
+            _ => Self::East,
+        }
+        // match degrees {
+        //     0.0..=90.0 => *self = Self::North,
+        //     90.0 => *self = Self::East,
+        //     180.0 => *self = Self::South,
+        //     270.0 => *self = Self::West,
+        //     _ => panic!("Invalid degrees: {}", degrees),
+        // }
+    }
 }
+
 impl From<CardinalDirection> for [i32; 2] {
     fn from(c: CardinalDirection) -> [i32; 2] {
         use self::CardinalDirection::*;
@@ -146,6 +168,7 @@ impl From<CardinalDirection> for [i32; 2] {
         }
     }
 }
+
 impl From<CardinalDirection> for (i32, i32) {
     fn from(c: CardinalDirection) -> (i32, i32) {
         use self::CardinalDirection::*;
@@ -157,6 +180,34 @@ impl From<CardinalDirection> for (i32, i32) {
         }
     }
 }
+
+impl From<CardinalDirection> for i32 {
+    fn from(c: CardinalDirection) -> Self {
+        use self::CardinalDirection::*;
+        match c {
+            East => 0,
+            North => 90,
+            West => 180,
+            South => 270,
+        }
+    }
+}
+
+// TODO: Wtf do we do here? lol
+impl From<i32> for CardinalDirection {
+    fn from(i: i32) -> Self {
+        use self::CardinalDirection::*;
+        match i {
+            0..=45 => East,
+            45..=90 => North,
+            90..=135 => North,
+            135..=180 => West,
+            180..=225 => West,
+            _ => South,
+        }
+    }
+}
+
 impl FromIterator<CardinalDirection> for &[CardinalDirection] {
     fn from_iter<T: IntoIterator<Item = CardinalDirection>>(iter: T) -> Self {
         let mut v = Vec::new();
@@ -166,6 +217,7 @@ impl FromIterator<CardinalDirection> for &[CardinalDirection] {
         Box::leak(v.into_boxed_slice())
     }
 }
+
 impl Distribution<CardinalDirection> for Standard {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> CardinalDirection {
         let index = rng.gen_range(0..NUM_CARDINAL_DIRECTIONS as u8);

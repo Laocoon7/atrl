@@ -134,6 +134,7 @@ impl BresenhamLineInclusiveIter {
     #[inline]
     pub fn advance(&mut self) -> impl Point2d { self.0.advance() }
 }
+
 impl Iterator for BresenhamLineInclusiveIter {
     type Item = IVec2;
 
@@ -146,6 +147,7 @@ impl Iterator for BresenhamLineInclusiveIter {
         }
     }
 }
+
 #[cfg(test)]
 mod tests {
     #[cfg(test)]
