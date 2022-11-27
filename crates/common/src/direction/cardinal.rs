@@ -196,14 +196,24 @@ impl From<CardinalDirection> for i32 {
 impl From<i32> for CardinalDirection {
     /// See issue [#37854](https://github.com/rust-lang/rust/issues/37854)
     fn from(i: i32) -> Self {
+        let mut i = i;
+        loop {
+            if i >= 0 {
+                break;
+            }
+            i += 360;
+        }
         use self::CardinalDirection::*;
-        match i {
+        match i % 360 { // loop 360deg back around.
             0..45 => East,
             45..90 => North,
             90..135 => North,
             135..180 => West,
             180..225 => West,
-            _ => South,
+            225..270 => South,
+            270..315 => South,
+            315..360 => East,
+            _ => East, // this can't pop as i >= 0 and < 360
         }
     }
 }
