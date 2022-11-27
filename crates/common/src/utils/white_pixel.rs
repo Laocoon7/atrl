@@ -3,6 +3,7 @@ use crate::prelude::*;
 pub struct WhitePixel {
     pub handle: Handle<Image>,
 }
+
 #[rustfmt::skip]
 const PIXEL_DATA: [u8; 16] = [
     255u8, 255u8, 255u8, 255u8,
@@ -10,6 +11,7 @@ const PIXEL_DATA: [u8; 16] = [
     255u8, 255u8, 255u8, 255u8,
     255u8, 255u8, 255u8, 255u8,
 ];
+
 impl FromWorld for WhitePixel {
     fn from_world(world: &mut World) -> Self {
         let mut system_state: SystemState<ResMut<Assets<Image>>> = SystemState::new(world);

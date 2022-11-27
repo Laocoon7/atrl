@@ -51,9 +51,7 @@ mod components {
     pub use movement::*;
 
     mod position {
-        mod local_position;
         mod world_position;
-        pub use local_position::*;
         pub use world_position::*;
     }
     pub use position::*;

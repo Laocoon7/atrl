@@ -5,7 +5,7 @@ pub struct AIPlugin<T, R> {
 }
 impl<T: StateNext, R: StateNext + Resource> Plugin for AIPlugin<T, R> {
     fn build(&self, app: &mut App) {
-        app.add_plugin(BigBrainPlugin,)
+        app.add_plugin(BigBrainPlugin)
             // Scoring Systems
             .add_system_set_to_stage(
                 BigBrainStage::Scorers,

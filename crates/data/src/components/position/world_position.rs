@@ -18,6 +18,7 @@ use crate::prelude::*;
 )]
 #[reflect(Component)]
 pub struct WorldPosition(pub IVec3);
+
 impl WorldPosition {
     pub fn xy(&self) -> IVec2 { (**self).xy() }
 }

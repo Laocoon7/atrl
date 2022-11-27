@@ -1,10 +1,12 @@
 use crate::prelude::*;
+
 //////////////////////////////////////////////////////////////////////////////////////////
 /// Bresenham Algo
 //////////////////////////////////////////////////////////////////////////////////////////
 
 #[derive(Debug, Clone)]
 struct Octant(u8);
+
 /// Line-drawing iterator
 #[derive(Debug, Clone)]
 pub struct BresenhamLineIter {
@@ -16,6 +18,7 @@ pub struct BresenhamLineIter {
     diff: i32,
     octant: Octant,
 }
+
 impl Octant {
     /// adapted from <http://codereview.stackexchange.com/a/95551>
     #[inline]
@@ -71,6 +74,7 @@ impl Octant {
         }
     }
 }
+
 impl BresenhamLineIter {
     /// Creates a new iterator.Yields intermediate points between `start`
     /// and `end`. Does include `start` but not `end`.
@@ -106,6 +110,7 @@ impl BresenhamLineIter {
         self.octant.from_octant(p)
     }
 }
+
 impl Iterator for BresenhamLineIter {
     type Item = IVec2;
 
@@ -125,6 +130,7 @@ impl Iterator for BresenhamLineIter {
 /// New type over `Bresenham` which include the `end` points when iterated over.
 #[derive(Debug, Clone)]
 pub struct BresenhamLineInclusiveIter(BresenhamLineIter);
+
 impl BresenhamLineInclusiveIter {
     /// Creates a new iterator. Yields points `start..=end`.
     #[inline]
@@ -153,6 +159,7 @@ mod tests {
     #[cfg(test)]
     mod line {
         use crate::prelude::*;
+
         #[test]
         fn line_vertical() {
             let mut canvas = Canvas::new([11, 11]);
@@ -162,6 +169,7 @@ mod tests {
             }
             canvas.print();
         }
+
         #[test]
         fn line_horizontal() {
             let mut canvas = Canvas::new([11, 11]);
@@ -171,6 +179,7 @@ mod tests {
             }
             canvas.print();
         }
+
         #[test]
         fn line_diagonal() {
             let mut canvas = Canvas::new([10, 10]);
@@ -180,6 +189,7 @@ mod tests {
             }
             canvas.print();
         }
+
         #[test]
         fn line_multi() {
             let mut canvas = Canvas::new([11, 7]);
@@ -195,26 +205,30 @@ mod tests {
             canvas.print();
         }
     }
+
     #[cfg(test)]
     mod bresenham {
         use crate::prelude::*;
+
         #[test]
         fn line_diagonal() {
             let mut canvas = Canvas::new([10, 10]);
-            let line = Bresenham::new((0, 0), (9, 9));
+            let line = BresenhamLineIter::new((0, 0), (9, 9));
             for p in line {
                 canvas.put(p, '*');
             }
             canvas.print();
         }
     }
+
     #[cfg(test)]
     mod bresenham_inclusive {
         use crate::prelude::*;
+
         #[test]
         fn line_diagonal() {
             let mut canvas = Canvas::new([10, 10]);
-            let line = BresenhamInclusive::new((0, 0), (9, 9));
+            let line = BresenhamLineInclusiveIter::new((0, 0), (9, 9));
             for p in line {
                 canvas.put(p, '*');
             }

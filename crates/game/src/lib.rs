@@ -22,6 +22,7 @@ mod ai {
     mod ai_plugin;
     pub use ai_plugin::*;
 }
+
 mod events {
     mod map {
         mod map_events;
@@ -31,12 +32,14 @@ mod events {
     mod event_cleaner;
     pub use event_cleaner::*;
 }
+
 mod map {
     mod resources {
         mod map_manager;
         pub use map_manager::*;
     }
     pub use resources::*;
+
     mod systems {
         mod load_first_map;
         pub use load_first_map::*;
@@ -44,18 +47,22 @@ mod map {
         pub use update_tilemaps::*;
     }
     pub use systems::*;
+
     mod map_plugin;
     pub use map_plugin::*;
 }
+
 mod player {
     mod systems {
         mod player_input;
         pub use player_input::*;
     }
     pub use systems::*;
+
     mod player_plugin;
     pub use player_plugin::*;
 }
+
 mod spawner {
     mod systems {
         mod spawn_ai;
@@ -64,23 +71,34 @@ mod spawner {
         pub use spawn_player::*;
     }
     pub use systems::*;
+
     mod spawner_plugin;
     pub use spawner_plugin::*;
 }
+
 mod systems {
     mod apply_damage;
-    mod fov;
-    mod perform_healing;
     pub use apply_damage::*;
+    mod fov;
     pub use fov::*;
+    mod perform_healing;
     pub use perform_healing::*;
 }
+
 mod turn_manager {
+    mod systems {
+        mod whos_turn;
+        pub use whos_turn::*;
+    }
+    pub use systems::*;
+
     mod turn_manager;
     pub use turn_manager::*;
 }
+
 mod ecs_plugin;
 mod game_plugin;
+
 pub mod prelude {
     mod import {
         pub use atrl_camera::prelude::*;
@@ -109,5 +127,6 @@ pub mod prelude {
 
     pub use crate::{
         ai::*, ecs_plugin::*, events::*, game_plugin::*, map::*, player::*, spawner::*, systems::*,
+        turn_manager::*,
     };
 }

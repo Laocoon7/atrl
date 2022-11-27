@@ -176,7 +176,8 @@ version = "0.7.0"
 ######################################
 [workspace.dependencies.bevy_ecs_tilemap]
 features = []
-version  = "0.9"
+# version  = "0.9"
+git = "https://github.com/StarArawn/bevy_ecs_tilemap"
 
 [workspace.dependencies.bevy_tileset]
 features = ["auto-tile"]

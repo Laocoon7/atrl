@@ -2,6 +2,13 @@
 #![allow(clippy::type_complexity)] // Bevy can have complex queries, so we shush clippy
 #![allow(clippy::too_many_arguments)] // Bevy has a lot of arguments, so we shush clippy
 #![allow(clippy::module_inception)]
+// The tracking issue for this feature is: [#37854](https://github.com/rust-lang/rust/issues/37854).
+// The exclusive_range_pattern feature allows non-inclusive range patterns (0..10)
+// to be used in appropriate pattern matching contexts. It also can be combined with
+// #![feature(half_open_range_patterns] to be able to use RangeTo patterns (..10).
+// !!! It also enabled RangeFrom patterns but that has since been stabilized !!!
+#![feature(exclusive_range_pattern)]
+
 mod direction {
     mod bitmap;
     mod cardinal;
@@ -16,6 +23,7 @@ mod direction {
     pub use ordinal::*;
     pub use table::*;
 }
+
 mod geometry {
     mod math {
         mod distance;
@@ -60,8 +68,6 @@ mod geometry {
         pub use ellipse::*;
         mod polygon;
         pub use polygon::*;
-        mod triangle;
-        pub use triangle::*;
     }
     pub use shapes::*;
 
@@ -72,6 +78,7 @@ mod geometry {
     mod shape_iter_exclusive;
     pub use shape_iter_exclusive::*;
 }
+
 mod grid {
     mod point {
         mod point2d;

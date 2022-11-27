@@ -1,4 +1,4 @@
-use crate::prelude::*;
+use crate::{prelude::*, turn_manager::TurnManager};
 #[derive(Copy, Clone)]
 pub struct GamePlugin<T> {
     /// Asset loading happens in this state. When it finishes it transitions to
@@ -23,9 +23,11 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
         app
             // Game Context
             .insert_resource(game_context)
+            // Turn Manager
+            .init_resource::<TurnManager>()
             // SaveLoad
             .add_plugin(SaveLoadPlugin)
-            // common loading
+            // common plugin
             .add_plugin(CommonPlugin)
             // Ecs Plugin (Systems)
             .add_plugin(EcsPlugin {

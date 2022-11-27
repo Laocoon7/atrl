@@ -1,5 +1,5 @@
 use crate::prelude::*;
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub struct Triangle {
     start: IVec2,
     point1: IVec2,
@@ -27,13 +27,9 @@ impl GridShape for Triangle {
         discovered
     }
 
-    fn contains(&self, point: impl Point2d) -> bool {
-        self.get_points().contains(&point.as_ivec2())
-    }
+    fn contains(&self, point: impl Point2d) -> bool { self.get_points().contains(&point.as_ivec2()) }
 
-    fn get_count(&self) -> usize {
-        self.get_points().len()
-    }
+    fn get_count(&self) -> usize { self.get_points().len() }
 }
 
 impl GridShapeWithBorder for Triangle {
@@ -55,7 +51,5 @@ impl GridShapeWithBorder for Triangle {
         self.get_border_points().contains(&point.as_ivec2())
     }
 
-    fn get_border_count(&self) -> usize {
-        self.get_border_points().len()
-    }
+    fn get_border_count(&self) -> usize { self.get_border_points().len() }
 }

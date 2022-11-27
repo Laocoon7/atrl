@@ -5,6 +5,7 @@ pub fn spawn_ai(
     mut commands: Commands,
     state: Res<CurrentGameState>,
     mut map_manager: ResMut<MapManager>,
+    mut turn_manager: ResMut<TurnManager>,
 ) {
     let world_position = IVec3::ZERO;
 
@@ -25,25 +26,25 @@ pub fn spawn_ai(
     let thinker = Thinker::build()
         .label("RandomThinker",)
         // We don't do anything unless we're thirsty enough.
-        .picker(FirstToScore { threshold: 0.8, },)
-        .when(WinningScorer::build(1.0,).push(CanSeePlayer::default(),), chase_and_attack)
-        .otherwise(Wander::default(),);
+        .picker(FirstToScore { threshold: 0.8, })
+        .when(WinningScorer::build(1.0).push(CanSeePlayer::default()), chase_and_attack)
+        .otherwise(Wander::default());
 
-    let entity = commands.spawn_empty().id();
+    let ai_entity = commands.spawn_empty().id();
     let local_position = UVec2::new(GRID_WIDTH / 3, GRID_HEIGHT / 3);
     let movement_type = MovementType::Walk.as_u8();
 
-    if !map.try_add_actor(local_position, entity, movement_type) {
+    if !map.try_add_actor(local_position, ai_entity, movement_type) {
         error!("Couldn't place ai actor at {:?}", local_position);
 
-        commands.entity(entity).despawn();
+        commands.entity(ai_entity).despawn();
 
         return;
     } else {
         info!("AI spawned at {:?}", local_position);
     }
 
-    commands.entity(entity).insert((
+    commands.entity(ai_entity).insert((
         ActorBundle {
             ai: AIComponent::aggressive(),
             name: Name::new("Gary the Destroyer"),
@@ -72,6 +73,8 @@ pub fn spawn_ai(
         },
         thinker,
     ));
+
+    turn_manager.add_entity(ai_entity);
 
     state.set_next(&mut commands);
 }

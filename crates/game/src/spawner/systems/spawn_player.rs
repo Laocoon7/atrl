@@ -1,5 +1,11 @@
 use crate::prelude::*;
-pub fn spawn_player(mut commands: Commands, tilesets: Tilesets, mut map_manager: ResMut<MapManager>) {
+
+pub fn spawn_player(
+    tilesets: Tilesets,
+    mut commands: Commands,
+    mut map_manager: ResMut<MapManager>,
+    mut turn_manager: ResMut<TurnManager>,
+) {
     let world_position = IVec3::ZERO;
 
     let Some(tileset) = tilesets.get_by_id(TILESET_ACTORS_ID) else {
@@ -7,24 +13,25 @@ pub fn spawn_player(mut commands: Commands, tilesets: Tilesets, mut map_manager:
         error!("Couldn't find tilemap_id: {:?}. Refusing to spawn player.", TILESET_ACTORS_ID);
         return;
     };
+
     let Some(map) = map_manager.get_current_map_mut() else {
         error!("Couldn't find a current map. Refusing to spawn player.");
         return;
     };
 
-    let entity = commands.spawn_empty().id();
     let local_position = UVec2::new(GRID_WIDTH / 2, GRID_HEIGHT / 2);
     let movement_type = MovementType::Walk.as_u8() | MovementType::Swim.as_u8();
 
-    if !map.try_add_actor(local_position, entity, movement_type) {
+    let player = commands.spawn_empty().id();
+    if !map.try_add_actor(local_position, player, movement_type) {
         error!("Couldn't place player actor at {:?}", local_position);
-        commands.entity(entity).despawn();
+        commands.entity(player).despawn();
         return;
     } else {
         info!("Player spawned at {:?}", local_position);
     }
 
-    commands.spawn(PlayerBundle {
+    commands.entity(player).insert(PlayerBundle {
         player: Player,
 
         actor: ActorBundle {
@@ -58,4 +65,6 @@ pub fn spawn_player(mut commands: Commands, tilesets: Tilesets, mut map_manager:
             ..default()
         },
     });
+
+    turn_manager.add_entity(player);
 }

@@ -78,11 +78,13 @@ impl Triangle {
     pub const fn side_type(&self) -> &TriangleSideType { &self.side_type }
 }
 impl Shape for Triangle {
+    #[inline]
     fn from_points(points: Vec<impl Point2d>) -> Self
     where Self: Sized {
         Self::new(points[0], points[1], points[2])
     }
 
+    #[inline]
     fn contains(&self, point: impl Point2d) -> bool {
         let p1 = IVec2::new(
             self.points[1].x - self.points[0].x,
@@ -98,12 +100,15 @@ impl Shape for Triangle {
         s >= 0.0 && t >= 0.0 && (s + t) <= 1.0
     }
 
+    #[inline]
     fn points(&self) -> Vec<IVec2> { self.points.to_vec() }
 
     #[inline]
     fn center(&self) -> IVec2 { self.center }
 }
+
 impl Triangle {
+    #[inline]
     pub fn as_rect(&self) -> Rectangle {
         Rectangle::new((self.left(), self.top()), (self.right(), self.bottom()))
     }

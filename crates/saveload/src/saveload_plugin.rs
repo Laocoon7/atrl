@@ -18,7 +18,6 @@ impl Plugin for SaveLoadPlugin {
             .register_type::<Movement>()
             //.register_type::<Map>()
             // -- Position -- //
-            .register_type::<LocalPosition>()
             .register_type::<WorldPosition>();
     }
 }

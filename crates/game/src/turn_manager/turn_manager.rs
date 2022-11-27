@@ -2,7 +2,7 @@ use crate::prelude::*;
 
 const TURN_TIME: u32 = 1000;
 
-#[derive(Resource)]
+#[derive(Default, Resource)]
 pub struct TurnManager {
     turn_number: u32,
     current_time: u32,
@@ -11,13 +11,15 @@ pub struct TurnManager {
 
 impl TurnManager {
     // This will go into an `impl FromWorld`
-    pub fn new() -> Self {
-        Self {
-            turn_number: 0,
-            current_time: 0,
-            entities: IndexList::new(),
-        }
-    }
+    // FIX: Does it need to?? - Jacob
+
+    // pub fn new() -> Self {
+    //     Self {
+    //         turn_number: 0,
+    //         current_time: 0,
+    //         entities: IndexList::new(),
+    //     }
+    // }
 
     /// Add entities to the TurnManager when building the map.
     pub fn add_entity(&mut self, entity: Entity) {
@@ -30,7 +32,7 @@ impl TurnManager {
 
     /// Remove an entity when it dies or the map unloads.
     pub fn remove_entity(&mut self, entity: Entity) {
-        let mut index = self.entities.first_index();
+        let index = self.entities.first_index();
         let mut found_index = None;
         while index.is_some() {
             if let Some((_turn_number, _current_time, current_entity)) = self.entities.get(index) {
@@ -106,3 +108,10 @@ impl TurnManager {
         None
     }
 }
+
+// impl FromWorld for TurnManager {
+//     fn from_world(_world: &mut World) -> Self {
+//         println!("TurnManager::from_world");
+//         Self::new()
+//     }
+// }

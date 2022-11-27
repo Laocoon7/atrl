@@ -23,6 +23,7 @@ allow = [
     "CC0-1.0",
     "BSL-1.0",
     "BlueOak-1.0.0",
+    "LGPL-2.1",
 ]
 copyleft = "deny"
 default = "deny"

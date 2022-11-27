@@ -193,16 +193,16 @@ impl From<CardinalDirection> for i32 {
     }
 }
 
-// TODO: Wtf do we do here? lol
 impl From<i32> for CardinalDirection {
+    /// See issue [#37854](https://github.com/rust-lang/rust/issues/37854)
     fn from(i: i32) -> Self {
         use self::CardinalDirection::*;
         match i {
-            0..=45 => East,
-            45..=90 => North,
-            90..=135 => North,
-            135..=180 => West,
-            180..=225 => West,
+            0..45 => East,
+            45..90 => North,
+            90..135 => North,
+            135..180 => West,
+            180..225 => West,
             _ => South,
         }
     }
