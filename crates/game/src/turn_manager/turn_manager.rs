@@ -12,6 +12,12 @@ pub struct TurnManager {
 impl TurnManager {
     // This will go into an `impl FromWorld`
     // FIX: Does it need to?? - Jacob
+    // Yes, as this needs to be serialized,
+    // and Entity is not reflectable. We will
+    // have to match new entity id's to the stored
+    // entities. FromWorld allows us access to all
+    // the resources and entities already generated.
+    // Serialization is going to be a pain! XD
 
     // pub fn new() -> Self {
     //     Self {
