@@ -12,13 +12,11 @@ pub fn chase_action(
     tilesets: Tilesets,
     mut commands: Commands,
     mut manager: ResMut<MapManager>,
+    mut move_events: EventWriter<WantsToMove>,
     mut target_q: Query<&mut TargetVisualizer>,
     player_q: Query<(Entity, &Transform), With<Player>>,
     mut action_q: Query<(&Actor, &mut ActionState, &mut ChaseActor, &ActionSpan)>,
-    mut ai_q: Query<
-        (&mut Transform, &FieldOfView, &Vision, &Movement, &Name),
-        (With<MyTurn>, Without<Player>),
-    >,
+    mut ai_q: Query<(&Transform, &FieldOfView, &Vision, &Movement, &Name), (With<MyTurn>, Without<Player>)>,
 ) {
     use ActionState::*;
 
@@ -26,7 +24,7 @@ pub fn chase_action(
         let _guard = span.span().enter();
 
         let (_player_entity, player_transform) = player_q.single();
-        let Ok((mut position, fov, vision, movement_component, name)) =
+        let Ok((position, fov, vision, movement_component, name)) =
             ai_q.get_mut(*actor) else {
                 error!("Actor must have required components");
                 return
@@ -145,45 +143,26 @@ pub fn chase_action(
                 // We have a path > 1 and we are not in range to attack.
                 println!("Chase path: {:?}", chase_path);
 
-                // What do we do if there is no next_pt?
-                let Some(next_pt) = chase_path.last() else { // wish we had a Vec::peek()
-                    error!("AI could not find a path for chasing.");
-                    *action_state = ActionState::Failure;
-                    return
-                };
+                chase_path.pop().map_or_else(
+                    || {
+                        // previous update path failed...
+                        error!("AI could not find a path for chasing.");
+                        *action_state = ActionState::Failure;
+                    },
+                    |next_pt| {
+                        update_target_visual(
+                            &mut commands,
+                            &tilesets,
+                            &mut target_q,
+                            actor,
+                            &next_pt,
+                            &chase_path,
+                        );
 
-                if map.try_move_actor(ai_pos, *next_pt, movement_component.0) {
-                    // we were moved!
-                    position.set_value(*next_pt);
-
-                    if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
-                        if !chase_path.is_empty() {
-                            target_visualizer.update(
-                                &mut commands,
-                                &tilesets,
-                                *next_pt,
-                                chase_path[0],
-                                Color::RED,
-                            );
-                        } else {
-                            target_visualizer.update(
-                                &mut commands,
-                                &tilesets,
-                                *next_pt,
-                                *next_pt,
-                                Color::RED,
-                            );
-                        }
-                    }
-                    chase_path.pop(); // consume the path point
-                } else {
-                    info!(
-                        "AI is blocked trying to move from {:?} to {:?}",
-                        ai_pos, next_pt
-                    );
-                }
-
-                chase.path = Some(chase_path);
+                        move_events.send(WantsToMove(*actor, next_pt));
+                        chase.path = Some(chase_path);
+                    },
+                );
             },
 
             // Init | Success | Failure

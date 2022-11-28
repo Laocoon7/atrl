@@ -5,7 +5,9 @@ use big_brain::actions::ActionState;
 use rand::distributions::Uniform;
 
 use crate::prelude::*;
+
 static WANDER_RANGE: Lazy<Uniform<u32>> = Lazy::new(|| Uniform::new_inclusive(3, 10));
+
 #[derive(Debug, Reflect, Default, Clone, PartialEq, Eq)]
 pub enum WanderFailureBehavior {
     #[default]
@@ -84,25 +86,14 @@ pub fn wander_action(
                         info!("{} has reached the end of their wander path!", name);
                     },
                     |next_pt| {
-                        if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
-                            if !ai_path.is_empty() {
-                                target_visualizer.update(
-                                    &mut commands,
-                                    &tilesets,
-                                    next_pt,
-                                    ai_path[0],
-                                    Color::WHITE,
-                                );
-                            } else {
-                                target_visualizer.update(
-                                    &mut commands,
-                                    &tilesets,
-                                    next_pt,
-                                    next_pt,
-                                    Color::WHITE,
-                                );
-                            }
-                        }
+                        update_target_visual(
+                            &mut commands,
+                            &tilesets,
+                            &mut target_q,
+                            actor,
+                            &next_pt,
+                            &ai_path,
+                        );
 
                         move_events.send(WantsToMove(*actor, next_pt));
                     },
@@ -115,6 +106,7 @@ pub fn wander_action(
         }
     }
 }
+
 fn generate_wander_path(
     rng: &mut impl RngCore,
     ai_pos: IVec2,

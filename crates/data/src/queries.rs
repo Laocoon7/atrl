@@ -16,6 +16,23 @@ pub fn entity_in_fov(
     }
 }
 
+pub fn update_target_visual(
+    commands: &mut Commands,
+    tilesets: &Tilesets,
+    target_q: &mut Query<&mut TargetVisualizer>,
+    actor: &Entity,
+    next_pt: &IVec2,
+    ai_path: &Vec<IVec2>,
+) {
+    if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
+        if !ai_path.is_empty() {
+            target_visualizer.update(commands, tilesets, *next_pt, ai_path[0], Color::RED);
+        } else {
+            target_visualizer.update(commands, tilesets, *next_pt, *next_pt, Color::RED);
+        }
+    }
+}
+
 pub fn end_turn_requeue(
     commands: &mut Commands,
     turn_manager: &mut TurnManager,
