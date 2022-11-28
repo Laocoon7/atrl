@@ -26,10 +26,10 @@ pub fn wander_action(
     mut commands: Commands,
     mut ctx: ResMut<GameContext>,
     mut manager: ResMut<MapManager>,
-    mut turn_manager: ResMut<TurnManager>,
+    mut move_events: EventWriter<WantsToMove>,
     mut target_q: Query<&mut TargetVisualizer>,
     mut action_q: Query<(&Actor, &mut ActionState, &mut Wander, &ActionSpan)>,
-    mut spatial_q: Query<(&mut Transform, &Movement, &Name), (With<MyTurn>, Without<Player>)>,
+    mut spatial_q: Query<(&Transform, &Movement, &Name), (With<MyTurn>, Without<Player>)>,
 ) {
     use ActionState::*;
 
@@ -42,7 +42,7 @@ pub fn wander_action(
             return
         };
 
-        let Ok((mut position, movement_component, name)) =
+        let Ok((position, movement_component, name)) =
         spatial_q.get_mut(*actor) else {
                 error!("Actor must have spatial components");
                 return
@@ -84,35 +84,27 @@ pub fn wander_action(
                         info!("{} has reached the end of their wander path!", name);
                     },
                     |next_pt| {
-                        if map.try_move_actor(ai_pos, next_pt, movement_component.0) {
-                            position.set_value(next_pt);
-                            if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
-                                if !ai_path.is_empty() {
-                                    target_visualizer.update(
-                                        &mut commands,
-                                        &tilesets,
-                                        next_pt,
-                                        ai_path[0],
-                                        Color::WHITE,
-                                    );
-                                } else {
-                                    target_visualizer.update(
-                                        &mut commands,
-                                        &tilesets,
-                                        next_pt,
-                                        next_pt,
-                                        Color::WHITE,
-                                    );
-                                }
+                        if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
+                            if !ai_path.is_empty() {
+                                target_visualizer.update(
+                                    &mut commands,
+                                    &tilesets,
+                                    next_pt,
+                                    ai_path[0],
+                                    Color::WHITE,
+                                );
+                            } else {
+                                target_visualizer.update(
+                                    &mut commands,
+                                    &tilesets,
+                                    next_pt,
+                                    next_pt,
+                                    Color::WHITE,
+                                );
                             }
-                        } else {
-                            info!(
-                                "AI is blocked trying to move from {:?} to {:?}",
-                                ai_pos, next_pt
-                            );
                         }
 
-                        end_turn_requeue(&mut commands, &mut turn_manager, *actor, 0);
+                        move_events.send(WantsToMove(*actor, next_pt));
                     },
                 );
                 wander.path = Some(ai_path);
