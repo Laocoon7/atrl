@@ -67,45 +67,57 @@ pub fn wander_action(
             Requested => {
                 info!("{} gonna start wandering!", name);
                 *action_state = Executing;
-                wander.path = Some(generate_wander_path(rng, ai_pos, movement_component.0, map));
+                wander.path = generate_wander_path(rng, ai_pos, movement_component.0, map);
             },
             Executing => {
                 let wander_path = std::mem::take(&mut wander.path);
                 let ai_path = wander_path.and_then(|p| {
                     if p.is_empty() || !map.can_place_actor(p[0], movement_component.0) {
-                        None
+                        if let Some(path) = generate_wander_path(rng, ai_pos, movement_component.0, map) {
+                            if path.len() == 0 {
+                                None
+                            } else {
+                                Some(path)
+                            }
+                        } else {
+                            None
+                        }
                     } else {
                         Some(p)
                     }
                 });
 
-                let mut ai_path = ai_path.map_or_else(
-                    || generate_wander_path(rng, ai_pos, movement_component.0, map),
-                    |p| p,
-                );
-
-                ai_path.pop().map_or_else(
-                    || {
-                        // We have reached the end of our trail!
-                        *action_state = Success;
-                        info!("{} has reached the end of their wander path!", name);
-                    },
-                    |next_pt| {
-                        update_target_visual(
-                            &mut commands,
-                            &tilesets,
-                            &mut target_q,
-                            &ai_path,
-                            actor,
-                            &next_pt,
-                            Color::YELLOW,
+                if let Some(mut ai_path) = ai_path {
+                    if map.can_place_actor(ai_path[0], movement_component.0) {
+                        ai_path.pop().map_or_else(
+                            || {
+                                // We have reached the end of our trail!
+                                *action_state = Success;
+                                info!("{} has reached the end of their wander path!", name);
+                            },
+                            |next_pt| {
+                                update_target_visual(
+                                    &mut commands,
+                                    &tilesets,
+                                    &mut target_q,
+                                    &ai_path,
+                                    actor,
+                                    &next_pt,
+                                    Color::YELLOW,
+                                );
+                                ai_component.preferred_action = Some(ActionType::Movement(next_pt));
+                                // move_events.send(WantsToMove(*actor, next_pt));
+                            },
                         );
 
-                        ai_component.preferred_action = Some(ActionType::Movement(next_pt)); // move_events.send(WantsToMove(*actor, next_pt));
-                        commands.insert_resource(TurnState::Processing);
-                    },
-                );
-                wander.path = Some(ai_path);
+                        wander.path = Some(ai_path);
+                    } else {
+                        ai_component.preferred_action = Some(ActionType::Wait);
+                    }
+                } else {
+                    ai_component.preferred_action = Some(ActionType::Wait);
+                }
+                commands.insert_resource(TurnState::Processing);
             },
 
             // Init | Success | Failure
@@ -119,13 +131,11 @@ fn generate_wander_path(
     ai_pos: IVec2,
     movement_type: u8,
     map_provider: &impl PathProvider,
-) -> Vec<IVec2> {
+) -> Option<Vec<IVec2>> {
     let wander_radius = WANDER_RANGE.sample(rng);
     let wander_circle = Circle::new(ai_pos, wander_radius);
 
     // Default to the circle center
     let destination = wander_circle.iter().choose(rng).unwrap_or_else(|| wander_circle.center());
-    PathFinder::Astar
-        .compute(ai_pos, destination, movement_type, false, map_provider)
-        .unwrap_or_default()
+    PathFinder::Astar.compute(ai_pos, destination, movement_type, true, map_provider)
 }

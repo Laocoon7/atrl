@@ -6,7 +6,7 @@ pub fn load_first_map(
     mut game_context: ResMut<GameContext>,
     mut map_manager: ResMut<MapManager>,
 ) {
-    println!("load_first_map");
+    info!("load_first_map");
     let length = (TILESET_TERRAIN_IDS_TABLE.len() - 1) as u32;
     let tileset_id = Prng::from_entropy().range(0..length) as usize;
     let tileset_id = TILESET_TERRAIN_IDS_TABLE[tileset_id];

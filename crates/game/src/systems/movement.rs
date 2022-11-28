@@ -24,7 +24,10 @@ pub fn movement(
             position.set_value(new_position);
             info!("Actor moved from {:?} to {:?}", last_position, new_position);
         } else {
-            info!("{:?} is blocked!", new_position);
+            info!(
+                "From:{:?} To:{:?} is blocked! {:?}",
+                last_position, new_position, *movement_type
+            );
         }
     }
 }
