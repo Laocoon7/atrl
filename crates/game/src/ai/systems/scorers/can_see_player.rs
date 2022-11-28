@@ -27,37 +27,8 @@ pub fn can_see_player(
                 if let Some(map) = manager.get_current_map() {
                     let player_pos = player_transform.get();
                     let ai_pos = ai_transform.get();
-
-                    // FIX: This was the normal way. Checking if the player is in the fov,
-                    // then drawing a line from ai -> player and checking if any tiles are
-                    // is_opaque
-                    // |
-                    // |
-                    // V
-
-                    // If the player is within the FOV range of the AI, check line of sight
-                    // if entity_in_fov(map, fov, vision, ai_pos, player_pos) {
-                    //     current_score = can_see_player.score_if_true;
-                    // }
-
-                    // Second way, check if the player is within the FOV range of the AI,
-                    // then use fov direction to check all points along the line for visibility
-                    let line_length = grid_shapes::Line::new(ai_pos, player_pos).get_count();
-                    if line_length < fov.0 as usize {
-                        let mut visibility_map = VisibilityMap::new(map.size);
-                        let angle = (player_pos.angle_to(ai_pos) - 180.0).abs();
-                        Fov::ShadowcastDirection(CardinalDirection::from(angle as i32)).compute(
-                            ai_pos,
-                            vision.0,
-                            fov.0,
-                            map,
-                            &mut visibility_map,
-                        );
-
-                        // FIX: Err I hate having to skip the first tile
-                        if visibility_map.get_visible(player_pos) {
-                            current_score = can_see_player.score_if_true;
-                        }
+                    if entity_in_fov(map, fov, vision, ai_pos, player_pos) {
+                        current_score = can_see_player.score_if_true;
                     }
                 }
             }
