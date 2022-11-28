@@ -126,8 +126,7 @@ pub fn wander_action(
             ai_component.preferred_action = Some(ActionType::Wait);
         }
         commands.insert_resource(TurnState::Processing);
-        wander.path = Some(ai_path);
-    },
+    }
 }
 
 fn generate_wander_path(
