@@ -1,9 +1,7 @@
 use crate::prelude::*;
 
 pub fn movement(
-    mut commands: Commands,
     mut map_manager: ResMut<MapManager>,
-    mut turn_manager: ResMut<TurnManager>,
     mut move_events: ResMut<Events<WantsToMove>>,
     mut spatial_q: Query<(&mut Transform, &Movement), With<WorldPosition>>,
 ) {

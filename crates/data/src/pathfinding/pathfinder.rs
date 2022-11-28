@@ -2,6 +2,7 @@ use super::shared::PathAlgorithm;
 use crate::prelude::*;
 pub enum PathFinder {
     Astar,
+    Dijkstras,
 }
 
 impl PathFinder {
@@ -17,6 +18,13 @@ impl PathFinder {
         let destination = destination.as_ivec2();
         match self {
             Self::Astar => AStar::compute_path(
+                origin,
+                destination,
+                movement_type,
+                partial_path_on_failure,
+                provider,
+            ),
+            Self::Dijkstras => Dijkstras::compute_path(
                 origin,
                 destination,
                 movement_type,

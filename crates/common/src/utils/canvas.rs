@@ -21,17 +21,22 @@ impl Canvas {
 
     pub fn print(&self) {
         let width = self.size.width();
+        print!("  ");
         (0..width).for_each(|i| print!("{}", i));
+
         println!();
+
         let chars: Vec<_> = self.string.replace(' ', ".").chars().collect();
         for (i, line) in chars.chunks(self.size.x as usize).enumerate() {
-            println!("{:>3} {}", i, String::from_iter(line.iter()));
+            println!("{} {}", i, String::from_iter(line.iter()));
         }
     }
 }
+
 #[cfg(test)]
 mod tests {
     use crate::prelude::*;
+
     #[test]
     fn print_test() {
         let mut canvas = Canvas::new([10, 5]);

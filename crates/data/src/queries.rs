@@ -4,13 +4,23 @@ pub fn entity_in_fov(
     map: &Map,
     fov: &FieldOfView,
     vision: &Vision,
-    self_pos: impl Point2d,
-    other_pos: impl Point2d,
+    current_pos: impl Point2d,
+    destination_pos: impl Point2d,
 ) -> bool {
-    // If the player is within the FOV range of the AI, check line of sight
-    if DistanceAlg::Pythagoras.distance2d(self_pos, other_pos) < fov.0 as f32 {
-        let line = Line::new(self_pos, other_pos);
-        line.iter().all(|point| !map.is_opaque(point, vision.0))
+    // // If the player is within the FOV range of the AI, check line of sight
+    let line_length = grid_shapes::Line::new(current_pos, destination_pos).get_count();
+    if line_length < fov.0 as usize {
+        let mut visibility_map = VisibilityMap::new(map.size);
+        let angle = (destination_pos.angle_to(current_pos) - 180.0).abs();
+        Fov::ShadowcastDirection(CardinalDirection::from(angle as i32)).compute(
+            current_pos,
+            vision.0,
+            fov.0,
+            map,
+            &mut visibility_map,
+        );
+
+        visibility_map.get_visible(destination_pos.as_ivec2())
     } else {
         false
     }
