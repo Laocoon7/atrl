@@ -1,10 +1,12 @@
 use crate::prelude::*;
+
 #[derive(Reflect, Component, Default)]
 #[reflect(Component)]
 pub struct AIComponent {
     ai_type: AIType,
     pub preferred_action: Option<ActionType>,
 }
+
 impl AIComponent {
     #[inline]
     pub const fn new(ai_type: AIType) -> Self {
@@ -14,6 +16,7 @@ impl AIComponent {
         }
     }
 }
+
 impl AIComponent {
     pub const fn human() -> Self {
         Self {

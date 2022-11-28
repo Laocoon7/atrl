@@ -55,11 +55,7 @@ pub fn can_see_player(
                         );
 
                         // FIX: Err I hate having to skip the first tile
-                        if Line::new(ai_pos, player_pos)
-                            .iter()
-                            .skip(1)
-                            .all(|pt| visibility_map.get_visible(pt))
-                        {
+                        if visibility_map.get_visible(player_pos) {
                             current_score = can_see_player.score_if_true;
                         }
                     }

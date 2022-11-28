@@ -56,61 +56,65 @@ pub fn wander_action(
         }
 
         let ai_pos = position.get();
-
         match *action_state {
+            // Init | Success | Failure
+            Init | Success | Failure => {
+                // Nothing to do here
+                continue;
+            },
             Cancelled => {
                 if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
                     target_visualizer.clear(&mut commands);
                 }
                 *action_state = Failure;
+                continue;
             },
+
+            // These two states will fall through to execution
             Requested => {
                 info!("{} gonna start wandering!", name);
                 *action_state = Executing;
                 wander.path = Some(generate_wander_path(rng, ai_pos, movement_component.0, map));
             },
-            Executing => {
-                let wander_path = std::mem::take(&mut wander.path);
-                let ai_path = wander_path.and_then(|p| {
-                    if p.is_empty() || !map.can_place_actor(p[0], movement_component.0) {
-                        None
-                    } else {
-                        Some(p)
-                    }
-                });
-
-                let mut ai_path = ai_path.map_or_else(
-                    || generate_wander_path(rng, ai_pos, movement_component.0, map),
-                    |p| p,
-                );
-
-                ai_path.pop().map_or_else(
-                    || {
-                        // We have reached the end of our trail!
-                        *action_state = Success;
-                        info!("{} has reached the end of their wander path!", name);
-                    },
-                    |next_pt| {
-                        update_target_visual(
-                            &mut commands,
-                            &tilesets,
-                            &mut target_q,
-                            &ai_path,
-                            actor,
-                            &next_pt,
-                            Color::YELLOW,
-                        );
-
-                        ai_component.preferred_action = Some(ActionType::Movement(next_pt)); // move_events.send(WantsToMove(*actor, next_pt));
-                        commands.insert_resource(TurnState::Processing);
-                    },
-                );
-                wander.path = Some(ai_path);
-            },
-
-            // Init | Success | Failure
-            _ => {},
+            Executing => {},
         }
+
+        let wander_path = std::mem::take(&mut wander.path);
+        let ai_path = wander_path.and_then(|p| {
+            if p.is_empty() || !map.can_place_actor(p[0], movement_component.0) {
+                None
+            } else {
+                Some(p)
+            }
+        });
+
+        let mut ai_path = ai_path.map_or_else(
+            || generate_wander_path(rng, ai_pos, movement_component.0, map),
+            |p| p,
+        );
+
+        ai_path.pop().map_or_else(
+            || {
+                // We have reached the end of our trail!
+                *action_state = Success;
+                info!("{} has reached the end of their wander path!", name);
+            },
+            |next_pt| {
+                update_target_visual(
+                    &mut commands,
+                    &tilesets,
+                    &mut target_q,
+                    &ai_path,
+                    actor,
+                    &next_pt,
+                    Color::YELLOW,
+                );
+
+                ai_component.preferred_action = Some(ActionType::Movement(next_pt));
+                commands.insert_resource(TurnState::Processing);
+            },
+        );
+        wander.path = Some(ai_path);
     }
 }
 
