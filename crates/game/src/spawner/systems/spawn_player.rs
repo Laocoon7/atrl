@@ -36,6 +36,7 @@ pub fn spawn_player(
 
         actor: ActorBundle {
             name: Name::new("Bob the Builder"),
+            mob: Mob,
             position: WorldPosition(world_position),
             health: Health::new(10, 10),
             ai: AIComponent::human(),

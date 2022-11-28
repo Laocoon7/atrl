@@ -46,6 +46,7 @@ pub fn spawn_ai(
 
     commands.entity(ai_entity).insert((
         ActorBundle {
+            mob: Mob,
             ai: AIComponent::aggressive(),
             name: Name::new("Gary the Destroyer"),
             position: WorldPosition(world_position),

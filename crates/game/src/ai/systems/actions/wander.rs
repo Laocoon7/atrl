@@ -28,10 +28,9 @@ pub fn wander_action(
     mut commands: Commands,
     mut ctx: ResMut<GameContext>,
     mut manager: ResMut<MapManager>,
-    mut move_events: EventWriter<WantsToMove>,
     mut target_q: Query<&mut TargetVisualizer>,
     mut action_q: Query<(&Actor, &mut ActionState, &mut Wander, &ActionSpan)>,
-    mut spatial_q: Query<(&Transform, &Movement, &Name), (With<MyTurn>, Without<Player>)>,
+    mut spatial_q: Query<(&Transform, &Movement, &Name, &mut AIComponent), Without<Player>>,
 ) {
     use ActionState::*;
 
@@ -44,11 +43,17 @@ pub fn wander_action(
             return
         };
 
-        let Ok((position, movement_component, name)) =
+        let Ok((position, movement_component, name, mut ai_component)) =
         spatial_q.get_mut(*actor) else {
                 error!("Actor must have spatial components");
                 return
             };
+
+        if ai_component.preferred_action.is_some() {
+            // already wandering, quick return;
+            commands.insert_resource(TurnState::Processing);
+            return;
+        }
 
         let ai_pos = position.get();
 
@@ -96,7 +101,8 @@ pub fn wander_action(
                             Color::YELLOW,
                         );
 
-                        move_events.send(WantsToMove(*actor, next_pt));
+                        ai_component.preferred_action = Some(ActionType::Movement(next_pt)); // move_events.send(WantsToMove(*actor, next_pt));
+                        commands.insert_resource(TurnState::Processing);
                     },
                 );
                 wander.path = Some(ai_path);

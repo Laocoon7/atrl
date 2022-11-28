@@ -9,7 +9,8 @@ pub enum AtrlStage {
 #[derive(Copy, Clone)]
 pub struct EcsPlugin<T, R> {
     pub state_running: T,
-    pub turn_state_ticking: R,
+    pub turn_state_processing: R,
+    pub turn_state_ai_thinking: R,
 }
 
 impl<T: StateNext, R: StateNext + Resource> EcsPlugin<T, R> {
@@ -60,7 +61,7 @@ impl<T: StateNext, R: StateNext + Resource> Plugin for EcsPlugin<T, R> {
             // AI
             .add_plugin(AIPlugin {
                 state_running: self.state_running,
-                turn_state_ticking: self.turn_state_ticking,
+                turn_state_ai_thinking: self.turn_state_ai_thinking,
             });
 
         // Startup
@@ -70,15 +71,19 @@ impl<T: StateNext, R: StateNext + Resource> Plugin for EcsPlugin<T, R> {
         );
 
         app.add_system_set_to_stage(
-            CoreStage::First,
-            ConditionSet::new().run_in_state(self.state_running).with_system(whos_turn).into(),
+            AtrlStage::ConsumeEvents,
+            ConditionSet::new()
+                .run_in_state(self.state_running)
+                .run_if_resource_equals(self.turn_state_processing)
+                .with_system(perform_turns)
+                .into(),
         );
 
         app.add_system_set_to_stage(
             AtrlStage::ConsumeEvents,
             ConditionSet::new()
                 .run_in_state(self.state_running)
-                // .run_if_resource_equals(self.turn_state_ticking)
+                .run_if_resource_equals(self.turn_state_processing)
                 .with_system(movement)
                 .into(),
         );

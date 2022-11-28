@@ -2,6 +2,12 @@
 #![allow(clippy::type_complexity)] // Bevy can have complex queries, so we shush clippy
 #![allow(clippy::too_many_arguments)] // Bevy has a lot of arguments, so we shush clippy
 #![allow(clippy::module_inception)]
+
+mod actions {
+    mod action_type;
+    pub use action_type::*;
+}
+
 mod actors {
     mod class_type;
     pub use class_type::*;
@@ -205,8 +211,8 @@ pub mod prelude {
     mod export {
         pub use crate::pathfinding::PathFinder; // where's the redundancy lint???
         pub use crate::{
-            actors::*, camera::*, components::*, fov::*, game::*, pathfinding::*, queries::*, resources::*,
-            system_params::*,
+            actions::*, actors::*, camera::*, components::*, fov::*, game::*, pathfinding::*, queries::*,
+            resources::*, system_params::*,
         };
     }
     pub use export::*;

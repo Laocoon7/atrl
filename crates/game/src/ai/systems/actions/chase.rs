@@ -12,11 +12,20 @@ pub fn chase_action(
     tilesets: Tilesets,
     mut commands: Commands,
     mut manager: ResMut<MapManager>,
-    mut move_events: EventWriter<WantsToMove>,
     mut target_q: Query<&mut TargetVisualizer>,
     player_q: Query<(Entity, &Transform), With<Player>>,
     mut action_q: Query<(&Actor, &mut ActionState, &mut ChaseActor, &ActionSpan)>,
-    mut ai_q: Query<(&Transform, &FieldOfView, &Vision, &Movement, &Name), (With<MyTurn>, Without<Player>)>,
+    mut ai_q: Query<
+        (
+            &Transform,
+            &FieldOfView,
+            &Vision,
+            &Movement,
+            &Name,
+            &mut AIComponent,
+        ),
+        Without<Player>,
+    >,
 ) {
     use ActionState::*;
 
@@ -24,11 +33,17 @@ pub fn chase_action(
         let _guard = span.span().enter();
 
         let (_player_entity, player_transform) = player_q.single();
-        let Ok((position, fov, vision, movement_component, name)) =
+        let Ok((position, fov, vision, movement_component, name, mut ai_component)) =
             ai_q.get_mut(*actor) else {
                 error!("Actor must have required components");
                 return
             };
+
+        if ai_component.preferred_action.is_some() {
+            // already chasing, quick return;
+            commands.insert_resource(TurnState::Processing);
+            return;
+        }
 
         let ai_pos = position.get();
         let player_pos = player_transform.get();
@@ -136,6 +151,8 @@ pub fn chase_action(
                 let Some(mut chase_path) = std::mem::take(&mut chase.path) else {
                     // previous update path failed...
                     error!("AI could not find a path for chasing.");
+                    ai_component.preferred_action = Some(ActionType::Wait);
+                    commands.insert_resource(TurnState::Processing);
                     *action_state = ActionState::Failure;
                     return;
                 };
@@ -143,11 +160,12 @@ pub fn chase_action(
                 // We have a path > 1 and we are not in range to attack.
                 println!("Chase path: {:?}", chase_path);
 
-                chase_path.pop().map_or_else(
+                let action = chase_path.pop().map_or_else(
                     || {
                         // previous update path failed...
                         error!("AI could not find a path for chasing.");
                         *action_state = ActionState::Failure;
+                        ActionType::Wait
                     },
                     |next_pt| {
                         update_target_visual(
@@ -160,10 +178,12 @@ pub fn chase_action(
                             Color::RED,
                         );
 
-                        move_events.send(WantsToMove(*actor, next_pt));
                         chase.path = Some(chase_path);
+                        ActionType::Movement(next_pt)
                     },
                 );
+                ai_component.preferred_action = Some(action);
+                commands.insert_resource(TurnState::Processing);
             },
 
             // Init | Success | Failure

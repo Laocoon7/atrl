@@ -26,8 +26,5 @@ pub fn movement(
         } else {
             info!("{:?} is blocked!", new_position);
         }
-
-        // FIX: What should the turns_taken be?
-        end_turn_requeue(&mut commands, &mut turn_manager, entity, 0);
     }
 }

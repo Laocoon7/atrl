@@ -23,8 +23,8 @@ pub enum UiState {
 #[derive(Default, Resource, Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub enum TurnState {
     #[default]
-    AwaitingInput,
-    Ticking,
+    Processing,
+    AIThinking,
     Dead,
 }
 
@@ -82,8 +82,8 @@ impl StateNext for GameState {
 impl StateNext for TurnState {
     fn next(&self) -> Option<Self> {
         match self {
-            Self::AwaitingInput => Some(Self::Ticking),
-            Self::Ticking => Some(Self::AwaitingInput),
+            Self::Processing => Some(Self::AIThinking),
+            Self::AIThinking => Some(Self::Processing),
             Self::Dead => None,
         }
     }

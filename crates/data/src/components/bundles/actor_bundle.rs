@@ -2,6 +2,7 @@ use crate::prelude::*;
 #[derive(Bundle)]
 pub struct ActorBundle {
     pub name: Name,
+    pub mob: Mob,
     pub health: Health,
     pub ai: AIComponent,
     pub position: WorldPosition,

@@ -1,7 +1,7 @@
 use crate::prelude::*;
 pub struct AIPlugin<T, R> {
     pub state_running: T,
-    pub turn_state_ticking: R,
+    pub turn_state_ai_thinking: R,
 }
 impl<T: StateNext, R: StateNext + Resource> Plugin for AIPlugin<T, R> {
     fn build(&self, app: &mut App) {
@@ -11,7 +11,7 @@ impl<T: StateNext, R: StateNext + Resource> Plugin for AIPlugin<T, R> {
                 BigBrainStage::Scorers,
                 ConditionSet::new()
                     .run_in_state(self.state_running)
-                    .run_if_resource_equals(self.turn_state_ticking)
+                    .run_if_resource_equals(self.turn_state_ai_thinking)
                     .with_system(can_see_player)
                     .into(),
             )
@@ -20,7 +20,7 @@ impl<T: StateNext, R: StateNext + Resource> Plugin for AIPlugin<T, R> {
                 BigBrainStage::Actions,
                 ConditionSet::new()
                     .run_in_state(self.state_running)
-                    .run_if_resource_equals(self.turn_state_ticking)
+                    .run_if_resource_equals(self.turn_state_ai_thinking)
                     .with_system(wander_action)
                     .with_system(chase_action)
                     .into(),

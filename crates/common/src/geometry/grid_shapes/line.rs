@@ -10,7 +10,6 @@ pub struct Line {
 
 impl Line {
     pub fn new(start: impl Point2d, end: impl Point2d) -> Self {
-        println!("Line from: {:?} to: {:?}", start.as_ivec2(), end.as_ivec2());
         Self {
             start: start.as_ivec2(),
             end: end.as_ivec2(),

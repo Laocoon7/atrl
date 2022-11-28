@@ -80,6 +80,8 @@ mod spawner {
 }
 
 mod systems {
+    mod action_queue;
+    pub use action_queue::*;
     mod apply_damage;
     pub use apply_damage::*;
     mod fov;
