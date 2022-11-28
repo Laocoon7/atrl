@@ -62,6 +62,12 @@ mod components {
     }
     pub use vision::*;
 
+    mod turn {
+        mod turn;
+        pub use turn::*;
+    }
+    pub use turn::*;
+
     mod consumable;
     pub use consumable::*;
     mod equipable;
@@ -160,6 +166,8 @@ mod resources {
     pub use timer::*;
     mod font_paths;
     pub use font_paths::*;
+    mod turn_manager;
+    pub use turn_manager::*;
 }
 
 mod queries;

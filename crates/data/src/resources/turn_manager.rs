@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-const TURN_TIME: u32 = 1000;
+pub const TURN_TIME: u32 = 1000;
 
 #[derive(Default, Resource)]
 pub struct TurnManager {
@@ -92,6 +92,7 @@ impl TurnManager {
         if next_time >= TURN_TIME {
             current_turn += 1;
         }
+
         if let Some(index) = self.get_index_after_time(current_turn, next_time) {
             self.entities.insert_before(index, (current_turn, next_time, entity));
         } else {

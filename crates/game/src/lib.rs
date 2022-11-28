@@ -83,17 +83,8 @@ mod systems {
     pub use fov::*;
     mod perform_healing;
     pub use perform_healing::*;
-}
-
-mod turn_manager {
-    mod systems {
-        mod whos_turn;
-        pub use whos_turn::*;
-    }
-    pub use systems::*;
-
-    mod turn_manager;
-    pub use turn_manager::*;
+    mod whos_turn;
+    pub use whos_turn::*;
 }
 
 mod ecs_plugin;
@@ -127,6 +118,5 @@ pub mod prelude {
 
     pub use crate::{
         ai::*, ecs_plugin::*, events::*, game_plugin::*, map::*, player::*, spawner::*, systems::*,
-        turn_manager::*,
     };
 }

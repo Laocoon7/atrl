@@ -24,7 +24,7 @@ pub fn spawn_ai(
 
     // Build the thinker
     let thinker = Thinker::build()
-        .label("RandomThinker",)
+        .label("RandomThinker")
         // We don't do anything unless we're thirsty enough.
         .picker(FirstToScore { threshold: 0.8, })
         .when(WinningScorer::build(1.0).push(CanSeePlayer::default()), chase_and_attack)

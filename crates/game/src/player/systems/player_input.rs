@@ -2,10 +2,26 @@ use crate::prelude::*;
 pub fn player_input(
     state: Res<TurnState>,
     mut commands: Commands,
+    mut turn_manager: ResMut<TurnManager>,
     mut manager: ResMut<MapManager>,
-    mut query: Query<(&mut Transform, &Movement, &ActionState<PlayerAction>), With<Player>>,
+    mut query: Query<
+        (
+            Entity,
+            &mut Transform,
+            &Movement,
+            &ActionState<PlayerAction>,
+        ),
+        (With<MyTurn>, With<Player>),
+    >,
 ) {
-    for (mut position, movement_component, action_state) in query.iter_mut() {
+    for (player, mut position, movement_component, action_state) in query.iter_mut() {
+        // Actions
+        if action_state.just_pressed(PlayerAction::Wait) {
+            info!("Player waited");
+            state.set_next(&mut commands);
+        }
+
+        // Movement
         for input_direction in PlayerAction::DIRECTIONS {
             if action_state.just_pressed(input_direction) {
                 if let Some(direction) = input_direction.direction() {
@@ -22,6 +38,8 @@ pub fn player_input(
                             info!("{:?} is blocked!", new_position);
                         }
                     }
+
+                    end_turn_requeue(&mut commands, &mut turn_manager, player, 0);
                     state.set_next(&mut commands);
                 }
             }

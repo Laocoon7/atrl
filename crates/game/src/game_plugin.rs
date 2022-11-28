@@ -1,4 +1,5 @@
-use crate::{prelude::*, turn_manager::TurnManager};
+use crate::prelude::*;
+
 #[derive(Copy, Clone)]
 pub struct GamePlugin<T> {
     /// Asset loading happens in this state. When it finishes it transitions to
@@ -50,9 +51,7 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
                 state_main_menu: self.state_main_menu
             })
             // Spawner
-            .add_plugin(SpawnerPlugin { state_construct_setup: self.state_construct_setup })
-            // Player
-            .add_plugin(PlayerPlugin { state_running: self.state_running });
+            .add_plugin(SpawnerPlugin { state_construct_setup: self.state_construct_setup });
     }
 }
 

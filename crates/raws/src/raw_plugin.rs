@@ -67,7 +67,7 @@ impl<T: StateNext> Plugin for RawPlugin<T> {
                         },
                     )
                     // Textures
-                    .with_system(load_game_textures,)
+                    .with_system(load_game_textures)
                     // Tilesets
                     .with_system(
                         move |commands: Commands,

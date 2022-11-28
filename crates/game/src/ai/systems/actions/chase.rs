@@ -15,7 +15,10 @@ pub fn chase_action(
     mut target_q: Query<&mut TargetVisualizer>,
     player_q: Query<(Entity, &Transform), With<Player>>,
     mut action_q: Query<(&Actor, &mut ActionState, &mut ChaseActor, &ActionSpan)>,
-    mut ai_q: Query<(&mut Transform, &FieldOfView, &Vision, &Movement, &Name), Without<Player>>,
+    mut ai_q: Query<
+        (&mut Transform, &FieldOfView, &Vision, &Movement, &Name),
+        (With<MyTurn>, Without<Player>),
+    >,
 ) {
     use ActionState::*;
 
@@ -23,8 +26,8 @@ pub fn chase_action(
         let _guard = span.span().enter();
 
         let (_player_entity, player_transform) = player_q.single();
-        let Ok((mut position, fov, vision, movement_component, name,)) =
-            ai_q.get_mut(*actor,) else {
+        let Ok((mut position, fov, vision, movement_component, name)) =
+            ai_q.get_mut(*actor) else {
                 error!("Actor must have required components");
                 return
             };

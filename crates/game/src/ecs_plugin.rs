@@ -51,15 +51,26 @@ impl<T: StateNext, R: StateNext + Resource> Plugin for EcsPlugin<T, R> {
     fn build(&self, app: &mut App) {
         self.setup_stages(app).setup_events(app);
 
-        app.add_plugin(AIPlugin {
-            state_running: self.state_running,
-            turn_state_ticking: self.turn_state_ticking,
-        });
+        app 
+            // Player
+            .add_plugin(PlayerPlugin {
+                state_running: self.state_running,
+            })
+            // AI
+            .add_plugin(AIPlugin {
+                state_running: self.state_running,
+                turn_state_ticking: self.turn_state_ticking,
+            });
 
         // Startup
         app.add_enter_system_set(
             self.state_running,
             ConditionSet::new().with_system(fov).into(),
+        );
+
+        app.add_system_set_to_stage(
+            CoreStage::First,
+            ConditionSet::new().run_in_state(self.state_running).with_system(whos_turn).into(),
         );
 
         app.add_system_set_to_stage(
