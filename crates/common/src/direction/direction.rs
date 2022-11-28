@@ -1,5 +1,7 @@
 use crate::prelude::*;
+
 pub const NUM_DIRECTIONS: usize = 8;
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize)]
 #[repr(u8)]
 pub enum GridDirection {
