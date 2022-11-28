@@ -1,6 +1,8 @@
 use super::{super::shared::*, astar_node::*};
 use crate::prelude::*;
+
 pub struct AStar;
+
 impl PathAlgorithm for AStar {
     fn compute_path(
         origin: IVec2,
@@ -12,20 +14,24 @@ impl PathAlgorithm for AStar {
         // create open/closed lists
         let mut open_nodes = IndexList::new();
         let mut closed_nodes = IndexList::new();
+
         // add the first node to the open list before starting the loop
         let first_node = AStarNode::new(origin, destination);
         open_nodes.insert_first(first_node);
+
         // loop through all the nodes
         // return if path is found
         loop {
             if open_nodes.is_empty() {
                 break;
             }
+
             // get the lowest cost node
             if let Some(current_node) = open_nodes.remove_first() {
                 if current_node.position() == destination {
                     return Self::reconstruct_path(current_node, &mut closed_nodes);
                 }
+
                 // update cardinals
                 current_node.position().neighbors_cardinal().for_each(|position| {
                     current_node.update_at_position(
@@ -38,6 +44,7 @@ impl PathAlgorithm for AStar {
                         &mut closed_nodes,
                     );
                 });
+
                 // update ordinals
                 current_node.position().neighbors_ordinal().for_each(|position| {
                     current_node.update_at_position(
@@ -50,14 +57,17 @@ impl PathAlgorithm for AStar {
                         &mut closed_nodes,
                     );
                 });
+
                 // close the current node
                 closed_nodes.insert_last(current_node);
             }
         }
+
         // No path found.
         if partial_path_on_failure {
             let mut index = closed_nodes.first_index();
             let mut best_node_index = index;
+
             if let Some(best_node) = closed_nodes.get(best_node_index) {
                 let mut best_cost = best_node.get_cost_from_end();
                 index = closed_nodes.next_index(index);
@@ -72,6 +82,7 @@ impl PathAlgorithm for AStar {
                     index = closed_nodes.next_index(index);
                 }
             }
+
             closed_nodes
                 .remove(best_node_index)
                 .and_then(|best_node| Self::reconstruct_path(best_node, &mut closed_nodes))

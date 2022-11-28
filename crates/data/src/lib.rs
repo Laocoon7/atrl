@@ -23,11 +23,13 @@ mod actors {
     pub use vision_type::*;
 }
 pub use actors::*;
+
 mod camera {
     mod camera_id;
     pub use camera_id::*;
 }
 pub use camera::*;
+
 mod components {
     pub use bevy::{
         prelude::{Component, ReflectComponent},
@@ -138,6 +140,7 @@ pub mod fov {
     mod visibility_map;
     pub use visibility_map::*;
 }
+
 mod pathfinding {
     mod astar {
         mod astar;
@@ -145,6 +148,12 @@ mod pathfinding {
         mod astar_node;
     }
     pub use astar::*;
+
+    mod dijkstra {
+        mod dijkstra;
+        pub use dijkstra::*;
+    }
+    pub use dijkstra::*;
 
     mod shared {
         mod path_algorithm;
