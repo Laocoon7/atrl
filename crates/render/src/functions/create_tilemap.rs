@@ -48,28 +48,26 @@ pub fn create_tilemap_on_entity<ZLevel: Into<f32>>(
             tile_storage.set(&tile_pos, tile_entity);
         }
     }
-    commands.entity(entity).insert(
-        (TilemapBundle {
-            texture: TilemapTexture::Single(texture_handle),
-            size: tilemap_size,
-            tile_size,
-            grid_size,
-            map_type,
-            storage: tile_storage,
-            transform: Transform {
-                translation: Vec3 {
-                    x: 0.5,
-                    y: 0.5,
-                    z: z_level.into(),
-                },
-                scale: Vec3 {
-                    x: tile_scale / tile_size.x,
-                    y: tile_scale / tile_size.y,
-                    z: 1.0,
-                },
-                ..Default::default()
+    commands.entity(entity).insert(TilemapBundle {
+        texture: TilemapTexture::Single(texture_handle),
+        size: tilemap_size,
+        tile_size,
+        grid_size,
+        map_type,
+        storage: tile_storage,
+        transform: Transform {
+            translation: Vec3 {
+                x: 0.5,
+                y: 0.5,
+                z: z_level.into(),
+            },
+            scale: Vec3 {
+                x: tile_scale / tile_size.x,
+                y: tile_scale / tile_size.y,
+                z: 1.0,
             },
             ..Default::default()
-        }),
-    );
+        },
+        ..Default::default()
+    });
 }

@@ -29,8 +29,11 @@ mod events {
         pub use map_events::*;
     }
     pub use map::*;
+
     mod event_cleaner;
     pub use event_cleaner::*;
+    mod actions;
+    pub use actions::*;
 }
 
 mod map {
@@ -85,6 +88,10 @@ mod systems {
     pub use perform_healing::*;
     mod whos_turn;
     pub use whos_turn::*;
+    mod movement;
+    pub use movement::*;
+    mod cull_dead;
+    pub use cull_dead::*;
 }
 
 mod ecs_plugin;

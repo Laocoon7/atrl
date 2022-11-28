@@ -204,7 +204,8 @@ impl From<i32> for CardinalDirection {
             i += 360;
         }
         use self::CardinalDirection::*;
-        match i % 360 { // loop 360deg back around.
+        match i % 360 {
+            // loop 360deg back around.
             0..45 => East,
             45..90 => North,
             90..135 => North,

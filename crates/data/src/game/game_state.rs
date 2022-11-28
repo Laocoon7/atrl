@@ -25,6 +25,7 @@ pub enum TurnState {
     #[default]
     AwaitingInput,
     Ticking,
+    Dead,
 }
 
 #[derive(Default, Clone, Copy, PartialEq, Hash, Eq, Debug)]
@@ -83,6 +84,7 @@ impl StateNext for TurnState {
         match self {
             Self::AwaitingInput => Some(Self::Ticking),
             Self::Ticking => Some(Self::AwaitingInput),
+            Self::Dead => None,
         }
     }
 }

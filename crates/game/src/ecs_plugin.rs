@@ -31,7 +31,8 @@ impl<T: StateNext, R: StateNext + Resource> EcsPlugin<T, R> {
     pub fn setup_events(self, app: &mut App) -> Self {
         app.init_resource::<Events<OnMapLoaded>>()
             .init_resource::<Events<OnMapTileEnter>>()
-            .init_resource::<Events<OnMapTileExit>>();
+            .init_resource::<Events<OnMapTileExit>>()
+            .init_resource::<Events<WantsToMove>>();
 
         app.add_system_set_to_stage(
             AtrlStage::CleanupEvents,
@@ -40,6 +41,7 @@ impl<T: StateNext, R: StateNext + Resource> EcsPlugin<T, R> {
                 .with_system(event_cleaner::<OnMapLoaded>)
                 .with_system(event_cleaner::<OnMapTileEnter>)
                 .with_system(event_cleaner::<OnMapTileExit>)
+                .with_system(event_cleaner::<WantsToMove>)
                 .into(),
         );
 
@@ -51,9 +53,8 @@ impl<T: StateNext, R: StateNext + Resource> Plugin for EcsPlugin<T, R> {
     fn build(&self, app: &mut App) {
         self.setup_stages(app).setup_events(app);
 
-        app 
-            // Player
-            .add_plugin(PlayerPlugin {
+        // Player
+        app.add_plugin(PlayerPlugin {
                 state_running: self.state_running,
             })
             // AI
@@ -77,9 +78,22 @@ impl<T: StateNext, R: StateNext + Resource> Plugin for EcsPlugin<T, R> {
             AtrlStage::ConsumeEvents,
             ConditionSet::new()
                 .run_in_state(self.state_running)
-                .run_if_resource_equals(self.turn_state_ticking)
-                .with_system(fov)
+                // .run_if_resource_equals(self.turn_state_ticking)
+                .with_system(movement)
                 .into(),
+        );
+
+        app.add_system_set_to_stage(
+            CoreStage::Last,
+            ConditionSet::new()
+                .run_in_state(self.state_running)
+                .label("cull_dead")
+                .with_system(cull_dead)
+                .into(),
+        )
+        .add_system_set_to_stage(
+            CoreStage::Last,
+            ConditionSet::new().run_in_state(self.state_running).after("cull_dead").with_system(fov).into(),
         );
     }
 }
