@@ -20,15 +20,16 @@ pub fn update_target_visual(
     commands: &mut Commands,
     tilesets: &Tilesets,
     target_q: &mut Query<&mut TargetVisualizer>,
+    ai_path: &Vec<IVec2>,
     actor: &Entity,
     next_pt: &IVec2,
-    ai_path: &Vec<IVec2>,
+    color: Color,
 ) {
     if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
         if !ai_path.is_empty() {
-            target_visualizer.update(commands, tilesets, *next_pt, ai_path[0], Color::RED);
+            target_visualizer.update(commands, tilesets, *next_pt, ai_path[0], color);
         } else {
-            target_visualizer.update(commands, tilesets, *next_pt, *next_pt, Color::RED);
+            target_visualizer.update(commands, tilesets, *next_pt, *next_pt, color);
         }
     }
 }

@@ -154,9 +154,10 @@ pub fn chase_action(
                             &mut commands,
                             &tilesets,
                             &mut target_q,
+                            &chase_path,
                             actor,
                             &next_pt,
-                            &chase_path,
+                            Color::RED,
                         );
 
                         move_events.send(WantsToMove(*actor, next_pt));

@@ -90,9 +90,10 @@ pub fn wander_action(
                             &mut commands,
                             &tilesets,
                             &mut target_q,
+                            &ai_path,
                             actor,
                             &next_pt,
-                            &ai_path,
+                            Color::YELLOW,
                         );
 
                         move_events.send(WantsToMove(*actor, next_pt));
