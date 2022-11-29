@@ -87,16 +87,20 @@ impl TurnManager {
     /// call this to re-add the entity to the queue
     /// time_spent is the amount of time used to perform the action.
     pub fn end_entity_turn(&mut self, entity: Entity, time_spent: u32) {
-        let next_time = self.current_time + time_spent;
-        let mut current_turn = self.turn_number;
-        if next_time >= TURN_TIME {
-            current_turn += 1;
+        let mut next_turn = self.turn_number;
+        let mut next_time = self.current_time + time_spent;
+        loop {
+            if next_time < TURN_TIME {
+                break;
+            }
+            next_turn += 1;
+            next_time -= TURN_TIME;
         }
 
-        if let Some(index) = self.get_index_after_time(current_turn, next_time) {
-            self.entities.insert_before(index, (current_turn, next_time, entity));
+        if let Some(index) = self.get_index_after_time(next_turn, next_time) {
+            self.entities.insert_before(index, (next_turn, next_time, entity));
         } else {
-            self.entities.insert_last((current_turn, next_time, entity));
+            self.entities.insert_last((next_turn, next_time, entity));
         }
     }
 
