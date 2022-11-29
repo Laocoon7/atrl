@@ -4,7 +4,7 @@ use crate::prelude::*;
 
 pub fn player_input(
     mut action_queue: ResMut<ActionQueue>,
-    mut query: Query<(&Transform, &ActionState<PlayerAction>), (With<MyTurn>, With<Player>)>,
+    mut query: Query<(&Transform, &ActionState<PlayerAction>), With<Player>>, // With<MyTurn>,
 ) {
     for (position, action_state) in query.iter_mut() {
         // Actions
