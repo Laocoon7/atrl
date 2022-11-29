@@ -115,7 +115,7 @@ pub fn chase_action(
                             // we are at the end of the chase, and we don't see the player.
                             //
                             // SWITCH TO WANDER_STATE
-                            ai_component.preferred_action = None;
+                            ai_component.preferred_action = Some(ActionType::Wait);
                             *action_state = ActionState::Failure;
 
                             return;

@@ -3,8 +3,8 @@ use std::time::Duration;
 use crate::prelude::*;
 
 pub fn player_input(
-    mut query: Query<(&Transform, &ActionState<PlayerAction>), With<Player>>,
     mut action_queue: ResMut<ActionQueue>,
+    mut query: Query<(&Transform, &ActionState<PlayerAction>), (With<MyTurn>, With<Player>)>,
 ) {
     for (position, action_state) in query.iter_mut() {
         // Actions

@@ -2,7 +2,7 @@ use std::collections::VecDeque;
 
 use crate::prelude::*;
 
-#[derive(Default, Resource)]
+#[derive(Debug, Default, Resource)]
 pub struct ActionQueue {
     actions: VecDeque<ActionType>,
 }

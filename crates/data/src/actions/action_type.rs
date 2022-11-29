@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-#[derive(Reflect, FromReflect)]
+#[derive(Debug, Reflect, FromReflect)]
 pub enum ActionType {
     Wait,
     Movement(IVec2),

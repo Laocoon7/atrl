@@ -102,8 +102,8 @@ pub fn wander_action(
                             &next_pt,
                             Color::YELLOW,
                         );
+
                         ai_component.preferred_action = Some(ActionType::Movement(next_pt));
-                        // move_events.send(WantsToMove(*actor, next_pt));
                     },
                 );
 
@@ -114,6 +114,7 @@ pub fn wander_action(
         } else {
             ai_component.preferred_action = Some(ActionType::Wait);
         }
+
         commands.insert_resource(TurnState::Processing);
     }
 }

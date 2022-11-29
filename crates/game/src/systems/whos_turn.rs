@@ -31,6 +31,7 @@ pub fn whos_turn(
 }
 
 pub fn perform_turns(
+    state: Res<TurnState>,
     mut commands: Commands,
     player_q: Query<&Player>,
     mut ai_q: Query<&mut AIComponent>,
@@ -52,7 +53,9 @@ pub fn perform_turns(
                 (entity, action_to_perform)
             } else {
                 info!("Waiting for ai to decide what to do...");
-                commands.insert_resource(TurnState::AIThinking);
+                if *state != TurnState::AIThinking {
+                    commands.insert_resource(TurnState::AIThinking);
+                }
                 return;
             }
         } else {
@@ -96,4 +99,5 @@ pub fn perform_turns(
     };
 
     turn_manager.end_entity_turn(entity, perform_time);
+    commands.entity(entity).remove::<MyTurn>();
 }
