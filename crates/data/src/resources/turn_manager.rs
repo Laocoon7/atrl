@@ -1,7 +1,5 @@
 use crate::prelude::*;
 
-pub const TURN_TIME: u32 = 1000;
-
 #[derive(Default, Resource)]
 pub struct TurnManager {
     turn_number: u32,

@@ -92,13 +92,7 @@ pub fn perform_turns(
     // We have an entity, and an action
     *waiting_on_entity = None;
 
-    let perform_time = match action {
-        ActionType::Wait => TURN_TIME,
-        ActionType::Movement(destination) => {
-            move_events.send(WantsToMove(entity, destination));
-            TURN_TIME
-        },
-    };
+    let perform_time = action.get_base_time_to_perform();
 
     commands.entity(entity).remove::<MyTurn>();
     turn_manager.end_entity_turn(entity, perform_time);
