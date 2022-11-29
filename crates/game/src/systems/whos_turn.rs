@@ -63,6 +63,8 @@ pub fn perform_turns(
             return;
         }
     } else if let Some(entity) = turn_manager.start_entity_turn() {
+        commands.entity(entity).insert(MyTurn);
+
         if player_q.get(entity).is_ok() {
             if let Some(action_to_perform) = action_queue.get_action() {
                 (entity, action_to_perform)
@@ -98,6 +100,6 @@ pub fn perform_turns(
         },
     };
 
-    turn_manager.end_entity_turn(entity, perform_time);
     commands.entity(entity).remove::<MyTurn>();
+    turn_manager.end_entity_turn(entity, perform_time);
 }
