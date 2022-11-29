@@ -8,19 +8,15 @@ use crate::prelude::*;
 
 static WANDER_RANGE: Lazy<Uniform<u32>> = Lazy::new(|| Uniform::new_inclusive(3, 10));
 
-#[derive(Debug, Reflect, Default, Clone, PartialEq, Eq)]
-pub enum WanderFailureBehavior {
-    #[default]
-    Wait,
-}
-
 // could be used for temporary storage for multi turn actions
 #[derive(Debug, Reflect, Default, Component, Clone, Eq, PartialEq)]
 #[reflect(Component)]
 pub struct Wander {
     path: Option<Vec<IVec2>>,
-    // What to do if entity has no available places to move
-    fail_behavior: WanderFailureBehavior,
+}
+
+impl Wander {
+    pub fn new(path: Vec<IVec2>) -> Self { Self { path: Some(path) } }
 }
 
 pub fn wander_action(
@@ -78,18 +74,11 @@ pub fn wander_action(
             },
             Executing => {},
         }
+
         let wander_path = std::mem::take(&mut wander.path);
         let ai_path = wander_path.and_then(|p| {
             if p.is_empty() || !map.can_place_actor(p[0], movement_component.0) {
-                if let Some(path) = generate_wander_path(rng, ai_pos, movement_component.0, map) {
-                    if path.len() == 0 {
-                        None
-                    } else {
-                        Some(path)
-                    }
-                } else {
-                    None
-                }
+                generate_wander_path(rng, ai_pos, movement_component.0, map).filter(|path| !path.is_empty())
             } else {
                 Some(p)
             }

@@ -115,11 +115,9 @@ pub fn chase_action(
                             // we are at the end of the chase, and we don't see the player.
                             //
                             // SWITCH TO WANDER_STATE
-                            //
-                            // We can technically still move towards this point here
-                            // but I'm not sure how to switch from chase -> wander
-                            // I'll try this for now:
+                            ai_component.preferred_action = None;
                             *action_state = ActionState::Failure;
+
                             return;
                         } else if map.can_place_actor(path[path.len() - 1], movement_component.0) {
                             // we have a valid path, and the next step is also valid!
@@ -182,6 +180,7 @@ pub fn chase_action(
                         ActionType::Movement(next_pt)
                     },
                 );
+
                 ai_component.preferred_action = Some(action);
                 commands.insert_resource(TurnState::Processing);
             },

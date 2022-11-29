@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-const MAX_AI_ACTORS: i32 = 10;
+const MAX_AI_ACTORS: i32 = 1;
 
 pub fn spawn_ai(
     tilesets: Tilesets,
@@ -29,6 +29,7 @@ pub fn spawn_ai(
         if actor_count >= MAX_AI_ACTORS {
             break;
         }
+
         for x in 0..10 {
             if actor_count >= MAX_AI_ACTORS {
                 break;

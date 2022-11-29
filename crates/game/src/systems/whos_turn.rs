@@ -32,12 +32,12 @@ pub fn whos_turn(
 
 pub fn perform_turns(
     mut commands: Commands,
+    player_q: Query<&Player>,
+    mut ai_q: Query<&mut AIComponent>,
     mut turn_manager: ResMut<TurnManager>,
     mut action_queue: ResMut<ActionQueue>,
     mut move_events: EventWriter<WantsToMove>,
-    player_q: Query<&Player>,
-    mut ai_q: Query<&mut AIComponent>,
-    mut waiting_on_entity: Local<Option<(Entity, bool)>>,
+    mut waiting_on_entity: Local<Option<(Entity, bool)>>, // (entity, is_player)
 ) {
     let (entity, action) = if let Some((entity, is_player)) = *waiting_on_entity {
         if is_player {
