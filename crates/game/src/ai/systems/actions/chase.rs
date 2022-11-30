@@ -78,11 +78,32 @@ pub fn chase_action(
                 if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
                     target_visualizer.clear(&mut commands);
                 }
+                ai_component.preferred_action = None;
                 info!("{} cancelled chase!", name);
                 *action_state = Failure;
             },
             Executing => {
                 info!("{} executing chase!", name);
+
+                let position = if entity_in_fov(map, fov, vision, ai_pos, player_pos) {
+                    chase.last_seen_pt = Some(player_pos);
+                    player_pos
+                } else {
+                    let Some(last_seen) = chase.last_seen_pt else {
+                        error!("Executing chase with no target.");
+                        ai_component.preferred_action = Some(ActionType::Wait);
+                        return;
+                    };
+                    
+                    last_seen
+                };
+
+                ai_component.preferred_action = Some(ActionType::Movement(position.as_uvec2()));
+                return;
+
+
+
+
                 // if update_path_target is_some() update the path
                 // otherwise we will assume chase.path is valid
                 let update_path_target = if entity_in_fov(map, fov, vision, ai_pos, player_pos) {

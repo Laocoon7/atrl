@@ -54,8 +54,9 @@ impl<T: StateNext, R: StateNext + Resource> Plugin for EcsPlugin<T, R> {
     fn build(&self, app: &mut App) {
         self.setup_stages(app).setup_events(app);
 
-        // Player
-        app.add_plugin(PlayerPlugin {
+        app
+            // Player
+            .add_plugin(PlayerPlugin {
                 state_running: self.state_running,
             })
             // AI

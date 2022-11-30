@@ -85,6 +85,12 @@ impl TurnManager {
     /// call this to re-add the entity to the queue
     /// time_spent is the amount of time used to perform the action.
     pub fn end_entity_turn(&mut self, entity: Entity, time_spent: u32) {
+        // shortcut no time spent:
+        if time_spent == 0 {
+            self.entities.insert_first((self.turn_number, self.current_time, entity));
+            return;
+        }
+
         let mut next_turn = self.turn_number;
         let mut next_time = self.current_time + time_spent;
         loop {

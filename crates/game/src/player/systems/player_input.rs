@@ -6,12 +6,11 @@ const PRESSED_DURATION: Duration = Duration::from_millis(500);
 
 pub fn player_input(
     mut action_queue: ResMut<ActionQueue>,
-    mut query: Query<(&Transform, &ActionState<PlayerAction>), With<Player>>, // With<MyTurn>,
+    mut query: Query<&ActionState<PlayerAction>, With<Player>>,
 ) {
-    for (position, action_state) in query.iter_mut() {
+    for action_state in query.iter_mut() {
         // Actions
         if action_state.just_pressed(PlayerAction::Wait) {
-            info!("Player waited");
             action_queue.add_action(ActionType::Wait);
         }
 
@@ -22,9 +21,7 @@ pub fn player_input(
                     action_state.current_duration(input_direction) > PRESSED_DURATION)
             {
                 if let Some(direction) = input_direction.direction() {
-                    let last_position = position.get();
-                    let destination = last_position + direction.coord();
-                    action_queue.add_action(ActionType::Movement(destination));
+                    action_queue.add_action(ActionType::MovementDelta(direction.coord()));
                 }
             }
         }
