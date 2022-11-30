@@ -171,7 +171,7 @@ impl<T: GridParam, const LAYER_COUNT: usize> Grid3d<T, LAYER_COUNT> {
     pub fn height(&self) -> u32 { self.size.height() }
 
     #[inline]
-    pub fn size(&self) -> UVec2 { self.size }
+    pub const fn size(&self) -> UVec2 { self.size }
 
     #[inline]
     pub fn in_bounds(&self, pos: impl Point2d) -> bool { pos.is_valid(self.size()) }
@@ -212,11 +212,7 @@ impl<T: GridParam, const LAYER_COUNT: usize> Grid3d<T, LAYER_COUNT> {
 
     #[inline]
     pub fn get<LayerId: Into<usize>>(&self, layer_id: LayerId, index: impl Point2d) -> Option<&T> {
-        if let Some(layer) = self.get_grid_by_layer(layer_id) {
-            layer.get(index)
-        } else {
-            None
-        }
+        self.get_grid_by_layer(layer_id).and_then(|layer| layer.get(index))
     }
 
     #[inline]
@@ -225,11 +221,7 @@ impl<T: GridParam, const LAYER_COUNT: usize> Grid3d<T, LAYER_COUNT> {
         layer_id: LayerId,
         index: impl Point2d,
     ) -> Option<&mut T> {
-        if let Some(layer) = self.get_grid_by_layer_mut(layer_id) {
-            layer.get_mut(index)
-        } else {
-            None
-        }
+        self.get_grid_by_layer_mut(layer_id).and_then(|layer| layer.get_mut(index))
     }
 
     #[inline]
@@ -253,11 +245,7 @@ impl<T: GridParam, const LAYER_COUNT: usize> Grid3d<T, LAYER_COUNT> {
         index: impl Point2d,
         value: T,
     ) -> Option<T> {
-        if let Some(layer) = self.get_grid_by_layer_mut(layer_id) {
-            layer.set(index, value)
-        } else {
-            None
-        }
+        self.get_grid_by_layer_mut(layer_id).and_then(|layer| layer.set(index, value))
     }
 
     #[inline]
