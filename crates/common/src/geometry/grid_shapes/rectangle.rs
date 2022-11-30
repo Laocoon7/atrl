@@ -83,11 +83,13 @@ impl Rectangle {
 
     #[inline]
     pub fn as_triangles(&self) -> (Triangle, Triangle) {
-        let max = IVec2::new(self.right(), self.top());
-        let min = IVec2::new(self.left(), self.bottom());
+        let bottom_left = IVec2::new(self.left(), self.bottom());
+        let top_left = IVec2::new(self.left(), self.top());
+        let bottom_right = IVec2::new(self.right(), self.bottom());
+        let top_right = IVec2::new(self.right(), self.top());
         (
-            Triangle::new(self.min(), max, min),
-            Triangle::new(self.max(), max, min),
+            Triangle::new(bottom_left, top_right, top_left),
+            Triangle::new(bottom_left, bottom_right, top_right),
         )
     }
 
