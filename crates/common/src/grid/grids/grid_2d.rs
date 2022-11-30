@@ -8,11 +8,13 @@ pub type GridIter<'a, T> = slice::Iter<'a, T>;
 pub type GridIterMut<'a, T> = slice::IterMut<'a, T>;
 pub type GridChunks<'a, T> = slice::Chunks<'a, T>;
 pub type GridChunksMut<'a, T> = slice::ChunksMut<'a, T>;
+
 #[derive(Serialize, Deserialize, Default, Debug, Clone, Hash, PartialEq, Eq)]
 pub struct Grid<T: GridParam> {
     pub size: UVec2,
     pub cells: Vec<T>,
 }
+
 // Grid Layer
 impl<T: GridParam> GridLayer<T> for Grid<T> {
     type MutableReturn<'a> = &'a mut T;
@@ -169,6 +171,7 @@ impl<T: GridParam> GridLayer<T> for Grid<T> {
         std::mem::replace(&mut self.cells[index], value)
     }
 }
+
 impl<T: GridParam> GridIterable<T> for Grid<T> {
     type IterChunkMutReturn<'a> = GridChunksMut<'a, T>;
     type IterChunkReturn<'a> = GridChunks<'a, T>;
@@ -220,6 +223,7 @@ impl<T: GridParam> GridIterable<T> for Grid<T> {
         return self.cells[x..].iter().step_by(w);
     }
 }
+
 ///////////////////////////////////////////////////////////////////////////
 // Deref/DerefMut
 ///////////////////////////////////////////////////////////////////////////
@@ -229,10 +233,12 @@ impl<T: GridParam> std::ops::Deref for Grid<T> {
 
     fn deref(&self) -> &Self::Target { &self.cells }
 }
+
 // DerefMut
 impl<T: GridParam> std::ops::DerefMut for Grid<T> {
     fn deref_mut(&mut self) -> &mut Self::Target { &mut self.cells }
 }
+
 ///////////////////////////////////////////////////////////////////////////
 // Indexing
 ///////////////////////////////////////////////////////////////////////////
@@ -246,12 +252,14 @@ impl<T: Copy + GridParam> std::ops::IndexMut<usize> for Grid<T> {
     #[inline]
     fn index_mut(&mut self, index: usize) -> &mut Self::Output { &mut self.cells[index] }
 }
+
 impl<T: Copy + GridParam, P: Point2d> Index<P> for Grid<T> {
     type Output = T;
 
     #[inline]
     fn index(&self, index: P) -> &T { self.get_unchecked(index) }
 }
+
 impl<T: Copy + GridParam, P: Point2d> IndexMut<P> for Grid<T> {
     #[inline]
     fn index_mut(&mut self, index: P) -> &mut Self::Output { self.get_mut_unchecked(index) }

@@ -2,6 +2,8 @@ use std::time::Duration;
 
 use crate::prelude::*;
 
+const PRESSED_DURATION: Duration = Duration::from_millis(500);
+
 pub fn player_input(
     mut action_queue: ResMut<ActionQueue>,
     mut query: Query<(&Transform, &ActionState<PlayerAction>), With<Player>>, // With<MyTurn>,
@@ -17,7 +19,7 @@ pub fn player_input(
         for input_direction in PlayerAction::DIRECTIONS {
             if action_state.just_pressed(input_direction) ||
                 (action_state.pressed(input_direction) &&
-                    action_state.current_duration(input_direction) > Duration::from_millis(500))
+                    action_state.current_duration(input_direction) > PRESSED_DURATION)
             {
                 if let Some(direction) = input_direction.direction() {
                     let last_position = position.get();
