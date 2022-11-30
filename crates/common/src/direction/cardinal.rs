@@ -136,25 +136,6 @@ impl CardinalDirection {
     pub const fn combine(self, other: Self) -> Option<OrdinalDirection> {
         OrdinalDirection::from_cardinals(self, other)
     }
-
-    pub fn from_degrees(degrees: f32) -> Self {
-        match degrees {
-            d if d > 0.0 && d <= 90.0 => Self::South,
-            d if d > 90.0 && d <= 180.0 => Self::West,
-            d if d > 180.0 && d <= 270.0 => Self::North,
-            // d if d > 90.0 && d < 180.0 => self.right90().right90(),
-            // d if d > 180.0 && d < 270.0 => self.right90().right90().right90(),
-            // d if d > 270.0 && d < 360.0 => self.right90().right90().right90().right90(),
-            _ => Self::East,
-        }
-        // match degrees {
-        //     0.0..=90.0 => *self = Self::North,
-        //     90.0 => *self = Self::East,
-        //     180.0 => *self = Self::South,
-        //     270.0 => *self = Self::West,
-        //     _ => panic!("Invalid degrees: {}", degrees),
-        // }
-    }
 }
 
 impl From<CardinalDirection> for [i32; 2] {
@@ -194,7 +175,6 @@ impl From<CardinalDirection> for i32 {
 }
 
 impl From<i32> for CardinalDirection {
-    /// See issue [#37854](https://github.com/rust-lang/rust/issues/37854)
     fn from(i: i32) -> Self {
         let mut i = i;
         loop {
@@ -206,14 +186,11 @@ impl From<i32> for CardinalDirection {
         use self::CardinalDirection::*;
         match i % 360 {
             // loop 360deg back around.
-            0..45 => East,
-            45..90 => North,
-            90..135 => North,
-            135..180 => West,
-            180..225 => West,
-            225..270 => South,
-            270..315 => South,
-            315..360 => East,
+            0..=44 => East,
+            45..=134 => North,
+            135..=224 => West,
+            225..=314 => South,
+            315..=359 => East,
             _ => East, // this can't pop as i >= 0 and < 360
         }
     }
