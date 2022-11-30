@@ -18,4 +18,3 @@ use crate::prelude::*;
 )]
 #[reflect(Component)]
 pub struct LocalPosition(pub UVec2);
-

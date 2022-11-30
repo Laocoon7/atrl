@@ -82,7 +82,8 @@ fn spawn_ai_at(
                 mob: Mob,
                 ai: AIComponent::aggressive(),
                 name: Name::new(name.to_string()),
-                position: WorldPosition(world_position),
+                world_position: WorldPosition(world_position),
+                local_position: LocalPosition(local_position),
                 health: Health::new(5, 5),
                 sprite: SpriteSheetBundle {
                     sprite: TextureAtlasSprite {

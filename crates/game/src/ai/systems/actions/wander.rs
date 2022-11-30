@@ -12,11 +12,8 @@ static WANDER_RANGE: Lazy<Uniform<u32>> = Lazy::new(|| Uniform::new_inclusive(3,
 #[derive(Debug, Reflect, Default, Component, Clone, Eq, PartialEq)]
 #[reflect(Component)]
 pub struct Wander {
-    path: Option<Vec<IVec2>>,
-}
-
-impl Wander {
-    pub fn new(path: Vec<IVec2>) -> Self { Self { path: Some(path) } }
+    my_previous_location: UVec2,
+    destination: Option<UVec2>,
 }
 
 pub fn wander_action(
@@ -26,7 +23,7 @@ pub fn wander_action(
     mut manager: ResMut<MapManager>,
     mut target_q: Query<&mut TargetVisualizer>,
     mut action_q: Query<(&Actor, &mut ActionState, &mut Wander, &ActionSpan)>,
-    mut spatial_q: Query<(&WorldPosition, &LocalPosition, &Movement, &Name, &mut AIComponent), Without<Player>>,
+    mut spatial_q: Query<(&WorldPosition, &LocalPosition, &Name, &mut AIComponent), Without<Player>>,
 ) {
     use ActionState::*;
 
@@ -39,19 +36,12 @@ pub fn wander_action(
             return
         };
 
-        let Ok((ai_world_position, ai_local_position, movement_component, name, mut ai_component)) =
+        let Ok((ai_world_position, ai_local_position, name, mut ai_component)) =
         spatial_q.get_mut(*actor) else {
                 error!("Actor must have spatial components");
                 return
             };
 
-        if ai_component.preferred_action.is_some() {
-            // already wandering, quick return;
-            commands.insert_resource(TurnState::Processing);
-            return;
-        }
-
-        let ai_pos = ai_local_position.0;
         match *action_state {
             // Init | Success | Failure
             Init | Success | Failure => {
@@ -59,11 +49,13 @@ pub fn wander_action(
                 continue;
             },
             Cancelled => {
+                ai_component.preferred_action = None;
+                *action_state = Failure;
+
                 if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
                     target_visualizer.clear(&mut commands);
                 }
-                ai_component.preferred_action = None;
-                *action_state = Failure;
+
                 continue;
             },
 
@@ -71,65 +63,41 @@ pub fn wander_action(
             Requested => {
                 info!("{} gonna start wandering!", name);
                 *action_state = Executing;
-                wander.path = generate_wander_path(rng, ai_pos, movement_component.0, map);
             },
             Executing => {},
         }
 
-        let wander_path = std::mem::take(&mut wander.path);
-        let ai_path = wander_path.and_then(|p| {
-            if p.is_empty() || !map.can_place_actor(p[0], movement_component.0) {
-                generate_wander_path(rng, ai_pos, movement_component.0, map).filter(|path| !path.is_empty())
-            } else {
-                Some(p)
-            }
-        });
+        let destination = match std::mem::take(&mut wander.destination) {
+            Some(destination) => {
+                if Line::new(ai_local_position.0, destination).get_count() < 1 {
+                    generate_wander_path(rng, ai_local_position.0).as_uvec2()
+                } else {
+                    destination
+                }
+            },
+            None => generate_wander_path(rng, ai_local_position.0).as_uvec2(),
+        };
 
-        if let Some(mut ai_path) = ai_path {
-            if map.can_place_actor(ai_path[0], movement_component.0) {
-                ai_path.pop().map_or_else(
-                    || {
-                        // We have reached the end of our trail!
-                        *action_state = Success;
-                        info!("{} has reached the end of their wander path!", name);
-                    },
-                    |next_pt| {
-                        update_target_visual(
-                            &mut commands,
-                            &tilesets,
-                            &mut target_q,
-                            &ai_path,
-                            actor,
-                            &next_pt,
-                            Color::YELLOW,
-                        );
+        ai_component.preferred_action = Some(ActionType::Movement((ai_world_position.0, destination)));
+        wander.my_previous_location = ai_local_position.0;
+        wander.destination = Some(destination);
 
-                        ai_component.preferred_action = Some(ActionType::Movement(next_pt));
-                    },
-                );
-
-                wander.path = Some(ai_path);
-            } else {
-                ai_component.preferred_action = Some(ActionType::Wait);
-            }
-        } else {
-            ai_component.preferred_action = Some(ActionType::Wait);
+        if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
+            target_visualizer.update(
+                &mut commands,
+                &tilesets,
+                ai_local_position.0,
+                destination,
+                Color::WHITE,
+            );
         }
-
-        commands.insert_resource(TurnState::Processing);
     }
 }
 
-fn generate_wander_path(
-    rng: &mut impl RngCore,
-    ai_pos: UVec2,
-    movement_type: u8,
-    map_provider: &impl PathProvider,
-) -> Option<Vec<IVec2>> {
+fn generate_wander_path(rng: &mut impl RngCore, ai_pos: UVec2) -> IVec2 {
     let wander_radius = WANDER_RANGE.sample(rng);
     let wander_circle = Circle::new(ai_pos, wander_radius);
 
     // Default to the circle center
-    let destination = wander_circle.iter().choose(rng).unwrap_or_else(|| wander_circle.center());
-    PathFinder::Astar.compute(ai_pos.as_ivec2(), destination, movement_type, true, map_provider)
+    wander_circle.iter().choose(rng).unwrap_or_else(|| wander_circle.center())
 }

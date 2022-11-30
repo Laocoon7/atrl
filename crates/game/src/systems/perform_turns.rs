@@ -1,19 +1,15 @@
 use crate::prelude::*;
 
 pub fn perform_turns(
-    mut commands: Commands,
-    state: Res<TurnState>,
-
     q_player: Query<&Player>,
     mut q_ai: Query<&mut AIComponent>,
 
     mut q_position: Query<(&mut WorldPosition, &mut LocalPosition)>,
-    
+    q_movement: Query<&Movement>,
+
     mut map_manager: ResMut<MapManager>,
     mut turn_manager: ResMut<TurnManager>,
     mut action_queue: ResMut<ActionQueue>,
-
-    mut move_events: EventWriter<WantsToMove>,
 ) {
     loop {
         // Select next entity
@@ -44,7 +40,13 @@ pub fn perform_turns(
             };
 
             loop {
-                match perform_action(entity, action, &mut map_manager, &mut q_position) {
+                match perform_action(
+                    entity,
+                    action,
+                    &mut map_manager,
+                    &mut q_position,
+                    &q_movement,
+                ) {
                     Ok(time_spent) => {
                         turn_manager.end_entity_turn(entity, time_spent);
                         break;
@@ -52,7 +54,6 @@ pub fn perform_turns(
                     Err(a) => action = a,
                 }
             }
-
         } else {
             error!("No entities waiting for a turn!");
             return;
@@ -60,16 +61,34 @@ pub fn perform_turns(
     }
 }
 
-fn perform_action(entity: Entity, action: ActionType, map_manager: &mut ResMut<MapManager>, q_position: &mut Query<(&mut WorldPosition, &mut LocalPosition)>) -> Result<u32, ActionType> {
+fn perform_action(
+    entity: Entity,
+    action: ActionType,
+    map_manager: &mut ResMut<MapManager>,
+    q_position: &mut Query<(&mut WorldPosition, &mut LocalPosition)>,
+    q_movement: &Query<&Movement>,
+) -> Result<u32, ActionType> {
     match action {
-        ActionType::Wait => Ok(ActionType::Wait.get_base_time_to_perform()),
+        ActionType::Wait => {
+            info!("Waiting");
+            Ok(ActionType::Wait.get_base_time_to_perform())
+        },
         ActionType::Movement(destination) => {
-            if try_move(entity, map_manager, q_position, destination.0, destination.1).is_ok() {
-                return Ok(action.get_base_time_to_perform())
-            } else {
-                return Err(ActionType::Wait)
+            match try_move(
+                entity,
+                map_manager,
+                q_position,
+                q_movement,
+                destination.0,
+                destination.1,
+            ) {
+                Ok(_) => {
+                    info!("Moved");
+                    Ok(action.get_base_time_to_perform())
+                },
+                Err(a) => Err(a),
             }
-        }
+        },
         ActionType::MovementDelta(delta) => {
             if let Ok((world_position, local_position)) = q_position.get(entity) {
                 let mut world_position = world_position.0;
@@ -90,22 +109,68 @@ fn perform_action(entity: Entity, action: ActionType, map_manager: &mut ResMut<M
                     local_position.y -= GRID_HEIGHT as i32;
                     world_position.y += 1;
                 }
-                return Err(ActionType::Movement((world_position, local_position.as_uvec2())))
+                return Err(ActionType::Movement((
+                    world_position,
+                    local_position.as_uvec2(),
+                )));
             } else {
-                return Err(ActionType::Wait)
+                return Err(ActionType::Wait);
             }
-            
-        }
+        },
     }
 }
 
-fn try_move(entity: Entity, map_manager: &mut ResMut<MapManager>, q_position: &mut Query<(&mut WorldPosition, &mut LocalPosition)>, _world_destination: IVec3, local_destination: UVec2) -> Result<(), ()> {
-    
-    // try to generate a path.
-
-    // move one space on that path.
-
-    // return ok if successful
-
-    Err(())
+fn try_move(
+    entity: Entity,
+    map_manager: &mut ResMut<MapManager>,
+    q_position: &mut Query<(&mut WorldPosition, &mut LocalPosition)>,
+    q_movement: &Query<&Movement>,
+    _world_destination: IVec3,
+    local_destination: UVec2,
+) -> Result<(), ActionType> {
+    if let Ok((_from_world_position, mut from_local_position)) = q_position.get_mut(entity) {
+        if let Ok(movement_component) = q_movement.get(entity) {
+            if let Some(map) = map_manager.get_current_map_mut() {
+                // try to generate a path.
+                if let Some(mut path) = PathFinder::Astar.compute(
+                    from_local_position.0,
+                    local_destination,
+                    movement_component.0,
+                    true,
+                    map,
+                ) {
+                    // move one space on that path.
+                    if let Some(destination) = path.pop() {
+                        // TODO: check if is closed door
+                        // and return Err(ActionType::OpenDoor(destination))
+                        if map.try_move_actor(from_local_position.0, destination, movement_component.0) {
+                            from_local_position.0 = destination.as_uvec2();
+                            return Ok(());
+                        } else {
+                            info!("{:?} is blocked!", destination);
+                            return Err(ActionType::Wait);
+                        }
+                    } else {
+                        info!(
+                            "Couldn't find a long enough path to {:?}",
+                            local_destination
+                        );
+                        return Err(ActionType::Wait);
+                    }
+                } else {
+                    info!("Couldn't find a path to {:?}", local_destination);
+                    return Err(ActionType::Wait);
+                }
+            } else {
+                info!("Couldn't find the map.");
+                return Err(ActionType::Wait);
+            }
+        } else {
+            info!("Couldn't find a movement component.");
+            return Err(ActionType::Wait);
+        }
+    } else {
+        info!("Couldn't find entities position components.");
+        return Err(ActionType::Wait);
+    }
 }

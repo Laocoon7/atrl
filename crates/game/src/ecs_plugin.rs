@@ -75,7 +75,7 @@ impl<T: StateNext, R: StateNext + Resource> Plugin for EcsPlugin<T, R> {
             AtrlStage::ConsumeEvents,
             ConditionSet::new()
                 .run_in_state(self.state_running)
-                .run_if_resource_equals(self.turn_state_processing)
+                //.run_if_resource_equals(self.turn_state_processing)
                 .with_system(perform_turns)
                 .into(),
         );
@@ -84,7 +84,7 @@ impl<T: StateNext, R: StateNext + Resource> Plugin for EcsPlugin<T, R> {
             AtrlStage::ConsumeEvents,
             ConditionSet::new()
                 .run_in_state(self.state_running)
-                .run_if_resource_equals(self.turn_state_processing)
+                //.run_if_resource_equals(self.turn_state_processing)
                 .with_system(movement)
                 .into(),
         );
