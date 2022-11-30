@@ -43,21 +43,3 @@ pub fn update_target_visual(
         }
     }
 }
-
-pub fn end_turn_requeue(
-    commands: &mut Commands,
-    turn_manager: &mut TurnManager,
-    entity: Entity,
-    _ticks_until_turn: u32,
-) {
-    println!("End turn: {:#?}", entity);
-
-    // FIX: What should this be?
-    let time_spent = TURN_TIME;
-
-    turn_manager.end_entity_turn(entity, time_spent);
-    commands.entity(entity).remove::<MyTurn>();
-    // commands.entity(entity).remove::<MyTurn>().insert(WaitingForTurn {
-    //     next_turn_tick: todo!(),
-    // });
-}

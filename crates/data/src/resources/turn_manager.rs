@@ -87,6 +87,7 @@ impl TurnManager {
     pub fn end_entity_turn(&mut self, entity: Entity, time_spent: u32) {
         let mut next_turn = self.turn_number;
         let mut next_time = self.current_time + time_spent;
+        
         loop {
             if next_time < TURN_TIME {
                 break;
