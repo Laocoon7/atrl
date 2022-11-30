@@ -26,7 +26,7 @@ pub fn wander_action(
     mut manager: ResMut<MapManager>,
     mut target_q: Query<&mut TargetVisualizer>,
     mut action_q: Query<(&Actor, &mut ActionState, &mut Wander, &ActionSpan)>,
-    mut spatial_q: Query<(&Transform, &Movement, &Name, &mut AIComponent), Without<Player>>,
+    mut spatial_q: Query<(&WorldPosition, &LocalPosition, &Movement, &Name, &mut AIComponent), Without<Player>>,
 ) {
     use ActionState::*;
 
@@ -39,7 +39,7 @@ pub fn wander_action(
             return
         };
 
-        let Ok((position, movement_component, name, mut ai_component)) =
+        let Ok((ai_world_position, ai_local_position, movement_component, name, mut ai_component)) =
         spatial_q.get_mut(*actor) else {
                 error!("Actor must have spatial components");
                 return
@@ -51,7 +51,7 @@ pub fn wander_action(
             return;
         }
 
-        let ai_pos = position.get();
+        let ai_pos = ai_local_position.0;
         match *action_state {
             // Init | Success | Failure
             Init | Success | Failure => {
@@ -62,6 +62,7 @@ pub fn wander_action(
                 if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
                     target_visualizer.clear(&mut commands);
                 }
+                ai_component.preferred_action = None;
                 *action_state = Failure;
                 continue;
             },
@@ -121,7 +122,7 @@ pub fn wander_action(
 
 fn generate_wander_path(
     rng: &mut impl RngCore,
-    ai_pos: IVec2,
+    ai_pos: UVec2,
     movement_type: u8,
     map_provider: &impl PathProvider,
 ) -> Option<Vec<IVec2>> {
@@ -130,5 +131,5 @@ fn generate_wander_path(
 
     // Default to the circle center
     let destination = wander_circle.iter().choose(rng).unwrap_or_else(|| wander_circle.center());
-    PathFinder::Astar.compute(ai_pos, destination, movement_type, true, map_provider)
+    PathFinder::Astar.compute(ai_pos.as_ivec2(), destination, movement_type, true, map_provider)
 }

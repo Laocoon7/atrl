@@ -100,6 +100,12 @@ fn perform_action(entity: Entity, action: ActionType, map_manager: &mut ResMut<M
 }
 
 fn try_move(entity: Entity, map_manager: &mut ResMut<MapManager>, q_position: &mut Query<(&mut WorldPosition, &mut LocalPosition)>, _world_destination: IVec3, local_destination: UVec2) -> Result<(), ()> {
-    // TODO:
+    
+    // try to generate a path.
+
+    // move one space on that path.
+
+    // return ok if successful
+
     Err(())
 }

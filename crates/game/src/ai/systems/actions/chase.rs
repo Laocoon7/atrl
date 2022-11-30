@@ -5,7 +5,7 @@ use crate::prelude::*;
 #[derive(Debug, Default, Component, Clone)]
 pub struct ChaseActor {
     path: Option<Vec<IVec2>>,
-    last_seen_pt: Option<IVec2>,
+    last_seen_pt: Option<(IVec3, UVec2)>,
 }
 
 pub fn chase_action(
@@ -13,11 +13,12 @@ pub fn chase_action(
     mut commands: Commands,
     mut manager: ResMut<MapManager>,
     mut target_q: Query<&mut TargetVisualizer>,
-    player_q: Query<(Entity, &Transform), With<Player>>,
+    player_q: Query<(Entity, &WorldPosition, &LocalPosition), With<Player>>,
     mut action_q: Query<(&Actor, &mut ActionState, &mut ChaseActor, &ActionSpan)>,
     mut ai_q: Query<
         (
-            &Transform,
+            &WorldPosition,
+            &LocalPosition,
             &FieldOfView,
             &Vision,
             &Movement,
@@ -32,8 +33,8 @@ pub fn chase_action(
     for (Actor(actor), mut action_state, mut chase, span) in action_q.iter_mut() {
         let _guard = span.span().enter();
 
-        let (_player_entity, player_transform) = player_q.single();
-        let Ok((position, fov, vision, movement_component, name, mut ai_component)) =
+        let (_player_entity, player_world_position, player_local_position) = player_q.single();
+        let Ok((ai_world_position, ai_local_position, fov, vision, movement_component, name, mut ai_component)) =
             ai_q.get_mut(*actor) else {
                 error!("Actor must have required components");
                 return
@@ -45,8 +46,8 @@ pub fn chase_action(
             return;
         }
 
-        let ai_pos = position.get();
-        let player_pos = player_transform.get();
+        let ai_pos = ai_local_position.0;
+        let player_pos = player_local_position.0;
         let Some(map) = manager.get_current_map_mut() else {
             error!("No map found");
             return
@@ -62,7 +63,7 @@ pub fn chase_action(
         // So this acts like a skip frame, where it sets the action to evaluating, then immediately
         // evaluates
         if *action_state == Requested {
-            chase.last_seen_pt = Some(player_pos);
+            chase.last_seen_pt = Some((player_world_position.0, player_local_position.0));
             chase.path = Some(generate_chase_path(
                 ai_pos,
                 player_pos,
@@ -86,6 +87,7 @@ pub fn chase_action(
                 info!("{} executing chase!", name);
 
                 let position = if entity_in_fov(map, fov, vision, ai_pos, player_pos) {
+                    let player_pos = (player_world_position.0, player_local_position.0);
                     chase.last_seen_pt = Some(player_pos);
                     player_pos
                 } else {
@@ -98,11 +100,10 @@ pub fn chase_action(
                     last_seen
                 };
 
-                ai_component.preferred_action = Some(ActionType::Movement(position.as_uvec2()));
-                return;
+                ai_component.preferred_action = Some(ActionType::Movement(position));
 
 
-
+/*
 
                 // if update_path_target is_some() update the path
                 // otherwise we will assume chase.path is valid
@@ -204,6 +205,7 @@ pub fn chase_action(
 
                 ai_component.preferred_action = Some(action);
                 commands.insert_resource(TurnState::Processing);
+                */
             },
 
             // Init | Success | Failure
@@ -214,12 +216,12 @@ pub fn chase_action(
     }
 }
 fn generate_chase_path(
-    ai_pos: IVec2,
-    target_pos: IVec2,
+    ai_pos: UVec2,
+    target_pos: UVec2,
     movement_type: u8,
     map_provider: &impl PathProvider,
 ) -> Vec<IVec2> {
-    PathFinder::Astar.compute(ai_pos, target_pos, movement_type, true, map_provider).unwrap_or_default()
+    PathFinder::Astar.compute(ai_pos.as_ivec2(), target_pos.as_ivec2(), movement_type, true, map_provider).unwrap_or_default()
 }
 
 const fn can_attack(_position: IVec2) -> bool { false }
