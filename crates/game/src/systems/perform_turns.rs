@@ -23,20 +23,18 @@ pub fn perform_turns(
                     turn_manager.end_entity_turn(entity, 0);
                     return;
                 }
-            } else {
-                if let Ok(mut ai_component) = q_ai.get_mut(entity) {
-                    if let Some(a) = std::mem::take(&mut ai_component.preferred_action) {
-                        a
-                    } else {
-                        turn_manager.end_entity_turn(entity, 0);
-                        return;
-                    }
+            } else if let Ok(mut ai_component) = q_ai.get_mut(entity) {
+                if let Some(a) = std::mem::take(&mut ai_component.preferred_action) {
+                    a
                 } else {
-                    error!("AI does not have an AI Component.");
-                    // don't add the entity back to the queue...
-                    // just go to the next one and try to recover
-                    continue;
+                    turn_manager.end_entity_turn(entity, 0);
+                    return;
                 }
+            } else {
+                error!("AI does not have an AI Component.");
+                // don't add the entity back to the queue...
+                // just go to the next one and try to recover
+                continue;
             };
 
             loop {
@@ -109,12 +107,12 @@ fn perform_action(
                     local_position.y -= GRID_HEIGHT as i32;
                     world_position.y += 1;
                 }
-                return Err(ActionType::Movement((
+                Err(ActionType::Movement((
                     world_position,
                     local_position.as_uvec2(),
-                )));
+                )))
             } else {
-                return Err(ActionType::Wait);
+                Err(ActionType::Wait)
             }
         },
     }
@@ -145,32 +143,32 @@ fn try_move(
                         // and return Err(ActionType::OpenDoor(destination))
                         if map.try_move_actor(from_local_position.0, destination, movement_component.0) {
                             from_local_position.0 = destination.as_uvec2();
-                            return Ok(());
+                            Ok(())
                         } else {
                             info!("{:?} is blocked!", destination);
-                            return Err(ActionType::Wait);
+                            Err(ActionType::Wait)
                         }
                     } else {
                         info!(
                             "Couldn't find a long enough path to {:?}",
                             local_destination
                         );
-                        return Err(ActionType::Wait);
+                        Err(ActionType::Wait)
                     }
                 } else {
                     info!("Couldn't find a path to {:?}", local_destination);
-                    return Err(ActionType::Wait);
+                    Err(ActionType::Wait)
                 }
             } else {
                 info!("Couldn't find the map.");
-                return Err(ActionType::Wait);
+                Err(ActionType::Wait)
             }
         } else {
             info!("Couldn't find a movement component.");
-            return Err(ActionType::Wait);
+            Err(ActionType::Wait)
         }
     } else {
         info!("Couldn't find entities position components.");
-        return Err(ActionType::Wait);
+        Err(ActionType::Wait)
     }
 }
