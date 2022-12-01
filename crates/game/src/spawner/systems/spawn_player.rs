@@ -6,8 +6,6 @@ pub fn spawn_player(
     mut map_manager: ResMut<MapManager>,
     mut turn_manager: ResMut<TurnManager>,
 ) {
-    let world_position = IVec3::ZERO;
-
     let Some(tileset) = tilesets.get_by_id(TILESET_ACTORS_ID) else {
         // crashing here, may make it hard to chase down other issues?
         error!("Couldn't find tilemap_id: {:?}. Refusing to spawn player.", TILESET_ACTORS_ID);
@@ -31,6 +29,7 @@ pub fn spawn_player(
         info!("Player spawned at {:?}", local_position);
     }
 
+    let world_position = IVec3::ZERO;
     let spawn_location = UVec2::new(GRID_WIDTH / 2, GRID_HEIGHT / 2);
 
     commands.entity(player).insert(PlayerBundle {
