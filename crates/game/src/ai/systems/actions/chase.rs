@@ -1,11 +1,13 @@
+use std::collections::VecDeque;
+
 use big_brain::actions::ActionState;
 
 use crate::prelude::*;
 
 #[derive(Debug, Default, Component, Clone)]
 pub struct ChaseActor {
-    path: Option<Vec<IVec2>>,
-    last_seen_pt: Option<IVec2>,
+    generated_path: bool,
+    last_seen_pt: Option<(IVec3, UVec2)>,
 }
 
 pub fn chase_action(
@@ -13,14 +15,15 @@ pub fn chase_action(
     mut commands: Commands,
     mut manager: ResMut<MapManager>,
     mut target_q: Query<&mut TargetVisualizer>,
-    player_q: Query<(Entity, &Transform), With<Player>>,
+    player_q: Query<(Entity, &WorldPosition, &LocalPosition), With<Player>>,
     mut action_q: Query<(&Actor, &mut ActionState, &mut ChaseActor, &ActionSpan)>,
     mut ai_q: Query<
         (
-            &Transform,
+            &WorldPosition,
+            &LocalPosition,
             &FieldOfView,
-            &Vision,
             &Movement,
+            &Vision,
             &Name,
             &mut AIComponent,
         ),
@@ -32,8 +35,8 @@ pub fn chase_action(
     for (Actor(actor), mut action_state, mut chase, span) in action_q.iter_mut() {
         let _guard = span.span().enter();
 
-        let (_player_entity, player_transform) = player_q.single();
-        let Ok((position, fov, vision, movement_component, name, mut ai_component)) =
+        let (_player_entity, player_world_position, player_local_position) = player_q.single();
+        let Ok((_ai_world_position, ai_local_position, fov, movement,vision, name, mut ai_component)) =
             ai_q.get_mut(*actor) else {
                 error!("Actor must have required components");
                 return
@@ -45,160 +48,112 @@ pub fn chase_action(
             return;
         }
 
-        let ai_pos = position.get();
-        let player_pos = player_transform.get();
+        let ai_pos = ai_local_position.0;
+        let player_pos = player_local_position.0;
         let Some(map) = manager.get_current_map_mut() else {
             error!("No map found");
             return
         };
 
-        // This doesnt exist on the original match below because whenever the player comes into view
-        // the `can_see_player` scorer sets the output to be 1, causing the wander action to spin
-        // down (1 frame). Then, the player moves and its the ai turn again. the chase
-        // actions boots up and evaluates (2 frames). After that spin up, when the player,
-        // finally moves a 3rd time, the chase action moves into the Executing
-        // state and moves the AI towards the player.
-        //
-        // So this acts like a skip frame, where it sets the action to evaluating, then immediately
-        // evaluates
-        if *action_state == Requested {
-            chase.last_seen_pt = Some(player_pos);
-            chase.path = Some(generate_chase_path(
-                ai_pos,
-                player_pos,
-                movement_component.0,
-                map,
-            ));
-            *action_state = Executing;
-            info!("{} gonna start chasing!", name);
-        }
-
         match *action_state {
+            // Init | Success | Failure
+            Init | Success | Failure => {
+                // Nothing to do here
+                continue;
+            },
             Cancelled => {
+                ai_component.preferred_action = None;
+                info!("{} cancelled chase!", name);
+                *action_state = Failure;
+
                 if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
                     target_visualizer.clear(&mut commands);
                 }
-                info!("{} cancelled chase!", name);
-                *action_state = Failure;
             },
-            Executing => {
-                info!("{} executing chase!", name);
-                // if update_path_target is_some() update the path
-                // otherwise we will assume chase.path is valid
-                let update_path_target = if entity_in_fov(map, fov, vision, ai_pos, player_pos) {
-                    // we saw the player, update the last seen position
-                    chase.last_seen_pt = Some(player_pos);
+            Requested => {
+                info!("{} gonna start chasing!", name);
+                *action_state = Executing;
 
-                    if can_attack(player_pos) {
-                        // We should attack instead of moving!
-                        *action_state = ActionState::Failure;
-                        return;
-                    }
+                let position = (player_world_position.0, player_local_position.0);
+                ai_component.preferred_action = Some(ActionType::Movement(position));
 
-                    // always update when we can see the player
-                    // so treat it as we don't have a valid path
-                    Some(player_pos)
-                } else {
-                    let Some(last_seen_position) = chase.last_seen_pt else {
-                        // How did we get here?
-                        // Make sure every transfer into chase is accompanied
-                        // by chase.last_seen_pt being set!
-                        error!("AI is chasing, but it has no last_seen_position.");
-                        *action_state = ActionState::Failure;
+                chase.generated_path = false;
+                chase.last_seen_pt = Some(position);
+            },
+            Executing => {},
+        }
+
+        info!("{} executing chase!", name);
+
+        let position = if entity_in_fov(map, fov, vision, ai_pos, player_pos) {
+            let player_pos = (player_world_position.0, player_local_position.0);
+            chase.last_seen_pt = Some(player_pos);
+            chase.generated_path = false;
+            player_pos
+        } else {
+            let Some(last_seen) = chase.last_seen_pt else {
+                        error!("Executing chase with no target.");
+                        ai_component.preferred_action = Some(ActionType::Wait);
                         return;
                     };
 
-                    // Do we have a place we are chasing to?
-                    if let Some(path) = &chase.path {
-                        if path.is_empty() {
-                            // we don't have a valid path because:
-                            // we are at the end of the chase, and we don't see the player.
-                            //
-                            // SWITCH TO WANDER_STATE
-                            ai_component.preferred_action = Some(ActionType::Wait);
-                            *action_state = ActionState::Failure;
+            // We reached the end of our chase path and we do not see the player :(
+            if last_seen.1 == ai_pos {
+                // Failed or Success? Either works since we dont have anything happen in success or failure
+                *action_state = Failure;
+                continue;
+            }
 
-                            return;
-                        } else if map.can_place_actor(path[path.len() - 1], movement_component.0) {
-                            // we have a valid path, and the next step is also valid!
-                            // we only check to make sure this is valid to see if we need to
-                            // try re-generating a path. this move will be checked again
-                            // as we actually try to move there.
-                            None
-                        } else {
-                            // we have a valid path
-                            // but something is blocking us.. Actor/New Feature/Etc
-                            // update the path to try to get around this thing...
-                            Some(last_seen_position)
-                        }
-                    } else {
-                        Some(last_seen_position)
-                    }
-                };
-
-                // update the path if necessary!
-                if let Some(target_position) = update_path_target {
-                    chase.path = Some(generate_chase_path(
-                        ai_pos,
-                        target_position,
-                        movement_component.0,
-                        map,
-                    ));
-                }
-
-                let Some(mut chase_path) = std::mem::take(&mut chase.path) else {
-                    // previous update path failed...
-                    error!("AI could not find a path for chasing.");
-                    ai_component.preferred_action = Some(ActionType::Wait);
-                    commands.insert_resource(TurnState::Processing);
-                    *action_state = ActionState::Failure;
-                    return;
-                };
-
-                // We have a path > 1 and we are not in range to attack.
-                println!("Chase path: {:?}", chase_path);
-
-                let action = chase_path.pop().map_or_else(
-                    || {
-                        // previous update path failed...
-                        error!("AI could not find a path for chasing.");
-                        *action_state = ActionState::Failure;
-                        ActionType::Wait
-                    },
-                    |next_pt| {
-                        update_target_visual(
-                            &mut commands,
-                            &tilesets,
-                            &mut target_q,
-                            &chase_path,
-                            actor,
-                            &next_pt,
-                            Color::RED,
-                        );
-
-                        chase.path = Some(chase_path);
-                        ActionType::Movement(next_pt)
-                    },
+            // We have lost sight of the player and need a path to their last seen position.
+            // Our pathfinder will only generate a valid path to the last seen location, this includes
+            // partial path We can expect the first element in the path to be a valid location
+            // that is closest to the last_seen_pt.
+            if !chase.generated_path {
+                let last_seen_pt = (
+                    last_seen.0,
+                    generate_last_seen_path(ai_pos, last_seen.1, movement.0, map)
+                        .first()
+                        .unwrap_or(&last_seen.1.as_ivec2())
+                        .as_uvec2(),
                 );
 
-                ai_component.preferred_action = Some(action);
-                commands.insert_resource(TurnState::Processing);
-            },
+                chase.generated_path = true;
+                chase.last_seen_pt = Some(last_seen_pt);
+                last_seen_pt
+            } else {
+                last_seen
+            }
+        };
 
-            // Init | Success | Failure
-            _ => {},
+        ai_component.preferred_action = Some(ActionType::Movement(position));
+
+        if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
+            target_visualizer.update(
+                &mut commands,
+                &tilesets,
+                ai_local_position.0,
+                position.1,
+                Color::RED,
+            );
         }
 
         info!("Chase action output: {:?}\n", action_state);
     }
 }
-fn generate_chase_path(
-    ai_pos: IVec2,
-    target_pos: IVec2,
+
+fn generate_last_seen_path(
+    ai_pos: UVec2,
+    target_pos: UVec2,
     movement_type: u8,
     map_provider: &impl PathProvider,
 ) -> Vec<IVec2> {
-    PathFinder::Astar.compute(ai_pos, target_pos, movement_type, true, map_provider).unwrap_or_default()
+    PathFinder::Astar
+        .compute(
+            ai_pos.as_ivec2(),
+            target_pos.as_ivec2(),
+            movement_type,
+            true,
+            map_provider,
+        )
+        .unwrap_or_default()
 }
-
-const fn can_attack(_position: IVec2) -> bool { false }

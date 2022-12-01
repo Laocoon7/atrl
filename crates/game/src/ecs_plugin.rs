@@ -54,8 +54,9 @@ impl<T: StateNext, R: StateNext + Resource> Plugin for EcsPlugin<T, R> {
     fn build(&self, app: &mut App) {
         self.setup_stages(app).setup_events(app);
 
-        // Player
-        app.add_plugin(PlayerPlugin {
+        app
+            // Player
+            .add_plugin(PlayerPlugin {
                 state_running: self.state_running,
             })
             // AI
@@ -74,7 +75,7 @@ impl<T: StateNext, R: StateNext + Resource> Plugin for EcsPlugin<T, R> {
             AtrlStage::ConsumeEvents,
             ConditionSet::new()
                 .run_in_state(self.state_running)
-                .run_if_resource_equals(self.turn_state_processing)
+                //.run_if_resource_equals(self.turn_state_processing)
                 .with_system(perform_turns)
                 .into(),
         );
@@ -83,7 +84,7 @@ impl<T: StateNext, R: StateNext + Resource> Plugin for EcsPlugin<T, R> {
             AtrlStage::ConsumeEvents,
             ConditionSet::new()
                 .run_in_state(self.state_running)
-                .run_if_resource_equals(self.turn_state_processing)
+                //.run_if_resource_equals(self.turn_state_processing)
                 .with_system(movement)
                 .into(),
         );

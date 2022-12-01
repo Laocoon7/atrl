@@ -1,8 +1,11 @@
 #![warn(clippy::nursery, clippy::all)]
 #![allow(clippy::type_complexity)]
 #![allow(clippy::too_many_arguments)] // Bevy has a lot of arguments, so we shush clippy
+#![allow(unused_imports)] // TODO: REMOVE ME
 
 pub(crate) mod prelude;
+use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
+
 use crate::prelude::*;
 
 #[cfg(feature = "debug")]
@@ -76,13 +79,22 @@ fn default_plugins(app: &mut App) -> &mut App {
     app.add_plugins(defaults);
 
     #[cfg(feature = "release")]
-    defaults.add_before::<bevy::asset::AssetPlugin, _>(bevy_embedded_assets::EmbeddedAssetPlugin);
+    {
+        defaults.add_before::<bevy::asset::AssetPlugin, _>(bevy_embedded_assets::EmbeddedAssetPlugin);
+        app.add_plugin(bevy::log::LogPlugin {
+            level: bevy::log::Level::WARN,
+            ..Default::default()
+        });
+    }
 
-    #[cfg(not(feature = "debug"))]
+    #[cfg(not(feature = "release"))]
     app.add_plugin(bevy::log::LogPlugin {
-        level: bevy::log::Level::WARN,
+        level: bevy::log::Level::INFO,
         ..Default::default()
     });
+
+    // app.add_plugin(LogDiagnosticsPlugin::default()).
+    // add_plugin(FrameTimeDiagnosticsPlugin::default());
 
     app
 }

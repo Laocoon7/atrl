@@ -1,5 +1,6 @@
 use crate::prelude::*;
 
+// FIX: PERFORMANCE??
 pub fn entity_in_fov(
     map: &Map,
     fov: &FieldOfView,

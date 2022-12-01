@@ -5,7 +5,8 @@ pub struct ActorBundle {
     pub mob: Mob,
     pub health: Health,
     pub ai: AIComponent,
-    pub position: WorldPosition,
+    pub world_position: WorldPosition,
+    pub local_position: LocalPosition,
 
     pub fov: FieldOfView,
     pub vision_component: Vision,

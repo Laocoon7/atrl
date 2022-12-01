@@ -6,8 +6,8 @@ pub const WAIT_TIME: u32 = 1000;
 #[derive(Debug, Reflect, FromReflect)]
 pub enum ActionType {
     Wait,
-    Attack,
-    Movement(IVec2),
+    Movement((IVec3, UVec2)),
+    MovementDelta(IVec2),
 }
 
 impl ActionType {
@@ -15,7 +15,7 @@ impl ActionType {
         match self {
             Self::Wait => WAIT_TIME,
             Self::Movement(_) => TURN_TIME,
-            Self::Attack => TURN_TIME,
+            Self::MovementDelta(_) => TURN_TIME,
         }
     }
 }
