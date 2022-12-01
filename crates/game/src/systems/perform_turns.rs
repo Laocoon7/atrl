@@ -80,10 +80,7 @@ fn perform_action(
                 destination.0,
                 destination.1,
             ) {
-                Ok(_) => {
-                    info!("Moved");
-                    Ok(action.get_base_time_to_perform())
-                },
+                Ok(_) => Ok(action.get_base_time_to_perform()),
                 Err(a) => Err(a),
             }
         },

@@ -1,4 +1,5 @@
 use crate::prelude::*;
+
 pub struct MapGenData<T> {
     pub user_data: T,
 

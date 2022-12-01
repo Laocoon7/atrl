@@ -19,11 +19,20 @@ pub struct Wander {
 pub fn wander_action(
     tilesets: Tilesets,
     mut commands: Commands,
+    manager: Res<MapManager>,
     mut ctx: ResMut<GameContext>,
-    mut manager: ResMut<MapManager>,
     mut target_q: Query<&mut TargetVisualizer>,
     mut action_q: Query<(&Actor, &mut ActionState, &mut Wander, &ActionSpan)>,
-    mut spatial_q: Query<(&WorldPosition, &LocalPosition, &Name, &mut AIComponent), Without<Player>>,
+    mut spatial_q: Query<
+        (
+            &WorldPosition,
+            &LocalPosition,
+            &Movement,
+            &Name,
+            &mut AIComponent,
+        ),
+        Without<Player>,
+    >,
 ) {
     use ActionState::*;
 
@@ -31,12 +40,12 @@ pub fn wander_action(
         let _guard = span.span().enter();
 
         let rng = ctx.random.get_prng().as_rngcore();
-        let Some(map) = manager.get_current_map_mut() else {
+        let Some(map) = manager.get_current_map() else {
             error!("No map found");
             return
         };
 
-        let Ok((ai_world_position, ai_local_position, name, mut ai_component)) =
+        let Ok((ai_world_position, ai_local_position, movement,name, mut ai_component)) =
         spatial_q.get_mut(*actor) else {
                 error!("Actor must have spatial components");
                 return
@@ -69,18 +78,18 @@ pub fn wander_action(
 
         let destination = match std::mem::take(&mut wander.destination) {
             Some(destination) => {
-                if Line::new(ai_local_position.0, destination).get_count() < 1 {
-                    generate_wander_path(rng, ai_local_position.0).as_uvec2()
+                if Line::new(ai_local_position.0, destination).get_count() <= 1 {
+                    generate_wander_path(rng, map, ai_local_position.0, movement.0).as_uvec2()
                 } else {
                     destination
                 }
             },
-            None => generate_wander_path(rng, ai_local_position.0).as_uvec2(),
+            None => generate_wander_path(rng, map, ai_local_position.0, movement.0).as_uvec2(),
         };
 
-        ai_component.preferred_action = Some(ActionType::Movement((ai_world_position.0, destination)));
-        wander.my_previous_location = ai_local_position.0;
         wander.destination = Some(destination);
+        wander.my_previous_location = ai_local_position.0;
+        ai_component.preferred_action = Some(ActionType::Movement((ai_world_position.0, destination)));
 
         if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
             target_visualizer.update(
@@ -94,10 +103,15 @@ pub fn wander_action(
     }
 }
 
-fn generate_wander_path(rng: &mut impl RngCore, ai_pos: UVec2) -> IVec2 {
+fn generate_wander_path(rng: &mut impl RngCore, map: &Map, ai_pos: UVec2, movement_type: u8) -> IVec2 {
     let wander_radius = WANDER_RANGE.sample(rng);
     let wander_circle = Circle::new(ai_pos, wander_radius);
 
-    // Default to the circle center
-    wander_circle.iter().choose(rng).unwrap_or_else(|| wander_circle.center())
+    loop {
+        // Default to the circle center
+        let new_destination = wander_circle.iter().choose(rng).unwrap_or_else(|| wander_circle.center());
+        if map.can_place_actor(new_destination, movement_type) {
+            return new_destination;
+        }
+    }
 }

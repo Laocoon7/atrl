@@ -28,6 +28,7 @@ pub fn can_see_player(
                     let player_pos = player_transform.get();
                     let ai_pos = ai_transform.get();
                     if entity_in_fov(map, fov, vision, ai_pos, player_pos) {
+                        println!("Entity {:?} can see player", actor);
                         current_score = can_see_player.score_if_true;
                     }
                 }

@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-const MAX_AI_ACTORS: i32 = 20;
+const MAX_AI_ACTORS: u32 = 1;
 
 pub fn spawn_ai(
     tilesets: Tilesets,
@@ -25,19 +25,18 @@ pub fn spawn_ai(
     let mut actor_count = 0;
     let movement_type = MovementType::Walk;
     let vision_type = VisionType::Normal;
-    for y in 0..10 {
+    for y in 0..MAX_AI_ACTORS {
         if actor_count >= MAX_AI_ACTORS {
             break;
         }
 
-        for x in 0..10 {
+        for x in 0..MAX_AI_ACTORS {
             if actor_count >= MAX_AI_ACTORS {
                 break;
             }
 
             let local_position = UVec2::new(GRID_WIDTH / 3 + x, GRID_HEIGHT / 3 + y);
             if map.can_place_actor(local_position, movement_type.as_u8()) {
-                info!("Spawning AI at {:?}", local_position);
                 let ai_entity = spawn_ai_at(
                     &mut commands,
                     tileset.atlas(),

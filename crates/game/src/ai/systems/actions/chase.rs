@@ -52,23 +52,10 @@ pub fn chase_action(
         };
 
         match *action_state {
-            Requested => {
-                let position = (player_world_position.0, player_local_position.0);
-                chase.last_seen_pt = Some(position);
-                ai_component.preferred_action = Some(ActionType::Movement(position));
-                *action_state = Executing;
-
-                if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
-                    target_visualizer.update(
-                        &mut commands,
-                        &tilesets,
-                        ai_local_position.0,
-                        player_local_position.0,
-                        Color::RED,
-                    );
-                }
-
-                info!("{} gonna start chasing!", name);
+            // Init | Success | Failure
+            Init | Success | Failure => {
+                // Nothing to do here
+                continue;
             },
             Cancelled => {
                 ai_component.preferred_action = None;
@@ -79,38 +66,49 @@ pub fn chase_action(
                     target_visualizer.clear(&mut commands);
                 }
             },
-            Executing => {
-                info!("{} executing chase!", name);
+            Requested => {
+                let position = (player_world_position.0, player_local_position.0);
+                chase.last_seen_pt = Some(position);
+                ai_component.preferred_action = Some(ActionType::Movement(position));
+                *action_state = Executing;
 
-                let position = if entity_in_fov(map, fov, vision, ai_pos, player_pos) {
-                    let player_pos = (player_world_position.0, player_local_position.0);
-                    chase.last_seen_pt = Some(player_pos);
-                    player_pos
-                } else {
-                    let Some(last_seen) = chase.last_seen_pt else {
+                info!("{} gonna start chasing!", name);
+            },
+            Executing => {},
+        }
+
+        info!("{} executing chase!", name);
+
+        let position = if entity_in_fov(map, fov, vision, ai_pos, player_pos) {
+            let player_pos = (player_world_position.0, player_local_position.0);
+            chase.last_seen_pt = Some(player_pos);
+            player_pos
+        } else {
+            let Some(last_seen) = chase.last_seen_pt else {
                         error!("Executing chase with no target.");
                         ai_component.preferred_action = Some(ActionType::Wait);
                         return;
                     };
 
-                    last_seen
-                };
+            if last_seen.1 == ai_pos {
+                // Failed or Success? Either works since we dont have anything happen in success or failure
+                *action_state = Failure;
+                continue;
+            }
 
-                ai_component.preferred_action = Some(ActionType::Movement(position));
+            last_seen
+        };
 
-                if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
-                    target_visualizer.update(
-                        &mut commands,
-                        &tilesets,
-                        ai_local_position.0,
-                        player_local_position.0,
-                        Color::RED,
-                    );
-                }
-            },
+        ai_component.preferred_action = Some(ActionType::Movement(position));
 
-            // Init | Success | Failure
-            _ => {},
+        if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
+            target_visualizer.update(
+                &mut commands,
+                &tilesets,
+                ai_local_position.0,
+                position.1,
+                Color::RED,
+            );
         }
 
         info!("Chase action output: {:?}\n", action_state);

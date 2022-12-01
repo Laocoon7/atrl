@@ -1,5 +1,3 @@
-use bevy::math::Vec3Swizzles;
-
 use crate::prelude::*;
 #[derive(
     Reflect,
