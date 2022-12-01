@@ -11,7 +11,7 @@ pub enum ActionType {
 }
 
 impl ActionType {
-    pub fn get_base_time_to_perform(&self) -> u32 {
+    pub const fn get_base_time_to_perform(&self) -> u32 {
         match self {
             Self::Wait => WAIT_TIME,
             Self::Movement(_) => TURN_TIME,
