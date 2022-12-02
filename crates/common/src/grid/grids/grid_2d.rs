@@ -120,7 +120,9 @@ impl<T: GridParam> GridLayer<T> for Grid<T> {
     }
 
     #[inline]
-    fn get_idx_unchecked(&self, point: impl Point2d) -> usize { point.as_index(self.width() as usize) }
+    fn get_idx_unchecked(&self, point: impl Point2d) -> usize {
+        point.as_index_unchecked(self.width() as usize)
+    }
 
     #[inline]
     fn index_to_pt(&self, idx: usize) -> Option<IVec2> {

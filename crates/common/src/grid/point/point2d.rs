@@ -32,7 +32,16 @@ pub trait Point2d: Clone + Copy {
 
     /// Get the point's corresponding 1d index.
     #[inline(always)]
-    fn as_index(&self, width: usize) -> usize { self.y() as usize * width + self.x() as usize }
+    fn as_index_unchecked(&self, width: usize) -> usize { self.y() as usize * width + self.x() as usize }
+
+    #[inline(always)]
+    fn as_index(&self, size: impl Size2d) -> Option<usize> {
+        if self.is_valid(size) {
+            Some(self.as_index_unchecked(size.width() as usize))
+        } else {
+            None
+        }
+    }
 
     /// Returns true if the point is valid for the given size.
     #[inline]

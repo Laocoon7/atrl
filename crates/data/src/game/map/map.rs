@@ -25,14 +25,12 @@ pub struct Map {
 // then switch to unchecked indexing grid[index] on private functions
 impl Map {
     pub fn try_add_actor(&mut self, position: impl Point2d, actor: Entity, movement_type: u8) -> bool {
-        let position_idx = if position.is_valid(self.size) {
-            position.as_index(self.size.width() as usize)
-        } else {
+        let Some(position_index) = position.as_index(self.size) else {
             return false;
-        };
+          };
 
         if self.can_place_actor(position, movement_type) {
-            self.add_actor(position_idx, actor);
+            self.add_actor(position_index, actor);
             true
         } else {
             false
@@ -40,21 +38,17 @@ impl Map {
     }
 
     pub fn try_move_actor(&mut self, from: impl Point2d, to: impl Point2d, movement_type: u8) -> bool {
-        let from_idx = if from.is_valid(self.size) {
-            from.as_index(self.size.width() as usize)
-        } else {
+        let Some(from_index) = from.as_index(self.size) else {
             return false;
-        };
+          };
 
-        let to_idx = if to.is_valid(self.size) {
-            to.as_index(self.size.width() as usize)
-        } else {
+        let Some(to_index) = to.as_index(self.size) else {
             return false;
-        };
+          };
 
         if self.can_place_actor(to, movement_type) {
-            if let Some(entity) = self.remove_actor(from_idx) {
-                self.add_actor(to_idx, entity);
+            if let Some(entity) = self.remove_actor(from_index) {
+                self.add_actor(to_index, entity);
                 return true;
             }
         }
@@ -63,13 +57,11 @@ impl Map {
     }
 
     pub fn try_remove_actor(&mut self, position: impl Point2d) -> Option<Entity> {
-        let position_idx = if position.is_valid(self.size) {
-            position.as_index(self.size.width() as usize)
-        } else {
+        let Some(position_index) = position.as_index(self.size) else {
             return None;
-        };
+          };
 
-        self.remove_actor(position_idx)
+        self.remove_actor(position_index)
     }
 
     pub fn can_place_actor(&self, position: impl Point2d, movement_type: u8) -> bool {
@@ -87,13 +79,11 @@ impl Map {
     }
 
     pub fn has_actor(&self, position: impl Point2d) -> bool {
-        let position_idx = if position.is_valid(self.size) {
-            position.as_index(self.size.width() as usize)
-        } else {
+        let Some(position_index) = position.as_index(self.size) else {
             return false;
-        };
+          };
 
-        self.actors[position_idx].is_some()
+        self.actors[position_index].is_some()
     }
 
     fn add_actor(&mut self, position_idx: usize, actor: Entity) { self.actors[position_idx] = Some(actor); }
@@ -122,7 +112,7 @@ impl Map {
         }
 
         if let Some(actor) = self.get_actor(from) {
-            let position_idx = to.as_index(self.size.width() as usize);
+            let position_idx = to.as_index_unchecked(self.size.width() as usize);
             self.remove_actor(position_idx);
             self.add_actor(position_idx, actor);
         }
