@@ -40,6 +40,7 @@ impl MapManager {
         if let Some(mut new_map) = self.loaded_maps.remove(&world_position) {
             // current map -> loaded_maps
             if let Some((current_world_position, map)) = std::mem::take(&mut self.current_map) {
+                // TODO: Hide current map...
                 self.loaded_maps.insert(current_world_position, map);
             }
 
