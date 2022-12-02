@@ -101,7 +101,7 @@ pub mod prelude {
     mod import {
         pub use atrl_camera::prelude::*;
         pub use atrl_common::prelude::*;
-        pub use atrl_data::prelude::{AssetLoadState::*, ConstructState::*, TurnState::*, UiState::*, *};
+        pub use atrl_data::prelude::{AssetLoadState::*, ConstructState::*, UiState::*, *};
         pub use atrl_map_gen::prelude::*;
         pub use atrl_raws::prelude::*;
         pub use atrl_renderer::prelude::*;

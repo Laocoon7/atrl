@@ -6,6 +6,7 @@ pub struct Dead;
 
 pub fn cull_dead(
     mut commands: Commands,
+    state: Res<CurrentGameState>,
     mut map_manager: ResMut<MapManager>,
     mut turn_manager: ResMut<TurnManager>,
     query: Query<(Entity, &Transform, &Name, Option<&Player>), With<Dead>>,
@@ -31,7 +32,7 @@ pub fn cull_dead(
 
                 if player.is_some() {
                     println!("YOU DIED!");
-                    commands.insert_resource(TurnState::Dead);
+                    state.go_to(&mut commands, GameState::Dead);
                 } else {
                     println!("{} DIED!", name);
                 }

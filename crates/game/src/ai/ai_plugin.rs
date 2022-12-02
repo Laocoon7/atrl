@@ -1,9 +1,9 @@
 use crate::prelude::*;
-pub struct AIPlugin<T, R> {
+pub struct AIPlugin<T> {
     pub state_running: T,
-    pub turn_state_ai_thinking: R,
 }
-impl<T: StateNext, R: StateNext + Resource> Plugin for AIPlugin<T, R> {
+
+impl<T: StateNext> Plugin for AIPlugin<T> {
     fn build(&self, app: &mut App) {
         app.add_plugin(BigBrainPlugin)
             // Scoring Systems
@@ -11,16 +11,14 @@ impl<T: StateNext, R: StateNext + Resource> Plugin for AIPlugin<T, R> {
                 BigBrainStage::Scorers,
                 ConditionSet::new()
                     .run_in_state(self.state_running)
-                    //.run_if_resource_equals(self.turn_state_ai_thinking)
                     .with_system(can_see_player)
                     .into(),
             )
             // Action Systems
-            .add_system_set(
-                // BigBrainStage::Actions,
+            .add_system_set_to_stage(
+                BigBrainStage::Actions,
                 ConditionSet::new()
                     .run_in_state(self.state_running)
-                    //.run_if_resource_equals(self.turn_state_ai_thinking)
                     .with_system(wander_action)
                     .with_system(chase_action)
                     .into(),

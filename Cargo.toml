@@ -40,7 +40,7 @@ release = [
 ]
 
 # default configurations
-default = ["dev", "debug"]
+default = ["dev"]
 
 # configuration for debugging information
 debug = [
