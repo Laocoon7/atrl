@@ -29,8 +29,10 @@ pub fn spawn_player(
         info!("Player spawned at {:?}", local_position);
     }
 
-    let world_position = IVec3::ZERO;
-    let spawn_location = UVec2::new(GRID_WIDTH / 2, GRID_HEIGHT / 2);
+    let position = Position::new(
+        WorldPosition::new(0, 0, 0),
+        LocalPosition::new(GRID_WIDTH / 2, GRID_HEIGHT / 2, MapLayer::Player as u32),
+    );
 
     commands.entity(player).insert(PlayerBundle {
         player: Player,
@@ -38,8 +40,7 @@ pub fn spawn_player(
         actor: ActorBundle {
             name: Name::new("Bob the Builder"),
             mob: Mob,
-            world_position: WorldPosition(world_position),
-            local_position: LocalPosition(spawn_location),
+            position,
             health: Health::new(10, 10),
             ai: AIComponent::human(),
             sprite: SpriteSheetBundle {
@@ -50,11 +51,7 @@ pub fn spawn_player(
                     ..Default::default()
                 },
                 texture_atlas: tileset.atlas().clone(),
-                transform: Transform::from_xyz(
-                    spawn_location.x as f32 + 0.5,
-                    spawn_location.y as f32 + 0.5,
-                    f32::from(MapLayer::Player),
-                ),
+                transform: Transform::from_translation(position.translation()),
                 ..Default::default()
             },
 

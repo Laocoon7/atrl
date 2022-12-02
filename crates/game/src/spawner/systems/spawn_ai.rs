@@ -75,14 +75,18 @@ fn spawn_ai_at(
         .when(WinningScorer::build(1.0).push(CanSeePlayer::default()), ChaseActor::default())
         .otherwise(Wander::default());
 
+    let position = Position::new(
+        WorldPosition::new(world_position.x, world_position.y, world_position.z),
+        LocalPosition::new(local_position.x, local_position.y, MapLayer::Actors as u32),
+    );
+
     commands
         .spawn((
             ActorBundle {
                 mob: Mob,
                 ai: AIComponent::aggressive(),
                 name: Name::new(name.to_string()),
-                world_position: WorldPosition(world_position),
-                local_position: LocalPosition(local_position),
+                position,
                 health: Health::new(5, 5),
                 sprite: SpriteSheetBundle {
                     sprite: TextureAtlasSprite {
@@ -92,11 +96,7 @@ fn spawn_ai_at(
                         ..Default::default()
                     },
                     texture_atlas: texture_atlas.clone(),
-                    transform: Transform::from_xyz(
-                        (local_position.x) as f32 + 0.5,
-                        (local_position.y) as f32 + 0.5,
-                        f32::from(MapLayer::Actors),
-                    ),
+                    transform: Transform::from_translation(position.translation()),
                     ..default()
                 },
 

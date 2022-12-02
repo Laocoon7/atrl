@@ -7,7 +7,7 @@ use crate::prelude::*;
 #[derive(Debug, Default, Component, Clone)]
 pub struct ChaseActor {
     generated_path: bool,
-    last_seen_pt: Option<(IVec3, UVec2)>,
+    last_seen_pt: Option<Position>,
 }
 
 pub fn chase_action(
@@ -15,12 +15,11 @@ pub fn chase_action(
     mut commands: Commands,
     mut manager: ResMut<MapManager>,
     mut target_q: Query<&mut TargetVisualizer>,
-    player_q: Query<(Entity, &WorldPosition, &LocalPosition), With<Player>>,
+    player_q: Query<(Entity, &Position), With<Player>>,
     mut action_q: Query<(&Actor, &mut ActionState, &mut ChaseActor)>,
     mut ai_q: Query<
         (
-            &WorldPosition,
-            &LocalPosition,
+            &Position,
             &FieldOfView,
             &Movement,
             &Vision,
@@ -33,8 +32,8 @@ pub fn chase_action(
     use ActionState::*;
 
     action_q.iter_mut().for_each(|(Actor(actor), mut action_state, mut chase)| {
-        let (_player_entity, player_world_position, player_local_position) = player_q.single();
-        let Ok((_ai_world_position, ai_local_position, fov, movement,vision, name, mut ai_component)) =
+        let (_player_entity, player_position) = player_q.single();
+        let Ok((ai_position, fov, movement,vision, name, mut ai_component)) =
             ai_q.get_mut(*actor) else {
                 info!("Actor must have required components");
                 return
@@ -45,8 +44,8 @@ pub fn chase_action(
             return;
         }
 
-        let ai_pos = ai_local_position.0;
-        let player_pos = player_local_position.0;
+        let ai_pos = ai_position.xy();
+        let player_pos = player_position.xy();
         let Some(map) = manager.get_current_map_mut() else {
             info!("No map found");
             return
@@ -74,11 +73,10 @@ pub fn chase_action(
                 info!("{} gonna start chasing!", name);
                 *action_state = Executing;
 
-                let position = (player_world_position.0, player_local_position.0);
-                ai_component.preferred_action = Some(ActionType::Movement(position));
+                ai_component.preferred_action = Some(ActionType::Movement(*player_position));
 
                 chase.generated_path = false;
-                chase.last_seen_pt = Some(position);
+                chase.last_seen_pt = Some(*player_position);
             },
             Executing => {},
         }
@@ -86,7 +84,7 @@ pub fn chase_action(
         info!("{} executing chase!", name);
 
         let position = if entity_in_fov(map, fov, vision, ai_pos, player_pos) {
-            let player_pos = (player_world_position.0, player_local_position.0);
+            let player_pos = *player_position;
             chase.last_seen_pt = Some(player_pos);
             chase.generated_path = false;
             player_pos
@@ -98,7 +96,7 @@ pub fn chase_action(
                     };
 
             // We reached the end of our chase path and we do not see the player :(
-            if last_seen.1 == ai_pos {
+            if last_seen.xy() == ai_pos {
                 // Failed or Success? Either works since we dont have anything happen in success or failure
                 *action_state = Failure;
                 return;
@@ -109,12 +107,17 @@ pub fn chase_action(
             // partial path We can expect the first element in the path to be a valid location
             // that is closest to the last_seen_pt.
             if !chase.generated_path {
-                let last_seen_pt = (
-                    last_seen.0,
-                    generate_last_seen_path(ai_pos, last_seen.1, movement.0, map)
-                        .first()
-                        .unwrap_or(&last_seen.1.as_ivec2())
-                        .as_uvec2(),
+                let xy = generate_last_seen_path(ai_pos, last_seen.xy(), movement.0, map)
+                    .first()
+                    .unwrap_or(&last_seen.xy().as_ivec2())
+                    .as_uvec2();
+                let last_seen_pt = Position::new(
+                    WorldPosition::new(
+                        last_seen.world_x(),
+                        last_seen.world_y(),
+                        last_seen.world_z(),
+                    ),
+                    LocalPosition::new(xy.x, xy.y, MapLayer::Actors as u32),
                 );
 
                 chase.generated_path = true;
@@ -131,8 +134,8 @@ pub fn chase_action(
             target_visualizer.update(
                 &mut commands,
                 &tilesets,
-                ai_local_position.0,
-                position.1,
+                ai_position.xy(),
+                position.xy(),
                 Color::RED,
             );
         }

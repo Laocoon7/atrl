@@ -20,7 +20,7 @@ impl Default for GameContext {
 }
 
 impl GameContext {
-    pub fn is_valid_world_position(&self, world_position: WorldPosition) -> bool {
-        self.world_bounds.contains(world_position.xy())
+    pub fn is_valid_world_position(&self, world_position: IVec3) -> bool {
+        self.world_bounds.contains((world_position.x, world_position.y))
     }
 }

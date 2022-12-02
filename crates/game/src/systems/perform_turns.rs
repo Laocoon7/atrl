@@ -5,7 +5,7 @@ pub fn perform_turns(
     mut q_ai: Query<(&mut AIComponent, &Name)>,
 
     q_movement: Query<&Movement>,
-    mut q_position: Query<(&mut WorldPosition, &mut LocalPosition)>,
+    mut q_position: Query<&mut Position>,
 
     mut map_manager: ResMut<MapManager>,
     mut turn_manager: ResMut<TurnManager>,
@@ -68,7 +68,7 @@ fn perform_action(
     entity: Entity,
     action: ActionType,
     map_manager: &mut ResMut<MapManager>,
-    q_position: &mut Query<(&mut WorldPosition, &mut LocalPosition)>,
+    q_position: &mut Query<&mut Position>,
     q_movement: &Query<&Movement>,
 ) -> Result<u32, ActionType> {
     match action {
@@ -77,42 +77,14 @@ fn perform_action(
             Ok(ActionType::Wait.get_base_time_to_perform())
         },
         ActionType::Movement(destination) => {
-            match try_move(
-                entity,
-                map_manager,
-                q_position,
-                q_movement,
-                destination.0,
-                destination.1,
-            ) {
+            match try_move(entity, map_manager, q_position, q_movement, destination) {
                 Ok(_) => Ok(action.get_base_time_to_perform()),
                 Err(a) => Err(a),
             }
         },
         ActionType::MovementDelta(delta) => {
-            if let Ok((world_position, local_position)) = q_position.get(entity) {
-                let mut world_position = world_position.0;
-                let mut local_position = local_position.0.as_ivec2() + delta;
-
-                if local_position.x < 0 {
-                    local_position.x += GRID_WIDTH as i32;
-                    world_position.x -= 1;
-                } else if local_position.x >= GRID_WIDTH as i32 {
-                    local_position.x -= GRID_WIDTH as i32;
-                    world_position.x += 1;
-                }
-
-                if local_position.y < 0 {
-                    local_position.y += GRID_HEIGHT as i32;
-                    world_position.y -= 1;
-                } else if local_position.y >= GRID_HEIGHT as i32 {
-                    local_position.y -= GRID_HEIGHT as i32;
-                    world_position.y += 1;
-                }
-                Err(ActionType::Movement((
-                    world_position,
-                    local_position.as_uvec2(),
-                )))
+            if let Ok(entity_position) = q_position.get(entity) {
+                Err(ActionType::Movement(*entity_position + delta))
             } else {
                 Err(ActionType::Wait)
             }
@@ -123,18 +95,17 @@ fn perform_action(
 fn try_move(
     entity: Entity,
     map_manager: &mut ResMut<MapManager>,
-    q_position: &mut Query<(&mut WorldPosition, &mut LocalPosition)>,
+    q_position: &mut Query<&mut Position>,
     q_movement: &Query<&Movement>,
-    _world_destination: IVec3,
-    local_destination: UVec2,
+    destination: Position,
 ) -> Result<(), ActionType> {
-    if let Ok((_from_world_position, mut from_local_position)) = q_position.get_mut(entity) {
+    if let Ok(mut from_position) = q_position.get_mut(entity) {
         if let Ok(movement_component) = q_movement.get(entity) {
             if let Some(map) = map_manager.get_current_map_mut() {
                 // try to generate a path.
                 if let Some(mut path) = PathFinder::Astar.compute(
-                    from_local_position.0,
-                    local_destination,
+                    from_position.xy(),
+                    destination.xy(),
                     movement_component.0,
                     true,
                     map,
@@ -143,22 +114,19 @@ fn try_move(
                     if let Some(destination) = path.pop() {
                         // TODO: check if is closed door
                         // and return Err(ActionType::OpenDoor(destination))
-                        if map.try_move_actor(from_local_position.0, destination, movement_component.0) {
-                            from_local_position.0 = destination.as_uvec2();
+                        if map.try_move_actor(from_position.xy(), destination, movement_component.0) {
+                            from_position.set_xy(destination.as_uvec2());
                             Ok(())
                         } else {
                             info!("{:?} is blocked!", destination);
                             Err(ActionType::Wait)
                         }
                     } else {
-                        info!(
-                            "Couldn't find a long enough path to {:?}",
-                            local_destination
-                        );
+                        info!("Couldn't find a long enough path to {:?}", destination);
                         Err(ActionType::Wait)
                     }
                 } else {
-                    info!("Couldn't find a path to {:?}", local_destination);
+                    info!("Couldn't find a path to {:?}", destination);
                     Err(ActionType::Wait)
                 }
             } else {

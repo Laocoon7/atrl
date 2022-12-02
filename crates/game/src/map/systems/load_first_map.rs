@@ -16,7 +16,7 @@ pub fn load_first_map(
         None,
         Some(tileset_id),
         &tilesets,
-        WorldPosition(IVec3::ZERO),
+        IVec3::ZERO,
     ) {
         error!("{}", e);
     }

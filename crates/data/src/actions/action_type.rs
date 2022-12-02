@@ -6,7 +6,7 @@ pub const WAIT_TIME: u32 = 1000;
 #[derive(Debug, Reflect, FromReflect)]
 pub enum ActionType {
     Wait,
-    Movement((IVec3, UVec2)),
+    Movement(Position),
     MovementDelta(IVec2),
 }
 

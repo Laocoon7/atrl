@@ -9,11 +9,23 @@ use crate::prelude::*;
 static WANDER_RANGE: Lazy<Uniform<u32>> = Lazy::new(|| Uniform::new_inclusive(3, 10));
 
 // could be used for temporary storage for multi turn actions
-#[derive(Debug, Reflect, Default, Component, Clone, Eq, PartialEq)]
+#[derive(Debug, Reflect, Component, Clone, Eq, PartialEq)]
 #[reflect(Component)]
 pub struct Wander {
-    my_previous_location: UVec2,
-    destination: Option<UVec2>,
+    my_previous_location: Position,
+    destination: Option<Position>,
+}
+
+impl Default for Wander {
+    fn default() -> Self {
+        Self {
+            my_previous_location: Position::new(
+                WorldPosition::new(0, 0, 0),
+                LocalPosition::new(0, 0, MapLayer::Actors as u32),
+            ),
+            destination: None,
+        }
+    }
 }
 
 pub fn wander_action(
@@ -23,16 +35,7 @@ pub fn wander_action(
     mut ctx: ResMut<GameContext>,
     mut target_q: Query<&mut TargetVisualizer>,
     mut action_q: Query<(&Actor, &mut ActionState, &mut Wander)>,
-    mut spatial_q: Query<
-        (
-            &WorldPosition,
-            &LocalPosition,
-            &Movement,
-            &Name,
-            &mut AIComponent,
-        ),
-        Without<Player>,
-    >,
+    mut spatial_q: Query<(&Position, &Movement, &Name, &mut AIComponent), Without<Player>>,
 ) {
     use ActionState::*;
 
@@ -43,7 +46,7 @@ pub fn wander_action(
             return
         };
 
-        let Ok((ai_world_position, ai_local_position, movement,name, mut ai_component)) =
+        let Ok((ai_position, movement,name, mut ai_component)) =
         spatial_q.get_mut(*actor) else {
             info!("Actor must have spatial components");
                 return
@@ -87,25 +90,43 @@ pub fn wander_action(
 
         let destination = match std::mem::take(&mut wander.destination) {
             Some(destination) => {
-                if Line::new(ai_local_position.0, destination).get_count() <= 1 {
-                    generate_wander_path(rng, map, ai_local_position.0, movement.0).as_uvec2()
+                if Line::new(ai_position.xy(), destination.xy()).get_count() <= 1 {
+                    let xy = generate_wander_path(rng, map, ai_position.xy(), movement.0).as_uvec2();
+                    Position::new(
+                        WorldPosition::new(
+                            ai_position.world_x(),
+                            ai_position.world_y(),
+                            ai_position.world_z(),
+                        ),
+                        LocalPosition::new(xy.x, xy.y, MapLayer::Actors as u32),
+                    )
                 } else {
                     destination
                 }
             },
-            None => generate_wander_path(rng, map, ai_local_position.0, movement.0).as_uvec2(),
+            None => {
+                let xy = generate_wander_path(rng, map, ai_position.xy(), movement.0).as_uvec2();
+                Position::new(
+                    WorldPosition::new(
+                        ai_position.world_x(),
+                        ai_position.world_y(),
+                        ai_position.world_z(),
+                    ),
+                    LocalPosition::new(xy.x, xy.y, MapLayer::Actors as u32),
+                )
+            },
         };
 
         wander.destination = Some(destination);
-        wander.my_previous_location = ai_local_position.0;
-        ai_component.preferred_action = Some(ActionType::Movement((ai_world_position.0, destination)));
+        wander.my_previous_location = *ai_position;
+        ai_component.preferred_action = Some(ActionType::Movement(destination));
 
         if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
             target_visualizer.update(
                 &mut commands,
                 &tilesets,
-                ai_local_position.0,
-                destination,
+                ai_position.xy(),
+                destination.xy(),
                 Color::WHITE,
             );
         }

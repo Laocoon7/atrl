@@ -4,7 +4,7 @@ use crate::prelude::*;
 pub struct Map {
     pub size: UVec2,
     pub random: Random,
-    pub world_position: WorldPosition,
+    pub world_position: IVec3,
 
     pub update_all: bool,
     pub update_tiles: HashSet<UVec2>,
@@ -104,7 +104,7 @@ impl Map {
 
 pub struct MapPassThroughData {
     pub random: Random,
-    pub world_position: WorldPosition,
+    pub world_position: IVec3,
 
     pub terrain_tileset_id: u8,
     pub feature_tileset_id: u8,
