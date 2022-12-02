@@ -1,4 +1,5 @@
 use crate::prelude::*;
+
 // This needs to impl FromWorld not derive reflect
 pub struct Map {
     pub size: UVec2,
@@ -24,8 +25,14 @@ pub struct Map {
 // then switch to unchecked indexing grid[index] on private functions
 impl Map {
     pub fn try_add_actor(&mut self, position: impl Point2d, actor: Entity, movement_type: u8) -> bool {
+        let position_idx = if position.is_valid(self.size) {
+            position.as_index(self.size.width() as usize)
+        } else {
+            return false;
+        };
+
         if self.can_place_actor(position, movement_type) {
-            self.add_actor(position, actor);
+            self.add_actor(position_idx, actor);
             true
         } else {
             false
@@ -33,17 +40,36 @@ impl Map {
     }
 
     pub fn try_move_actor(&mut self, from: impl Point2d, to: impl Point2d, movement_type: u8) -> bool {
+        let from_idx = if from.is_valid(self.size) {
+            from.as_index(self.size.width() as usize)
+        } else {
+            return false;
+        };
+
+        let to_idx = if to.is_valid(self.size) {
+            to.as_index(self.size.width() as usize)
+        } else {
+            return false;
+        };
+
         if self.can_place_actor(to, movement_type) {
-            if let Some(entity) = self.remove_actor(from) {
-                self.add_actor(to, entity);
+            if let Some(entity) = self.remove_actor(from_idx) {
+                self.add_actor(to_idx, entity);
                 return true;
             }
         }
+
         false
     }
 
     pub fn try_remove_actor(&mut self, position: impl Point2d) -> Option<Entity> {
-        self.remove_actor(position)
+        let position_idx = if position.is_valid(self.size) {
+            position.as_index(self.size.width() as usize)
+        } else {
+            return None;
+        };
+
+        self.remove_actor(position_idx)
     }
 
     pub fn can_place_actor(&self, position: impl Point2d, movement_type: u8) -> bool {
@@ -61,14 +87,18 @@ impl Map {
     }
 
     pub fn has_actor(&self, position: impl Point2d) -> bool {
-        self.actors.get(position).map_or(false, |opt| opt.is_some())
+        let position_idx = if position.is_valid(self.size) {
+            position.as_index(self.size.width() as usize)
+        } else {
+            return false;
+        };
+
+        self.actors[position_idx].is_some()
     }
 
-    fn add_actor(&mut self, position: impl Point2d, actor: Entity) { self.actors.set(position, Some(actor)); }
+    fn add_actor(&mut self, position_idx: usize, actor: Entity) { self.actors[position_idx] = Some(actor); }
 
-    fn remove_actor(&mut self, position: impl Point2d) -> Option<Entity> {
-        self.actors.set(position, None).and_then(|opt| opt)
-    }
+    fn remove_actor(&mut self, position_idx: usize) -> Option<Entity> { self.actors[position_idx].take() }
 
     pub fn get_actor(&self, position: impl Point2d) -> Option<Entity> {
         self.actors.get(position).and_then(|e| e.as_ref().copied())
@@ -90,9 +120,11 @@ impl Map {
         if self.has_actor(to) {
             return;
         }
+
         if let Some(actor) = self.get_actor(from) {
-            self.remove_actor(from);
-            self.add_actor(to, actor);
+            let position_idx = to.as_index(self.size.width() as usize);
+            self.remove_actor(position_idx);
+            self.add_actor(position_idx, actor);
         }
     }
 }
@@ -150,10 +182,12 @@ impl FovProvider for Map {
         // None by default (if there's no terrain, there's nothing to see)
         let terrain =
             self.terrain_types.get(position).map_or(VisionType::None.as_u8(), |t| t.vision_penetrates());
+
         // Get the vision types that can see through this feature:
         // Any by default (if there's no feature, don't block vision)
         let feature =
             self.feature_types.get(position).map_or(VisionType::Any.as_u8(), |f| f.vision_penetrates());
+
         (terrain & feature & (vision_type)) == 0
     }
 }
@@ -164,10 +198,12 @@ impl PathProvider for Map {
         // None by default (this provides bounds checking)
         let terrain =
             self.terrain_types.get(position).map_or(MovementType::None.as_u8(), |t| t.allowed_movement());
+
         // Get the movement types that can move through this feature:
         // Any by default (if there's no feature, don't block movement)
         let feature =
             self.feature_types.get(position).map_or(MovementType::Any.as_u8(), |f| f.allowed_movement());
+
         (terrain & feature & movement_type) != 0
     }
 

@@ -40,12 +40,12 @@ pub const TILESET_ACTORS_NAME: &str = "actors";
 pub const TILESET_ACTORS_ID: TilesetId = 2;
 
 #[rustfmt::skip] // pretty tables
-pub const TILESET_ACTORS_NAME_TABLE: &'static [&'static str] = &[
+pub const TILESET_ACTORS_NAME_TABLE: &[&str] = &[
     TILESET_ACTORS_NAME,
 ];
 
 #[rustfmt::skip] // pretty tables
-pub const TILESET_ACTORS_IDS_TABLE: &'static [TilesetId] = &[
+pub const TILESET_ACTORS_IDS_TABLE: &[TilesetId] = &[
     TILESET_ACTORS_ID,
 ];
 
@@ -56,12 +56,12 @@ pub const TILESET_ITEMS_NAME: &str = "items";
 pub const TILESET_ITEMS_ID: TilesetId = 3;
 
 #[rustfmt::skip] // pretty tables
-pub const TILESET_ITEMS_NAME_TABLE: &'static [&'static str] = &[
+pub const TILESET_ITEMS_NAME_TABLE: &[&str] = &[
     TILESET_ITEMS_NAME,
 ];
 
 #[rustfmt::skip] // pretty tables
-pub const TILESET_ITEMS_IDS_TABLE: &'static [TilesetId] = &[
+pub const TILESET_ITEMS_IDS_TABLE: &[TilesetId] = &[
     TILESET_ITEMS_ID,
 ];
 
@@ -72,12 +72,12 @@ pub const TILESET_FEATURES_NAME: &str = "features";
 pub const TILESET_FEATURES_ID: TilesetId = 4;
 
 #[rustfmt::skip] // pretty tables
-pub const TILESET_FEATURES_NAME_TABLE: &'static [&'static str] = &[
+pub const TILESET_FEATURES_NAME_TABLE: &[&str] = &[
     TILESET_FEATURES_NAME,
 ];
 
 #[rustfmt::skip] // pretty tables
-pub const TILESET_FEATURES_IDS_TABLE: &'static [TilesetId] = &[
+pub const TILESET_FEATURES_IDS_TABLE: &[TilesetId] = &[
     TILESET_FEATURES_ID,
 ];
 
@@ -88,12 +88,12 @@ pub const TILESET_TERRAIN_NAME: &str = "terrain";
 pub const TILESET_TERRAIN_ID: TilesetId = 5;
 
 #[rustfmt::skip] // pretty tables
-pub const TILESET_TERRAIN_NAME_TABLE: &'static [&'static str] = &[
+pub const TILESET_TERRAIN_NAME_TABLE: &[&str] = &[
     TILESET_TERRAIN_NAME,
 ];
 
 #[rustfmt::skip] // pretty tables
-pub const TILESET_TERRAIN_IDS_TABLE: &'static [TilesetId] = &[
+pub const TILESET_TERRAIN_IDS_TABLE: &[TilesetId] = &[
     TILESET_TERRAIN_ID,
 ];
 /////////////////////////////////////////////////////////////////////

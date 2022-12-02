@@ -1,8 +1,8 @@
 use crate::prelude::*;
 #[derive(Default, Resource)]
 pub struct MapManager {
-    pub current_map: Option<(IVec3, Map)>,
     loaded_maps: HashMap<IVec3, Map>,
+    pub current_map: Option<(IVec3, Map)>,
 }
 impl MapManager {
     pub fn new() -> Self {
@@ -58,10 +58,10 @@ impl MapManager {
         set_current: bool,
     ) -> &mut Map {
         // make sure the map is loaded.. deserialize/generate as necessary
-        if self.get_loaded_map(world_position).is_none() {
-            if self.get_serialized_map(game_context, world_position).is_none() {
-                self.get_generated_map(commands, game_context, world_position, tilesets);
-            }
+        if self.get_loaded_map(world_position).is_none() &&
+            self.get_serialized_map(game_context, world_position).is_none()
+        {
+            self.get_generated_map(commands, game_context, world_position, tilesets);
         }
 
         // make the map current if requested..
