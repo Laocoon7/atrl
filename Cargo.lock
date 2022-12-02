@@ -1353,7 +1353,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5bcf530afb40e45e14440701e5e996d7fd139e84a912a4d83a8d6a0fb3e58663"
 dependencies = [
  "log",
- "nix 0.25.0",
+ "nix 0.25.1",
  "slotmap",
  "thiserror",
  "vec_map",
@@ -2304,7 +2304,7 @@ dependencies = [
  "libc",
  "libudev-sys",
  "log",
- "nix 0.25.0",
+ "nix 0.25.1",
  "uuid",
  "vec_map",
  "wasm-bindgen",
@@ -2783,7 +2783,7 @@ checksum = "078e285eafdfb6c4b434e0d31e8cfcb5115b651496faca5749b88fafd4f23bfd"
 [[package]]
 name = "kayak_font"
 version = "0.1.0"
-source = "git+https://github.com/StarArawn/kayak_ui#ec0d497f836df2035c417be898e1670210377d76"
+source = "git+https://github.com/StarArawn/kayak_ui#a046e33496f6f5b4b8d51b62546919d200fbb053"
 dependencies = [
  "anyhow",
  "bevy",
@@ -2800,7 +2800,7 @@ dependencies = [
 [[package]]
 name = "kayak_ui"
 version = "0.1.0"
-source = "git+https://github.com/StarArawn/kayak_ui#ec0d497f836df2035c417be898e1670210377d76"
+source = "git+https://github.com/StarArawn/kayak_ui#a046e33496f6f5b4b8d51b62546919d200fbb053"
 dependencies = [
  "bevy",
  "bitflags",
@@ -2818,7 +2818,7 @@ dependencies = [
 [[package]]
 name = "kayak_ui_macros"
 version = "0.1.0"
-source = "git+https://github.com/StarArawn/kayak_ui#ec0d497f836df2035c417be898e1670210377d76"
+source = "git+https://github.com/StarArawn/kayak_ui#a046e33496f6f5b4b8d51b62546919d200fbb053"
 dependencies = [
  "find-crate",
  "proc-macro-crate",
@@ -3264,9 +3264,9 @@ dependencies = [
 
 [[package]]
 name = "nix"
-version = "0.24.2"
+version = "0.24.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "195cdbc1741b8134346d515b3a56a1c94b0912758009cfd53f99ea0f57b065fc"
+checksum = "fa52e972a9a719cecb6864fb88568781eb706bac2cd1d4f04a648542dbf78069"
 dependencies = [
  "bitflags",
  "cfg-if",
@@ -3276,9 +3276,9 @@ dependencies = [
 
 [[package]]
 name = "nix"
-version = "0.25.0"
+version = "0.25.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e322c04a9e3440c327fca7b6c8a63e6890a32fa2ad689db972425f07e0d22abb"
+checksum = "f346ff70e7dbfd675fe90590b92d59ef2de15a8779ae305ebcbfd3f0caf59be4"
 dependencies = [
  "autocfg",
  "bitflags",
@@ -4298,7 +4298,7 @@ dependencies = [
  "lazy_static",
  "log",
  "memmap2",
- "nix 0.24.2",
+ "nix 0.24.3",
  "pkg-config",
  "wayland-client",
  "wayland-cursor",
@@ -4873,7 +4873,7 @@ dependencies = [
  "bitflags",
  "downcast-rs",
  "libc",
- "nix 0.24.2",
+ "nix 0.24.3",
  "scoped-tls",
  "wayland-commons",
  "wayland-scanner",
@@ -4886,7 +4886,7 @@ version = "0.29.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8691f134d584a33a6606d9d717b95c4fa20065605f798a3f350d78dced02a902"
 dependencies = [
- "nix 0.24.2",
+ "nix 0.24.3",
  "once_cell",
  "smallvec",
  "wayland-sys",
@@ -4898,7 +4898,7 @@ version = "0.29.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6865c6b66f13d6257bef1cd40cbfe8ef2f150fb8ebbdb1e8e873455931377661"
 dependencies = [
- "nix 0.24.2",
+ "nix 0.24.3",
  "wayland-client",
  "xcursor",
 ]
