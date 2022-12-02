@@ -1,6 +1,5 @@
 use crate::prelude::*;
 // This needs to impl FromWorld not derive reflect
-#[derive(Component, Clone)]
 pub struct Map {
     pub size: UVec2,
     pub random: Random,
