@@ -9,7 +9,7 @@ pub struct TargetVisualizer {
     entity_list: Vec<Entity>,
 }
 impl TargetVisualizer {
-    pub fn new(start: impl Point2d, end: impl Point2d) -> Self {
+    pub fn new(start: impl GridPoint, end: impl GridPoint) -> Self {
         Self {
             start: Some(start.as_ivec2()),
             end: Some(end.as_ivec2()),
@@ -21,8 +21,8 @@ impl TargetVisualizer {
         &mut self,
         commands: &mut Commands,
         tilesets: &Tilesets,
-        start: impl Point2d,
-        end: impl Point2d,
+        start: impl GridPoint,
+        end: impl GridPoint,
         color: Color,
     ) {
         let start = start.as_ivec2();

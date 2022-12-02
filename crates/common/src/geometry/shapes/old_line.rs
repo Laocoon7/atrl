@@ -17,7 +17,7 @@ pub struct Line {
 }
 
 impl Line {
-    pub fn new(start: impl Point2d, end: impl Point2d) -> Self {
+    pub fn new(start: impl GridPoint, end: impl GridPoint) -> Self {
         let start = start.as_ivec2();
         let end = end.as_ivec2();
         let line_type = if start == end {
@@ -71,13 +71,13 @@ impl Line {
 }
 
 impl Shape for Line {
-    fn from_points(points: Vec<impl Point2d>) -> Self
+    fn from_points(points: Vec<impl GridPoint>) -> Self
     where Self: Sized {
         debug_assert!(points.len() >= 2);
         Self::new(points[0], points[1])
     }
 
-    fn contains(&self, point: impl Point2d) -> bool {
+    fn contains(&self, point: impl GridPoint) -> bool {
         let point = point.as_ivec2();
         match self.line_type {
             LineType::Point => self.start == point,

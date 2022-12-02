@@ -32,7 +32,7 @@ impl<T: GridParam> GridLayer<T> for Grid<T> {
     }
 
     #[inline(always)]
-    fn blit_clone(&mut self, to: impl Point2d, source: &Self, from: impl Point2d, size: impl Size2d)
+    fn blit_clone(&mut self, to: impl GridPoint, source: &Self, from: impl GridPoint, size: impl Size2d)
     where T: Clone {
         for y in 0..size.height() {
             for x in 0..size.width() {
@@ -56,7 +56,7 @@ impl<T: GridParam> GridLayer<T> for Grid<T> {
     }
 
     #[inline(always)]
-    fn blit_copy(&mut self, to: impl Point2d, source: &Self, from: impl Point2d, size: impl Size2d)
+    fn blit_copy(&mut self, to: impl GridPoint, source: &Self, from: impl GridPoint, size: impl Size2d)
     where T: Copy {
         for y in 0..size.height() {
             for x in 0..size.width() {
@@ -108,10 +108,10 @@ impl<T: GridParam> GridLayer<T> for Grid<T> {
     fn is_empty(&self) -> bool { self.cells.is_empty() }
 
     #[inline]
-    fn in_bounds(&self, pos: impl Point2d) -> bool { pos.is_valid(self.size()) }
+    fn in_bounds(&self, pos: impl GridPoint) -> bool { pos.is_valid(self.size()) }
 
     #[inline]
-    fn get_idx(&self, pos: impl Point2d) -> Option<usize> {
+    fn get_idx(&self, pos: impl GridPoint) -> Option<usize> {
         if pos.is_valid(self.size()) {
             Some(self.get_idx_unchecked(pos))
         } else {
@@ -120,7 +120,7 @@ impl<T: GridParam> GridLayer<T> for Grid<T> {
     }
 
     #[inline]
-    fn get_idx_unchecked(&self, point: impl Point2d) -> usize {
+    fn get_idx_unchecked(&self, point: impl GridPoint) -> usize {
         point.as_index_unchecked(self.width() as usize)
     }
 
@@ -142,23 +142,23 @@ impl<T: GridParam> GridLayer<T> for Grid<T> {
     }
 
     #[inline]
-    fn get(&self, index: impl Point2d) -> Option<&T> { self.get_idx(index).map(|idx| &self.cells[idx]) }
+    fn get(&self, index: impl GridPoint) -> Option<&T> { self.get_idx(index).map(|idx| &self.cells[idx]) }
 
     #[inline]
-    fn get_mut(&mut self, index: impl Point2d) -> Option<&mut T> {
+    fn get_mut(&mut self, index: impl GridPoint) -> Option<&mut T> {
         self.get_idx(index).map(move |idx| &mut self.cells[idx])
     }
 
     #[inline]
-    fn get_unchecked(&self, index: impl Point2d) -> &T { self.cells.index(self.get_idx_unchecked(index)) }
+    fn get_unchecked(&self, index: impl GridPoint) -> &T { self.cells.index(self.get_idx_unchecked(index)) }
 
     #[inline]
-    fn get_mut_unchecked(&mut self, index: impl Point2d) -> &mut T {
+    fn get_mut_unchecked(&mut self, index: impl GridPoint) -> &mut T {
         self.cells.index_mut(self.get_idx_unchecked(index))
     }
 
     #[inline]
-    fn set(&mut self, index: impl Point2d, value: T) -> Option<T> {
+    fn set(&mut self, index: impl GridPoint, value: T) -> Option<T> {
         if index.is_valid(self.size()) {
             let index = self.get_idx_unchecked(index);
             Some(std::mem::replace(&mut self.cells[index], value))
@@ -168,7 +168,7 @@ impl<T: GridParam> GridLayer<T> for Grid<T> {
     }
 
     #[inline]
-    fn set_unchecked(&mut self, index: impl Point2d, value: T) -> T {
+    fn set_unchecked(&mut self, index: impl GridPoint, value: T) -> T {
         let index = self.get_idx_unchecked(index);
         std::mem::replace(&mut self.cells[index], value)
     }
@@ -255,14 +255,14 @@ impl<T: Copy + GridParam> std::ops::IndexMut<usize> for Grid<T> {
     fn index_mut(&mut self, index: usize) -> &mut Self::Output { &mut self.cells[index] }
 }
 
-impl<T: Copy + GridParam, P: Point2d> Index<P> for Grid<T> {
+impl<T: Copy + GridParam, P: GridPoint> Index<P> for Grid<T> {
     type Output = T;
 
     #[inline]
     fn index(&self, index: P) -> &T { self.get_unchecked(index) }
 }
 
-impl<T: Copy + GridParam, P: Point2d> IndexMut<P> for Grid<T> {
+impl<T: Copy + GridParam, P: GridPoint> IndexMut<P> for Grid<T> {
     #[inline]
     fn index_mut(&mut self, index: P) -> &mut Self::Output { self.get_mut_unchecked(index) }
 }

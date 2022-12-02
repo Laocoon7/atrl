@@ -8,7 +8,7 @@ pub struct Polygon {
     is_convex: bool,
 }
 impl Polygon {
-    pub fn new(points: Vec<impl Point2d>) -> Self {
+    pub fn new(points: Vec<impl GridPoint>) -> Self {
         let points: Vec<IVec2> = points.into_iter().map(|p| p.as_ivec2()).collect();
         let fpoints = points.iter().map(|p| p.as_vec2()).collect();
         let is_convex = is_convex(&points);
@@ -49,12 +49,12 @@ impl Polygon {
     pub const fn is_convex(&self) -> bool { self.is_convex }
 }
 impl Shape for Polygon {
-    fn from_points(points: Vec<impl Point2d>) -> Self
+    fn from_points(points: Vec<impl GridPoint>) -> Self
     where Self: Sized {
         Self::new(points)
     }
 
-    fn contains(&self, point: impl Point2d) -> bool {
+    fn contains(&self, point: impl GridPoint) -> bool {
         let fpoint = point.as_vec2();
         let mut j = self.fpoints.len() - 1;
         let mut odd_number_of_nodes = false;

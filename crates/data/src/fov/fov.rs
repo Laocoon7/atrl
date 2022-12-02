@@ -6,7 +6,7 @@ pub enum Fov {
 impl Fov {
     pub fn compute<Range: Into<u32>>(
         &self,
-        origin: impl Point2d,
+        origin: impl GridPoint,
         vision_type: u8,
         range: Range,
         provider: &impl FovProvider,

@@ -6,7 +6,7 @@ pub struct Triangle {
     point2: IVec2,
 }
 impl Triangle {
-    pub fn new(start: impl Point2d, point1: impl Point2d, point2: impl Point2d) -> Self {
+    pub fn new(start: impl GridPoint, point1: impl GridPoint, point2: impl GridPoint) -> Self {
         Self {
             start: start.as_ivec2(),
             point1: point1.as_ivec2(),
@@ -27,7 +27,7 @@ impl GridShape for Triangle {
         discovered
     }
 
-    fn contains(&self, point: impl Point2d) -> bool { self.get_points().contains(&point.as_ivec2()) }
+    fn contains(&self, point: impl GridPoint) -> bool { self.get_points().contains(&point.as_ivec2()) }
 
     fn get_count(&self) -> usize { self.get_points().len() }
 }
@@ -47,7 +47,7 @@ impl GridShapeWithBorder for Triangle {
         discovered
     }
 
-    fn border_contains(&self, point: impl Point2d) -> bool {
+    fn border_contains(&self, point: impl GridPoint) -> bool {
         self.get_border_points().contains(&point.as_ivec2())
     }
 

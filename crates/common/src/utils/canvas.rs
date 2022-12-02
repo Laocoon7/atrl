@@ -12,12 +12,14 @@ impl Canvas {
         }
     }
 
-    pub fn put(&mut self, pos: impl Point2d, glyph: char) {
+    pub fn put(&mut self, pos: impl GridPoint, glyph: char) {
         let i = self.to_index(pos);
         self.string.replace_range(i..i + 1, std::str::from_utf8(&[glyph as u8]).unwrap());
     }
 
-    fn to_index(&self, point: impl Point2d) -> usize { point.as_index_unchecked(self.size.width() as usize) }
+    fn to_index(&self, point: impl GridPoint) -> usize {
+        point.as_index_unchecked(self.size.width() as usize)
+    }
 
     pub fn print(&self) {
         let width = self.size.width();

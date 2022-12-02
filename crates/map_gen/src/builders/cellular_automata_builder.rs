@@ -27,7 +27,7 @@ impl<T> CellularAutomataBuilder<T> {
         Box::new(self)
     }
 
-    fn count_neighbors(grid: &Grid<u32>, index: impl Point2d) -> u32 {
+    fn count_neighbors(grid: &Grid<u32>, index: impl GridPoint) -> u32 {
         let mut neighbors = 0;
         for y in -1..=1 {
             for x in -1..=1 {

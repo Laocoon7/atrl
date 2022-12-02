@@ -40,7 +40,7 @@ pub struct AdjIterator<'a> {
     arr: &'a [GridDirection],
 }
 impl<'a> AdjIterator<'a> {
-    pub fn new(p: impl Point2d, arr: &'a [GridDirection]) -> Self {
+    pub fn new(p: impl GridPoint, arr: &'a [GridDirection]) -> Self {
         Self {
             i: 0,
             p: p.as_ivec2(),

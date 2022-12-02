@@ -22,7 +22,7 @@ pub struct BresenhamLineIter {
 impl Octant {
     /// adapted from <http://codereview.stackexchange.com/a/95551>
     #[inline]
-    fn from_points(start: impl Point2d, end: impl Point2d) -> Self {
+    fn from_points(start: impl GridPoint, end: impl GridPoint) -> Self {
         let mut dx = end.x() - start.x();
         let mut dy = end.y() - start.y();
         let mut octant = 0;
@@ -44,7 +44,7 @@ impl Octant {
     }
 
     #[inline]
-    fn to_octant(&self, p: impl Point2d) -> IVec2 {
+    fn to_octant(&self, p: impl GridPoint) -> IVec2 {
         match self.0 {
             0 => IVec2::new(p.x(), p.y()),
             1 => IVec2::new(p.y(), p.x()),
@@ -60,7 +60,7 @@ impl Octant {
 
     #[inline]
     #[allow(clippy::wrong_self_convention)]
-    fn from_octant(&self, p: impl Point2d) -> IVec2 {
+    fn from_octant(&self, p: impl GridPoint) -> IVec2 {
         match self.0 {
             0 => IVec2::new(p.x(), p.y()),
             1 => IVec2::new(p.y(), p.x()),
@@ -79,7 +79,7 @@ impl BresenhamLineIter {
     /// Creates a new iterator.Yields intermediate points between `start`
     /// and `end`. Does include `start` but not `end`.
     #[inline]
-    pub fn new(start: impl Point2d, end: impl Point2d) -> Self {
+    pub fn new(start: impl GridPoint, end: impl GridPoint) -> Self {
         let octant = Octant::from_points(start, end);
         let start = octant.to_octant(start);
         let end = octant.to_octant(end);
@@ -134,11 +134,13 @@ pub struct BresenhamLineInclusiveIter(BresenhamLineIter);
 impl BresenhamLineInclusiveIter {
     /// Creates a new iterator. Yields points `start..=end`.
     #[inline]
-    pub fn new(start: impl Point2d, end: impl Point2d) -> Self { Self(BresenhamLineIter::new(start, end)) }
+    pub fn new(start: impl GridPoint, end: impl GridPoint) -> Self {
+        Self(BresenhamLineIter::new(start, end))
+    }
 
     /// Return the next point without checking if we are past `end`.
     #[inline]
-    pub fn advance(&mut self) -> impl Point2d { self.0.advance() }
+    pub fn advance(&mut self) -> impl GridPoint { self.0.advance() }
 }
 
 impl Iterator for BresenhamLineInclusiveIter {

@@ -15,7 +15,7 @@ pub enum CardinalDirection {
 }
 
 impl CardinalDirection {
-    pub fn from_unit_coord(coord: impl Point2d + std::fmt::Debug) -> Self {
+    pub fn from_unit_coord(coord: impl GridPoint + std::fmt::Debug) -> Self {
         match [coord.x(), coord.y()] {
             [1, 0] => Self::East,
             [-1, 0] => Self::West,

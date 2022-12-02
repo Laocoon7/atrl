@@ -20,7 +20,7 @@ impl BresenhamCircleIter {
     /// * `radius` - the radius of the desired circle.
     #[inline]
     #[allow(dead_code)]
-    pub fn new(center: impl Point2d, radius: i32) -> Self {
+    pub fn new(center: impl GridPoint, radius: i32) -> Self {
         Self {
             y: 0,
             radius,
@@ -81,7 +81,7 @@ impl BresenhamCircleNoDiagIter {
     /// * `radius` - the radius of the circle
     #[inline]
     #[allow(dead_code)]
-    pub fn new(center: impl Point2d, radius: i32) -> Self {
+    pub fn new(center: impl GridPoint, radius: i32) -> Self {
         Self {
             center: center.as_ivec2(),
             x: -radius,

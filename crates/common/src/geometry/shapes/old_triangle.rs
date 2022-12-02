@@ -21,7 +21,7 @@ pub struct Triangle {
     center: IVec2,
 }
 impl Triangle {
-    pub fn new(point1: impl Point2d, point2: impl Point2d, point3: impl Point2d) -> Self {
+    pub fn new(point1: impl GridPoint, point2: impl GridPoint, point3: impl GridPoint) -> Self {
         let points = [point1.as_ivec2(), point2.as_ivec2(), point3.as_ivec2()];
         let angles = [
             points[0].angle_to(points[1]),
@@ -79,13 +79,13 @@ impl Triangle {
 }
 impl Shape for Triangle {
     #[inline]
-    fn from_points(points: Vec<impl Point2d>) -> Self
+    fn from_points(points: Vec<impl GridPoint>) -> Self
     where Self: Sized {
         Self::new(points[0], points[1], points[2])
     }
 
     #[inline]
-    fn contains(&self, point: impl Point2d) -> bool {
+    fn contains(&self, point: impl GridPoint) -> bool {
         let p1 = IVec2::new(
             self.points[1].x - self.points[0].x,
             self.points[1].y - self.points[0].y,

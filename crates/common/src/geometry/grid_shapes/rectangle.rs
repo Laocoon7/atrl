@@ -15,7 +15,7 @@ impl Default for Rectangle {
 
 impl Rectangle {
     #[inline]
-    pub fn new(min: impl Point2d, max: impl Point2d) -> Self {
+    pub fn new(min: impl GridPoint, max: impl GridPoint) -> Self {
         let min = min.as_ivec2();
         let max = max.as_ivec2();
         Self {
@@ -25,7 +25,7 @@ impl Rectangle {
     }
 
     #[inline]
-    pub fn new_with_size(min: impl Point2d, size: impl Size2d) -> Self {
+    pub fn new_with_size(min: impl GridPoint, size: impl Size2d) -> Self {
         let min = min.as_ivec2();
         Self::new(min, min + size.as_ivec2())
     }
@@ -125,7 +125,7 @@ impl GridShape for Rectangle {
     fn get_count(&self) -> usize { self.get_points().len() }
 
     #[inline]
-    fn contains(&self, point: impl Point2d) -> bool {
+    fn contains(&self, point: impl GridPoint) -> bool {
         self.min.x <= point.x() && self.max.x > point.x() && self.min.y <= point.y() && self.max.y > point.y()
     }
 

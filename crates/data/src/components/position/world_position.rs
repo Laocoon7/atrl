@@ -44,7 +44,7 @@ impl WorldPosition {
     }
 }
 
-impl Point2d for WorldPosition {
+impl GridPoint for WorldPosition {
     fn x(&self) -> i32 { self.x() }
 
     fn y(&self) -> i32 { self.y() }

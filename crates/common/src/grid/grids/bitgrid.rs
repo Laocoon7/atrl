@@ -31,7 +31,7 @@ impl GridLayer<bool> for BitGrid {
     }
 
     #[inline(always)]
-    fn blit_clone(&mut self, to: impl Point2d, source: &Self, from: impl Point2d, size: impl Size2d)
+    fn blit_clone(&mut self, to: impl GridPoint, source: &Self, from: impl GridPoint, size: impl Size2d)
     where bool: Clone {
         for y in 0..size.height() {
             for x in 0..size.width() {
@@ -55,7 +55,7 @@ impl GridLayer<bool> for BitGrid {
     }
 
     #[inline(always)]
-    fn blit_copy(&mut self, to: impl Point2d, source: &Self, from: impl Point2d, size: impl Size2d)
+    fn blit_copy(&mut self, to: impl GridPoint, source: &Self, from: impl GridPoint, size: impl Size2d)
     where bool: Copy {
         for y in 0..size.height() {
             for x in 0..size.width() {
@@ -104,15 +104,15 @@ impl GridLayer<bool> for BitGrid {
     fn is_empty(&self) -> bool { self.cells.is_empty() }
 
     #[inline]
-    fn in_bounds(&self, point: impl Point2d) -> bool { point.is_valid(self.size()) }
+    fn in_bounds(&self, point: impl GridPoint) -> bool { point.is_valid(self.size()) }
 
     #[inline]
-    fn get_idx_unchecked(&self, point: impl Point2d) -> usize {
+    fn get_idx_unchecked(&self, point: impl GridPoint) -> usize {
         point.as_index_unchecked(self.width() as usize)
     }
 
     #[inline]
-    fn get_idx(&self, coord: impl Point2d) -> Option<usize> {
+    fn get_idx(&self, coord: impl GridPoint) -> Option<usize> {
         if coord.is_valid(self.size()) {
             Some(self.get_idx_unchecked(coord))
         } else {
@@ -138,26 +138,26 @@ impl GridLayer<bool> for BitGrid {
     }
 
     #[inline]
-    fn get(&self, pos: impl Point2d) -> Option<&bool> { self.get_idx(pos).map(|idx| &self.cells[idx]) }
+    fn get(&self, pos: impl GridPoint) -> Option<&bool> { self.get_idx(pos).map(|idx| &self.cells[idx]) }
 
-    fn get_mut(&mut self, pos: impl Point2d) -> Option<Self::MutableReturn<'_>> {
+    fn get_mut(&mut self, pos: impl GridPoint) -> Option<Self::MutableReturn<'_>> {
         let width = self.width() as usize;
         self.cells.get_mut(pos.as_index_unchecked(width))
     }
 
-    fn get_unchecked(&self, pos: impl Point2d) -> &bool { self.cells.index(self.get_idx_unchecked(pos)) }
+    fn get_unchecked(&self, pos: impl GridPoint) -> &bool { self.cells.index(self.get_idx_unchecked(pos)) }
 
     /// Gets a mutable reference corresponding to an index
     ///
     /// # Safety
     ///
     /// This function is unsafe because it does not check if the index is out of bounds.
-    fn get_mut_unchecked(&mut self, pos: impl Point2d) -> Self::MutableReturn<'_> {
+    fn get_mut_unchecked(&mut self, pos: impl GridPoint) -> Self::MutableReturn<'_> {
         let w = self.width() as usize;
         unsafe { self.cells.get_unchecked_mut(pos.as_index_unchecked(w)) }
     }
 
-    fn set(&mut self, pos: impl Point2d, value: bool) -> Option<bool> {
+    fn set(&mut self, pos: impl GridPoint, value: bool) -> Option<bool> {
         if pos.is_valid(self.size()) {
             let index = self.get_idx_unchecked(pos);
             Some(self.cells.replace(index, value))
@@ -166,7 +166,7 @@ impl GridLayer<bool> for BitGrid {
         }
     }
 
-    fn set_unchecked(&mut self, pos: impl Point2d, value: bool) -> bool {
+    fn set_unchecked(&mut self, pos: impl GridPoint, value: bool) -> bool {
         let index = self.get_idx_unchecked(pos);
         self.cells.replace(index, value)
     }
@@ -233,7 +233,7 @@ impl Index<usize> for BitGrid {
     fn index(&self, index: usize) -> &bool { &self.cells[index] }
 }
 
-impl<P: Point2d> Index<P> for BitGrid {
+impl<P: GridPoint> Index<P> for BitGrid {
     type Output = bool;
 
     #[inline]

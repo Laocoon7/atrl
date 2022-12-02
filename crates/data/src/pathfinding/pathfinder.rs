@@ -8,8 +8,8 @@ pub enum PathFinder {
 impl PathFinder {
     pub fn compute(
         &self,
-        origin: impl Point2d,
-        destination: impl Point2d,
+        origin: impl GridPoint,
+        destination: impl GridPoint,
         movement_type: u8,
         partial_path_on_failure: bool,
         provider: &impl PathProvider,

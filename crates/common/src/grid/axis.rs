@@ -14,7 +14,7 @@ impl GridAxis {
     }
 
     #[inline(always)]
-    pub fn new_coord<P: Point2d>(self, this_axis: i32, other_axis: i32) -> IVec2 {
+    pub fn new_coord<P: GridPoint>(self, this_axis: i32, other_axis: i32) -> IVec2 {
         match self {
             Self::X => P::new(this_axis, other_axis),
             Self::Y => P::new(other_axis, this_axis),

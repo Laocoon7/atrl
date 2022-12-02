@@ -6,7 +6,7 @@ pub struct Circle {
 }
 
 impl Circle {
-    pub fn new(center: impl Point2d, radius: u32) -> Self {
+    pub fn new(center: impl GridPoint, radius: u32) -> Self {
         Self {
             center: center.as_ivec2(),
             radius,
@@ -24,20 +24,20 @@ impl Circle {
 
 impl Shape for Circle {
     /// must be [center, edge]
-    fn from_points(points: Vec<impl Point2d>) -> Self
+    fn from_points(points: Vec<impl GridPoint>) -> Self
     where Self: Sized {
         debug_assert!(points.len() >= 2);
         let radius = DistanceAlg::Pythagoras.distance2d(points[0], points[1]).floor() as u32; // .round() ??
         Self::new(points[0], radius)
     }
 
-    fn translate_by(&self, delta: impl Point2d) -> Self {
+    fn translate_by(&self, delta: impl GridPoint) -> Self {
         Self::new(self.center + delta.as_ivec2(), self.radius)
     }
 
-    fn move_to(&self, point: impl Point2d) -> Self { Self::new(point.as_ivec2(), self.radius) }
+    fn move_to(&self, point: impl GridPoint) -> Self { Self::new(point.as_ivec2(), self.radius) }
 
-    fn contains(&self, point: impl Point2d) -> bool {
+    fn contains(&self, point: impl GridPoint) -> bool {
         let dist = DistanceAlg::Pythagoras.distance2d(self.center, point).floor() as u32; // .round() ??
         dist <= self.radius
     }
@@ -46,7 +46,7 @@ impl Shape for Circle {
     fn points(&self) -> Vec<IVec2> {
         vec![
             self.center,
-            Point2d::as_ivec2(&IVec2::from_angle(self.center, self.radius as f32, 0.0)),
+            GridPoint::as_ivec2(&IVec2::from_angle(self.center, self.radius as f32, 0.0)),
         ]
     }
 

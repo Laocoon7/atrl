@@ -5,8 +5,8 @@ pub fn entity_in_fov(
     map: &Map,
     fov: &FieldOfView,
     vision: &Vision,
-    current_pos: impl Point2d,
-    destination_pos: impl Point2d,
+    current_pos: impl GridPoint,
+    destination_pos: impl GridPoint,
 ) -> bool {
     // // If the player is within the FOV range of the AI, check line of sight
     let line_length = grid_shapes::Line::new(current_pos, destination_pos).get_count();

@@ -1,6 +1,6 @@
 use crate::prelude::*;
 /// A trait for types representing a 2d Point.
-pub trait Point2d: Clone + Copy {
+pub trait GridPoint: Clone + Copy {
     #[allow(clippy::new_ret_no_self)]
     /// Construct a IVec2
     fn new(x: i32, y: i32) -> IVec2 { IVec2::new(x, y) }
@@ -12,7 +12,7 @@ pub trait Point2d: Clone + Copy {
     fn y(&self) -> i32;
 
     /// Returns the grid point offset by the given amount.
-    fn offset(&self, xy: impl Point2d) -> IVec2 { self.add(xy) }
+    fn offset(&self, xy: impl GridPoint) -> IVec2 { self.add(xy) }
 
     /// Convert point to `IVec2` (i32).
     #[inline]
@@ -56,28 +56,30 @@ pub trait Point2d: Clone + Copy {
     ////////////////
     /// Adds two points together.
     #[inline]
-    fn add(&self, other: impl Point2d) -> IVec2 { IVec2::new(self.x() + other.x(), self.y() + other.y()) }
+    fn add(&self, other: impl GridPoint) -> IVec2 { IVec2::new(self.x() + other.x(), self.y() + other.y()) }
 
-    /// Returns distance from another `Point2d`.
+    /// Returns distance from another `GridPoint`.
     #[inline]
-    fn distance(&self, other: impl Point2d) -> f32 { self.as_vec2().distance(other.as_vec2()) }
+    fn distance(&self, other: impl GridPoint) -> f32 { self.as_vec2().distance(other.as_vec2()) }
 
     /// The [taxicab distance](https://en.wikipedia.org/wiki/Taxicab_geometry)
     /// between two grid points.
     #[inline]
-    fn taxi_dist(self, other: impl Point2d) -> f32 {
+    fn taxi_dist(self, other: impl GridPoint) -> f32 {
         DistanceAlg::Manhattan.distance2d(self.as_vec2(), other.as_vec2())
     }
 
     /// Linearly interpolate between points a and b by the amount t.
     #[inline]
-    fn lerp(self, other: impl Point2d, t: f32) -> IVec2 { self.as_vec2().lerp(other.as_vec2(), t).as_ivec2() }
+    fn lerp(self, other: impl GridPoint, t: f32) -> IVec2 {
+        self.as_vec2().lerp(other.as_vec2(), t).as_ivec2()
+    }
 
     ////////////////
     //  Geometry  //
     ////////////////
     #[inline]
-    fn from_angle(center: impl Point2d, distance: f32, degrees: f32) -> IVec2 {
+    fn from_angle(center: impl GridPoint, distance: f32, degrees: f32) -> IVec2 {
         let rads = degrees.to_radians();
         let x = (distance * rads.cos()).floor() as i32; // .round() ??
         let y = (distance * rads.sin()).floor() as i32;
@@ -85,14 +87,14 @@ pub trait Point2d: Clone + Copy {
     }
 
     #[inline]
-    fn angle_to(&self, point: impl Point2d) -> f32 {
+    fn angle_to(&self, point: impl GridPoint) -> f32 {
         let x = (point.x() - self.x()) as f32;
         let y = (point.y() - self.y()) as f32;
         y.atan2(x).to_degrees()
     }
 
     #[inline]
-    fn mid_point(&self, point: impl Point2d) -> IVec2 {
+    fn mid_point(&self, point: impl GridPoint) -> IVec2 {
         IVec2 {
             x: (self.x() + point.x()) / 2,
             y: (self.y() + point.y()) / 2,
@@ -101,11 +103,11 @@ pub trait Point2d: Clone + Copy {
 
     /// Returns the `Cross Product` between two points.
     #[inline]
-    fn cross_product(&self, point: impl Point2d) -> i32 { self.x() * point.y() - self.y() * point.x() }
+    fn cross_product(&self, point: impl GridPoint) -> i32 { self.x() * point.y() - self.y() * point.x() }
 
     /// Returns the `Dot Product` between two points.
     #[inline]
-    fn dot_product(&self, point: impl Point2d) -> i32 { self.x() * point.x() + self.y() * point.y() }
+    fn dot_product(&self, point: impl GridPoint) -> i32 { self.x() * point.x() + self.y() * point.y() }
 
     /// Returns the grid point the given number of spaces above this one.
     #[inline]
@@ -153,7 +155,7 @@ mod tests {
     fn taxi() {
         let a = (10, 10);
         let b = (20, 20);
-        let dist = Point2d::taxi_dist(a, b);
+        let dist = GridPoint::taxi_dist(a, b);
         assert_eq!(dist, 20.);
     }
     #[test]

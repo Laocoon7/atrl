@@ -44,7 +44,7 @@ impl LocalPosition {
     }
 }
 
-impl Point2d for LocalPosition {
+impl GridPoint for LocalPosition {
     fn x(&self) -> i32 { self.x() as i32 }
 
     fn y(&self) -> i32 { self.y() as i32 }
