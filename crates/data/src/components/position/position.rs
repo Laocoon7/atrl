@@ -32,7 +32,7 @@ impl Position {
     pub const fn layer(&self) -> u32 { self.local_position.layer() }
 
     #[inline]
-    pub const fn xy(&self) -> UVec2 { self.local_position.xy() }
+    pub const fn gridpoint(&self) -> UVec2 { self.local_position.gridpoint() }
 
     pub fn set_x(&mut self, value: u32) { self.local_position.set_x(value); }
 
@@ -57,7 +57,7 @@ impl Position {
     pub const fn world_z(&self) -> i32 { self.world_position.z() }
 
     #[inline]
-    pub const fn world_xy(&self) -> IVec2 { self.world_position.xy() }
+    pub const fn world_gridpoint(&self) -> IVec2 { self.world_position.gridpoint() }
 
     #[inline]
     pub const fn world_xyz(&self) -> IVec3 { self.world_position.xyz() }

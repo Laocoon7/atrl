@@ -19,7 +19,7 @@ impl WorldPosition {
     pub const fn z(&self) -> i32 { self.0.z }
 
     #[inline]
-    pub const fn xy(&self) -> IVec2 { IVec2::new(self.x(), self.y()) }
+    pub const fn gridpoint(&self) -> IVec2 { IVec2::new(self.x(), self.y()) }
 
     #[inline]
     pub const fn xyz(&self) -> IVec3 { self.0 }

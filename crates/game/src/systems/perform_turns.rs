@@ -116,8 +116,8 @@ fn try_move(
                         |map| {
                             PathFinder::Astar
                                 .compute(
-                                    from_position.xy(),
-                                    destination.xy(),
+                                    from_position.gridpoint(),
+                                    destination.gridpoint(),
                                     movement_component.0,
                                     true,
                                     map,
@@ -138,7 +138,7 @@ fn try_move(
                                             },
                                             |destination| {
                                                 if map.try_move_actor(
-                                                    from_position.xy(),
+                                                    from_position.gridpoint(),
                                                     destination,
                                                     movement_component.0,
                                                 ) {

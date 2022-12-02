@@ -80,15 +80,15 @@ mod geometry {
 }
 
 mod grid {
-    mod point {
-        mod point2d;
-        pub use point2d::*;
-        mod point2d_impl;
-        pub use point2d_impl::*;
-        mod point2d_iter;
-        pub use point2d_iter::*;
+    mod grid_point {
+        mod gridpoint;
+        pub use gridpoint::*;
+        mod gridpoint_impl;
+        pub use gridpoint_impl::*;
+        mod gridpoint_iter;
+        pub use gridpoint_iter::*;
     }
-    pub use point::*;
+    pub use grid_point::*;
 
     mod grids {
         mod grid_2d;

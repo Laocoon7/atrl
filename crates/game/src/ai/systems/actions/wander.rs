@@ -90,8 +90,8 @@ pub fn wander_action(
 
         let destination = match std::mem::take(&mut wander.destination) {
             Some(destination) => {
-                if Line::new(ai_position.xy(), destination.xy()).get_count() <= 1 {
-                    let xy = generate_wander_path(rng, map, ai_position.xy(), movement.0).as_uvec2();
+                if Line::new(ai_position.gridpoint(), destination.gridpoint()).get_count() <= 1 {
+                    let xy = generate_wander_path(rng, map, ai_position.gridpoint(), movement.0).as_uvec2();
                     Position::new(
                         WorldPosition::new(
                             ai_position.world_x(),
@@ -105,7 +105,7 @@ pub fn wander_action(
                 }
             },
             None => {
-                let xy = generate_wander_path(rng, map, ai_position.xy(), movement.0).as_uvec2();
+                let xy = generate_wander_path(rng, map, ai_position.gridpoint(), movement.0).as_uvec2();
                 Position::new(
                     WorldPosition::new(
                         ai_position.world_x(),
@@ -125,8 +125,8 @@ pub fn wander_action(
             target_visualizer.update(
                 &mut commands,
                 &tilesets,
-                ai_position.xy(),
-                destination.xy(),
+                ai_position.gridpoint(),
+                destination.gridpoint(),
                 Color::WHITE,
             );
         }

@@ -44,8 +44,8 @@ pub fn chase_action(
             return;
         }
 
-        let ai_pos = ai_position.xy();
-        let player_pos = player_position.xy();
+        let ai_pos = ai_position.gridpoint();
+        let player_pos = player_position.gridpoint();
         let Some(map) = manager.get_current_map_mut() else {
             info!("No map found");
             return
@@ -95,7 +95,7 @@ pub fn chase_action(
                     };
 
             // We reached the end of our chase path and we do not see the player :(
-            if last_seen.xy() == ai_pos {
+            if last_seen.gridpoint() == ai_pos {
                 // Failed or Success? Either works since we dont have anything happen in success or failure
                 *action_state = Failure;
                 return;
@@ -106,9 +106,9 @@ pub fn chase_action(
             // partial path. We can expect the first element in the path to be a valid location
             // that is closest to the last_seen_pt.
             if !chase.generated_path {
-                let xy = generate_last_seen_path(ai_pos, last_seen.xy(), movement.0, map)
+                let xy = generate_last_seen_path(ai_pos, last_seen.gridpoint(), movement.0, map)
                     .first()
-                    .unwrap_or(&last_seen.xy().as_ivec2())
+                    .unwrap_or(&last_seen.gridpoint().as_ivec2())
                     .as_uvec2();
                 let last_seen_pt = Position::new(
                     WorldPosition::new(
@@ -133,8 +133,8 @@ pub fn chase_action(
             target_visualizer.update(
                 &mut commands,
                 &tilesets,
-                ai_position.xy(),
-                position.xy(),
+                ai_position.gridpoint(),
+                position.gridpoint(),
                 Color::RED,
             );
         }

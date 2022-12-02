@@ -19,7 +19,7 @@ impl LocalPosition {
     pub const fn layer(&self) -> u32 { self.0.z }
 
     #[inline]
-    pub const fn xy(&self) -> UVec2 { UVec2::new(self.x(), self.y()) }
+    pub const fn gridpoint(&self) -> UVec2 { UVec2::new(self.x(), self.y()) }
 
     ///////////////////////////////
     /// Setters
