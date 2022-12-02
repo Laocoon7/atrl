@@ -11,26 +11,18 @@ use crate::prelude::*;
 #[cfg(feature = "debug")]
 pub(crate) mod debug {
     mod systems {
-        mod camera_viewport;
         mod show_ui;
-        mod user_input;
         mod window_title;
-        pub use camera_viewport::*;
         pub use show_ui::*;
-        pub use user_input::*;
         pub use window_title::*;
     }
     pub use systems::*;
 
-    mod debug_egui_plugin;
-    pub use debug_egui_plugin::*;
     mod debug_plugin;
     pub use debug_plugin::*;
-    mod tab_viewer;
-    pub use tab_viewer::*;
-    mod ui_state;
-    pub use ui_state::*;
 }
+
+mod log;
 
 fn main() {
     let mut app = App::new();
@@ -73,25 +65,15 @@ fn default_plugins(app: &mut App) -> &mut App {
             ..Default::default()
         })
         .set(ImagePlugin::default_nearest())
-        .build()
-        .disable::<bevy::log::LogPlugin>();
+        .set(atlr_log_plugin())
+        .build();
 
     app.add_plugins(defaults);
 
     #[cfg(feature = "release")]
     {
         defaults.add_before::<bevy::asset::AssetPlugin, _>(bevy_embedded_assets::EmbeddedAssetPlugin);
-        app.add_plugin(bevy::log::LogPlugin {
-            level: bevy::log::Level::WARN,
-            ..Default::default()
-        });
     }
-
-    #[cfg(not(feature = "debug"))]
-    app.add_plugin(bevy::log::LogPlugin {
-        level: bevy::log::Level::INFO,
-        ..Default::default()
-    });
 
     app
 }
