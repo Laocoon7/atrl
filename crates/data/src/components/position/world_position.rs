@@ -43,9 +43,3 @@ impl WorldPosition {
         self.set_z(z);
     }
 }
-
-impl GridPoint for WorldPosition {
-    fn x(&self) -> i32 { self.x() }
-
-    fn y(&self) -> i32 { self.y() }
-}

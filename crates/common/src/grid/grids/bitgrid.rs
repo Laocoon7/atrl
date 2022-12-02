@@ -107,9 +107,7 @@ impl GridLayer<bool> for BitGrid {
     fn in_bounds(&self, point: impl GridPoint) -> bool { point.is_valid(self.size()) }
 
     #[inline]
-    fn get_idx_unchecked(&self, point: impl GridPoint) -> usize {
-        point.as_index_unchecked(self.width() as usize)
-    }
+    fn get_idx_unchecked(&self, point: impl GridPoint) -> usize { point.as_index_unchecked(self.width()) }
 
     #[inline]
     fn get_idx(&self, coord: impl GridPoint) -> Option<usize> {
@@ -141,8 +139,8 @@ impl GridLayer<bool> for BitGrid {
     fn get(&self, pos: impl GridPoint) -> Option<&bool> { self.get_idx(pos).map(|idx| &self.cells[idx]) }
 
     fn get_mut(&mut self, pos: impl GridPoint) -> Option<Self::MutableReturn<'_>> {
-        let width = self.width() as usize;
-        self.cells.get_mut(pos.as_index_unchecked(width))
+        let w = self.width();
+        self.cells.get_mut(pos.as_index_unchecked(w))
     }
 
     fn get_unchecked(&self, pos: impl GridPoint) -> &bool { self.cells.index(self.get_idx_unchecked(pos)) }
@@ -153,7 +151,7 @@ impl GridLayer<bool> for BitGrid {
     ///
     /// This function is unsafe because it does not check if the index is out of bounds.
     fn get_mut_unchecked(&mut self, pos: impl GridPoint) -> Self::MutableReturn<'_> {
-        let w = self.width() as usize;
+        let w = self.width();
         unsafe { self.cells.get_unchecked_mut(pos.as_index_unchecked(w)) }
     }
 

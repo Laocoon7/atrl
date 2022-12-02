@@ -24,7 +24,7 @@ pub struct Map {
 // OPTIMIZE: All pub fn should check / convert position to usize index
 // then switch to unchecked indexing grid[index] on private functions
 impl Map {
-    pub fn try_add_actor(&mut self, position: impl GridPoint, actor: Entity, movement_type: u8) -> bool {
+    pub fn try_add_actor(&mut self, position: UVec2, actor: Entity, movement_type: u8) -> bool {
         let Some(position_index) = position.as_index(self.size) else {
             return false;
           };
@@ -37,7 +37,7 @@ impl Map {
         }
     }
 
-    pub fn try_move_actor(&mut self, from: impl GridPoint, to: impl GridPoint, movement_type: u8) -> bool {
+    pub fn try_move_actor(&mut self, from: UVec2, to: UVec2, movement_type: u8) -> bool {
         let Some(from_index) = from.as_index(self.size) else {
             return false;
           };
@@ -56,7 +56,7 @@ impl Map {
         false
     }
 
-    pub fn try_remove_actor(&mut self, position: impl GridPoint) -> Option<Entity> {
+    pub fn try_remove_actor(&mut self, position: UVec2) -> Option<Entity> {
         let Some(position_index) = position.as_index(self.size) else {
             return None;
           };
@@ -64,34 +64,21 @@ impl Map {
         self.remove_actor(position_index)
     }
 
-    pub fn can_place_actor(&self, position: impl GridPoint, movement_type: u8) -> bool {
-        self.is_walkable(position.as_ivec2(), movement_type) && !self.has_actor(position)
-    }
-
-    pub fn set_terrain_at(&mut self, position: impl GridPoint, terrain_type: TerrainType) {
-        self.terrain_types.set(position, terrain_type);
-        self.update_tiles.insert(position.as_uvec2());
-    }
-
-    pub fn add_feature_at(&mut self, position: impl GridPoint, feature_type: FeatureType) {
-        self.feature_types.set(position, feature_type);
-        self.update_tiles.insert(position.as_uvec2());
-    }
-
-    pub fn has_actor(&self, position: impl GridPoint) -> bool {
+    pub fn can_place_actor(&self, position: UVec2, movement_type: u8) -> bool {
         let Some(position_index) = position.as_index(self.size) else {
             return false;
           };
-
-        self.actors[position_index].is_some()
+        self.is_walkable(position.as_ivec2(), movement_type) && !self.has_actor(position_index)
     }
 
-    fn add_actor(&mut self, position_idx: usize, actor: Entity) { self.actors[position_idx] = Some(actor); }
+    pub fn set_terrain_at(&mut self, position: UVec2, terrain_type: TerrainType) {
+        self.terrain_types.set(position, terrain_type);
+        self.update_tiles.insert(position);
+    }
 
-    fn remove_actor(&mut self, position_idx: usize) -> Option<Entity> { self.actors[position_idx].take() }
-
-    pub fn get_actor(&self, position: impl GridPoint) -> Option<Entity> {
-        self.actors.get(position).and_then(|e| e.as_ref().copied())
+    pub fn add_feature_at(&mut self, position: UVec2, feature_type: FeatureType) {
+        self.feature_types.set(position, feature_type);
+        self.update_tiles.insert(position);
     }
 
     pub fn get_actor_position(&self, actor: Entity) -> Option<IVec2> {
@@ -106,17 +93,17 @@ impl Map {
         )
     }
 
-    pub fn move_actor(&mut self, from: impl GridPoint, to: impl GridPoint) {
-        if self.has_actor(to) {
-            return;
-        }
-
-        if let Some(actor) = self.get_actor(from) {
-            let position_idx = to.as_index_unchecked(self.size.width() as usize);
-            self.remove_actor(position_idx);
-            self.add_actor(position_idx, actor);
-        }
+    // TODO: pub?
+    fn _get_actor(&self, position_idx: usize) -> Option<Entity> {
+        self.actors[position_idx].as_ref().copied()
     }
+
+    // TODO: pub?
+    fn has_actor(&self, position_idx: usize) -> bool { self.actors[position_idx].is_some() }
+
+    fn add_actor(&mut self, position_idx: usize, actor: Entity) { self.actors[position_idx] = Some(actor); }
+
+    fn remove_actor(&mut self, position_idx: usize) -> Option<Entity> { self.actors[position_idx].take() }
 }
 
 pub struct MapPassThroughData {

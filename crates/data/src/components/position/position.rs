@@ -19,6 +19,14 @@ impl Position {
         }
     }
 
+    #[inline(always)]
+    pub fn grid_index(&self, size: UVec2) -> Option<usize> { self.gridpoint().as_index(size) }
+
+    #[inline(always)]
+    pub fn grid_index_unchecked<I: TryInto<usize>>(&self, width: I) -> usize {
+        self.gridpoint().as_index_unchecked(width)
+    }
+
     ///////////////////////////////
     /// LocalPosition
     ///////////////////////////////
@@ -55,9 +63,6 @@ impl Position {
 
     #[inline]
     pub const fn world_z(&self) -> i32 { self.world_position.z() }
-
-    #[inline]
-    pub const fn world_gridpoint(&self) -> IVec2 { self.world_position.gridpoint() }
 
     #[inline]
     pub const fn world_xyz(&self) -> IVec3 { self.world_position.xyz() }

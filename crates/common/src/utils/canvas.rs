@@ -17,9 +17,7 @@ impl Canvas {
         self.string.replace_range(i..i + 1, std::str::from_utf8(&[glyph as u8]).unwrap());
     }
 
-    fn to_index(&self, point: impl GridPoint) -> usize {
-        point.as_index_unchecked(self.size.width() as usize)
-    }
+    fn to_index(&self, point: impl GridPoint) -> usize { point.as_index_unchecked(self.size.width()) }
 
     pub fn print(&self) {
         let width = self.size.width();

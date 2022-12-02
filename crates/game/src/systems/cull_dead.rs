@@ -9,7 +9,7 @@ pub fn cull_dead(
     state: Res<CurrentGameState>,
     mut map_manager: ResMut<MapManager>,
     mut turn_manager: ResMut<TurnManager>,
-    query: Query<(Entity, &Transform, &Name, Option<&Player>), With<Dead>>,
+    query: Query<(Entity, &Position, &Name, Option<&Player>), With<Dead>>,
 ) {
     for (entity, position, name, player) in query.iter() {
         let Some(map) = map_manager.get_current_map_mut() else {
@@ -17,8 +17,7 @@ pub fn cull_dead(
             continue;
         };
 
-        let actor_pos = position.get();
-
+        let actor_pos = position.gridpoint();
         map.try_remove_actor(actor_pos).map_or_else(
             || {
                 error!(

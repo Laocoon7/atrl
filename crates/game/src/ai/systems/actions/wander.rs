@@ -140,7 +140,7 @@ fn generate_wander_path(rng: &mut impl RngCore, map: &Map, ai_pos: UVec2, moveme
     loop {
         // Default to the circle center
         let new_destination = wander_circle.iter().choose(rng).unwrap_or_else(|| wander_circle.center());
-        if map.can_place_actor(new_destination, movement_type) {
+        if map.can_place_actor(new_destination.as_uvec2(), movement_type) {
             return new_destination;
         }
     }

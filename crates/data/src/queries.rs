@@ -5,8 +5,8 @@ pub fn entity_in_fov(
     map: &Map,
     fov: &FieldOfView,
     vision: &Vision,
-    current_pos: impl GridPoint,
-    destination_pos: impl GridPoint,
+    current_pos: UVec2,
+    destination_pos: UVec2,
 ) -> bool {
     // // If the player is within the FOV range of the AI, check line of sight
     let line_length = grid_shapes::Line::new(current_pos, destination_pos).get_count();
@@ -24,23 +24,5 @@ pub fn entity_in_fov(
         visibility_map.get_visible(destination_pos.as_ivec2())
     } else {
         false
-    }
-}
-
-pub fn update_target_visual(
-    commands: &mut Commands,
-    tilesets: &Tilesets,
-    target_q: &mut Query<&mut TargetVisualizer>,
-    ai_path: &Vec<IVec2>,
-    actor: &Entity,
-    next_pt: &IVec2,
-    color: Color,
-) {
-    if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
-        if !ai_path.is_empty() {
-            target_visualizer.update(commands, tilesets, *next_pt, ai_path[0], color);
-        } else {
-            target_visualizer.update(commands, tilesets, *next_pt, *next_pt, color);
-        }
     }
 }

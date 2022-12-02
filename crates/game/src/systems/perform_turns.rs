@@ -139,7 +139,7 @@ fn try_move(
                                             |destination| {
                                                 if map.try_move_actor(
                                                     from_position.gridpoint(),
-                                                    destination,
+                                                    destination.as_uvec2(),
                                                     movement_component.0,
                                                 ) {
                                                     from_position.set_xy(destination.as_uvec2());

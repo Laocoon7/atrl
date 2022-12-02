@@ -1,4 +1,5 @@
 use crate::prelude::*;
+
 #[derive(Default, Reflect, FromReflect, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct LocalPosition(UVec3);
 
@@ -42,10 +43,4 @@ impl LocalPosition {
             (self.layer() as f32).mul_add(2.0, 1.0),
         )
     }
-}
-
-impl GridPoint for LocalPosition {
-    fn x(&self) -> i32 { self.x() as i32 }
-
-    fn y(&self) -> i32 { self.y() as i32 }
 }

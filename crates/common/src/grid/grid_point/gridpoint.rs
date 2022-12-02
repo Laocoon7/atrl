@@ -32,12 +32,15 @@ pub trait GridPoint: Clone + Copy {
 
     /// Get the point's corresponding 1d index.
     #[inline(always)]
-    fn as_index_unchecked(&self, width: usize) -> usize { self.y() as usize * width + self.x() as usize }
+    fn as_index_unchecked<I: TryInto<usize>>(&self, width: I) -> usize {
+        let width = width.try_into().unwrap_or_else(|_v| panic!("Something went wrong!"));
+        self.y() as usize * width + self.x() as usize
+    }
 
     #[inline(always)]
     fn as_index(&self, size: impl Size2d) -> Option<usize> {
         if self.is_valid(size) {
-            Some(self.as_index_unchecked(size.width() as usize))
+            Some(self.as_index_unchecked(size.width()))
         } else {
             None
         }

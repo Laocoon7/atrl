@@ -15,8 +15,8 @@ impl Default for CanSeePlayer {
 
 pub fn can_see_player(
     manager: Res<MapManager>,
-    ai_q: Query<(&Transform, &FieldOfView, &Vision)>,
-    player_q: Query<(Entity, &Transform), With<Player>>,
+    ai_q: Query<(&Position, &FieldOfView, &Vision)>,
+    player_q: Query<(Entity, &Position), With<Player>>,
     mut query: Query<(&Actor, &mut Score, &CanSeePlayer)>,
 ) {
     for (_player, player_transform) in &player_q {
@@ -25,8 +25,8 @@ pub fn can_see_player(
 
             if let Ok((ai_transform, fov, vision)) = ai_q.get(*actor) {
                 if let Some(map) = manager.get_current_map() {
-                    let player_pos = player_transform.get();
-                    let ai_pos = ai_transform.get();
+                    let player_pos = player_transform.gridpoint();
+                    let ai_pos = ai_transform.gridpoint();
                     if entity_in_fov(map, fov, vision, ai_pos, player_pos) {
                         current_score = can_see_player.score_if_true;
                     }
