@@ -1,4 +1,6 @@
-missing(debug)  - 0
-cursor          - 1
-dcss            - 2
-actors          - 3
+missing(debug)          - 0
+ui                      - 1
+actors                  - 2
+items                   - 3
+features                - 4
+terrain                 - 5

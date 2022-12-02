@@ -173,8 +173,8 @@ mod resources {
     pub use app_settings::*;
     mod tile_ids;
     pub use tile_ids::*;
-    mod tileset_paths;
-    pub use tileset_paths::*;
+    mod tileset_ids;
+    pub use tileset_ids::*;
     mod timer;
     pub use timer::*;
     mod font_paths;

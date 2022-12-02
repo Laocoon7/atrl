@@ -1,0 +1,10 @@
+(
+    name: Some("ui"),
+    id: 1,
+    tiles: {
+        0: "./tiles/empty.ron",
+        1: "./tiles/dcss/ui/cursor/cursor.ron",
+        2: "./tiles/dcss/ui/cursor/cursor_red.ron",
+        3: "./tiles/dcss/ui/cursor/cursor_green.ron",
+    }
+)

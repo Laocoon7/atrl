@@ -1,0 +1,8 @@
+(
+    name: Some("terrain"),
+    id: 5,
+    tiles: {
+        0: "./tiles/empty.ron",
+        1: "./tiles/dcss/terrain/floor.ron",
+    }
+)

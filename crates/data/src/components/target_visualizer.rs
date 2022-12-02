@@ -31,8 +31,8 @@ impl TargetVisualizer {
         self.end = Some(end);
         // TODO: reuse entities updating position...
         self.clear(commands);
-        let Some(tileset) = tilesets.get_by_id(TILESET_CURSOR_ID) else {
-            error!("Couldn't find tilemap_id: {:?}. Refusing to draw TargetVisualizer.", TILESET_CURSOR_ID);
+        let Some(tileset) = tilesets.get_by_id(&TILESET_UI_ID) else {
+            error!("Couldn't find tilemap_id: {:?}. Refusing to draw TargetVisualizer.", TILESET_UI_ID);
             return;
         };
         let line = grid_shapes::Line::new(start, end);
@@ -42,7 +42,7 @@ impl TargetVisualizer {
                     .spawn(SpriteSheetBundle {
                         sprite: TextureAtlasSprite {
                             color,
-                            index: TILE_CURSOR_ID,
+                            index: TILE_UI_CURSOR_ID,
                             custom_size: Some(Vec2::ONE),
                             ..Default::default()
                         },

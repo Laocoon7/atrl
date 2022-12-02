@@ -6,7 +6,7 @@ pub fn spawn_player(
     mut map_manager: ResMut<MapManager>,
     mut turn_manager: ResMut<TurnManager>,
 ) {
-    let Some(tileset) = tilesets.get_by_id(TILESET_ACTORS_ID) else {
+    let Some(tileset) = tilesets.get_by_id(&TILESET_ACTORS_ID) else {
         // crashing here, may make it hard to chase down other issues?
         error!("Couldn't find tilemap_id: {:?}. Refusing to spawn player.", TILESET_ACTORS_ID);
         return;
