@@ -65,14 +65,14 @@ fn spawn_ai_at(
     vision_type: VisionType,
     movement_type: MovementType,
 ) -> Entity {
-    let chase_and_attack = Steps::build().step(ChaseActor::default());
+    // let chase_and_attack = Steps::build().step(ChaseActor::default());
 
     // Build the thinker
     let thinker = Thinker::build()
         .label("RandomThinker")
         // We don't do anything unless we're thirsty enough.
         .picker(FirstToScore { threshold: 0.8, })
-        .when(WinningScorer::build(1.0).push(CanSeePlayer::default()), chase_and_attack)
+        .when(WinningScorer::build(1.0).push(CanSeePlayer::default()), ChaseActor::default())
         .otherwise(Wander::default());
 
     commands

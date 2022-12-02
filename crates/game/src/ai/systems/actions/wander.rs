@@ -22,7 +22,7 @@ pub fn wander_action(
     manager: Res<MapManager>,
     mut ctx: ResMut<GameContext>,
     mut target_q: Query<&mut TargetVisualizer>,
-    mut action_q: Query<(&Actor, &mut ActionState, &mut Wander, &ActionSpan)>,
+    mut action_q: Query<(&Actor, &mut ActionState, &mut Wander)>,
     mut spatial_q: Query<
         (
             &WorldPosition,
@@ -36,45 +36,54 @@ pub fn wander_action(
 ) {
     use ActionState::*;
 
-    for (Actor(actor), mut action_state, mut wander, span) in action_q.iter_mut() {
-        let _guard = span.span().enter();
-
+    action_q.iter_mut().for_each(|(Actor(actor), mut action_state, mut wander)| {
         let rng = ctx.random.get_prng().as_rngcore();
         let Some(map) = manager.get_current_map() else {
-            error!("No map found");
+            info!("No map found");
             return
         };
 
         let Ok((ai_world_position, ai_local_position, movement,name, mut ai_component)) =
         spatial_q.get_mut(*actor) else {
-                error!("Actor must have spatial components");
+            info!("Actor must have spatial components");
                 return
             };
 
+        if ai_component.preferred_action.is_some() {
+            // already wandering, quick return;
+            return;
+        }
+
         match *action_state {
-            // Init | Success | Failure
-            Init | Success | Failure => {
+            // Success | Failure
+            Success | Failure => {
                 // Nothing to do here
-                continue;
+                info!("{} wander state: {:?}", name, action_state);
+                return;
             },
             Cancelled => {
+                info!("{} cancelled wander", name);
                 ai_component.preferred_action = None;
                 *action_state = Failure;
+
+                // commands.entity(*actor).remove::<Wander>().insert(ChaseActor::default());
 
                 if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
                     target_visualizer.clear(&mut commands);
                 }
 
-                continue;
+                return;
             },
 
             // These two states will fall through to execution
-            Requested => {
+            Init | Requested => {
                 info!("{} gonna start wandering!", name);
                 *action_state = Executing;
             },
             Executing => {},
         }
+
+        info!("{} executing wander!", name);
 
         let destination = match std::mem::take(&mut wander.destination) {
             Some(destination) => {
@@ -100,7 +109,7 @@ pub fn wander_action(
                 Color::WHITE,
             );
         }
-    }
+    });
 }
 
 fn generate_wander_path(rng: &mut impl RngCore, map: &Map, ai_pos: UVec2, movement_type: u8) -> IVec2 {

@@ -16,7 +16,7 @@ pub fn chase_action(
     mut manager: ResMut<MapManager>,
     mut target_q: Query<&mut TargetVisualizer>,
     player_q: Query<(Entity, &WorldPosition, &LocalPosition), With<Player>>,
-    mut action_q: Query<(&Actor, &mut ActionState, &mut ChaseActor, &ActionSpan)>,
+    mut action_q: Query<(&Actor, &mut ActionState, &mut ChaseActor)>,
     mut ai_q: Query<
         (
             &WorldPosition,
@@ -32,34 +32,32 @@ pub fn chase_action(
 ) {
     use ActionState::*;
 
-    for (Actor(actor), mut action_state, mut chase, span) in action_q.iter_mut() {
-        let _guard = span.span().enter();
-
+    action_q.iter_mut().for_each(|(Actor(actor), mut action_state, mut chase)| {
         let (_player_entity, player_world_position, player_local_position) = player_q.single();
         let Ok((_ai_world_position, ai_local_position, fov, movement,vision, name, mut ai_component)) =
             ai_q.get_mut(*actor) else {
-                error!("Actor must have required components");
+                info!("Actor must have required components");
                 return
             };
 
         if ai_component.preferred_action.is_some() {
             // already chasing, quick return;
-            commands.insert_resource(TurnState::Processing);
             return;
         }
 
         let ai_pos = ai_local_position.0;
         let player_pos = player_local_position.0;
         let Some(map) = manager.get_current_map_mut() else {
-            error!("No map found");
+            info!("No map found");
             return
         };
 
         match *action_state {
-            // Init | Success | Failure
-            Init | Success | Failure => {
+            // Success | Failure
+            Success | Failure => {
                 // Nothing to do here
-                continue;
+                info!("{} chase state: {:?}", name, action_state);
+                return;
             },
             Cancelled => {
                 ai_component.preferred_action = None;
@@ -69,8 +67,10 @@ pub fn chase_action(
                 if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
                     target_visualizer.clear(&mut commands);
                 }
+
+                return;
             },
-            Requested => {
+            Init | Requested => {
                 info!("{} gonna start chasing!", name);
                 *action_state = Executing;
 
@@ -101,7 +101,7 @@ pub fn chase_action(
             if last_seen.1 == ai_pos {
                 // Failed or Success? Either works since we dont have anything happen in success or failure
                 *action_state = Failure;
-                continue;
+                return;
             }
 
             // We have lost sight of the player and need a path to their last seen position.
@@ -136,9 +136,7 @@ pub fn chase_action(
                 Color::RED,
             );
         }
-
-        info!("Chase action output: {:?}\n", action_state);
-    }
+    });
 }
 
 fn generate_last_seen_path(

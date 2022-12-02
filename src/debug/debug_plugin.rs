@@ -14,8 +14,13 @@ impl Plugin for DebugPlugin {
                      sequence=debug"
                 .to_string(),
         });
+
         // Fps / Entity Tracking
         app.add_plugin(FrameTimeDiagnosticsPlugin).add_plugin(EntityCountDiagnosticsPlugin);
+
+        // app.add_plugin(LogDiagnosticsPlugin::default()).
+        // add_plugin(FrameTimeDiagnosticsPlugin::default());
+
         // Inspector Egui Plugin
         app.add_plugin(DebugEguiPlugin);
     }

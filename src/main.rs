@@ -87,14 +87,11 @@ fn default_plugins(app: &mut App) -> &mut App {
         });
     }
 
-    #[cfg(not(feature = "release"))]
+    #[cfg(not(feature = "debug"))]
     app.add_plugin(bevy::log::LogPlugin {
         level: bevy::log::Level::INFO,
         ..Default::default()
     });
-
-    // app.add_plugin(LogDiagnosticsPlugin::default()).
-    // add_plugin(FrameTimeDiagnosticsPlugin::default());
 
     app
 }

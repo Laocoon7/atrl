@@ -16,8 +16,8 @@ impl<T: StateNext, R: StateNext + Resource> Plugin for AIPlugin<T, R> {
                     .into(),
             )
             // Action Systems
-            .add_system_set_to_stage(
-                BigBrainStage::Actions,
+            .add_system_set(
+                // BigBrainStage::Actions,
                 ConditionSet::new()
                     .run_in_state(self.state_running)
                     //.run_if_resource_equals(self.turn_state_ai_thinking)

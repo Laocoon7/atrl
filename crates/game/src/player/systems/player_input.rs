@@ -37,8 +37,10 @@ pub fn player_input(
                     timer.finished()
             {
                 if let Some(direction) = input_direction.direction() {
-                    action_queue.add_action(ActionType::MovementDelta(direction.coord()));
                     timer.reset();
+                    action_queue.add_action(ActionType::MovementDelta(direction.coord()));
+                    println!();
+                    info!("Player turn end");
                 }
             }
         }

@@ -2,10 +2,10 @@ use crate::prelude::*;
 
 pub fn perform_turns(
     q_player: Query<&Player>,
-    mut q_ai: Query<&mut AIComponent>,
+    mut q_ai: Query<(&mut AIComponent, &Name)>,
 
-    mut q_position: Query<(&mut WorldPosition, &mut LocalPosition)>,
     q_movement: Query<&Movement>,
+    mut q_position: Query<(&mut WorldPosition, &mut LocalPosition)>,
 
     mut map_manager: ResMut<MapManager>,
     mut turn_manager: ResMut<TurnManager>,
@@ -23,15 +23,20 @@ pub fn perform_turns(
                     turn_manager.end_entity_turn(entity, 0);
                     return;
                 }
-            } else if let Ok(mut ai_component) = q_ai.get_mut(entity) {
+            } else if let Ok((mut ai_component, name)) = q_ai.get_mut(entity) {
+                info!("Starting turn for {}", name);
+
                 if let Some(a) = std::mem::take(&mut ai_component.preferred_action) {
+                    info!("{} is performing {:?}", name, a);
                     a
                 } else {
+                    info!("{} has no preferred action!", name);
                     turn_manager.end_entity_turn(entity, 0);
                     return;
+                    // ActionType::Wait
                 }
             } else {
-                error!("AI does not have an AI Component.");
+                info!("AI does not have an AI Component.");
                 // don't add the entity back to the queue...
                 // just go to the next one and try to recover
                 continue;
