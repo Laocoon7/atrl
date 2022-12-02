@@ -31,24 +31,24 @@ pub fn chase_action(
 ) {
     use ActionState::*;
 
-    action_q.iter_mut().for_each(|(Actor(actor), mut action_state, mut chase)| {
+    for (Actor(actor), mut action_state, mut chase) in action_q.iter_mut() {
         let (_player_entity, player_position) = player_q.single();
         let Ok((ai_position, fov, movement,vision, name, mut ai_component)) =
             ai_q.get_mut(*actor) else {
                 info!("Actor must have required components");
-                return
+                continue;
             };
 
         if ai_component.preferred_action.is_some() {
             // already chasing, quick return;
-            return;
+            continue;
         }
 
         let ai_pos = ai_position.gridpoint();
         let player_pos = player_position.gridpoint();
         let Some(map) = manager.get_current_map_mut() else {
             info!("No map found");
-            return
+            continue;
         };
 
         match *action_state {
@@ -56,7 +56,7 @@ pub fn chase_action(
             Success | Failure => {
                 // Nothing to do here
                 info!("{} chase state: {:?}", name, action_state);
-                return;
+                continue;
             },
             Cancelled => {
                 ai_component.preferred_action = None;
@@ -67,7 +67,7 @@ pub fn chase_action(
                     target_visualizer.clear(&mut commands);
                 }
 
-                return;
+                continue;
             },
             Init | Requested => {
                 info!("{} gonna start chasing!", name);
@@ -91,14 +91,14 @@ pub fn chase_action(
             let Some(last_seen) = chase.last_seen_pt else {
                         error!("Executing chase with no target.");
                         ai_component.preferred_action = Some(ActionType::Wait);
-                        return;
+                        continue;
                     };
 
             // We reached the end of our chase path and we do not see the player :(
             if last_seen.gridpoint() == ai_pos {
                 // Failed or Success? Either works since we dont have anything happen in success or failure
                 *action_state = Failure;
-                return;
+                continue;
             }
 
             // We have lost sight of the player and need a path to their last seen position.
@@ -138,7 +138,7 @@ pub fn chase_action(
                 Color::RED,
             );
         }
-    });
+    }
 }
 
 fn generate_last_seen_path(
