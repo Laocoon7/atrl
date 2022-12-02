@@ -7,7 +7,7 @@ pub struct MapGenData<T> {
     pub random: Random,
     pub exit_positions: Vec<UVec2>,
 
-    pub grid: Grid<u32>,
+    pub terrain_grid: Grid<u32>,
     pub rooms: Vec<Rectangle>,
 }
 
@@ -18,7 +18,7 @@ impl<T> MapGenData<T> {
             size,
             random,
             exit_positions: Vec::new(),
-            grid: Grid::new_default(size),
+            terrain_grid: Grid::new_default(size),
             rooms: Vec::new(),
         }
     }

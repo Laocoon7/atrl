@@ -31,19 +31,19 @@ impl<T> MapArchitect<T> for SetBuilder<T> {
             None => Rectangle::new((0i32, 0), data.size - UVec2::new(1, 1)),
         };
 
-        if !data.grid.in_bounds(rect.min()) || !data.grid.in_bounds(rect.max()) {
+        if !data.terrain_grid.in_bounds(rect.min()) || !data.terrain_grid.in_bounds(rect.max()) {
             error!(
                 "SetBuilder Rectangle{{ {}, {} }} is outside of bounds for Grid({}, {})",
                 rect.min(),
                 rect.max(),
-                data.grid.width(),
-                data.grid.height()
+                data.terrain_grid.width(),
+                data.terrain_grid.height()
             );
             return;
         }
 
         rect.for_each(|v| {
-            data.grid.set(v, self.value);
+            data.terrain_grid.set(v, self.value);
         });
     }
 }

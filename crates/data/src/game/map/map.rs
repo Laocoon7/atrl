@@ -113,7 +113,7 @@ impl From<MapGenData<MapPassThroughData>> for Map {
         let mut terrain_types = Grid::new_default(data.size);
         for y in 0..data.size.height() {
             for x in 0..data.size.width() {
-                let v = *data.grid.get_unchecked((x, y));
+                let v = *data.terrain_grid.get_unchecked((x, y));
                 terrain_types.set((x, y), v.into());
             }
         }

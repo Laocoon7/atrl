@@ -6,13 +6,13 @@ use crate::prelude::*;
 ///
 /// https://rust-lang.github.io/rust-clippy/master/index.html#cognitive_complexity
 pub fn update_tilemaps(
-    mut q_map: Query<&mut Map>,
+    mut map_manager: ResMut<MapManager>,
     q_storage: Query<&TileStorage>,
     mut q_tiles: Query<&mut TileTextureIndex>,
 ) {
-    for mut map in q_map.iter_mut() {
+    if let Some(map) = map_manager.get_current_map_mut() {
         if !map.update_all && map.update_tiles.is_empty() {
-            continue;
+            return;
         }
 
         // Get storages
@@ -20,7 +20,7 @@ pub fn update_tilemaps(
             Ok(s) => s,
             Err(e) => {
                 error!("{}", e);
-                continue;
+                return;
             },
         };
 
@@ -28,7 +28,7 @@ pub fn update_tilemaps(
             Ok(s) => s,
             Err(e) => {
                 error!("{}", e);
-                continue;
+                return;
             },
         };
 

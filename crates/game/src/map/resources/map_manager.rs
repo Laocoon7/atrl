@@ -37,12 +37,13 @@ impl MapManager {
     }
 
     fn set_current_map(&mut self, world_position: IVec3) {
-        if let Some(new_map) = self.loaded_maps.remove(&world_position) {
+        if let Some(mut new_map) = self.loaded_maps.remove(&world_position) {
             // current map -> loaded_maps
             if let Some((current_world_position, map)) = std::mem::take(&mut self.current_map) {
                 self.loaded_maps.insert(current_world_position, map);
             }
 
+            new_map.update_all = true;
             self.current_map = Some((world_position, new_map));
         }
     }
