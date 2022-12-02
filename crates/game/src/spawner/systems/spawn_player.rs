@@ -38,10 +38,10 @@ pub fn spawn_player(
         player: Player,
 
         actor: ActorBundle {
-            name: Name::new("Bob the Builder"),
-            mob: Mob,
             position,
-            health: Health::new(10, 10),
+            mob: Mob,
+            name: Name::new("Bob the Builder"),
+            health: Health::full(10),
             ai: AIComponent::human(),
             sprite: SpriteSheetBundle {
                 sprite: TextureAtlasSprite {

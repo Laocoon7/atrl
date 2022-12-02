@@ -3,7 +3,7 @@ use std::ops::{Add, AddAssign};
 use crate::prelude::*;
 
 #[derive(
-    Component, Reflect, FromReflect, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Hash, Debug,
+    Default, Component, Reflect, FromReflect, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Hash, Debug,
 )]
 pub struct Position {
     world_position: WorldPosition,
@@ -11,7 +11,8 @@ pub struct Position {
 }
 
 impl Position {
-    pub fn new(world_position: WorldPosition, local_position: LocalPosition) -> Self {
+    #[inline(always)]
+    pub const fn new(world_position: WorldPosition, local_position: LocalPosition) -> Self {
         Self {
             world_position,
             local_position,
@@ -21,13 +22,17 @@ impl Position {
     ///////////////////////////////
     /// LocalPosition
     ///////////////////////////////
-    pub fn x(&self) -> u32 { self.local_position.x() }
+    #[inline]
+    pub const fn x(&self) -> u32 { self.local_position.x() }
 
-    pub fn y(&self) -> u32 { self.local_position.y() }
+    #[inline]
+    pub const fn y(&self) -> u32 { self.local_position.y() }
 
-    pub fn layer(&self) -> u32 { self.local_position.layer() }
+    #[inline]
+    pub const fn layer(&self) -> u32 { self.local_position.layer() }
 
-    pub fn xy(&self) -> UVec2 { self.local_position.xy() }
+    #[inline]
+    pub const fn xy(&self) -> UVec2 { self.local_position.xy() }
 
     pub fn set_x(&mut self, value: u32) { self.local_position.set_x(value); }
 
@@ -42,15 +47,20 @@ impl Position {
     ///////////////////////////////
     /// WorldPosition
     ///////////////////////////////
-    pub fn world_x(&self) -> i32 { self.world_position.x() }
+    #[inline]
+    pub const fn world_x(&self) -> i32 { self.world_position.x() }
 
-    pub fn world_y(&self) -> i32 { self.world_position.y() }
+    #[inline]
+    pub const fn world_y(&self) -> i32 { self.world_position.y() }
 
-    pub fn world_z(&self) -> i32 { self.world_position.z() }
+    #[inline]
+    pub const fn world_z(&self) -> i32 { self.world_position.z() }
 
-    pub fn world_xy(&self) -> IVec2 { self.world_position.xy() }
+    #[inline]
+    pub const fn world_xy(&self) -> IVec2 { self.world_position.xy() }
 
-    pub fn world_xyz(&self) -> IVec3 { self.world_position.xyz() }
+    #[inline]
+    pub const fn world_xyz(&self) -> IVec3 { self.world_position.xyz() }
 
     pub fn set_world_x(&mut self, value: i32) { self.world_position.set_x(value); }
 
@@ -64,8 +74,9 @@ impl Position {
 }
 
 impl Add<IVec2> for Position {
-    type Output = Position;
+    type Output = Self;
 
+    #[inline]
     fn add(self, rhs: IVec2) -> Self::Output {
         let mut world_x = self.world_x();
         let mut world_y = self.world_y();
@@ -97,6 +108,7 @@ impl Add<IVec2> for Position {
 }
 
 impl AddAssign<IVec2> for Position {
+    #[inline]
     fn add_assign(&mut self, rhs: IVec2) {
         let new_x = self.x() as i32 + rhs.x;
         let new_y = self.y() as i32 + rhs.y;

@@ -73,10 +73,9 @@ pub fn chase_action(
                 info!("{} gonna start chasing!", name);
                 *action_state = Executing;
 
-                ai_component.preferred_action = Some(ActionType::Movement(*player_position));
-
                 chase.generated_path = false;
                 chase.last_seen_pt = Some(*player_position);
+                ai_component.preferred_action = Some(ActionType::Movement(*player_position));
             },
             Executing => {},
         }
@@ -104,7 +103,7 @@ pub fn chase_action(
 
             // We have lost sight of the player and need a path to their last seen position.
             // Our pathfinder will only generate a valid path to the last seen location, this includes
-            // partial path We can expect the first element in the path to be a valid location
+            // partial path. We can expect the first element in the path to be a valid location
             // that is closest to the last_seen_pt.
             if !chase.generated_path {
                 let xy = generate_last_seen_path(ai_pos, last_seen.xy(), movement.0, map)

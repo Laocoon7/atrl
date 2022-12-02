@@ -1,22 +1,28 @@
 use crate::prelude::*;
-#[derive(Reflect, FromReflect, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Default, Reflect, FromReflect, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct WorldPosition(IVec3);
 
 impl WorldPosition {
-    pub fn new(x: i32, y: i32, z: i32) -> Self { Self(IVec3::new(x, y, z)) }
+    #[inline(always)]
+    pub const fn new(x: i32, y: i32, z: i32) -> Self { Self(IVec3::new(x, y, z)) }
 
     ///////////////////////////////
     /// Getters
     ///////////////////////////////
-    pub fn x(&self) -> i32 { self.0.x }
+    #[inline]
+    pub const fn x(&self) -> i32 { self.0.x }
 
-    pub fn y(&self) -> i32 { self.0.y }
+    #[inline]
+    pub const fn y(&self) -> i32 { self.0.y }
 
-    pub fn z(&self) -> i32 { self.0.z }
+    #[inline]
+    pub const fn z(&self) -> i32 { self.0.z }
 
-    pub fn xy(&self) -> IVec2 { IVec2::new(self.x(), self.y()) }
+    #[inline]
+    pub const fn xy(&self) -> IVec2 { IVec2::new(self.x(), self.y()) }
 
-    pub fn xyz(&self) -> IVec3 { self.0 }
+    #[inline]
+    pub const fn xyz(&self) -> IVec3 { self.0 }
 
     ///////////////////////////////
     /// Setters
@@ -36,4 +42,10 @@ impl WorldPosition {
         self.set_xy(x, y);
         self.set_z(z);
     }
+}
+
+impl Point2d for WorldPosition {
+    fn x(&self) -> i32 { self.x() }
+
+    fn y(&self) -> i32 { self.y() }
 }

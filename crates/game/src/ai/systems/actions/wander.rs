@@ -12,18 +12,18 @@ static WANDER_RANGE: Lazy<Uniform<u32>> = Lazy::new(|| Uniform::new_inclusive(3,
 #[derive(Debug, Reflect, Component, Clone, Eq, PartialEq)]
 #[reflect(Component)]
 pub struct Wander {
-    my_previous_location: Position,
     destination: Option<Position>,
+    my_previous_location: Position,
 }
 
 impl Default for Wander {
     fn default() -> Self {
         Self {
+            destination: None,
             my_previous_location: Position::new(
                 WorldPosition::new(0, 0, 0),
                 LocalPosition::new(0, 0, MapLayer::Actors as u32),
             ),
-            destination: None,
         }
     }
 }

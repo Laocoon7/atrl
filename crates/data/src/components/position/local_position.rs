@@ -1,20 +1,25 @@
 use crate::prelude::*;
-#[derive(Reflect, FromReflect, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Hash, Debug)]
+#[derive(Default, Reflect, FromReflect, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct LocalPosition(UVec3);
 
 impl LocalPosition {
-    pub fn new(x: u32, y: u32, layer: u32) -> Self { Self(UVec3::new(x, y, layer)) }
+    #[inline(always)]
+    pub const fn new(x: u32, y: u32, layer: u32) -> Self { Self(UVec3::new(x, y, layer)) }
 
     ///////////////////////////////
     /// Getters
     ///////////////////////////////
-    pub fn x(&self) -> u32 { self.0.x }
+    #[inline]
+    pub const fn x(&self) -> u32 { self.0.x }
 
-    pub fn y(&self) -> u32 { self.0.y }
+    #[inline]
+    pub const fn y(&self) -> u32 { self.0.y }
 
-    pub fn layer(&self) -> u32 { self.0.z }
+    #[inline]
+    pub const fn layer(&self) -> u32 { self.0.z }
 
-    pub fn xy(&self) -> UVec2 { UVec2::new(self.x(), self.y()) }
+    #[inline]
+    pub const fn xy(&self) -> UVec2 { UVec2::new(self.x(), self.y()) }
 
     ///////////////////////////////
     /// Setters
@@ -34,7 +39,13 @@ impl LocalPosition {
         Vec3::new(
             self.x() as f32 + 0.5,
             self.y() as f32 + 0.5,
-            self.layer() as f32 * 2.0 + 1.0,
+            (self.layer() as f32).mul_add(2.0, 1.0),
         )
     }
+}
+
+impl Point2d for LocalPosition {
+    fn x(&self) -> i32 { self.x() as i32 }
+
+    fn y(&self) -> i32 { self.y() as i32 }
 }

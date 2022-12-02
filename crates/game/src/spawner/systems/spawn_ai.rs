@@ -84,10 +84,10 @@ fn spawn_ai_at(
         .spawn((
             ActorBundle {
                 mob: Mob,
+                position,
                 ai: AIComponent::aggressive(),
                 name: Name::new(name.to_string()),
-                position,
-                health: Health::new(5, 5),
+                health: Health::full(5),
                 sprite: SpriteSheetBundle {
                     sprite: TextureAtlasSprite {
                         color: Color::RED,
