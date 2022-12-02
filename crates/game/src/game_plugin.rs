@@ -33,8 +33,6 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
             // Ecs Plugin (Systems)
             .add_plugin(EcsPlugin {
                 state_running: self.state_running,
-                turn_state_processing: TurnState::Processing,
-                turn_state_ai_thinking: TurnState::AIThinking,
             });
 
         self
@@ -58,12 +56,10 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
 
 impl<T: StateNext> GamePlugin<T> {
     fn setup_states(self, app: &mut App) -> Self {
-        app.add_loopless_state(GameState::Initializing)
-            .insert_resource(TurnState::Processing)
-            .add_enter_system(
-                GameState::Initializing,
-                switch_in_game_state!(self.state_asset_load),
-            );
+        app.add_loopless_state(GameState::Initializing).add_enter_system(
+            GameState::Initializing,
+            switch_in_game_state!(self.state_asset_load),
+        );
         self
     }
 

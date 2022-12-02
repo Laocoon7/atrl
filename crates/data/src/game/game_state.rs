@@ -20,13 +20,13 @@ pub enum UiState {
     MainMenu,
 }
 
-#[derive(Default, Resource, Clone, Copy, PartialEq, Eq, Hash, Debug)]
-pub enum TurnState {
-    #[default]
-    Processing,
-    AIThinking,
-    Dead,
-}
+// #[derive(Default, Resource, Clone, Copy, PartialEq, Eq, Hash, Debug)]
+// pub enum TurnState {
+//     #[default]
+//     Processing,
+//     AIThinking,
+//     Dead,
+// }
 
 #[derive(Default, Clone, Copy, PartialEq, Hash, Eq, Debug)]
 pub enum GameState {
@@ -36,6 +36,7 @@ pub enum GameState {
     Ui(UiState),
     Construct(ConstructState),
     InGame,
+    Dead,
     Quit,
 }
 
@@ -75,31 +76,33 @@ impl StateNext for GameState {
                 ConstructState::Construct => Some(Self::Construct(ConstructState::Setup)),
                 ConstructState::Setup => Some(Self::InGame),
             },
+
+            Self::Dead => Some(Self::Ui(UiState::MainMenu)),
         }
     }
 }
 
-impl StateNext for TurnState {
-    fn next(&self) -> Option<Self> {
-        match self {
-            Self::Processing => Some(Self::AIThinking),
-            Self::AIThinking => Some(Self::Processing),
-            Self::Dead => None,
-        }
-    }
-}
+// impl StateNext for TurnState {
+//     fn next(&self) -> Option<Self> {
+//         match self {
+//             Self::Processing => Some(Self::AIThinking),
+//             Self::AIThinking => Some(Self::Processing),
+//             Self::Dead => None,
+//         }
+//     }
+// }
 
-impl TurnState {
-    pub fn set_next(&self, commands: &mut Commands) {
-        let current = &self;
-        current.next().map_or_else(
-            || {
-                bevy::log::error!("no next turnstate for {:?}.", current);
-            },
-            |next| {
-                bevy::log::info!("transitioning turnstate from {:?} to {:?}", current, next);
-                commands.insert_resource(next);
-            },
-        )
-    }
-}
+// impl TurnState {
+//     pub fn set_next(&self, commands: &mut Commands) {
+//         let current = &self;
+//         current.next().map_or_else(
+//             || {
+//                 bevy::log::error!("no next turnstate for {:?}.", current);
+//             },
+//             |next| {
+//                 bevy::log::info!("transitioning turnstate from {:?} to {:?}", current,
+// next);                 commands.insert_resource(next);
+//             },
+//         )
+//     }
+// }

@@ -44,7 +44,6 @@ default = ["dev"]
 
 # configuration for debugging information
 debug = [
-  "egui_dock",
   "bevy-inspector-egui",
   "debug-graph",
   # "debug_asset_server",
@@ -319,11 +318,6 @@ version  = "0.6"
 branch   = "rework"
 git      = "https://github.com/jakobhellermann/bevy-inspector-egui"
 optional = true
-
-[dependencies.egui_dock]
-git      = "https://github.com/Adanos020/egui_dock"
-optional = true
-rev      = "041e5f362c281c286a63edeef2f7d02dbd5d62f4"
 
 [dependencies.bevy_mod_debugdump]
 optional = true
