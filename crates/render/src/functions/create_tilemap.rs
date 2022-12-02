@@ -1,7 +1,9 @@
 use crate::prelude::*;
+
 pub fn create_tilemap_parent(commands: &mut Commands, name: &str) -> Entity {
     commands.spawn((Name::new(name.to_string()), SpatialBundle::default())).id()
 }
+
 pub fn create_tilemap<ZLevel: Into<f32>>(
     commands: &mut Commands,
     size: impl Size2d,
@@ -13,6 +15,7 @@ pub fn create_tilemap<ZLevel: Into<f32>>(
     create_tilemap_on_entity(commands, entity, size, z_level, tileset, tile_scale);
     entity
 }
+
 pub fn create_tilemap_on_entity<ZLevel: Into<f32>>(
     commands: &mut Commands,
     entity: Entity,

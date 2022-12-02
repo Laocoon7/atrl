@@ -1,8 +1,8 @@
 use crate::prelude::*;
 #[derive(Default, Resource)]
 pub struct MapManager {
-    pub current_map: Option<Map>,
-    loaded_maps: HashMap<IVec3, Entity>,
+    pub current_map: Option<(IVec3, Map)>,
+    loaded_maps: HashMap<IVec3, Map>,
 }
 impl MapManager {
     pub fn new() -> Self {
@@ -12,190 +12,166 @@ impl MapManager {
         }
     }
 
-    pub const fn get_current_map(&self) -> Option<&Map> { self.current_map.as_ref() }
+    pub const fn get_current_map(&self) -> Option<&Map> {
+        if let Some((_world_position, map)) = self.current_map.as_ref() {
+            Some(map)
+        } else {
+            None
+        }
+    }
 
-    pub fn get_current_map_mut(&mut self) -> Option<&mut Map> { self.current_map.as_mut() }
+    pub const fn get_current_map_world_position(&self) -> Option<IVec3> {
+        if let Some((world_position, _map)) = self.current_map.as_ref() {
+            Some(*world_position)
+        } else {
+            None
+        }
+    }
 
-    pub fn get_or_generate(
+    pub fn get_current_map_mut(&mut self) -> Option<&mut Map> {
+        if let Some((_world_position, map)) = self.current_map.as_mut() {
+            Some(map)
+        } else {
+            None
+        }
+    }
+
+    fn set_current_map(&mut self, world_position: IVec3) {
+        if let Some(new_map) = self.loaded_maps.remove(&world_position) {
+            // current map -> loaded_maps
+            if let Some((current_world_position, map)) = std::mem::take(&mut self.current_map) {
+                self.loaded_maps.insert(current_world_position, map);
+            }
+
+            self.current_map = Some((world_position, new_map));
+        }
+    }
+
+    pub fn get(
         &mut self,
         commands: &mut Commands,
         game_context: &mut ResMut<GameContext>,
-        tileset_name: Option<String>,
-        tileset_id: Option<u8>,
-        tilesets: &Tilesets,
         world_position: IVec3,
-    ) -> AtrlResult<Entity> {
-        info!("MapManager::get_or_generate({:?})", world_position);
-        if !game_context.is_valid_world_position(world_position) {
-            return Err(AtrlError::InvalidWorldPosition(world_position));
+        tilesets: &Tilesets,
+        set_current: bool,
+    ) -> &mut Map {
+        // make sure the map is loaded.. deserialize/generate as necessary
+        if self.get_loaded_map(world_position).is_none() {
+            if self.get_serialized_map(game_context, world_position).is_none() {
+                self.get_generated_map(commands, game_context, world_position, tilesets);
+            }
         }
 
-        if let Some(entity) = self.loaded_maps.get(&world_position) {
-            return Ok(*entity);
+        // make the map current if requested..
+        if set_current {
+            self.set_current_map(world_position);
         }
 
-        // TODO: check deserialize map from world_position
-        let map_seed =
-            game_context.map_manager_random.prht.get(world_position.x, world_position.y, world_position.z);
-        let mut random = Random::new(map_seed);
-        let rng = Box::new(Pcg64::seed_from_u64(random.prng.next_u64()));
-        let map_name = format!(
-            "Map ({}, {}, {})",
-            world_position.x, world_position.y, world_position.z
-        );
+        // check if our map is the current map
+        if let Some((current_world_position, map)) = self.current_map.as_mut() {
+            if *current_world_position == world_position {
+                return map;
+            }
+        }
 
-        let tileset = tileset_name.map_or_else(
-            || {
-                tileset_id.map_or_else(
-                    || tilesets.get_by_id(&0).unwrap_or_else(|| panic!("Couldn't find tilemap_id: {:?}", 0)),
-                    |id| {
-                        tilesets
-                            .get_by_id(&id)
-                            .unwrap_or_else(|| panic!("Couldn't find tilemap_id: {:?}", id))
-                    },
-                )
-            },
-            |name| {
-                tilesets.get_by_name(&name).unwrap_or_else(|| panic!("Couldn't find tilemap_name: {}", &name))
-            },
-        );
+        // our map is not current, but we know we loaded it..
+        self.loaded_maps.get_mut(&world_position).expect("Error getting map.")
+    }
 
-        let tileset_id = *tileset.id();
-        let terrain_layer_entity = commands.spawn_empty().id();
-        let feature_layer_entity = commands.spawn_empty().id();
-        let item_layer_entity = commands.spawn_empty().id();
+    fn get_loaded_map(&mut self, world_position: IVec3) -> Option<&mut Map> {
+        self.loaded_maps.get_mut(&world_position)
+    }
 
-        let map = Map::from(Self::generate_map(
-            [GRID_WIDTH, GRID_HEIGHT],
-            &map_name,
-            (GRID_WIDTH / 2, GRID_HEIGHT / 2),
-            rng,
-            MapPassThroughData {
-                world_position,
-                random,
+    fn get_serialized_map(
+        &mut self,
+        _game_context: &mut ResMut<GameContext>,
+        _world_position: IVec3,
+    ) -> Option<&mut Map> {
+        // TODO: lookup map data from serialized data
+        None
+    }
 
-                terrain_tileset_id: tileset_id,
-                feature_tileset_id: tileset_id,
-                item_tileset_id: tileset_id,
+    fn get_generated_map(
+        &mut self,
+        commands: &mut Commands,
+        game_context: &mut ResMut<GameContext>,
+        world_position: IVec3,
+        tilesets: &Tilesets,
+    ) -> &mut Map {
+        // Create the map size.
+        let map_size = UVec2::new(GRID_WIDTH, GRID_HEIGHT);
 
-                terrain_layer_entity,
-                feature_layer_entity,
-                item_layer_entity,
-            },
-        ));
+        // Create a Random for the map to be generated from and then use as it's own.
+        let map_seed = game_context.random.prht.get(world_position.x, world_position.y, world_position.z);
+        let random = Random::new(map_seed);
 
+        // Create the entity to hold the map.
+        let map_entity = commands.spawn_empty().id();
+
+        // Create the entities for each layer of the map which uses bevy_ecs_tilemap. - TERRAIN
+        let tileset = tilesets.get_by_id(&TILESET_TERRAIN_ID).expect("Cannot find TILESET_TERRAIN_ID.");
+        let terrain_layer_entity = commands
+            .spawn(Name::new(format!(
+                "TERRAIN ({}, {}, {})",
+                world_position.x, world_position.y, world_position.z
+            )))
+            .id();
         create_tilemap_on_entity(
             commands,
             terrain_layer_entity,
-            [GRID_WIDTH, GRID_HEIGHT],
-            f32::from(MapLayer::Terrain),
+            map_size,
+            MapLayer::Terrain,
             tileset,
             1.0,
         );
+
+        // Create the entities for each layer of the map which uses bevy_ecs_tilemap. - FEATURES
+        let tileset = tilesets.get_by_id(&TILESET_FEATURES_ID).expect("Cannot find TILESET_FEATURES_ID.");
+        let features_layer_entity = commands
+            .spawn(Name::new(format!(
+                "FEATURES ({}, {}, {})",
+                world_position.x, world_position.y, world_position.z
+            )))
+            .id();
         create_tilemap_on_entity(
             commands,
-            feature_layer_entity,
-            [GRID_WIDTH, GRID_HEIGHT],
-            f32::from(MapLayer::Features),
-            tileset,
-            1.0,
-        );
-        create_tilemap_on_entity(
-            commands,
-            item_layer_entity,
-            [GRID_WIDTH, GRID_HEIGHT],
-            f32::from(MapLayer::Items),
+            features_layer_entity,
+            map_size,
+            MapLayer::Features,
             tileset,
             1.0,
         );
 
-        commands.entity(terrain_layer_entity).insert(Name::new(format!(
-            "TerrainLayer ({}, {}, {})",
-            world_position.x, world_position.y, world_position.z
-        )));
-        commands.entity(feature_layer_entity).insert(Name::new(format!(
-            "FeatureLayer ({}, {}, {})",
-            world_position.x, world_position.y, world_position.z
-        )));
-        commands.entity(item_layer_entity).insert(Name::new(format!(
-            "ItemLayer ({}, {}, {})",
-            world_position.x, world_position.y, world_position.z
-        )));
+        // Create the map.
+        let map = self.generate_map(map_size, random, MapPassThroughData {
+            world_position,
+            map_entity,
+            terrain_layer_entity,
+            features_layer_entity,
+        });
 
-        self.current_map = Some(map.clone());
-
-        let map_entity = commands
-            .spawn((
-                map,
+        // Build the map entity.
+        commands
+            .entity(map_entity)
+            .insert((
                 Name::new(format!(
-                    "Map ({}, {}, {})",
+                    "MAP ({}, {}, {})",
                     world_position.x, world_position.y, world_position.z
                 )),
+                // map,
                 SpatialBundle::default(),
             ))
             .add_child(terrain_layer_entity)
-            .add_child(feature_layer_entity)
-            .add_child(item_layer_entity)
-            .id();
-        Ok(map_entity)
+            .add_child(features_layer_entity);
+
+        // This map is currently loaded, add it to loaded_maps
+        self.loaded_maps.insert(world_position, map);
+
+        // Return a reference to the loaded_map
+        self.loaded_maps.get_mut(&world_position).expect("This was just added...")
     }
 
-    fn generate_map(
-        size: impl Size2d,
-        name: &str,
-        starting_position: impl Point2d,
-        rng: Box<dyn RngCore>,
-        user_data: MapPassThroughData,
-    ) -> MapGenData<MapPassThroughData> {
-        MapGenerator::new(
-            size,
-            name,
-            starting_position,
-            rng,
-            // FinalizerBuilder::new(40, 40), You probably wanted:
-            ScatterBuilder::new(),
-            user_data,
-        )
-        .with(CellularAutomataBuilder::new())
-        .with(FinalizerBuilder::new(1, 2))
-        .generate()
-
-        // MapGenerator::new(
-        //    size,
-        //    name,
-        //    starting_position,
-        //    rng,
-        //    // FinalizerBuilder::new(40, 40), You probably wanted:
-        //    SetBuilder::new().set_value(TILE_TERRAIN_FLOOR_ID as u32),
-        //    user_data,
-        //)
-        //.generate()
-
-        // if Prng::from_entropy().coin() {
-        //     MapGenerator::new(size, name, starting_position, rng, ScatterBuilder::new(),
-        // user_data)         .with(CellularAutomataBuilder::new())
-        //         .with(FinalizerBuilder::new(1, 2))
-        //         .with(
-        //             SetBuilder::new()
-        //                 .with_rect(Rectangle::new(
-        //                     starting_position.as_ivec2() - IVec2::new(1, 1),
-        //                     starting_position.as_ivec2() + IVec2::new(1, 1),
-        //                 ))
-        //                 .set_value(1),
-        //         )
-        //         .generate()
-        // } else {
-        //     MapGenerator::new(size, name, starting_position, rng, ScatterBuilder::new(),
-        // user_data)         .with(FinalizerBuilder::new(1, 4))
-        //         .with(
-        //             SetBuilder::new()
-        //                 .with_rect(Rectangle::new(
-        //                     starting_position.as_ivec2() - IVec2::new(1, 1),
-        //                     starting_position.as_ivec2() + IVec2::new(1, 1),
-        //                 ))
-        //                 .set_value(1),
-        //         )
-        //         .generate()
-        // }
+    fn generate_map(&mut self, size: UVec2, random: Random, user_data: MapPassThroughData) -> Map {
+        Map::from(MapGenerator::new(size, random, SetBuilder::new().set_value(1), user_data).generate())
     }
 }

@@ -36,7 +36,7 @@ impl<T> MapArchitect<T> for ScatterBuilder<T> {
 
         rect.for_each(|v| {
             // TODO: look into different rng function. rng.gen_range() is for only 1 lookup.
-            data.grid.set(v, data.rng.gen_range(0..u32::MAX));
+            data.grid.set(v, data.random.prng.range(0..u32::MAX));
         });
     }
 }

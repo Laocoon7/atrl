@@ -5,19 +5,15 @@ pub struct Map {
     pub size: UVec2,
     pub random: Random,
     pub world_position: IVec3,
+    pub entity: Entity,
 
     pub update_all: bool,
     pub update_tiles: HashSet<UVec2>,
 
     pub actors: Grid<Option<Entity>>,
 
-    pub terrain_tileset_id: u8,
-    pub feature_tileset_id: u8,
-    pub item_tileset_id: u8,
-
     pub terrain_layer_entity: Entity,
     pub feature_layer_entity: Entity,
-    pub item_layer_entity: Entity,
 
     pub terrain_types: Grid<TerrainType>,
     pub feature_types: Grid<FeatureType>,
@@ -103,16 +99,11 @@ impl Map {
 }
 
 pub struct MapPassThroughData {
-    pub random: Random,
     pub world_position: IVec3,
 
-    pub terrain_tileset_id: u8,
-    pub feature_tileset_id: u8,
-    pub item_tileset_id: u8,
-
+    pub map_entity: Entity,
     pub terrain_layer_entity: Entity,
-    pub feature_layer_entity: Entity,
-    pub item_layer_entity: Entity,
+    pub features_layer_entity: Entity,
     // TODO: Explored tiles should be passed from serialized data for the map on loading, or just a
     // new HashSet pub explored_tiles: HashSet<UVec2>
 }
@@ -129,10 +120,11 @@ impl From<MapGenData<MapPassThroughData>> for Map {
 
         Self {
             size: data.size,
+            entity: data.user_data.map_entity,
             update_all: true,
 
             update_tiles: HashSet::new(),
-            random: data.user_data.random,
+            random: data.random,
             actors: Grid::new_default(data.size),
             world_position: data.user_data.world_position,
 
@@ -140,13 +132,8 @@ impl From<MapGenData<MapPassThroughData>> for Map {
             item_types: Grid::new_default(data.size),
             feature_types: Grid::new_default(data.size),
 
-            item_tileset_id: data.user_data.item_tileset_id,
-            terrain_tileset_id: data.user_data.terrain_tileset_id,
-            feature_tileset_id: data.user_data.feature_tileset_id,
-
-            item_layer_entity: data.user_data.item_layer_entity,
             terrain_layer_entity: data.user_data.terrain_layer_entity,
-            feature_layer_entity: data.user_data.feature_layer_entity,
+            feature_layer_entity: data.user_data.features_layer_entity,
 
             // TODO: Add explored_tiles HashSet to MapPassThroughData
             explored_tiles: HashSet::new(),

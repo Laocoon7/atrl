@@ -32,14 +32,6 @@ pub fn update_tilemaps(
             },
         };
 
-        let item_storage = match q_storage.get(map.item_layer_entity) {
-            Ok(s) => s,
-            Err(e) => {
-                error!("{}", e);
-                continue;
-            },
-        };
-
         let mut check_next = Vec::new();
         if map.update_all {
             for y in 0..map.size.height() {
@@ -60,18 +52,6 @@ pub fn update_tilemaps(
                             tile_texture_index.0 = index;
                         } else {
                             check_next.push(UVec2::new(x, y));
-                        }
-                    }
-
-                    if let Some(entity) = item_storage.get(&tile_pos) {
-                        if let Ok(mut tile_texture_index) = q_tiles.get_mut(entity) {
-                            // TODO: Display Items
-                            // sort through items to decide which to show
-                            if let Some((index, _)) =
-                                map.item_types.get_unchecked((x, y)).iter().enumerate().next()
-                            {
-                                tile_texture_index.0 = index as u32;
-                            }
                         }
                     }
                 }
@@ -98,18 +78,6 @@ pub fn update_tilemaps(
                         tile_texture_index.0 = (*map.feature_types.get_unchecked(position)).into();
                     } else {
                         map.update_tiles.insert(UVec2::new(tile_pos.x, tile_pos.y));
-                    }
-                }
-
-                if let Some(entity) = item_storage.get(&tile_pos) {
-                    if let Ok(mut tile_texture_index) = q_tiles.get_mut(entity) {
-                        // TODO: Display Items
-                        // sort through items to decide which to show
-                        if let Some((index, _)) =
-                            map.item_types.get_unchecked(position).iter().enumerate().next()
-                        {
-                            tile_texture_index.0 = index as u32;
-                        }
                     }
                 }
             }
