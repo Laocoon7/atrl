@@ -69,8 +69,6 @@ pub fn wander_action(
                 ai_component.preferred_action = None;
                 *action_state = Failure;
 
-                // commands.entity(*actor).remove::<Wander>().insert(ChaseActor::default());
-
                 if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
                     target_visualizer.clear(&mut commands);
                 }

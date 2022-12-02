@@ -19,13 +19,13 @@ pub fn can_see_player(
     player_q: Query<(Entity, &Position), With<Player>>,
     mut query: Query<(&Actor, &mut Score, &CanSeePlayer)>,
 ) {
-    for (_player, player_transform) in &player_q {
+    for (_player, player_position) in &player_q {
         for (Actor(actor), mut score, can_see_player) in query.iter_mut() {
             let mut current_score = 0.0;
 
             if let Ok((ai_transform, fov, vision)) = ai_q.get(*actor) {
                 if let Some(map) = manager.get_current_map() {
-                    let player_pos = player_transform.gridpoint();
+                    let player_pos = player_position.gridpoint();
                     let ai_pos = ai_transform.gridpoint();
                     if entity_in_fov(map, fov, vision, ai_pos, player_pos) {
                         current_score = can_see_player.score_if_true;

@@ -46,6 +46,7 @@ impl TurnManager {
                 }
             }
         }
+
         if let Some(index) = found_index {
             self.entities.remove(index);
         }

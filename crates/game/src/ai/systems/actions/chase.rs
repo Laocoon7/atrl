@@ -13,9 +13,9 @@ pub struct ChaseActor {
 pub fn chase_action(
     tilesets: Tilesets,
     mut commands: Commands,
-    mut manager: ResMut<MapManager>,
+    manager: Res<MapManager>,
+    player_q: Query<&Position, With<Player>>,
     mut target_q: Query<&mut TargetVisualizer>,
-    player_q: Query<(Entity, &Position), With<Player>>,
     mut action_q: Query<(&Actor, &mut ActionState, &mut ChaseActor)>,
     mut ai_q: Query<
         (
@@ -31,8 +31,15 @@ pub fn chase_action(
 ) {
     use ActionState::*;
 
+    let player_position = match player_q.get_single() {
+        Ok(p) => p,
+        Err(err) => {
+            error!("No player found: {}", err);
+            return;
+        },
+    };
+
     for (Actor(actor), mut action_state, mut chase) in action_q.iter_mut() {
-        let (_player_entity, player_position) = player_q.single();
         let Ok((ai_position, fov, movement,vision, name, mut ai_component)) =
             ai_q.get_mut(*actor) else {
                 info!("Actor must have required components");
@@ -44,12 +51,13 @@ pub fn chase_action(
             continue;
         }
 
-        let ai_pos = ai_position.gridpoint();
-        let player_pos = player_position.gridpoint();
-        let Some(map) = manager.get_current_map_mut() else {
+        let Some(map) = manager.get_current_map() else {
             info!("No map found");
             continue;
         };
+
+        let ai_pos = ai_position.gridpoint();
+        let player_pos = player_position.gridpoint();
 
         match *action_state {
             // Success | Failure
@@ -84,6 +92,12 @@ pub fn chase_action(
 
         let position = if entity_in_fov(map, fov, vision, ai_pos, player_pos) {
             let player_pos = *player_position;
+            if in_attack_range(ai_pos, player_pos.gridpoint()) {
+                info!("{} in attack range!", name);
+                *action_state = Success;
+                // return;
+            }
+
             chase.last_seen_pt = Some(player_pos);
             chase.generated_path = false;
             player_pos

@@ -11,9 +11,11 @@ mod ai {
         }
         pub use scorers::*;
         mod actions {
+            mod attack;
+            pub use attack::*;
             mod chase;
-            mod wander;
             pub use chase::*;
+            mod wander;
             pub use wander::*;
         }
         pub use actions::*;

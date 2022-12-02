@@ -10,9 +10,5 @@ impl<T: StateNext> Plugin for PlayerPlugin<T> {
             .add_system_set(
                 ConditionSet::new().run_in_state(self.state_running).with_system(player_input).into(),
             );
-
-        // TODO: Remove this once states are working for player / AI
-        // app.add_system(insert_resource!(TurnState::AwaitingInput).
-        // run_if_resource_equals(TurnState::Ticking));
     }
 }
