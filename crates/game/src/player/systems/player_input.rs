@@ -49,14 +49,15 @@ pub fn player_input(
 }
 
 pub fn draw_shape(
-    mut commands: Commands,
-    q_player: Query<&Position, With<Player>>,
     tilesets: Tilesets,
+    mut commands: Commands,
     mut has_ran: Local<bool>,
+    q_player: Query<&Position, With<Player>>,
 ) {
     if *has_ran {
         return;
     }
+
     *has_ran = true;
 
     if let Some(tileset) = tilesets.get_by_id(&TILESET_UI_ID) {
@@ -69,22 +70,22 @@ pub fn draw_shape(
             let shape = Circle::new(position.gridpoint(), 15u32);
 
             // let shape = Triangle::new(
-            //    position.gridpoint(),
-            //    position.gridpoint() + UVec2::new(5, 0),
-            //    position.gridpoint() + UVec2::new(0, 5),
-            //);
+            //     position.gridpoint(),
+            //     position.gridpoint() + UVec2::new(5, 0),
+            //     position.gridpoint() + UVec2::new(0, 5),
+            // );
 
             // let shape = Rectangle::new(
-            //    position.gridpoint(),
-            //    position.gridpoint() + UVec2::new(10, 5),
-            //);
+            //     position.gridpoint(),
+            //     position.gridpoint() + UVec2::new(10, 5),
+            // );
 
             for point in shape.get_points() {
                 commands.spawn(SpriteSheetBundle {
                     texture_atlas: tileset.atlas().clone(),
                     sprite: TextureAtlasSprite {
                         custom_size: Some(Vec2::ONE),
-                        index: TILE_UI_CURSOR_GREEN_ID as usize,
+                        index: TILE_UI_CURSOR_GREEN_ID,
                         ..Default::default()
                     },
                     transform: Transform::from_translation(Vec3::new(

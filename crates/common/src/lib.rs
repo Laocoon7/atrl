@@ -123,14 +123,13 @@ mod macros {
 
 mod random {
     mod noise;
-    mod prht;
-    mod prng;
-    mod random;
-    pub use prht::*;
-    pub use prng::*;
-    pub use random::*;
-
     pub use self::noise::*;
+    mod prht;
+    pub use prht::*;
+    mod prng;
+    pub use prng::*;
+    mod random;
+    pub use random::*;
 }
 
 mod states {
