@@ -46,3 +46,37 @@ pub fn player_input(
         }
     }
 }
+
+pub fn draw_shape(
+    mut commands: Commands,
+    q_player: Query<&Position, With<Player>>,
+    tilesets: Tilesets,
+    mut has_ran: Local<bool>,
+) {
+    if *has_ran {
+        return;
+    }
+    *has_ran = true;
+
+    if let Some(tileset) = tilesets.get_by_id(&TILESET_UI_ID) {
+        for position in q_player.iter() {
+            let circle = Circle::new(position.gridpoint(), 5u32);
+            for point in circle.get_points() {
+                commands.spawn(SpriteSheetBundle {
+                    texture_atlas: tileset.atlas().clone(),
+                    sprite: TextureAtlasSprite {
+                        custom_size: Some(Vec2::ONE),
+                        index: TILE_UI_CURSOR_GREEN_ID as usize,
+                        ..Default::default()
+                    },
+                    transform: Transform::from_translation(Vec3::new(
+                        point.x as f32 + 0.5,
+                        point.y as f32 + 0.5,
+                        f32::from(MapLayer::UI),
+                    )),
+                    ..Default::default()
+                });
+            }
+        }
+    }
+}

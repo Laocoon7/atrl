@@ -72,39 +72,45 @@ impl GridShape for Circle {
         loop {
             let line = Line::new(
                 (self.center.x + x, self.center.y + y),
-                (self.center.x - x, self.center.y + y),
+                (self.center.x + x, self.center.y - y),
             );
-
             for point in line.get_points() {
                 discovered.insert(point);
             }
 
             let line = Line::new(
+                (self.center.x - x, self.center.y + y),
                 (self.center.x - x, self.center.y - y),
-                (self.center.x + x, self.center.y - y),
             );
-
             for point in line.get_points() {
                 discovered.insert(point);
             }
 
             let line = Line::new(
                 (self.center.x + y, self.center.y + x),
-                (self.center.x - x, self.center.y + x),
+                (self.center.x + y, self.center.y - x),
             );
-
             for point in line.get_points() {
                 discovered.insert(point);
             }
 
             let line = Line::new(
-                (self.center.x + y, self.center.y - x),
-                (self.center.x - x, self.center.y - x),
+                (self.center.x - y, self.center.y + x),
+                (self.center.x - y, self.center.y - x),
             );
-
             for point in line.get_points() {
                 discovered.insert(point);
             }
+
+            //// Circumfrence
+            // discovered.insert(IVec2::new(self.center.x + x, self.center.y + y));
+            // discovered.insert(IVec2::new(self.center.x + x, self.center.y - y));
+            // discovered.insert(IVec2::new(self.center.x - x, self.center.y + y));
+            // discovered.insert(IVec2::new(self.center.x - x, self.center.y - y));
+            // discovered.insert(IVec2::new(self.center.x + y, self.center.y + x));
+            // discovered.insert(IVec2::new(self.center.x + y, self.center.y - x));
+            // discovered.insert(IVec2::new(self.center.x - y, self.center.y + x));
+            // discovered.insert(IVec2::new(self.center.x - y, self.center.y - x));
 
             if d < 0 {
                 d += (2 * x) + 1;
