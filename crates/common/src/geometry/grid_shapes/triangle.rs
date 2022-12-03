@@ -29,7 +29,8 @@ impl GridShape for Triangle {
 
     fn contains(&self, point: impl GridPoint) -> bool { self.get_points().contains(&point.as_ivec2()) }
 
-    fn get_count(&self) -> usize { self.get_points().len() }
+    // FIX: PERF
+    fn get_count(&self) -> u32 { self.get_points().len() as u32 }
 }
 
 impl GridShapeWithBorder for Triangle {

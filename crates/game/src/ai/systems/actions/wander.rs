@@ -29,7 +29,6 @@ impl Default for Wander {
 }
 
 pub fn wander_action(
-    tilesets: Tilesets,
     mut commands: Commands,
     manager: Res<MapManager>,
     mut ctx: ResMut<GameContext>,
@@ -39,7 +38,7 @@ pub fn wander_action(
 ) {
     use ActionState::*;
 
-    action_q.iter_mut().for_each(|(Actor(actor), mut action_state, mut wander)| {
+    for (Actor(actor), mut action_state, mut wander) in action_q.iter_mut() {
         let rng = ctx.random.get_prng().as_rngcore();
         let Some(map) = manager.get_current_map() else {
             info!("No map found");
@@ -69,8 +68,6 @@ pub fn wander_action(
                 ai_component.preferred_action = None;
                 *action_state = Failure;
 
-                // commands.entity(*actor).remove::<Wander>().insert(ChaseActor::default());
-
                 if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
                     target_visualizer.clear(&mut commands);
                 }
@@ -82,6 +79,10 @@ pub fn wander_action(
             Init | Requested => {
                 info!("{} gonna start wandering!", name);
                 *action_state = Executing;
+
+                if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
+                    target_visualizer.set_color(Color::WHITE);
+                }
             },
             Executing => {},
         }
@@ -120,17 +121,7 @@ pub fn wander_action(
         wander.destination = Some(destination);
         wander.my_previous_location = *ai_position;
         ai_component.preferred_action = Some(ActionType::Movement(destination));
-
-        if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
-            target_visualizer.update(
-                &mut commands,
-                &tilesets,
-                ai_position.gridpoint(),
-                destination.gridpoint(),
-                Color::WHITE,
-            );
-        }
-    });
+    }
 }
 
 fn generate_wander_path(rng: &mut impl RngCore, map: &Map, ai_pos: UVec2, movement_type: u8) -> IVec2 {

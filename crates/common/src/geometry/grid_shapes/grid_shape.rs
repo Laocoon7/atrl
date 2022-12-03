@@ -1,7 +1,7 @@
 use crate::prelude::*;
 pub trait GridShape {
     /// returns the number of points in the shape
-    fn get_count(&self) -> usize;
+    fn get_count(&self) -> u32;
 
     /// returns `true` if the point is inside the shape
     fn contains(&self, point: impl GridPoint) -> bool;

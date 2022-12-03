@@ -22,7 +22,7 @@ impl Line {
 
 impl GridShape for Line {
     #[inline]
-    fn get_count(&self) -> usize { self.get_points().len() }
+    fn get_count(&self) -> u32 { self.start.sub(self.end).abs().max_element() as u32 }
 
     #[inline]
     fn contains(&self, point: impl GridPoint) -> bool { self.get_points().contains(&point.as_ivec2()) }

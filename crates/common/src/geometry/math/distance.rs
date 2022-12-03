@@ -63,7 +63,6 @@ fn distance2d_manhattan(start: impl GridPoint, end: impl GridPoint) -> f32 {
 /// Calculates a Chebyshev distance between two points
 /// See: [GameProgramming/Heuristics](http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html)
 fn distance2d_chebyshev(start: impl GridPoint, end: impl GridPoint) -> f32 {
-    // distance2d_diagonal_with_costs(start, end, 1.0, 1.0)
     let start = start.as_vec2();
     let end = end.as_vec2();
     start.sub(end).abs().max_element()

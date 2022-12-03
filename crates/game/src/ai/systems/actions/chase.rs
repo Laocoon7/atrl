@@ -11,11 +11,10 @@ pub struct ChaseActor {
 }
 
 pub fn chase_action(
-    tilesets: Tilesets,
     mut commands: Commands,
-    mut manager: ResMut<MapManager>,
+    manager: Res<MapManager>,
+    player_q: Query<&Position, With<Player>>,
     mut target_q: Query<&mut TargetVisualizer>,
-    player_q: Query<(Entity, &Position), With<Player>>,
     mut action_q: Query<(&Actor, &mut ActionState, &mut ChaseActor)>,
     mut ai_q: Query<
         (
@@ -31,8 +30,15 @@ pub fn chase_action(
 ) {
     use ActionState::*;
 
+    let player_position = match player_q.get_single() {
+        Ok(p) => p,
+        Err(err) => {
+            error!("No player found: {}", err);
+            return;
+        },
+    };
+
     for (Actor(actor), mut action_state, mut chase) in action_q.iter_mut() {
-        let (_player_entity, player_position) = player_q.single();
         let Ok((ai_position, fov, movement,vision, name, mut ai_component)) =
             ai_q.get_mut(*actor) else {
                 info!("Actor must have required components");
@@ -44,24 +50,30 @@ pub fn chase_action(
             continue;
         }
 
-        let ai_pos = ai_position.gridpoint();
-        let player_pos = player_position.gridpoint();
-        let Some(map) = manager.get_current_map_mut() else {
+        let Some(map) = manager.get_current_map() else {
             info!("No map found");
             continue;
         };
 
+        let ai_pos = ai_position.gridpoint();
+        let player_pos = player_position.gridpoint();
+
         match *action_state {
             // Success | Failure
             Success | Failure => {
-                // Nothing to do here
                 info!("{} chase state: {:?}", name, action_state);
+                ai_component.preferred_action = None;
+
+                if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
+                    target_visualizer.clear(&mut commands);
+                }
+
                 continue;
             },
             Cancelled => {
-                ai_component.preferred_action = None;
                 info!("{} cancelled chase!", name);
                 *action_state = Failure;
+                ai_component.preferred_action = None;
 
                 if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
                     target_visualizer.clear(&mut commands);
@@ -76,6 +88,10 @@ pub fn chase_action(
                 chase.generated_path = false;
                 chase.last_seen_pt = Some(*player_position);
                 ai_component.preferred_action = Some(ActionType::Movement(*player_position));
+
+                if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
+                    target_visualizer.set_color(Color::RED);
+                }
             },
             Executing => {},
         }
@@ -84,6 +100,11 @@ pub fn chase_action(
 
         let position = if entity_in_fov(map, fov, vision, ai_pos, player_pos) {
             let player_pos = *player_position;
+            if in_attack_range(ai_pos, player_pos.gridpoint()) {
+                *action_state = Success;
+                continue;
+            }
+
             chase.last_seen_pt = Some(player_pos);
             chase.generated_path = false;
             player_pos
@@ -96,7 +117,6 @@ pub fn chase_action(
 
             // We reached the end of our chase path and we do not see the player :(
             if last_seen.gridpoint() == ai_pos {
-                // Failed or Success? Either works since we dont have anything happen in success or failure
                 *action_state = Failure;
                 continue;
             }
@@ -110,6 +130,7 @@ pub fn chase_action(
                     .first()
                     .unwrap_or(&last_seen.gridpoint().as_ivec2())
                     .as_uvec2();
+
                 let last_seen_pt = Position::new(
                     WorldPosition::new(
                         last_seen.world_x(),
@@ -128,16 +149,6 @@ pub fn chase_action(
         };
 
         ai_component.preferred_action = Some(ActionType::Movement(position));
-
-        if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
-            target_visualizer.update(
-                &mut commands,
-                &tilesets,
-                ai_position.gridpoint(),
-                position.gridpoint(),
-                Color::RED,
-            );
-        }
     }
 }
 

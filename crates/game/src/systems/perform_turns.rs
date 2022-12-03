@@ -38,7 +38,7 @@ pub fn perform_turns(
                 info!("AI does not have an AI Component.");
                 // don't add the entity back to the queue...
                 // just go to the next one and try to recover
-                continue;
+                return;
             };
 
             loop {
@@ -92,6 +92,13 @@ fn perform_action(
             q_position.get(entity).map_or(Err(ActionType::Wait), |entity_position| {
                 Err(ActionType::Movement(*entity_position + delta))
             })
+        },
+        ActionType::Attack(entity) => {
+            info!(
+                "LETS ATTRACK HERE! PLEASE HOOK ME UP! I WANNA ATTACK {:?}",
+                entity
+            );
+            Ok(action.get_base_time_to_perform())
         },
     }
 }

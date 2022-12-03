@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-const MAX_AI_ACTORS: u32 = 2;
+const MAX_AI_ACTORS: u32 = 1;
 
 pub fn spawn_ai(
     tilesets: Tilesets,
@@ -69,10 +69,12 @@ fn spawn_ai_at(
 
     // Build the thinker
     let thinker = Thinker::build()
-        .label("RandomThinker")
-        // We don't do anything unless we're thirsty enough.
-        .picker(FirstToScore { threshold: 0.8, })
-        .when(WinningScorer::build(1.0).push(CanSeePlayer::default()), ChaseActor::default())
+        .picker(FirstToScore { threshold: 0.8 })
+        .when(
+            // WinningScorer::build(1.0).push(CanSeePlayer::default()),
+            CanSeePlayer::default(),
+            Steps::build().step(ChaseActor::default()).step(AttackActor::default()),
+        )
         .otherwise(Wander::default());
 
     let position = Position::new(
