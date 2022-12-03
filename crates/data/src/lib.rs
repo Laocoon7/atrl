@@ -87,6 +87,7 @@ mod components {
     mod target_visualizer;
     pub use target_visualizer::*;
 }
+
 mod game {
     mod map {
         mod tiles {
@@ -110,6 +111,8 @@ mod game {
     pub use game_context::*;
     mod game_state;
     pub use game_state::*;
+    mod game_stage;
+    pub use game_stage::*;
 }
 
 pub mod fov {
@@ -169,6 +172,8 @@ mod system_params {
 }
 
 mod resources {
+    mod action_queue;
+    pub use action_queue::*;
     mod app_settings;
     pub use app_settings::*;
     mod tile_ids;

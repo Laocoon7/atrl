@@ -15,26 +15,28 @@ pub struct GamePlugin<T> {
 }
 
 impl<T: StateNext> Plugin for GamePlugin<T> {
-    fn build(&self, app: &mut App) {
-        let game_context = GameContext::default();
+    fn build(&self, app: &mut App) { self.setup_states(app).setup_resources(app).setup_game_plugins(app); }
+}
 
-        // set entry state
-        self.setup_states(app);
+impl<T: StateNext> GamePlugin<T> {
+    fn setup_states(self, app: &mut App) -> Self {
+        app.add_loopless_state(GameState::Initializing).add_enter_system(
+            GameState::Initializing,
+            switch_in_game_state!(self.state_asset_load),
+        );
+        self
+    }
 
+    fn setup_resources(self, app: &mut App) -> Self {
         app
             // Game Context
-            .insert_resource(game_context)
+            .init_resource::<GameContext>()
             // Turn Manager
-            .init_resource::<TurnManager>()
-            // SaveLoad
-            .add_plugin(SaveLoadPlugin)
-            // common plugin
-            .add_plugin(CommonPlugin)
-            // Ecs Plugin (Systems)
-            .add_plugin(EcsPlugin {
-                state_running: self.state_running,
-            });
+            .init_resource::<TurnManager>();
+        self
+    }
 
+    fn setup_game_plugins(self, app: &mut App) -> Self {
         self
             // Raw Files
             .add_raws(app)
@@ -44,22 +46,21 @@ impl<T: StateNext> Plugin for GamePlugin<T> {
             .add_map_plugins(app);
 
         app
+            // Common plugin
+            .add_plugin(CommonPlugin)
+            // SaveLoad Plugin
+            .add_plugin(SaveLoadPlugin)
+            // Spawner
+            .add_plugin(SpawnerPlugin { state_construct_setup: self.state_construct_setup })
+            // Systems Plugin
+            .add_plugin(SystemsPlugin {
+                state_running: self.state_running,
+            })
             // UI
             .add_plugin(UiPlugin {
                 state_asset_load: self.state_asset_load,
                 state_main_menu: self.state_main_menu
-            })
-            // Spawner
-            .add_plugin(SpawnerPlugin { state_construct_setup: self.state_construct_setup });
-    }
-}
-
-impl<T: StateNext> GamePlugin<T> {
-    fn setup_states(self, app: &mut App) -> Self {
-        app.add_loopless_state(GameState::Initializing).add_enter_system(
-            GameState::Initializing,
-            switch_in_game_state!(self.state_asset_load),
-        );
+            });
         self
     }
 
