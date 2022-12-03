@@ -1,6 +1,9 @@
 use crate::prelude::*;
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash, StageLabel)]
 pub enum AtrlStage {
+    AIThinking,
+    PerformTurns,
     ProccessEvents,
     CleanupEvents,
 }
@@ -25,16 +28,18 @@ impl<T: StateNext> EcsPlugin<T> {
         // CoreStage::Last => (cull_dead_sys => fov_sys)
         //   (before) => AtrlStage::CleanupEvents
         //   (after) => BigBrainStage::Cleanup
-        app.add_stage_after(
-            BigBrainStage::Actions,
-            AtrlStage::ProccessEvents,
-            SystemStage::parallel(),
-        )
-        .add_stage_before(
-            CoreStage::Last,
-            AtrlStage::CleanupEvents,
-            SystemStage::parallel(),
-        );
+        app.add_stage_after(PreUpdate, AtrlStage::AIThinking, SystemStage::parallel())
+            .add_stage_after(
+                AtrlStage::AIThinking,
+                AtrlStage::PerformTurns,
+                SystemStage::parallel(),
+            )
+            .add_stage_after(
+                AtrlStage::PerformTurns,
+                AtrlStage::ProccessEvents,
+                SystemStage::parallel(),
+            )
+            .add_stage_before(Last, AtrlStage::CleanupEvents, SystemStage::parallel());
 
         self
     }
@@ -60,6 +65,8 @@ impl<T: StateNext> EcsPlugin<T> {
 
 impl<T: StateNext> Plugin for EcsPlugin<T> {
     fn build(&self, app: &mut App) {
+        self.setup_stages(app).setup_events(app);
+
         app
             // Player
             .add_plugin(PlayerPlugin {
@@ -70,8 +77,6 @@ impl<T: StateNext> Plugin for EcsPlugin<T> {
                 state_running: self.state_running,
             });
 
-        self.setup_stages(app).setup_events(app);
-
         // Startup
         app.add_enter_system_set(
             self.state_running,
@@ -80,7 +85,7 @@ impl<T: StateNext> Plugin for EcsPlugin<T> {
 
         // Process Events
         app.add_system_set_to_stage(
-            AtrlStage::ProccessEvents,
+            AtrlStage::PerformTurns,
             ConditionSet::new().run_in_state(self.state_running).with_system(perform_turns).into(),
         )
         .add_system_set_to_stage(
@@ -91,14 +96,19 @@ impl<T: StateNext> Plugin for EcsPlugin<T> {
         app.add_system_set_to_stage(
             CoreStage::Last,
             ConditionSet::new()
-                .run_in_state(self.state_running)
                 .label("cull_dead")
+                .run_in_state(self.state_running)
                 .with_system(cull_dead)
                 .into(),
         )
         .add_system_set_to_stage(
             CoreStage::Last,
-            ConditionSet::new().run_in_state(self.state_running).after("cull_dead").with_system(fov).into(),
+            ConditionSet::new()
+                .after("cull_dead")
+                .run_in_state(self.state_running)
+                .with_system(fov)
+                .with_system(update_targeting)
+                .into(),
         );
     }
 }

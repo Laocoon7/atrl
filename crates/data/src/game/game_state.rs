@@ -20,14 +20,6 @@ pub enum UiState {
     MainMenu,
 }
 
-// #[derive(Default, Resource, Clone, Copy, PartialEq, Eq, Hash, Debug)]
-// pub enum TurnState {
-//     #[default]
-//     Processing,
-//     AIThinking,
-//     Dead,
-// }
-
 #[derive(Default, Clone, Copy, PartialEq, Hash, Eq, Debug)]
 pub enum GameState {
     #[default]
@@ -81,28 +73,3 @@ impl StateNext for GameState {
         }
     }
 }
-
-// impl StateNext for TurnState {
-//     fn next(&self) -> Option<Self> {
-//         match self {
-//             Self::Processing => Some(Self::AIThinking),
-//             Self::AIThinking => Some(Self::Processing),
-//             Self::Dead => None,
-//         }
-//     }
-// }
-
-// impl TurnState {
-//     pub fn set_next(&self, commands: &mut Commands) {
-//         let current = &self;
-//         current.next().map_or_else(
-//             || {
-//                 bevy::log::error!("no next turnstate for {:?}.", current);
-//             },
-//             |next| {
-//                 bevy::log::info!("transitioning turnstate from {:?} to {:?}", current,
-// next);                 commands.insert_resource(next);
-//             },
-//         )
-//     }
-// }

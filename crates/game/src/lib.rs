@@ -69,8 +69,8 @@ mod player {
 mod spawner {
     mod systems {
         mod spawn_ai;
-        mod spawn_player;
         pub use spawn_ai::*;
+        mod spawn_player;
         pub use spawn_player::*;
     }
     pub use systems::*;
@@ -94,6 +94,8 @@ mod systems {
     pub use movement::*;
     mod cull_dead;
     pub use cull_dead::*;
+    mod update_targeting;
+    pub use update_targeting::*;
 }
 
 mod ecs_plugin;

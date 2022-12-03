@@ -74,7 +74,6 @@ fn perform_action(
     entity: Entity,
     action: ActionType,
     map_manager: &mut ResMut<MapManager>,
-
     q_position: &mut Query<&mut Position>,
     q_movement: &Query<&Movement>,
 ) -> Result<u32, ActionType> {
@@ -91,14 +90,10 @@ fn perform_action(
         },
         ActionType::MovementDelta(delta) => {
             q_position.get(entity).map_or(Err(ActionType::Wait), |entity_position| {
-                println!("Moving to to {:?}", *entity_position + delta);
                 Err(ActionType::Movement(*entity_position + delta))
             })
         },
-        ActionType::Attack(entity) => {
-            info!("Attacking {:?}", entity);
-            Ok(action.get_base_time_to_perform())
-        },
+        ActionType::Attack(_) => todo!(),
     }
 }
 

@@ -46,10 +46,10 @@ pub fn chase_action(
                 continue;
             };
 
-        if ai_component.preferred_action.is_some() {
-            // already chasing, quick return;
-            continue;
-        }
+        // if ai_component.preferred_action.is_some() {
+        //     // already chasing, quick return;
+        //     continue;
+        // }
 
         let Some(map) = manager.get_current_map() else {
             info!("No map found");
@@ -62,14 +62,19 @@ pub fn chase_action(
         match *action_state {
             // Success | Failure
             Success | Failure => {
-                // Nothing to do here
                 info!("{} chase state: {:?}", name, action_state);
+                ai_component.preferred_action = None;
+
+                if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
+                    target_visualizer.clear(&mut commands);
+                }
+
                 continue;
             },
             Cancelled => {
-                ai_component.preferred_action = None;
                 info!("{} cancelled chase!", name);
                 *action_state = Failure;
+                ai_component.preferred_action = None;
 
                 if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
                     target_visualizer.clear(&mut commands);
@@ -95,7 +100,7 @@ pub fn chase_action(
             if in_attack_range(ai_pos, player_pos.gridpoint()) {
                 info!("{} in attack range!", name);
                 *action_state = Success;
-                // return;
+                continue;
             }
 
             chase.last_seen_pt = Some(player_pos);
@@ -110,7 +115,6 @@ pub fn chase_action(
 
             // We reached the end of our chase path and we do not see the player :(
             if last_seen.gridpoint() == ai_pos {
-                // Failed or Success? Either works since we dont have anything happen in success or failure
                 *action_state = Failure;
                 continue;
             }

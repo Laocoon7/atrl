@@ -39,7 +39,7 @@ pub fn wander_action(
 ) {
     use ActionState::*;
 
-    action_q.iter_mut().for_each(|(Actor(actor), mut action_state, mut wander)| {
+    for (Actor(actor), mut action_state, mut wander) in action_q.iter_mut() {
         let rng = ctx.random.get_prng().as_rngcore();
         let Some(map) = manager.get_current_map() else {
             info!("No map found");
@@ -52,10 +52,10 @@ pub fn wander_action(
                 return
             };
 
-        if ai_component.preferred_action.is_some() {
-            // already wandering, quick return;
-            return;
-        }
+        // if ai_component.preferred_action.is_some() {
+        //     // already wandering, quick return;
+        //     return;
+        // }
 
         match *action_state {
             // Success | Failure
@@ -128,7 +128,7 @@ pub fn wander_action(
                 Color::WHITE,
             );
         }
-    });
+    }
 }
 
 fn generate_wander_path(rng: &mut impl RngCore, map: &Map, ai_pos: UVec2, movement_type: u8) -> IVec2 {

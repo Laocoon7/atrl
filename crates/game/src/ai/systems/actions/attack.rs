@@ -6,10 +6,10 @@ use crate::prelude::*;
 // could be used for temporary storage for multi turn actions
 pub struct AttackActor;
 
-pub fn attack_player(
+pub fn attack_action(
     mut commands: Commands,
-    player_q: Query<(Entity, &Position), With<Player>>,
     mut target_q: Query<&mut TargetVisualizer>,
+    player_q: Query<(Entity, &Position), With<Player>>,
     mut action_q: Query<(&Actor, &mut ActionState), With<AttackActor>>,
     mut ai_q: Query<(&Position, &Name, &mut AIComponent), Without<Player>>,
 ) {
@@ -18,34 +18,33 @@ pub fn attack_player(
     let (player_entity, player_position) = match player_q.get_single() {
         Ok(p) => p,
         Err(err) => {
-            error!("No player found: {}", err);
+            info!("No player found: {}", err);
             return;
         },
     };
 
-    action_q.iter_mut().for_each(|(Actor(actor), mut action_state)| {
+    for (Actor(actor), mut action_state) in action_q.iter_mut() {
         let Ok((ai_position, name, mut ai_component)) =
-            ai_q.get_mut(*actor) else {
-                info!("Actor must have required attack components");
-                return
-            };
+        ai_q.get_mut(*actor) else {
+            info!("Actor must have required attack components");
+            continue
+        };
 
-        if ai_component.preferred_action.is_some() {
-            // already attacking, quick return;
-            return;
-        }
-
-        // let Some(map) = manager.get_current_map() else {
-        //     info!("No map found");
-        //     return
-        // };
+        // if ai_component.preferred_action.is_some() {
+        //     // already attacking, quick return;
+        //     info!(
+        //         "{} Already attacking: {:?}",
+        //         name, ai_component.preferred_action
+        //     );
+        //     continue;
+        // }
 
         match *action_state {
             // Success | Failure
             Success | Failure => {
                 // Nothing to do here
                 info!("{} attack state: {:?}", name, action_state);
-                return;
+                continue;
             },
             ActionState::Cancelled => {
                 info!("{} cancelled attack!", name);
@@ -56,7 +55,7 @@ pub fn attack_player(
                     target_visualizer.clear(&mut commands);
                 }
 
-                return;
+                continue;
             },
 
             // these final two fall through to logic
@@ -72,11 +71,11 @@ pub fn attack_player(
         let player_pos = player_position.gridpoint();
 
         if in_attack_range(ai_pos, player_pos) {
-            ai_component.preferred_action = Some(ActionType::Wait);
             *action_state = ActionState::Success;
+            ai_component.preferred_action = Some(ActionType::Attack(player_entity));
         } else {
-            ai_component.preferred_action = Some(ActionType::Wait);
             *action_state = ActionState::Failure;
+            ai_component.preferred_action = Some(ActionType::Movement(*player_position));
         }
-    });
+    }
 }
