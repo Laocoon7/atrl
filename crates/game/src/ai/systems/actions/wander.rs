@@ -29,7 +29,6 @@ impl Default for Wander {
 }
 
 pub fn wander_action(
-    tilesets: Tilesets,
     mut commands: Commands,
     manager: Res<MapManager>,
     mut ctx: ResMut<GameContext>,
@@ -52,10 +51,10 @@ pub fn wander_action(
                 return
             };
 
-        // if ai_component.preferred_action.is_some() {
-        //     // already wandering, quick return;
-        //     return;
-        // }
+        if ai_component.preferred_action.is_some() {
+            // already wandering, quick return;
+            return;
+        }
 
         match *action_state {
             // Success | Failure
@@ -80,6 +79,10 @@ pub fn wander_action(
             Init | Requested => {
                 info!("{} gonna start wandering!", name);
                 *action_state = Executing;
+
+                if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
+                    target_visualizer.set_color(Color::WHITE);
+                }
             },
             Executing => {},
         }
@@ -118,16 +121,6 @@ pub fn wander_action(
         wander.destination = Some(destination);
         wander.my_previous_location = *ai_position;
         ai_component.preferred_action = Some(ActionType::Movement(destination));
-
-        if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
-            target_visualizer.update(
-                &mut commands,
-                &tilesets,
-                ai_position.gridpoint(),
-                destination.gridpoint(),
-                Color::WHITE,
-            );
-        }
     }
 }
 

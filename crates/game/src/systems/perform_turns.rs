@@ -38,7 +38,7 @@ pub fn perform_turns(
                 info!("AI does not have an AI Component.");
                 // don't add the entity back to the queue...
                 // just go to the next one and try to recover
-                continue;
+                return;
             };
 
             loop {

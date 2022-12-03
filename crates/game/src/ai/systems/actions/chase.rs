@@ -11,7 +11,6 @@ pub struct ChaseActor {
 }
 
 pub fn chase_action(
-    tilesets: Tilesets,
     mut commands: Commands,
     manager: Res<MapManager>,
     player_q: Query<&Position, With<Player>>,
@@ -46,10 +45,10 @@ pub fn chase_action(
                 continue;
             };
 
-        // if ai_component.preferred_action.is_some() {
-        //     // already chasing, quick return;
-        //     continue;
-        // }
+        if ai_component.preferred_action.is_some() {
+            // already chasing, quick return;
+            continue;
+        }
 
         let Some(map) = manager.get_current_map() else {
             info!("No map found");
@@ -89,6 +88,10 @@ pub fn chase_action(
                 chase.generated_path = false;
                 chase.last_seen_pt = Some(*player_position);
                 ai_component.preferred_action = Some(ActionType::Movement(*player_position));
+
+                if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
+                    target_visualizer.set_color(Color::RED);
+                }
             },
             Executing => {},
         }
@@ -146,16 +149,6 @@ pub fn chase_action(
         };
 
         ai_component.preferred_action = Some(ActionType::Movement(position));
-
-        if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
-            target_visualizer.update(
-                &mut commands,
-                &tilesets,
-                ai_position.gridpoint(),
-                position.gridpoint(),
-                Color::RED,
-            );
-        }
     }
 }
 

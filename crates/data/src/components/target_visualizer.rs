@@ -1,47 +1,55 @@
 use atrl_common::prelude::grid_shapes::GridShape;
 
 use crate::prelude::*;
-#[derive(Component, Default)]
+#[derive(Component)]
 pub struct TargetVisualizer {
+    color: Color,
     start: Option<IVec2>,
     end: Option<IVec2>,
-
     entity_list: Vec<Entity>,
 }
-impl TargetVisualizer {
-    pub fn new(start: UVec2, end: UVec2) -> Self {
+
+impl Default for TargetVisualizer {
+    fn default() -> Self {
         Self {
+            color: Color::WHITE,
+            start: Default::default(),
+            end: Default::default(),
+            entity_list: Default::default(),
+        }
+    }
+}
+
+impl TargetVisualizer {
+    pub fn new(start: UVec2, end: UVec2, color: Color) -> Self {
+        Self {
+            color,
+            entity_list: Vec::new(),
             start: Some(start.as_ivec2()),
             end: Some(end.as_ivec2()),
-            entity_list: Vec::new(),
         }
     }
 
-    pub fn update(
-        &mut self,
-        commands: &mut Commands,
-        tilesets: &Tilesets,
-        start: UVec2,
-        end: UVec2,
-        color: Color,
-    ) {
+    pub fn update(&mut self, commands: &mut Commands, tilesets: &Tilesets, start: UVec2, end: UVec2) {
         let start = start.as_ivec2();
         let end = end.as_ivec2();
         self.start = Some(start);
         self.end = Some(end);
+
         // TODO: reuse entities updating position...
         self.clear(commands);
         let Some(tileset) = tilesets.get_by_id(&TILESET_UI_ID) else {
             error!("Couldn't find tilemap_id: {:?}. Refusing to draw TargetVisualizer.", TILESET_UI_ID);
             return;
         };
+
         let line = grid_shapes::Line::new(start, end);
         for point in line.get_points() {
             self.entity_list.push(
                 commands
                     .spawn(SpriteSheetBundle {
                         sprite: TextureAtlasSprite {
-                            color,
+                            color: self.color,
                             index: TILE_UI_CURSOR_ID,
                             custom_size: Some(Vec2::ONE),
                             ..Default::default()
@@ -72,4 +80,6 @@ impl TargetVisualizer {
         let Some(end) = self.end else {return None;};
         Some((start, end))
     }
+
+    pub fn set_color(&mut self, color: Color) { self.color = color; }
 }

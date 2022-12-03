@@ -30,14 +30,14 @@ pub fn attack_action(
             continue
         };
 
-        // if ai_component.preferred_action.is_some() {
-        //     // already attacking, quick return;
-        //     info!(
-        //         "{} Already attacking: {:?}",
-        //         name, ai_component.preferred_action
-        //     );
-        //     continue;
-        // }
+        if ai_component.preferred_action.is_some() {
+            // already attacking, quick return;
+            info!(
+                "{} Already attacking: {:?}",
+                name, ai_component.preferred_action
+            );
+            continue;
+        }
 
         match *action_state {
             // Success | Failure
