@@ -58,6 +58,9 @@ pub fn perform_turns(
             }
 
             if is_player {
+                for (mut ai_component, _name) in q_ai.iter_mut() {
+                    ai_component.preferred_action = None;
+                }
                 return;
             }
         } else {
