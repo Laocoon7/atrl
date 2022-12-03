@@ -1,4 +1,4 @@
-use std::ops::Div;
+use std::ops::{Div, Sub};
 
 use super::grid_shape::*;
 use crate::prelude::*;
@@ -122,7 +122,7 @@ impl Rectangle {
 
 impl GridShape for Rectangle {
     #[inline]
-    fn get_count(&self) -> usize { self.get_points().len() }
+    fn get_count(&self) -> u32 { self.min.sub(self.max).abs().max_element() as u32 }
 
     #[inline]
     fn contains(&self, point: impl GridPoint) -> bool {
