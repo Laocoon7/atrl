@@ -81,7 +81,8 @@ pub fn wander_action(
                 *action_state = Executing;
 
                 if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
-                    target_visualizer.set_color(Color::WHITE);
+                    target_visualizer.set_color(Color::YELLOW);
+                    target_visualizer.set_style(TargetVisualizerStyle::Select);
                 }
             },
             Executing => {},

@@ -91,6 +91,7 @@ pub fn chase_action(
 
                 if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
                     target_visualizer.set_color(Color::RED);
+                    target_visualizer.set_style(TargetVisualizerStyle::Target);
                 }
             },
             Executing => {},

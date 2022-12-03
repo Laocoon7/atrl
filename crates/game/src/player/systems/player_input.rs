@@ -67,13 +67,13 @@ pub fn draw_shape(
             //    position.gridpoint() + UVec2::new(7, 10),
             //);
 
-            let shape = Circle::new(position.gridpoint(), 15u32);
+            // let shape = Circle::new(position.gridpoint(), 15u32);
 
-            // let shape = Triangle::new(
-            //     position.gridpoint(),
-            //     position.gridpoint() + UVec2::new(5, 0),
-            //     position.gridpoint() + UVec2::new(0, 5),
-            // );
+            let shape = Triangle::new(
+                position.gridpoint(),
+                position.gridpoint() + UVec2::new(3, 5),
+                position.gridpoint() + UVec2::new(3, 2),
+            );
 
             // let shape = Rectangle::new(
             //     position.gridpoint(),
@@ -84,8 +84,9 @@ pub fn draw_shape(
                 commands.spawn(SpriteSheetBundle {
                     texture_atlas: tileset.atlas().clone(),
                     sprite: TextureAtlasSprite {
+                        color: Color::GREEN,
                         custom_size: Some(Vec2::ONE),
-                        index: TILE_UI_CURSOR_GREEN_ID,
+                        index: TILE_UI_CURSOR_CURSOR_ID,
                         ..Default::default()
                     },
                     transform: Transform::from_translation(Vec3::new(

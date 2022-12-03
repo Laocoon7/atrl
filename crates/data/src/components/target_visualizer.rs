@@ -1,9 +1,28 @@
 use atrl_common::prelude::grid_shapes::GridShape;
 
 use crate::prelude::*;
+
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum TargetVisualizerStyle {
+    Cursor,
+    Select,
+    Target,
+}
+
+impl From<TargetVisualizerStyle> for usize {
+    fn from(value: TargetVisualizerStyle) -> Self {
+        match value {
+            TargetVisualizerStyle::Cursor => TILE_UI_CURSOR_CURSOR_ID,
+            TargetVisualizerStyle::Select => TILE_UI_CURSOR_SELECT_ID,
+            TargetVisualizerStyle::Target => TILE_UI_CURSOR_TARGET_ID,
+        }
+    }
+}
+
 #[derive(Component)]
 pub struct TargetVisualizer {
     color: Color,
+    style: TargetVisualizerStyle,
     start: Option<IVec2>,
     end: Option<IVec2>,
     entity_list: Vec<Entity>,
@@ -13,6 +32,7 @@ impl Default for TargetVisualizer {
     fn default() -> Self {
         Self {
             color: Color::WHITE,
+            style: TargetVisualizerStyle::Cursor,
             start: Default::default(),
             end: Default::default(),
             entity_list: Default::default(),
@@ -21,9 +41,10 @@ impl Default for TargetVisualizer {
 }
 
 impl TargetVisualizer {
-    pub fn new(start: UVec2, end: UVec2, color: Color) -> Self {
+    pub fn new(start: UVec2, end: UVec2, style: TargetVisualizerStyle, color: Color) -> Self {
         Self {
             color,
+            style,
             entity_list: Vec::new(),
             start: Some(start.as_ivec2()),
             end: Some(end.as_ivec2()),
@@ -50,7 +71,7 @@ impl TargetVisualizer {
                     .spawn(SpriteSheetBundle {
                         sprite: TextureAtlasSprite {
                             color: self.color,
-                            index: TILE_UI_CURSOR_ID,
+                            index: usize::from(self.style),
                             custom_size: Some(Vec2::ONE),
                             ..Default::default()
                         },
@@ -83,4 +104,6 @@ impl TargetVisualizer {
     }
 
     pub fn set_color(&mut self, color: Color) { self.color = color; }
+
+    pub fn set_style(&mut self, style: TargetVisualizerStyle) { self.style = style; }
 }

@@ -10,9 +10,9 @@ pub const TILE_MISSING_ID: TileId = 0;
 /// CURSOR
 /////////////////////////////////////////////////////////////////////
 pub const TILE_UI_MISSING_ID: TileId = 0;
-pub const TILE_UI_CURSOR_ID: TileId = 1;
-pub const TILE_UI_CURSOR_RED_ID: TileId = 2;
-pub const TILE_UI_CURSOR_GREEN_ID: TileId = 3;
+pub const TILE_UI_CURSOR_CURSOR_ID: TileId = 1;
+pub const TILE_UI_CURSOR_TARGET_ID: TileId = 2;
+pub const TILE_UI_CURSOR_SELECT_ID: TileId = 3;
 
 /////////////////////////////////////////////////////////////////////
 /// ACTORS
