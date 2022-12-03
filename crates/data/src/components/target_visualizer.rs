@@ -70,6 +70,7 @@ impl TargetVisualizer {
     pub fn clear(&mut self, commands: &mut Commands) {
         self.start = None;
         self.end = None;
+
         for entity in self.entity_list.drain(..) {
             commands.entity(entity).despawn_recursive();
         }

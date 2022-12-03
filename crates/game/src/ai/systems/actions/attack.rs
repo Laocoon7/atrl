@@ -71,7 +71,8 @@ pub fn attack_action(
         let player_pos = player_position.gridpoint();
 
         if in_attack_range(ai_pos, player_pos) {
-            *action_state = ActionState::Success;
+            println!("{} is in attack range!", name);
+            // *action_state = ActionState::Success;
             ai_component.preferred_action = Some(ActionType::Attack(player_entity));
         } else {
             *action_state = ActionState::Failure;

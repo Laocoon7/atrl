@@ -30,5 +30,6 @@ pub fn entity_in_fov(
 // We assume the attack range is sqrt(2)
 pub fn in_attack_range(attacker_pos: UVec2, victim_pos: UVec2) -> bool {
     let distance = DistanceAlg::Pythagoras.distance2d(attacker_pos, victim_pos);
+    println!("Distance: {}", distance);
     distance <= DIAGONAL_COST
 }

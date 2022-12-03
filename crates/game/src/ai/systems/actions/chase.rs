@@ -101,7 +101,6 @@ pub fn chase_action(
         let position = if entity_in_fov(map, fov, vision, ai_pos, player_pos) {
             let player_pos = *player_position;
             if in_attack_range(ai_pos, player_pos.gridpoint()) {
-                info!("{} in attack range!", name);
                 *action_state = Success;
                 continue;
             }
@@ -131,6 +130,7 @@ pub fn chase_action(
                     .first()
                     .unwrap_or(&last_seen.gridpoint().as_ivec2())
                     .as_uvec2();
+
                 let last_seen_pt = Position::new(
                     WorldPosition::new(
                         last_seen.world_x(),

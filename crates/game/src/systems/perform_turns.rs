@@ -93,7 +93,13 @@ fn perform_action(
                 Err(ActionType::Movement(*entity_position + delta))
             })
         },
-        ActionType::Attack(_) => todo!(),
+        ActionType::Attack(entity) => {
+            info!(
+                "LETS ATTRACK HERE! PLEASE HOOK ME UP! I WANNA ATTACK {:?}",
+                entity
+            );
+            Ok(action.get_base_time_to_perform())
+        },
     }
 }
 

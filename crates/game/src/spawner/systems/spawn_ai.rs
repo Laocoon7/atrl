@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-const MAX_AI_ACTORS: u32 = 2;
+const MAX_AI_ACTORS: u32 = 1;
 
 pub fn spawn_ai(
     tilesets: Tilesets,
