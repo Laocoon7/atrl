@@ -56,6 +56,10 @@ pub fn perform_turns(
                     Err(a) => action = a,
                 }
             }
+
+            if is_player {
+                return;
+            }
         } else {
             error!("No entities waiting for a turn!");
             return;
