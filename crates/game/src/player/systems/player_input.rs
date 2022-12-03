@@ -61,8 +61,25 @@ pub fn draw_shape(
 
     if let Some(tileset) = tilesets.get_by_id(&TILESET_UI_ID) {
         for position in q_player.iter() {
-            let circle = Circle::new(position.gridpoint(), 5u32);
-            for point in circle.get_points() {
+            // let shape = Line::new(
+            //    position.gridpoint(),
+            //    position.gridpoint() + UVec2::new(7, 10),
+            //);
+
+            let shape = Circle::new(position.gridpoint(), 15u32);
+
+            // let shape = Triangle::new(
+            //    position.gridpoint(),
+            //    position.gridpoint() + UVec2::new(5, 0),
+            //    position.gridpoint() + UVec2::new(0, 5),
+            //);
+
+            // let shape = Rectangle::new(
+            //    position.gridpoint(),
+            //    position.gridpoint() + UVec2::new(10, 5),
+            //);
+
+            for point in shape.get_points() {
                 commands.spawn(SpriteSheetBundle {
                     texture_atlas: tileset.atlas().clone(),
                     sprite: TextureAtlasSprite {
