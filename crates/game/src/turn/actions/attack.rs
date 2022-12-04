@@ -1,13 +1,10 @@
 use crate::prelude::*;
 
 pub fn try_attack(entity: Entity, position: Position, world: &mut World) -> Result<(), ActionType> {
-    let mut system_state: SystemState<(
-    MapManager,
-    Query<(&mut Health, &Name)>,
-    )> = SystemState::new(world);
+    let mut system_state: SystemState<(MapManager, Query<(&mut Health, &Name)>)> = SystemState::new(world);
 
     let (mut map_manager, mut health_q) = system_state.get_mut(world);
-    
+
     let mut actors = Vec::new();
     let mut features = Vec::new();
 
@@ -39,5 +36,4 @@ pub fn try_attack(entity: Entity, position: Position, world: &mut World) -> Resu
         info!("Couldn't find entities with health components.");
         Err(ActionType::Wait)
     }
-
 }

@@ -29,8 +29,9 @@ impl<T: StateNext> GamePlugin<T> {
 
     fn setup_resources(self, app: &mut App) -> Self {
         app
-            // Game Context
+            // Game Contexts
             .init_resource::<GameContext>()
+            .init_resource::<AiContext>()
             // Turn Manager
             .init_resource::<TurnManager>();
         self

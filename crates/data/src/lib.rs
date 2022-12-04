@@ -97,6 +97,14 @@ mod components {
 }
 
 mod game {
+    mod contexts {
+        mod game_context;
+        pub use game_context::*;
+        mod ai_context;
+        pub use ai_context::*;
+    }
+    pub use contexts::*;
+
     mod map {
         mod functions {
             mod create_tilemap;
@@ -133,8 +141,6 @@ mod game {
     }
     pub use map::*;
 
-    mod game_context;
-    pub use game_context::*;
     mod game_state;
     pub use game_state::*;
     mod game_stage;

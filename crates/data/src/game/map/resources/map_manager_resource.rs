@@ -9,7 +9,12 @@ pub struct MapManagerResource {
 
 // Constructor
 impl MapManagerResource {
-    pub fn new(world_position: WorldPosition, map: Map, terrain_layer: Entity, features_layer: Entity) -> Self {
+    pub fn new(
+        world_position: WorldPosition,
+        map: Map,
+        terrain_layer: Entity,
+        features_layer: Entity,
+    ) -> Self {
         Self {
             current_map: (world_position, map),
             loaded_maps: HashMap::new(),

@@ -13,11 +13,7 @@ pub fn try_move(
         Query<(&mut Position, &Movement)>,
         Query<&BlocksMovement>,
     )> = SystemState::new(world);
-    let (
-        mut map_manager,
-        mut spatial_q,
-        q_blocks_movement
-    ) = system_state.get_mut(world);
+    let (mut map_manager, mut spatial_q, q_blocks_movement) = system_state.get_mut(world);
 
     spatial_q.get_mut(entity).map_or_else(
         |err| {
@@ -32,7 +28,7 @@ pub fn try_move(
                     movement_component.0,
                     true,
                     &mut map_manager,
-                    &q_blocks_movement
+                    &q_blocks_movement,
                 )
                 .map_or_else(
                     || {

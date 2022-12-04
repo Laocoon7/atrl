@@ -3,7 +3,6 @@ use crate::prelude::*;
 pub struct MapPassThroughData {
     pub map_entity: Entity,
     pub world_position: WorldPosition,
-
     // TODO: Explored tiles should be passed from serialized data for the map on loading, or just a
     // new HashSet pub explored_tiles: HashSet<UVec2>
 }

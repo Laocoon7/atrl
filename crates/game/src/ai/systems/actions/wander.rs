@@ -31,7 +31,7 @@ impl Default for Wander {
 pub fn wander_action(
     mut commands: Commands,
     mut map_manager: MapManager,
-    mut ctx: ResMut<GameContext>,
+    mut ai_context: ResMut<AiContext>,
     mut target_q: Query<&mut TargetVisualizer>,
     mut action_q: Query<(&Actor, &mut ActionState, &mut Wander)>, /* TODO: Can these be one query /
                                                                    * SystemParam? */
@@ -49,7 +49,7 @@ pub fn wander_action(
 
         // TODO: This is currently using the general game rng?
         // Should AI have it's own rng?
-        let rng = ctx.random.get_prng().as_rngcore();
+        let rng = ai_context.random.prng.as_rngcore();
 
         let Ok((ai_position, movement,name, mut ai_component)) =
         spatial_q.get_mut(*actor) else {
