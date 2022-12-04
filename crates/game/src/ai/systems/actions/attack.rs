@@ -9,14 +9,14 @@ pub struct AttackActor;
 pub fn attack_action(
     mut commands: Commands,
     mut target_q: Query<&mut TargetVisualizer>,
-    player_q: Query<&Position, With<Player>>,
+    player_entity: Res<PlayerEntity>,
     mut action_q: Query<(&Actor, &mut ActionState), With<AttackActor>>,
-    mut ai_q: Query<(&Position, &Name, &mut AIComponent), Without<Player>>,
+    mut mobs_q: Query<(&Position, &Name, &mut AIComponent)>,
 ) {
     use ActionState::*;
 
-    let player_position = match player_q.get_single() {
-        Ok(p) => p,
+    let (player_entity, player_position) = match mobs_q.get(player_entity.current()) {
+        Ok((p, ..)) => (player_entity.current(), p),
         Err(err) => {
             info!("No player found: {}", err);
             return;
@@ -25,7 +25,7 @@ pub fn attack_action(
 
     for (Actor(actor), mut action_state) in action_q.iter_mut() {
         let Ok((ai_position, name, mut ai_component)) =
-        ai_q.get_mut(*actor) else {
+        mobs_q.get_mut(*actor) else {
             info!("Actor must have required attack components");
             continue
         };
@@ -68,10 +68,7 @@ pub fn attack_action(
             ActionState::Executing => {},
         }
 
-        let ai_pos = ai_position.gridpoint();
-        let player_pos = player_position.gridpoint();
-
-        if in_attack_range(ai_pos, player_pos) {
+        if in_attack_range(*ai_position, *player_position) {
             println!("{} is in attack range!", name);
             // *action_state = ActionState::Success;
             ai_component.preferred_action = Some(ActionType::Attack(*player_position));

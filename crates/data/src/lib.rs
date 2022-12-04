@@ -44,6 +44,14 @@ mod components {
     }
     pub use ai_component::*;
 
+    mod blocks {
+        mod blocks_movement;
+        pub use blocks_movement::*;
+        mod blocks_vision;
+        pub use blocks_vision::*;
+    }
+    pub use blocks::*;
+
     mod bundles {
         mod actor_bundle;
         mod player_bundle;
@@ -90,6 +98,20 @@ mod components {
 
 mod game {
     mod map {
+        mod functions {
+            mod create_tilemap;
+            pub use create_tilemap::*;
+        }
+        pub use functions::*;
+
+        mod resources {
+            mod map_manager;
+            pub use map_manager::*;
+            mod map_manager_resource;
+            pub use map_manager_resource::*;
+        }
+        pub use resources::*;
+
         mod tiles {
             mod feature_type;
             pub use feature_type::*;
@@ -104,6 +126,10 @@ mod game {
         pub use map::*;
         mod map_layer;
         pub use map_layer::*;
+        mod map_pass_through_data;
+        pub use map_pass_through_data::*;
+        mod map_plugin;
+        pub use map_plugin::*;
     }
     pub use map::*;
 
@@ -151,8 +177,8 @@ mod pathfinding {
     pub use astar::*;
 
     mod dijkstra {
-        mod dijkstra;
-        pub use dijkstra::*;
+        //mod dijkstra;
+        //pub use dijkstra::*;
     }
     pub use dijkstra::*;
 
@@ -166,16 +192,14 @@ mod pathfinding {
     mod path_provider;
     pub use path_provider::*;
 }
-mod system_params {
-    mod player_param;
-    pub use player_param::*;
-}
 
 mod resources {
     mod action_queue;
     pub use action_queue::*;
     mod app_settings;
     pub use app_settings::*;
+    mod player_entity;
+    pub use player_entity::*;
     mod tile_ids;
     pub use tile_ids::*;
     mod tileset_ids;
@@ -200,8 +224,9 @@ pub mod prelude {
             },
             prelude::*,
             render::render_resource::{Extent3d, TextureDimension, TextureFormat},
-            utils::HashSet,
+            utils::{HashMap, HashSet},
         };
+        pub use bevy_ecs_tilemap::prelude::*;
         pub use bevy_tileset::prelude::*;
         pub use index_list::{Index, IndexList};
         pub use iyes_loopless::prelude::*;
@@ -224,7 +249,7 @@ pub mod prelude {
         pub use crate::pathfinding::PathFinder; // where's the redundancy lint???
         pub use crate::{
             actions::*, actors::*, camera::*, components::*, fov::*, game::*, pathfinding::*, queries::*,
-            resources::*, system_params::*,
+            resources::*,
         };
     }
     pub use export::*;

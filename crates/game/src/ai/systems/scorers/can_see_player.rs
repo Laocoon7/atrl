@@ -14,26 +14,30 @@ impl Default for CanSeePlayer {
 }
 
 pub fn can_see_player(
-    manager: Res<MapManager>,
-    ai_q: Query<(&Position, &FieldOfView, &Vision)>,
-    player_q: Query<(Entity, &Position), With<Player>>,
+    mut map_manager: MapManager,
+    mobs_q: Query<(&Position, &FieldOfView, &Vision)>,
+    player_entity: Res<PlayerEntity>,
     mut query: Query<(&Actor, &mut Score, &CanSeePlayer)>,
+    q_blocks_vision: Query<&BlocksVision>,
 ) {
-    for (_player, player_position) in &player_q {
-        for (Actor(actor), mut score, can_see_player) in query.iter_mut() {
-            let mut current_score = 0.0;
+    let Ok((player_position, ..)) = mobs_q.get(player_entity.current()) else {
+        error!("No player!");
+        return;
+    };
 
-            if let Ok((ai_transform, fov, vision)) = ai_q.get(*actor) {
-                if let Some(map) = manager.get_current_map() {
-                    let player_pos = player_position.gridpoint();
-                    let ai_pos = ai_transform.gridpoint();
-                    if entity_in_fov(map, fov, vision, ai_pos, player_pos) {
-                        current_score = can_see_player.score_if_true;
-                    }
-                }
-            }
 
-            score.set(current_score);
+    for (Actor(actor), mut score, can_see_player) in query.iter_mut() {
+        if *actor == player_entity.current() {
+            continue;
         }
+        let mut current_score = 0.0;
+
+        if let Ok((ai_position, fov, vision)) = mobs_q.get(*actor) {
+            if entity_in_fov(&mut map_manager, &q_blocks_vision, fov, vision, *ai_position, *player_position) {
+                current_score = can_see_player.score_if_true;
+            }
+        }
+
+        score.set(current_score);
     }
 }

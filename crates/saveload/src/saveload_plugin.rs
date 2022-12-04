@@ -4,7 +4,7 @@ impl Plugin for SaveLoadPlugin {
     fn build(&self, app: &mut App) {
         app
             // -- Tags -- //
-            .register_type::<Player>()
+            //.register_type::<Player>()
             // -- AI -- //
             .register_type::<AIType>()
             .register_type::<AIComponent>()

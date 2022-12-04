@@ -27,9 +27,23 @@ impl Position {
         self.gridpoint().as_index_unchecked(width)
     }
 
+    pub fn distance(&self, other: Self) -> u32 {
+        let dist_x =
+        ((other.world_x() * GRID_WIDTH as i32 + other.x() as i32) -
+        (self.world_x() * GRID_WIDTH as i32 + self.x() as i32)).abs() as u32;
+        let dist_y = 
+        ((other.world_y() * GRID_HEIGHT as i32 + other.y() as i32) -
+        (self.world_y() * GRID_HEIGHT as i32 + self.y() as i32)).abs() as u32;
+
+        dist_x.max(dist_y)
+    }
+
     ///////////////////////////////
     /// LocalPosition
     ///////////////////////////////
+    #[inline]
+    pub const fn get_local_position(&self) -> LocalPosition { self.local_position }
+
     #[inline]
     pub const fn x(&self) -> u32 { self.local_position.x() }
 
@@ -55,6 +69,9 @@ impl Position {
     ///////////////////////////////
     /// WorldPosition
     ///////////////////////////////
+    #[inline]
+    pub const fn get_world_position(&self) -> WorldPosition { self.world_position }
+
     #[inline]
     pub const fn world_x(&self) -> i32 { self.world_position.x() }
 

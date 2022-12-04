@@ -1,8 +1,6 @@
 use crate::prelude::*;
 #[derive(Bundle)]
 pub struct PlayerBundle {
-    pub player: Player,
-
     #[bundle]
     pub actor: ActorBundle,
     #[bundle]

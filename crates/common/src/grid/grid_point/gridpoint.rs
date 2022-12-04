@@ -151,6 +151,8 @@ pub trait GridPoint: Clone + Copy {
         AdjIterator::new(*self, OrdinalDirection::all_directions().collect())
     }
 }
+
+
 #[cfg(test)]
 mod tests {
     use crate::prelude::*;

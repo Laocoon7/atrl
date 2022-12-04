@@ -30,20 +30,26 @@ impl Default for Wander {
 
 pub fn wander_action(
     mut commands: Commands,
-    manager: Res<MapManager>,
+    map_manager: MapManager,
     mut ctx: ResMut<GameContext>,
     mut target_q: Query<&mut TargetVisualizer>,
-    mut action_q: Query<(&Actor, &mut ActionState, &mut Wander)>,
-    mut spatial_q: Query<(&Position, &Movement, &Name, &mut AIComponent), Without<Player>>,
+    mut action_q: Query<(&Actor, &mut ActionState, &mut Wander)>, // TODO: Can these be one query / SystemParam?
+    mut spatial_q: Query<(&Position, &Movement, &Name, &mut AIComponent)>, // TODO: Or a ParamSet?
+    player_entity: Res<PlayerEntity>,
+    q_blocks_movement: Query<&BlocksMovement>,
 ) {
     use ActionState::*;
 
     for (Actor(actor), mut action_state, mut wander) in action_q.iter_mut() {
+        // don't work on the player...
+        if *actor == player_entity.current() {
+            return;
+        }
+
+
+        // TODO: This is currently using the general game rng?
+        // Should AI have it's own rng?
         let rng = ctx.random.get_prng().as_rngcore();
-        let Some(map) = manager.get_current_map() else {
-            info!("No map found");
-            return
-        };
 
         let Ok((ai_position, movement,name, mut ai_component)) =
         spatial_q.get_mut(*actor) else {
@@ -92,30 +98,14 @@ pub fn wander_action(
 
         let destination = match std::mem::take(&mut wander.destination) {
             Some(destination) => {
-                if Line::new(ai_position.gridpoint(), destination.gridpoint()).get_count() <= 1 {
-                    let xy = generate_wander_path(rng, map, ai_position.gridpoint(), movement.0).as_uvec2();
-                    Position::new(
-                        WorldPosition::new(
-                            ai_position.world_x(),
-                            ai_position.world_y(),
-                            ai_position.world_z(),
-                        ),
-                        LocalPosition::new(xy.x, xy.y, MapLayer::Actors as u32),
-                    )
+                if ai_position.distance(destination) <= 1 {
+                    generate_wander_path(rng, &mut map_manager, *ai_position, movement.0, &q_blocks_movement)
                 } else {
                     destination
                 }
             },
             None => {
-                let xy = generate_wander_path(rng, map, ai_position.gridpoint(), movement.0).as_uvec2();
-                Position::new(
-                    WorldPosition::new(
-                        ai_position.world_x(),
-                        ai_position.world_y(),
-                        ai_position.world_z(),
-                    ),
-                    LocalPosition::new(xy.x, xy.y, MapLayer::Actors as u32),
-                )
+                generate_wander_path(rng, &mut map_manager, *ai_position, movement.0, &q_blocks_movement)
             },
         };
 
@@ -125,15 +115,22 @@ pub fn wander_action(
     }
 }
 
-fn generate_wander_path(rng: &mut impl RngCore, map: &Map, ai_pos: UVec2, movement_type: u8) -> IVec2 {
+fn generate_wander_path(
+    rng: &mut impl RngCore,
+    map: &mut MapManager,
+    ai_pos: Position,
+    movement_type: u8,
+    q_blocks_movement: &Query<&BlocksMovement>,
+) -> Position {
     let wander_radius = WANDER_RANGE.sample(rng);
-    let wander_circle = Circle::new(ai_pos, wander_radius);
+    let wander_circle = Circle::new((0u32, 0), wander_radius);
 
     loop {
         // Default to the circle center
-        let new_destination = wander_circle.iter().choose(rng).unwrap_or_else(|| wander_circle.center());
-        if map.can_place_actor(new_destination.as_uvec2(), movement_type) {
-            return new_destination;
+        let offset = wander_circle.iter().choose(rng).unwrap_or_else(|| wander_circle.center());
+        let destination = ai_pos + offset;
+        if map.can_place_actor(destination, movement_type, q_blocks_movement) {
+            return destination;
         }
     }
 }

@@ -3,33 +3,35 @@
 use super::{quadrant::*, row::*};
 use crate::prelude::*;
 pub struct Shadowcast;
-impl FovAlgorithm for Shadowcast {
+impl<'w, 's> FovAlgorithm<'w, 's> for Shadowcast {
     fn compute_fov(
-        origin: IVec2,
+        origin: Position,
         vision_type: u8,
         range: u32,
-        provider: &impl FovProvider,
+        provider: &mut impl FovProvider,
+        q_blocks_vision: &Query<'w, 's, &'static BlocksVision>,
         receiver: &mut impl FovReceiver,
     ) {
         receiver.set_visible(origin);
         CardinalDirection::all().enumerate().for_each(|(_index, direction)| {
-            let mut quadrant = Quadrant::new(direction, origin, vision_type, provider, receiver);
+            let mut quadrant = Quadrant::new(direction, origin, vision_type, provider, q_blocks_vision, receiver);
             let mut first_row = Row::new(1, Slope::new(-1, 1), Slope::new(1, 1));
             Self::scan_recursive(range, &mut quadrant, &mut first_row);
         });
     }
 }
-impl Shadowcast {
+impl<'w, 's> Shadowcast {
     pub fn compute_direction(
-        origin: IVec2,
+        origin: Position,
         vision_type: u8,
         range: u32,
-        provider: &impl FovProvider,
+        provider: &mut impl FovProvider,
+        q_blocks_vision: &Query<'w, 's, &'static BlocksVision>,
         receiver: &mut impl FovReceiver,
         direction: CardinalDirection,
     ) {
         receiver.set_visible(origin);
-        let mut quadrant = Quadrant::new(direction, origin, vision_type, provider, receiver);
+        let mut quadrant = Quadrant::new(direction, origin, vision_type, provider, q_blocks_vision, receiver);
         let mut first_row = Row::new(1, Slope::new(-1, 1), Slope::new(1, 1));
         Self::scan_recursive(range, &mut quadrant, &mut first_row);
     }

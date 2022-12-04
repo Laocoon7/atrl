@@ -1,10 +1,11 @@
 use crate::prelude::*;
 pub trait PathAlgorithm {
     fn compute_path(
-        origin: IVec2,
-        destination: IVec2,
+        origin: Position,
+        destination: Position,
         movement_type: u8,
         partial_path_on_failure: bool,
-        provider: &impl PathProvider,
-    ) -> Option<Vec<IVec2>>;
+        provider: &mut impl PathProvider,
+        q_blocks_movement: &Query<&BlocksMovement>,
+    ) -> Option<Vec<Position>>;
 }

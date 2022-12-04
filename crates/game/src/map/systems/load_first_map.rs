@@ -4,7 +4,7 @@ pub fn load_first_map(
     mut commands: Commands,
     state: Res<CurrentGameState>,
     mut game_context: ResMut<GameContext>,
-    mut map_manager: ResMut<MapManager>,
+    mut map_manager: ResMut<MapManagerResource>,
 ) {
     info!("load_first_map");
     map_manager.get(

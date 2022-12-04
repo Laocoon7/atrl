@@ -6,7 +6,7 @@ use crate::prelude::*;
 ///
 /// https://rust-lang.github.io/rust-clippy/master/index.html#cognitive_complexity
 pub fn update_tilemaps(
-    mut map_manager: ResMut<MapManager>,
+    mut map_manager: ResMut<MapManagerResource>,
     q_storage: Query<&TileStorage>,
     mut q_tiles: Query<&mut TileTextureIndex>,
 ) {

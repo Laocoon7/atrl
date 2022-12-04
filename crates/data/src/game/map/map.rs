@@ -2,190 +2,175 @@ use crate::prelude::*;
 
 // This needs to impl FromWorld not derive reflect
 pub struct Map {
-    pub size: UVec2,
-    pub random: Random,
-    pub world_position: IVec3,
+    // Map Definitions
     pub entity: Entity,
+    pub size: UVec2,
+    pub world_position: WorldPosition,
+    pub random: Random,
 
-    pub update_all: bool,
-    pub update_tiles: HashSet<UVec2>,
-
-    pub actors: Grid<Option<Entity>>,
-
+    // Child Layers
     pub terrain_layer_entity: Entity,
     pub feature_layer_entity: Entity,
 
-    pub terrain_types: Grid<TerrainType>,
-    pub feature_types: Grid<FeatureType>,
-    pub item_types: Grid<Vec<ItemType>>,
-
+    // Update Flags
+    pub update_all: bool,
+    pub update_tiles: HashSet<UVec2>,
     pub explored_tiles: HashSet<UVec2>,
+    
+    // Object containers
+    pub terrain: Grid<TerrainType>,
+    pub features: Grid<Option<Vec<Entity>>>,
+    //pub items: Grid<Option<ItemStack>>,
+    pub actors: Grid<Option<Vec<Entity>>>,
 }
-// OPTIMIZE: All pub fn should check / convert position to usize index
-// then switch to unchecked indexing grid[index] on private functions
-impl Map {
-    pub fn try_add_actor(&mut self, position: UVec2, actor: Entity, movement_type: u8) -> bool {
-        let Some(position_index) = position.as_index(self.size) else {
-            return false;
-          };
 
-        if self.can_place_actor(position, movement_type) {
-            self.add_actor(position_index, actor);
+// Constructor: See MapPassThroughData
+
+//// Perform terrain functions on this map
+//impl Map {
+//    
+//}
+
+// Perform actor functions on this map
+impl Map {
+    /// Do not use this function!!!
+    /// Use MapManager::can_place_actor instead!!!
+    pub fn can_place_actor(&self, position: LocalPosition, movement_type: u8, q_blocks_movement: &Query<&BlocksMovement>) -> bool {
+        let Some(index) = position.grid_index(self.size) else { return false; };
+
+        !self.is_blocked(index, movement_type, q_blocks_movement)
+    }
+
+    /// Do not use this function!!!
+    /// Use MapManager::add_actor instead!!!
+    pub fn add_actor(&mut self, actor: Entity, position: LocalPosition, movement_type: u8, q_blocks_movement: &Query<&BlocksMovement>) -> bool {
+        let Some(index) = position.grid_index(self.size) else { return false; };
+
+        if self.can_place_actor(position, movement_type, q_blocks_movement) {
+            if self.actors[index].is_none() {
+                self.actors[index] = Some(Vec::new());
+            }
+
+            // Was just created above if it didn't exist.
+            let actors = self.actors[index].as_mut().unwrap();
+
+            actors.push(actor);
+
             true
         } else {
             false
         }
     }
+    
+    /// Do not use this function!!!
+    /// Use MapManager::remove_actor instead!!!
+    pub fn remove_actor(&mut self, actor: Entity, position: LocalPosition) {
+        let Some(index) = position.grid_index(self.size) else { return; };
 
-    pub fn try_move_actor(&mut self, from: UVec2, to: UVec2, movement_type: u8) -> bool {
-        let Some(from_index) = from.as_index(self.size) else {
-            return false;
-          };
+        if let Some(actors) = self.actors[index].as_mut() {
+            actors.retain(|&x| x != actor);
 
-        let Some(to_index) = to.as_index(self.size) else {
-            return false;
-          };
+            if actors.len() == 0 {
+                self.actors[index] = None;
+            }
+        }
+    }
 
-        if self.can_place_actor(to, movement_type) {
-            if let Some(entity) = self.remove_actor(from_index) {
-                self.add_actor(to_index, entity);
-                return true;
+    /// Do not use this function!!!
+    /// Use MapManager::get_actors instead!!!
+    pub fn get_actors(&self, position: LocalPosition) -> Option<&Vec<Entity>> {
+        let Some(index) = position.grid_index(self.size) else { return None; };
+
+        self.actors[index].as_ref()
+    }
+}
+
+// Perform feature functions on this map
+impl Map {
+    /// Do not use this function!!!
+    /// Use MapManager::add_feature instead!!!
+    pub fn add_feature(&mut self, feature: Entity, position: LocalPosition) -> bool {
+        let Some(index) = position.grid_index(self.size) else { return false; };
+
+        if self.features[index].is_none() {
+            self.features[index] = Some(Vec::new());
+        }
+
+        // Was just created above if it didn't exist.
+        let features = self.features[index].as_mut().unwrap();
+
+        features.push(feature);
+
+        true
+    }
+    
+    /// Do not use this function!!!
+    /// Use MapManager::remove_feature instead!!!
+    pub fn remove_feature(&mut self, feature: Entity, position: LocalPosition) {
+        let Some(index) = position.grid_index(self.size) else { return; };
+
+        if let Some(features) = self.features[index].as_mut() {
+            features.retain(|&x| x != feature);
+
+            if features.len() == 0 {
+                self.features[index] = None;
+            }
+        }
+    }
+
+    /// Do not use this function!!!
+    /// Use MapManager::get_features instead!!!
+    pub fn get_features(&self, position: LocalPosition) -> Option<&Vec<Entity>> {
+        let Some(index) = position.grid_index(self.size) else { return None; };
+
+        self.features[index].as_ref()
+    }
+}
+
+//// Perform item functions on this map
+//impl Map {
+//    
+//}
+
+// Blocked
+impl Map {
+    fn is_blocked(&self, index: usize, movement_type: u8, q_blocks_movement: &Query<&BlocksMovement>) -> bool {
+        // if there are actors
+        if let Some(actors) = self.actors[index].as_ref() {
+            // for each actor
+            for &entity in actors {
+                // get BlocksMovement component
+                if let Ok(blocks_movement) = q_blocks_movement.get(entity) {
+                    // check if we are blocked
+                    if blocks_movement.is_blocked(movement_type) {
+                        // if we are blocked return true
+                        return true;
+                    }
+                }
             }
         }
 
+        // if there are features
+        if let Some(features) = self.actors[index].as_ref() {
+            // for each feature
+            for &entity in features {
+                // get BlocksMovement component
+                if let Ok(blocks_movement) = q_blocks_movement.get(entity) {
+                    // check if we are blocked
+                    if blocks_movement.is_blocked(movement_type) {
+                        // if we are blocked return true
+                        return true;
+                    }
+                }
+            }
+        }
+
+        // We are not blocked!
         false
     }
-
-    pub fn try_remove_actor(&mut self, position: UVec2) -> Option<Entity> {
-        let Some(position_index) = position.as_index(self.size) else {
-            return None;
-          };
-
-        self.remove_actor(position_index)
-    }
-
-    pub fn can_place_actor(&self, position: UVec2, movement_type: u8) -> bool {
-        let Some(position_index) = position.as_index(self.size) else {
-            return false;
-          };
-        self.is_walkable(position.as_ivec2(), movement_type) && !self.has_actor(position_index)
-    }
-
-    pub fn set_terrain_at(&mut self, position: UVec2, terrain_type: TerrainType) {
-        self.terrain_types.set(position, terrain_type);
-        self.update_tiles.insert(position);
-    }
-
-    pub fn add_feature_at(&mut self, position: UVec2, feature_type: FeatureType) {
-        self.feature_types.set(position, feature_type);
-        self.update_tiles.insert(position);
-    }
-
-    pub fn get_actor_position(&self, actor: Entity) -> Option<IVec2> {
-        self.actors.enumerate().find_map(
-            |(pt, e)| {
-                if e.as_ref() == Some(&actor) {
-                    Some(pt)
-                } else {
-                    None
-                }
-            },
-        )
-    }
-
-    pub fn get_actor(&self, position: Position) -> Option<Entity> {
-        let Some(position_index) = position.grid_index(self.size) else {
-            return None;
-          };
-
-        self.actors[position_index]
-    }
-
-    // TODO: pub?
-    fn has_actor(&self, position_idx: usize) -> bool { self.actors[position_idx].is_some() }
-
-    fn add_actor(&mut self, position_idx: usize, actor: Entity) { self.actors[position_idx] = Some(actor); }
-
-    fn remove_actor(&mut self, position_idx: usize) -> Option<Entity> { self.actors[position_idx].take() }
 }
 
-pub struct MapPassThroughData {
-    pub world_position: IVec3,
-
-    pub map_entity: Entity,
-    pub terrain_layer_entity: Entity,
-    pub features_layer_entity: Entity,
-    // TODO: Explored tiles should be passed from serialized data for the map on loading, or just a
-    // new HashSet pub explored_tiles: HashSet<UVec2>
-}
-
-impl From<MapGenData<MapPassThroughData>> for Map {
-    fn from(data: MapGenData<MapPassThroughData>) -> Self {
-        let mut terrain_types = Grid::new_default(data.size);
-        for y in 0..data.size.height() {
-            for x in 0..data.size.width() {
-                let v = *data.terrain_grid.get_unchecked((x, y));
-                terrain_types.set((x, y), v.into());
-            }
-        }
-
-        Self {
-            size: data.size,
-            entity: data.user_data.map_entity,
-            update_all: true,
-
-            update_tiles: HashSet::new(),
-            random: data.random,
-            actors: Grid::new_default(data.size),
-            world_position: data.user_data.world_position,
-
-            terrain_types,
-            item_types: Grid::new_default(data.size),
-            feature_types: Grid::new_default(data.size),
-
-            terrain_layer_entity: data.user_data.terrain_layer_entity,
-            feature_layer_entity: data.user_data.features_layer_entity,
-
-            // TODO: Add explored_tiles HashSet to MapPassThroughData
-            explored_tiles: HashSet::new(),
-        }
-    }
-}
-
-impl FovProvider for Map {
-    fn is_opaque(&self, position: IVec2, vision_type: u8) -> bool {
-        // Check if the player is blind
-        if (vision_type & VisionType::Blind as u8) != 0 {
-            return false;
-        }
-        // Get the vision types that can see through this terrain:
-        // None by default (if there's no terrain, there's nothing to see)
-        let terrain =
-            self.terrain_types.get(position).map_or(VisionType::None.as_u8(), |t| t.vision_penetrates());
-
-        // Get the vision types that can see through this feature:
-        // Any by default (if there's no feature, don't block vision)
-        let feature =
-            self.feature_types.get(position).map_or(VisionType::Any.as_u8(), |f| f.vision_penetrates());
-
-        (terrain & feature & (vision_type)) == 0
-    }
-}
-
-impl PathProvider for Map {
-    fn is_walkable(&self, position: IVec2, movement_type: u8) -> bool {
-        // Get the movement types that can move through this terrain:
-        // None by default (this provides bounds checking)
-        let terrain =
-            self.terrain_types.get(position).map_or(MovementType::None.as_u8(), |t| t.allowed_movement());
-
-        // Get the movement types that can move through this feature:
-        // Any by default (if there's no feature, don't block movement)
-        let feature =
-            self.feature_types.get(position).map_or(MovementType::Any.as_u8(), |f| f.allowed_movement());
-
-        (terrain & feature & movement_type) != 0
-    }
-
-    fn cost(&self, _position: IVec2, _movement_type: u8) -> u32 { 1 }
+// Map Systems
+impl Map {
+    
 }

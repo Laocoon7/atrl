@@ -63,25 +63,6 @@ mod events {
     pub use event_plugin::*;
 }
 
-mod map {
-    mod resources {
-        mod map_manager;
-        pub use map_manager::*;
-    }
-    pub use resources::*;
-
-    mod systems {
-        mod load_first_map;
-        pub use load_first_map::*;
-        mod update_tilemaps;
-        pub use update_tilemaps::*;
-    }
-    pub use systems::*;
-
-    mod map_plugin;
-    pub use map_plugin::*;
-}
-
 mod player {
     mod systems {
         mod player_input;
@@ -139,7 +120,7 @@ pub mod prelude {
         pub use atrl_renderer::prelude::*;
         pub use atrl_saveload::prelude::*;
         pub use bevy::{
-            ecs::system::SystemState,
+            ecs::system::{SystemParam, SystemState},
             prelude::*,
             utils::{HashMap, HashSet},
         };
@@ -156,5 +137,5 @@ pub mod prelude {
     }
     pub(crate) use import::*;
 
-    pub use crate::{ai::*, ecs::*, events::*, game_plugin::*, map::*, player::*, spawner::*, turn::*};
+    pub use crate::{ai::*, ecs::*, events::*, game_plugin::*, player::*, spawner::*, turn::*};
 }

@@ -271,6 +271,7 @@ dependencies = [
  "atrl-common",
  "atrl-map-gen",
  "bevy",
+ "bevy_ecs_tilemap",
  "bevy_tileset",
  "index_list",
  "iyes_loopless",

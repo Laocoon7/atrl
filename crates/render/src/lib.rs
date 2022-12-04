@@ -2,10 +2,7 @@
 #![allow(clippy::module_inception)]
 #![allow(clippy::type_complexity)]
 #![allow(clippy::too_many_arguments)] // Bevy has a lot of arguments, so we shush clippy
-mod functions {
-    mod create_tilemap;
-    pub use create_tilemap::*;
-}
+
 mod ui {
     mod main_menu {
         mod systems {
@@ -65,5 +62,5 @@ pub mod prelude {
     }
     pub(crate) use imports::*;
 
-    pub use crate::{functions::*, map_renderer_plugin::*, map_renderer_settings::*, ui::*};
+    pub use crate::{map_renderer_plugin::*, map_renderer_settings::*, ui::*};
 }

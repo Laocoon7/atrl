@@ -5,12 +5,13 @@ pub struct AStar;
 
 impl PathAlgorithm for AStar {
     fn compute_path(
-        origin: IVec2,
-        destination: IVec2,
+        origin: Position,
+        destination: Position,
         movement_type: u8,
         partial_path_on_failure: bool,
-        provider: &impl PathProvider,
-    ) -> Option<Vec<IVec2>> {
+        provider: &mut impl PathProvider,
+        q_blocks_movement: &Query<&BlocksMovement>,
+    ) -> Option<Vec<Position>> {
         // create open/closed lists
         let mut open_nodes = IndexList::new();
         let mut closed_nodes = IndexList::new();
@@ -33,30 +34,34 @@ impl PathAlgorithm for AStar {
                 }
 
                 // update cardinals
-                current_node.position().neighbors_cardinal().for_each(|position| {
+                for cardinal in CardinalDirection::all() {
+                    let current_position = current_node.position() + cardinal.coord();
                     current_node.update_at_position(
-                        position,
+                        current_position,
                         false,
                         destination,
                         provider,
+                        q_blocks_movement,
                         movement_type,
                         &mut open_nodes,
-                        &mut closed_nodes,
+                        &mut closed_nodes
                     );
-                });
-
+                }
+                
                 // update ordinals
-                current_node.position().neighbors_ordinal().for_each(|position| {
+                for ordinal in OrdinalDirection::all() {
+                    let current_position = current_node.position() + ordinal.coord();
                     current_node.update_at_position(
-                        position,
+                        current_position,
                         true,
                         destination,
                         provider,
+                        q_blocks_movement,
                         movement_type,
                         &mut open_nodes,
-                        &mut closed_nodes,
+                        &mut closed_nodes
                     );
-                });
+                }
 
                 // close the current node
                 closed_nodes.insert_last(current_node);
@@ -98,7 +103,7 @@ impl AStar {
     fn reconstruct_path(
         finished_node: AStarNode,
         closed_nodes: &mut IndexList<AStarNode>,
-    ) -> Option<Vec<IVec2>> {
+    ) -> Option<Vec<Position>> {
         let mut ret = Vec::new();
         let mut current_node = finished_node;
         loop {

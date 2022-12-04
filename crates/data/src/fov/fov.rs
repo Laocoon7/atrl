@@ -4,20 +4,20 @@ pub enum Fov {
     ShadowcastDirection(CardinalDirection),
 }
 impl Fov {
-    pub fn compute<Range: Into<u32>>(
+    pub fn compute<'w, 's, Range: Into<u32>>(
         &self,
-        origin: impl GridPoint,
+        origin: Position,
         vision_type: u8,
         range: Range,
-        provider: &impl FovProvider,
+        provider: &mut impl FovProvider,
+        q_blocks_vision: &Query<'w, 's, &'static BlocksVision>,
         receiver: &mut impl FovReceiver,
     ) {
-        let origin = origin.as_ivec2();
         let range = range.into();
         match self {
-            Self::Shadowcast => Shadowcast::compute_fov(origin, vision_type, range, provider, receiver),
+            Self::Shadowcast => Shadowcast::compute_fov(origin, vision_type, range, provider, q_blocks_vision, receiver),
             Self::ShadowcastDirection(direction) => {
-                Shadowcast::compute_direction(origin, vision_type, range, provider, receiver, *direction)
+                Shadowcast::compute_direction(origin, vision_type, range, provider, q_blocks_vision, receiver, *direction)
             },
         }
     }

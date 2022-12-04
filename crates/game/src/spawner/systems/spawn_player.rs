@@ -3,8 +3,9 @@ use crate::prelude::*;
 pub fn spawn_player(
     tilesets: Tilesets,
     mut commands: Commands,
-    mut map_manager: ResMut<MapManager>,
+    mut map_manager: MapManager,
     mut turn_manager: ResMut<TurnManager>,
+    q_blocks_movement: Query<&BlocksMovement>,
 ) {
     let Some(tileset) = tilesets.get_by_id(&TILESET_ACTORS_ID) else {
         // crashing here, may make it hard to chase down other issues?
@@ -12,31 +13,23 @@ pub fn spawn_player(
         return;
     };
 
-    let Some(map) = map_manager.get_current_map_mut() else {
-        error!("Couldn't find a current map. Refusing to spawn player.");
-        return;
-    };
+    let position = Position::new(
+        WorldPosition::new(0, 0, 0),
+        LocalPosition::new(GRID_WIDTH / 2, GRID_HEIGHT / 2, MapLayer::Player as u32)
+    );
 
-    let local_position = UVec2::new(GRID_WIDTH / 2, GRID_HEIGHT / 2);
     let movement_type = MovementType::Walk.as_u8() | MovementType::Swim.as_u8();
 
     let player = commands.spawn_empty().id();
-    if !map.try_add_actor(local_position, player, movement_type) {
-        error!("Couldn't place player actor at {:?}", local_position);
+    if !map_manager.add_actor(player, position, movement_type, &q_blocks_movement) {
+        error!("Couldn't place player actor at {:?}", position.gridpoint());
         commands.entity(player).despawn();
         return;
     } else {
-        info!("Player spawned at {:?}", local_position);
+        info!("Player spawned at {:?}", position.gridpoint());
     }
 
-    let position = Position::new(
-        WorldPosition::new(0, 0, 0),
-        LocalPosition::new(GRID_WIDTH / 2, GRID_HEIGHT / 2, MapLayer::Player as u32),
-    );
-
-    commands.entity(player).insert(PlayerBundle {
-        player: Player,
-
+    let player = commands.entity(player).insert(PlayerBundle {
         actor: ActorBundle {
             position,
             mob: Mob,
@@ -64,7 +57,9 @@ pub fn spawn_player(
             input_map: PlayerBundle::default_input_map(),
             ..default()
         },
-    });
+    }).id();
+
+    commands.insert_resource(PlayerEntity::new(player));
 
     turn_manager.add_entity(player);
 }

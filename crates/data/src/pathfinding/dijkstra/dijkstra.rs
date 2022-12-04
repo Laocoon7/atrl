@@ -8,12 +8,12 @@ pub struct Dijkstras;
 
 impl PathAlgorithm for Dijkstras {
     fn compute_path(
-        origin: IVec2,
-        destination: IVec2,
+        origin: Position,
+        destination: Position,
         movement_type: u8,
         partial_path_on_failure: bool,
         provider: &impl PathProvider,
-    ) -> Option<Vec<IVec2>> {
+    ) -> Option<Vec<Position>> {
         let dijkstra_path = dijkstra(
             &origin,
             |pt| Self::neighbors(provider, movement_type, pt),

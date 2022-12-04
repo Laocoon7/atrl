@@ -16,7 +16,7 @@ pub fn player_input(
     time: Res<Time>,
     mut timer: Local<PlayerTimer>,
     mut action_queue: ResMut<ActionQueue>,
-    mut query: Query<(&Position, &ActionState<PlayerAction>), With<Player>>,
+    mut query: Query<&ActionState<PlayerAction>>, // TODO: removed player tag... is it needed?
 ) {
     // Tick timer until duration is met.
     if !timer.finished() {
@@ -54,7 +54,8 @@ pub fn draw_shape(
     tilesets: Tilesets,
     mut commands: Commands,
     mut has_ran: Local<bool>,
-    q_player: Query<&Position, With<Player>>,
+    player_entity: Res<PlayerEntity>,
+    q_position: Query<&Position>,
 ) {
     if *has_ran {
         return;
@@ -63,42 +64,44 @@ pub fn draw_shape(
     *has_ran = true;
 
     if let Some(tileset) = tilesets.get_by_id(&TILESET_UI_ID) {
-        for position in q_player.iter() {
-            // let shape = Line::new(
-            //    position.gridpoint(),
-            //    position.gridpoint() + UVec2::new(7, 10),
-            //);
+        let Ok(position) = q_position.get(player_entity.current()) else {
+            return;
+        };
 
-            // let shape = Circle::new(position.gridpoint(), 15u32);
+        // let shape = Line::new(
+        //    position.gridpoint(),
+        //    position.gridpoint() + UVec2::new(7, 10),
+        //);
 
-            let shape = Triangle::new(
-                position.gridpoint(),
-                position.gridpoint() + UVec2::new(3, 5),
-                position.gridpoint() + UVec2::new(3, 2),
-            );
+        // let shape = Circle::new(position.gridpoint(), 15u32);
 
-            // let shape = Rectangle::new(
-            //     position.gridpoint(),
-            //     position.gridpoint() + UVec2::new(10, 5),
-            // );
+        let shape = Triangle::new(
+            position.gridpoint(),
+            position.gridpoint() + UVec2::new(3, 5),
+            position.gridpoint() + UVec2::new(3, 2),
+        );
 
-            for point in shape.get_points() {
-                commands.spawn(SpriteSheetBundle {
-                    texture_atlas: tileset.atlas().clone(),
-                    sprite: TextureAtlasSprite {
-                        color: Color::GREEN,
-                        custom_size: Some(Vec2::ONE),
-                        index: TILE_UI_CURSOR_CURSOR_ID,
-                        ..Default::default()
-                    },
-                    transform: Transform::from_translation(Vec3::new(
-                        point.x as f32 + 0.5,
-                        point.y as f32 + 0.5,
-                        f32::from(MapLayer::UI),
-                    )),
+        // let shape = Rectangle::new(
+        //     position.gridpoint(),
+        //     position.gridpoint() + UVec2::new(10, 5),
+        // );
+
+        for point in shape.get_points() {
+            commands.spawn(SpriteSheetBundle {
+                texture_atlas: tileset.atlas().clone(),
+                sprite: TextureAtlasSprite {
+                    color: Color::GREEN,
+                    custom_size: Some(Vec2::ONE),
+                    index: TILE_UI_CURSOR_CURSOR_ID,
                     ..Default::default()
-                });
-            }
+                },
+                transform: Transform::from_translation(Vec3::new(
+                    point.x as f32 + 0.5,
+                    point.y as f32 + 0.5,
+                    f32::from(MapLayer::UI),
+                )),
+                ..Default::default()
+            });
         }
     }
 }

@@ -2,20 +2,19 @@ use super::shared::PathAlgorithm;
 use crate::prelude::*;
 pub enum PathFinder {
     Astar,
-    Dijkstras,
+    //Dijkstras,
 }
 
 impl PathFinder {
     pub fn compute(
         &self,
-        origin: impl GridPoint,
-        destination: impl GridPoint,
+        origin: Position,
+        destination: Position,
         movement_type: u8,
         partial_path_on_failure: bool,
-        provider: &impl PathProvider,
-    ) -> Option<Vec<IVec2>> {
-        let origin = origin.as_ivec2();
-        let destination = destination.as_ivec2();
+        provider: &mut impl PathProvider,
+        q_blocks_movement: &Query<&BlocksMovement>,
+    ) -> Option<Vec<Position>> {
         match self {
             Self::Astar => AStar::compute_path(
                 origin,
@@ -23,14 +22,15 @@ impl PathFinder {
                 movement_type,
                 partial_path_on_failure,
                 provider,
+                q_blocks_movement,
             ),
-            Self::Dijkstras => Dijkstras::compute_path(
-                origin,
-                destination,
-                movement_type,
-                partial_path_on_failure,
-                provider,
-            ),
+            //Self::Dijkstras => Dijkstras::compute_path(
+            //    origin,
+            //    destination,
+            //    movement_type,
+            //    partial_path_on_failure,
+            //    provider,
+            //),
         }
     }
 }

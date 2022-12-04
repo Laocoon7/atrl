@@ -6,8 +6,9 @@ pub fn spawn_ai(
     tilesets: Tilesets,
     mut commands: Commands,
     state: Res<CurrentGameState>,
-    mut map_manager: ResMut<MapManager>,
+    mut map_manager: MapManager,
     mut turn_manager: ResMut<TurnManager>,
+    q_blocks_movement: Query<&BlocksMovement>,
 ) {
     let world_position = IVec3::ZERO;
 
@@ -17,37 +18,31 @@ pub fn spawn_ai(
         return;
     };
 
-    let Some(map) = map_manager.get_current_map_mut() else {
-        error!("Couldn't find a current map. Refusing to spawn ai.");
-        return;
-    };
-
     let mut actor_count = 0;
     let movement_type = MovementType::Walk;
     let vision_type = VisionType::Normal;
     for y in 0..MAX_AI_ACTORS {
-        if actor_count >= MAX_AI_ACTORS {
-            break;
-        }
-
         for x in 0..MAX_AI_ACTORS {
             if actor_count >= MAX_AI_ACTORS {
                 break;
             }
 
-            let local_position = UVec2::new(GRID_WIDTH / 3 + x, GRID_HEIGHT / 3 + y);
-            if map.can_place_actor(local_position, movement_type.as_u8()) {
+            let position = Position::new(
+                WorldPosition::new(0, 0, 0),
+                LocalPosition::new(GRID_WIDTH / 3 + x, GRID_HEIGHT / 3 + y, MapLayer::Actors as u32),
+            );
+
+            if map_manager.can_place_actor(position, movement_type.as_u8(), &q_blocks_movement) {
                 let ai_entity = spawn_ai_at(
                     &mut commands,
                     tileset.atlas(),
                     format!("Gary ({})", actor_count).as_str(),
-                    local_position,
-                    world_position,
+                    position,
                     vision_type,
                     movement_type,
                 );
                 turn_manager.add_entity(ai_entity);
-                map.try_add_actor(local_position, ai_entity, movement_type.as_u8());
+                map_manager.add_actor(ai_entity, position, movement_type.as_u8(), &q_blocks_movement);
                 actor_count += 1;
             }
         }
@@ -60,8 +55,7 @@ fn spawn_ai_at(
     commands: &mut Commands,
     texture_atlas: &Handle<TextureAtlas>,
     name: &str,
-    local_position: UVec2,
-    world_position: IVec3,
+    position: Position,
     vision_type: VisionType,
     movement_type: MovementType,
 ) -> Entity {
@@ -76,11 +70,6 @@ fn spawn_ai_at(
             Steps::build().step(ChaseActor::default()).step(AttackActor::default()),
         )
         .otherwise(Wander::default());
-
-    let position = Position::new(
-        WorldPosition::new(world_position.x, world_position.y, world_position.z),
-        LocalPosition::new(local_position.x, local_position.y, MapLayer::Actors as u32),
-    );
 
     commands
         .spawn((

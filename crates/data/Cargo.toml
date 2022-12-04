@@ -14,6 +14,7 @@ atrl-map-gen = { workspace = true }
 
 arrayvec               = { workspace = true }
 bevy                   = { workspace = true }
+bevy_ecs_tilemap       = { workspace = true }
 bevy_tileset           = { workspace = true }
 index_list             = { workspace = true }
 iyes_loopless          = { workspace = true }

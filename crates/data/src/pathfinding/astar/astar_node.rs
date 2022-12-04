@@ -7,9 +7,9 @@ const ORDINAL_COST: u32 = (ORDINAL_COST_F32 * SCALE_F32_TO_U32) as u32;
 #[derive(Debug)]
 pub(super) struct AStarNode {
     is_walkable: bool,
-    position: IVec2,
+    position: Position,
     cost_multiplier: u32,
-    from_node: Option<IVec2>,
+    from_node: Option<Position>,
 
     cost_from_start: u32,
     cost_from_end: u32,
@@ -17,10 +17,8 @@ pub(super) struct AStarNode {
 }
 
 impl AStarNode {
-    pub fn new(origin: IVec2, destination: IVec2) -> Self {
-        let from_end = (DistanceAlg::DiagonalWithCosts(CARDINAL_COST_F32, ORDINAL_COST_F32)
-            .distance2d(origin, destination) *
-            SCALE_F32_TO_U32) as u32;
+    pub fn new(origin: Position, destination: Position) -> Self {
+        let from_end = origin.distance(destination);
         Self {
             is_walkable: true,
             position: origin,
@@ -35,17 +33,16 @@ impl AStarNode {
 
     fn create_neighbor(
         &self,
-        position: IVec2,
+        position: Position,
         is_diagonal: bool,
-        destination: IVec2,
-        provider: &impl PathProvider,
+        destination: Position,
+        provider: &mut impl PathProvider,
+        q_blocks_movement: &Query<&BlocksMovement>,
         movement_type: u8,
     ) -> Self {
-        let cost_from_end = (DistanceAlg::DiagonalWithCosts(CARDINAL_COST_F32, ORDINAL_COST_F32)
-            .distance2d(position, destination) *
-            SCALE_F32_TO_U32) as u32;
+        let cost_from_end = position.distance(destination);
         let mut s = Self {
-            is_walkable: provider.is_walkable(position, movement_type),
+            is_walkable: provider.is_walkable(position, movement_type, q_blocks_movement),
             position,
             cost_multiplier: provider.cost(position, movement_type),
 
@@ -62,9 +59,9 @@ impl AStarNode {
         s
     }
 
-    pub const fn position(&self) -> IVec2 { self.position }
+    pub const fn position(&self) -> Position { self.position }
 
-    pub const fn get_from_node(&self) -> Option<IVec2> { self.from_node }
+    pub const fn get_from_node(&self) -> Option<Position> { self.from_node }
 
     pub const fn get_cost_from_end(&self) -> u32 { self.cost_from_end }
 
@@ -84,10 +81,11 @@ impl AStarNode {
 
     pub fn update_at_position(
         &self,
-        position: IVec2,
+        position: Position,
         is_diagonal: bool,
-        destination: IVec2,
-        provider: &impl PathProvider,
+        destination: Position,
+        provider: &mut impl PathProvider,
+        q_blocks_movement: &Query<&BlocksMovement>,
         movement_type: u8,
         open_nodes: &mut IndexList<Self>,
         closed_nodes: &mut IndexList<Self>,
@@ -106,7 +104,7 @@ impl AStarNode {
                     }
                 } else {
                     let new_neighbor =
-                        self.create_neighbor(position, is_diagonal, destination, provider, movement_type);
+                        self.create_neighbor(position, is_diagonal, destination, provider, q_blocks_movement, movement_type);
                     if new_neighbor.is_walkable {
                         Self::insert_ordered(open_nodes, new_neighbor);
                     }
@@ -138,7 +136,7 @@ impl AStarNode {
         };
     }
 
-    pub fn find_node_with_position(list: &IndexList<Self>, position: IVec2) -> Option<Index> {
+    pub fn find_node_with_position(list: &IndexList<Self>, position: Position) -> Option<Index> {
         let mut index = list.first_index();
         while index.is_some() {
             if let Some(node) = list.get(index) {

@@ -21,6 +21,9 @@ impl LocalPosition {
 
     #[inline]
     pub const fn gridpoint(&self) -> UVec2 { UVec2::new(self.x(), self.y()) }
+    
+    #[inline(always)]
+    pub fn grid_index(&self, size: UVec2) -> Option<usize> { self.gridpoint().as_index(size) }
 
     ///////////////////////////////
     /// Setters
