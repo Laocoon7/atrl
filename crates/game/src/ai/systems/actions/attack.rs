@@ -8,15 +8,15 @@ pub struct AttackActor;
 
 pub fn attack_action(
     mut commands: Commands,
-    mut target_q: Query<&mut TargetVisualizer>,
     player_entity: Res<PlayerEntity>,
-    mut action_q: Query<(&Actor, &mut ActionState), With<AttackActor>>,
+    mut target_q: Query<&mut TargetVisualizer>,
     mut mobs_q: Query<(&Position, &Name, &mut AIComponent)>,
+    mut action_q: Query<(&Actor, &mut ActionState), With<AttackActor>>,
 ) {
     use ActionState::*;
 
     let player_position = match mobs_q.get(player_entity.current()) {
-        Ok((p, ..)) => p.clone(),
+        Ok((p, ..)) => *p,
         Err(err) => {
             info!("No player found: {}", err);
             return;

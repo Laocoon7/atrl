@@ -4,8 +4,15 @@ use crate::prelude::*;
 pub struct LocalPosition(UVec3);
 
 impl LocalPosition {
+    /// All zeroes.
+    pub const ZERO: Self = Self::splat(0);
+
     #[inline(always)]
     pub const fn new(x: u32, y: u32, layer: u32) -> Self { Self(UVec3::new(x, y, layer)) }
+
+    /// Creates a `LocalPostion` with all elements set to `v`.
+    #[inline]
+    pub const fn splat(v: u32) -> Self { Self(UVec3::splat(v)) }
 
     ///////////////////////////////
     /// Getters

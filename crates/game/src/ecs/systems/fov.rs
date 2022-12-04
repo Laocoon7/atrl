@@ -1,4 +1,5 @@
 use crate::prelude::*;
+
 pub fn fov<'w, 's>(
     mut map_manager: MapManager,
     player_entity: Res<PlayerEntity>,

@@ -14,11 +14,11 @@ impl Default for PlayerTimer {
 
 pub fn player_input(
     time: Res<Time>,
+    q_position: Query<&Position>,
     mut timer: Local<PlayerTimer>,
+    player_entity: Res<PlayerEntity>,
     mut action_queue: ResMut<ActionQueue>,
     mut query: Query<&ActionState<PlayerAction>>,
-    player_entity: Res<PlayerEntity>,
-    q_position: Query<&Position>,
 ) {
     // Tick timer until duration is met.
     if !timer.finished() {

@@ -30,6 +30,7 @@ pub fn try_attack(entity: Entity, position: Position, world: &mut World) -> Resu
             );
         }
     }
+
     if has_attacked {
         Ok(())
     } else {

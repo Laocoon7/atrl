@@ -255,7 +255,7 @@ impl<'w, 's> MapManager<'w, 's> {
         let map_size = UVec2::new(GRID_WIDTH, GRID_HEIGHT);
 
         let tileset = tilesets.get_by_id(&TILESET_TERRAIN_ID).expect("Cannot find TILESET_TERRAIN_ID.");
-        let terrain_layer_entity = commands.spawn(Name::new(format!("TERRAIN_LAYER"))).id();
+        let terrain_layer_entity = commands.spawn(Name::new("TERRAIN_LAYER".to_string())).id();
         create_tilemap_on_entity(
             commands,
             terrain_layer_entity,
@@ -266,7 +266,7 @@ impl<'w, 's> MapManager<'w, 's> {
         );
 
         let tileset = tilesets.get_by_id(&TILESET_FEATURES_ID).expect("Cannot find TILESET_FEATURES_ID.");
-        let features_layer_entity = commands.spawn(Name::new(format!("FEATURES_Layer"))).id();
+        let features_layer_entity = commands.spawn(Name::new("FEATURES_LAYER".to_string())).id();
         create_tilemap_on_entity(
             commands,
             features_layer_entity,
@@ -458,7 +458,7 @@ pub fn update_tilemaps(
     }
 
     let mut position = Position::new(
-        map_manager.map_manager.current_map.0.clone(),
+        map_manager.map_manager.current_map.0,
         LocalPosition::new(0, 0, MapLayer::Terrain as u32), // MapLayer is ignored
     );
 

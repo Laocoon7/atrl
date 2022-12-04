@@ -26,7 +26,7 @@ pub fn spawn_ai(
             }
 
             let position = Position::new(
-                WorldPosition::new(0, 0, 0),
+                WorldPosition::ZERO,
                 LocalPosition::new(
                     GRID_WIDTH / 3 + x,
                     GRID_HEIGHT / 3 + y,

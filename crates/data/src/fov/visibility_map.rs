@@ -1,11 +1,12 @@
 use crate::prelude::*;
 
-#[derive(Debug, Clone)]
+#[derive(Default, Debug, Clone)]
 pub struct VisibilityMap {
     visible_positions: HashSet<Position>,
 }
 
 impl VisibilityMap {
+    #[inline(always)]
     pub fn new() -> Self {
         Self {
             visible_positions: HashSet::new(),
