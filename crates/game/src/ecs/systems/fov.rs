@@ -1,4 +1,5 @@
 use crate::prelude::*;
+
 pub fn fov<'w, 's>(
     mut map_manager: MapManager,
     mut q_tile: Query<(&mut TileVisible, &mut TileColor, &TilePos)>,

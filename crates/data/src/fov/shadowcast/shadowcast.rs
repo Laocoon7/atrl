@@ -2,7 +2,9 @@
 // https://www.albertford.com/shadowcasting/
 use super::{quadrant::*, row::*};
 use crate::prelude::*;
+
 pub struct Shadowcast;
+
 impl<'w, 's> FovAlgorithm<'w, 's> for Shadowcast {
     fn compute_fov(
         origin: Position,
@@ -57,10 +59,12 @@ impl<'w, 's> Shadowcast {
             if DistanceAlg::PythagorasSquared.distance2d(IVec2::ZERO, tile) > range.pow(2) as f32 {
                 continue;
             }
+
             // Should we reveal the tile?
             if quadrant.is_opaque(tile) | row.is_symmetric(tile) {
                 quadrant.set_visible(tile);
             }
+
             // handle the current row based on vision angles around the previous tile
             if let Some(prev_tile) = prev_tile {
                 // did we *just* hit floor after traveling through walls?
@@ -74,9 +78,11 @@ impl<'w, 's> Shadowcast {
                     Self::scan_recursive(range, quadrant, &mut next_row);
                 }
             }
+
             // setup for next tile
             prev_tile = Some(tile);
         }
+
         // if our last tile was floor, we can see down another row
         if let Some(prev_tile) = prev_tile {
             if quadrant.is_clear(prev_tile) {

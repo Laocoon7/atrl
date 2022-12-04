@@ -4,11 +4,11 @@ pub enum Fov {
     ShadowcastDirection(CardinalDirection),
 }
 impl Fov {
-    pub fn compute<'w, 's, Range: Into<u32>>(
+    pub fn compute<'w, 's, FovRange: Into<u32>>(
         &self,
         origin: Position,
         vision_type: u8,
-        range: Range,
+        range: FovRange,
         provider: &mut impl FovProvider,
         q_blocks_vision: &Query<'w, 's, &'static BlocksVision>,
         receiver: &mut impl FovReceiver,

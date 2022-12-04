@@ -3,8 +3,15 @@ use crate::prelude::*;
 pub struct WorldPosition(IVec3);
 
 impl WorldPosition {
+    /// All zeroes.
+    pub const ZERO: Self = Self::splat(0);
+
     #[inline(always)]
     pub const fn new(x: i32, y: i32, z: i32) -> Self { Self(IVec3::new(x, y, z)) }
+
+    /// Creates a `WorldPosition` with all elements set to `v`.
+    #[inline]
+    pub const fn splat(v: i32) -> Self { Self(IVec3::splat(v)) }
 
     ///////////////////////////////
     /// Getters

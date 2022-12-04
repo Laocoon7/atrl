@@ -14,7 +14,7 @@ pub fn spawn_player(
     };
 
     let position = Position::new(
-        WorldPosition::new(0, 0, 0),
+        WorldPosition::ZERO,
         LocalPosition::new(GRID_WIDTH / 2, GRID_HEIGHT / 2, MapLayer::Player as u32),
     );
 

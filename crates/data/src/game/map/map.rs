@@ -77,7 +77,7 @@ impl Map {
         if let Some(actors) = self.actors[index].as_mut() {
             actors.retain(|&x| x != actor);
 
-            if actors.len() == 0 {
+            if actors.is_empty() {
                 self.actors[index] = None;
             }
         }
@@ -119,7 +119,7 @@ impl Map {
         if let Some(features) = self.features[index].as_mut() {
             features.retain(|&x| x != feature);
 
-            if features.len() == 0 {
+            if features.is_empty() {
                 self.features[index] = None;
             }
         }
