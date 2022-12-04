@@ -6,6 +6,7 @@ pub struct PointIterRowMajor {
     coord: IVec2,
     size: UVec2,
 }
+
 impl PointIterRowMajor {
     pub fn new(size: impl Size2d) -> Self {
         Self {
@@ -14,6 +15,7 @@ impl PointIterRowMajor {
         }
     }
 }
+
 impl Iterator for PointIterRowMajor {
     type Item = IVec2;
 
@@ -30,6 +32,7 @@ impl Iterator for PointIterRowMajor {
         Some(coord)
     }
 }
+
 ////////////////////////////////////////////////////////////
 // Adjacent Iter
 ////////////////////////////////////////////////////////////
@@ -39,6 +42,7 @@ pub struct AdjIterator<'a> {
     p: IVec2,
     arr: &'a [GridDirection],
 }
+
 impl<'a> AdjIterator<'a> {
     pub fn new(p: impl GridPoint, arr: &'a [GridDirection]) -> Self {
         Self {
@@ -48,6 +52,7 @@ impl<'a> AdjIterator<'a> {
         }
     }
 }
+
 impl<'a> Iterator for AdjIterator<'a> {
     type Item = IVec2;
 

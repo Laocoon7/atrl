@@ -147,7 +147,7 @@ mod game {
     pub use game_stage::*;
 }
 
-mod map_gen{
+mod map_gen {
     mod builders {
         mod cellular_automata_builder;
         pub use cellular_automata_builder::*;
@@ -204,8 +204,8 @@ mod pathfinding {
     pub use astar::*;
 
     mod dijkstra {
-        // mod dijkstra;
-        // pub use dijkstra::*;
+        mod dijkstra;
+        pub use dijkstra::*;
     }
     pub use dijkstra::*;
 
@@ -409,20 +409,14 @@ pub mod prelude {
         pub use bitvec::prelude::*;
         pub use index_list::{Index, IndexList};
         pub use iyes_loopless::prelude::*;
-        pub use leafwing_input_manager::{
-            action_state::ActionState,
-            prelude::*,
-        };
+        pub use leafwing_input_manager::{action_state::ActionState, prelude::*};
         pub use noise::{NoiseFn, Perlin};
         pub use num_derive::*;
         pub use num_traits::*;
         pub use once_cell::sync::Lazy;
         pub use ordered_float::OrderedFloat;
         pub use parking_lot::{Mutex, MutexGuard};
-        pub use rand::{
-            distributions::Standard,
-            prelude::*,
-        };
+        pub use rand::{distributions::Standard, prelude::*};
         pub use ron;
         pub use serde::{
             de::{self, Deserializer, MapAccess, SeqAccess, Visitor},
@@ -434,20 +428,18 @@ pub mod prelude {
 
         // macros
         pub use crate::impl_new;
-        pub use crate::impl_default;
-        pub use crate::insert_resource;
-        pub use crate::remove_resource;
-        pub use crate::spawn_component;
-        pub use crate::switch_in_game_state;
-        pub use crate::impl_as_primative;
+        pub use crate::{
+            impl_as_primative, impl_default, insert_resource, remove_resource, spawn_component,
+            switch_in_game_state,
+        };
     }
     pub(crate) use import::*;
 
     mod export {
         pub use crate::pathfinding::PathFinder; // where's the redundancy lint???
         pub use crate::{
-            actions::*, actors::*, camera::*, components::*, fov::*, game::*, map_gen::*, pathfinding::*, utilities::*, queries::*,
-            resources::*,
+            actions::*, actors::*, camera::*, components::*, fov::*, game::*, map_gen::*, pathfinding::*,
+            queries::*, resources::*, utilities::*,
         };
     }
     pub use export::*;

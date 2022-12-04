@@ -123,7 +123,7 @@ impl Position {
         (
             (self.world_x() * GRID_WIDTH as i32 + self.x() as i32) as i64,
             (self.world_y() * GRID_HEIGHT as i32 + self.y() as i32) as i64,
-            self.world_z()
+            self.world_z(),
         )
     }
 
@@ -137,7 +137,7 @@ impl Position {
 
         Self::new(
             WorldPosition::new(world_x, world_y, world_z),
-            LocalPosition::new(local_x, local_y, layer)
+            LocalPosition::new(local_x, local_y, layer),
         )
     }
 }

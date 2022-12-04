@@ -1,4 +1,5 @@
 use crate::prelude::*;
+
 /// A trait for types representing a 2d Point.
 pub trait GridPoint: Clone + Copy {
     #[allow(clippy::new_ret_no_self)]
