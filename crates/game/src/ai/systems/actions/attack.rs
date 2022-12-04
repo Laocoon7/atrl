@@ -9,13 +9,13 @@ pub struct AttackActor;
 pub fn attack_action(
     mut commands: Commands,
     mut target_q: Query<&mut TargetVisualizer>,
-    player_q: Query<(Entity, &Position), With<Player>>,
+    player_q: Query<&Position, With<Player>>,
     mut action_q: Query<(&Actor, &mut ActionState), With<AttackActor>>,
     mut ai_q: Query<(&Position, &Name, &mut AIComponent), Without<Player>>,
 ) {
     use ActionState::*;
 
-    let (player_entity, player_position) = match player_q.get_single() {
+    let player_position = match player_q.get_single() {
         Ok(p) => p,
         Err(err) => {
             info!("No player found: {}", err);
@@ -58,7 +58,7 @@ pub fn attack_action(
             ActionState::Init | ActionState::Requested => {
                 info!("{} gonna start attacking!", name);
                 *action_state = Executing;
-                ai_component.preferred_action = Some(ActionType::Attack(player_entity));
+                ai_component.preferred_action = Some(ActionType::Attack(*player_position));
             },
             ActionState::Executing => {},
         }
@@ -69,7 +69,7 @@ pub fn attack_action(
         if in_attack_range(ai_pos, player_pos) {
             println!("{} is in attack range!", name);
             // *action_state = ActionState::Success;
-            ai_component.preferred_action = Some(ActionType::Attack(player_entity));
+            ai_component.preferred_action = Some(ActionType::Attack(*player_position));
         } else {
             *action_state = ActionState::Failure;
             ai_component.preferred_action = Some(ActionType::Movement(*player_position));

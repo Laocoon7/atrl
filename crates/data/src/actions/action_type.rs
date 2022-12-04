@@ -7,7 +7,7 @@ pub const ATTACK_TIME: u32 = 1000;
 #[derive(Debug, Reflect, FromReflect)]
 pub enum ActionType {
     Wait,
-    Attack(Entity),
+    Attack(Position),
     Movement(Position),
     MovementDelta(IVec2),
 }

@@ -1,5 +1,3 @@
-use atrl_common::prelude::grid_shapes::GridShape;
-
 use crate::prelude::*;
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
@@ -19,23 +17,23 @@ impl From<TargetVisualizerStyle> for usize {
     }
 }
 
-#[derive(Component)]
+#[derive(Component, Clone)]
 pub struct TargetVisualizer {
     color: Color,
-    style: TargetVisualizerStyle,
-    start: Option<IVec2>,
     end: Option<IVec2>,
-    entity_list: Vec<Entity>,
+    start: Option<IVec2>,
+    style: TargetVisualizerStyle,
+    entity_list: Vec<(IVec2, Entity)>,
 }
 
 impl Default for TargetVisualizer {
     fn default() -> Self {
         Self {
             color: Color::WHITE,
-            style: TargetVisualizerStyle::Cursor,
-            start: Default::default(),
             end: Default::default(),
+            start: Default::default(),
             entity_list: Default::default(),
+            style: TargetVisualizerStyle::Cursor,
         }
     }
 }
@@ -58,15 +56,16 @@ impl TargetVisualizer {
         self.end = Some(end);
 
         // TODO: reuse entities updating position...
-        self.clear(commands);
         let Some(tileset) = tilesets.get_by_id(&TILESET_UI_ID) else {
             error!("Couldn't find tilemap_id: {:?}. Refusing to draw TargetVisualizer.", TILESET_UI_ID);
             return;
         };
 
+        self.clear(commands);
         let line = grid_shapes::Line::new(start, end);
-        for point in line.get_points() {
-            self.entity_list.push(
+        for point in line.iter() {
+            self.entity_list.push((
+                point,
                 commands
                     .spawn(SpriteSheetBundle {
                         sprite: TextureAtlasSprite {
@@ -84,7 +83,7 @@ impl TargetVisualizer {
                         ..default()
                     })
                     .id(),
-            );
+            ));
         }
     }
 
@@ -92,7 +91,7 @@ impl TargetVisualizer {
         self.start = None;
         self.end = None;
 
-        for entity in self.entity_list.drain(..) {
+        for (_, entity) in self.entity_list.drain(..) {
             commands.entity(entity).despawn_recursive();
         }
     }

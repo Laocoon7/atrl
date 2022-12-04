@@ -16,14 +16,14 @@ pub fn player_input(
     time: Res<Time>,
     mut timer: Local<PlayerTimer>,
     mut action_queue: ResMut<ActionQueue>,
-    mut query: Query<&ActionState<PlayerAction>, With<Player>>,
+    mut query: Query<(&Position, &ActionState<PlayerAction>), With<Player>>,
 ) {
     // Tick timer until duration is met.
     if !timer.finished() {
         timer.tick(time.delta());
     }
 
-    for action_state in query.iter_mut() {
+    for (player_pos, action_state) in query.iter_mut() {
         // Actions
         if action_state.just_pressed(PlayerAction::Wait) {
             action_queue.add_action(ActionType::Wait);
@@ -38,7 +38,7 @@ pub fn player_input(
             {
                 if let Some(direction) = input_direction.direction() {
                     timer.reset();
-                    action_queue.add_action(ActionType::MovementDelta(direction.coord()));
+                    action_queue.add_action(ActionType::Movement(*player_pos + direction));
 
                     println!();
                     info!("Player turn end");

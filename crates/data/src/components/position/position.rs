@@ -139,3 +139,12 @@ impl AddAssign<IVec2> for Position {
         }
     }
 }
+
+impl Add<GridDirection> for Position {
+    type Output = Self;
+
+    fn add(self, rhs: GridDirection) -> Self::Output {
+        let coord = rhs.coord();
+        self + coord
+    }
+}
