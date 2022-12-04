@@ -25,10 +25,10 @@ impl GridShape for Line {
     fn get_count(&self) -> u32 { self.start.sub(self.end).abs().max_element() as u32 }
 
     #[inline]
-    fn contains(&self, point: impl GridPoint) -> bool { self.get_points().contains(&point.as_ivec2()) }
+    fn contains(&self, point: impl GridPoint) -> bool { self.get_positions().contains(&point.as_ivec2()) }
 
     #[inline]
-    fn get_points(&self) -> HashSet<IVec2> {
+    fn get_positions(&self) -> HashSet<IVec2> {
         let mut discovered = HashSet::new();
         let max_delta = self.start.sub(self.end).abs().max_element();
         for step in 0..=max_delta {

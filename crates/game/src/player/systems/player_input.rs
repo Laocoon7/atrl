@@ -90,7 +90,7 @@ pub fn draw_shape(
         //     position.gridpoint() + UVec2::new(10, 5),
         // );
 
-        for point in shape.get_points() {
+        for point in shape.get_positions() {
             commands.spawn(SpriteSheetBundle {
                 texture_atlas: tileset.atlas().clone(),
                 sprite: TextureAtlasSprite {

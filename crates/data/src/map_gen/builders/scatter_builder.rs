@@ -1,15 +1,14 @@
+use std::marker::PhantomData;
+
 use crate::prelude::*;
-pub struct SetBuilder<T> {
+pub struct ScatterBuilder<T> {
     rect: Option<Rectangle>,
-    value: u32,
     phantom: PhantomData<T>,
 }
-
-impl<T> SetBuilder<T> {
+impl<T> ScatterBuilder<T> {
     pub fn new() -> Box<Self> {
         Box::new(Self {
             rect: None,
-            value: u32::MAX,
             phantom: PhantomData,
         })
     }
@@ -18,13 +17,8 @@ impl<T> SetBuilder<T> {
         self.rect = Some(rectangle);
         Box::new(self)
     }
-
-    pub fn set_value(mut self, value: u32) -> Box<Self> {
-        self.value = value;
-        Box::new(self)
-    }
 }
-impl<T> MapArchitect<T> for SetBuilder<T> {
+impl<T> MapArchitect<T> for ScatterBuilder<T> {
     fn generate(&mut self, data: &mut MapGenData<T>) {
         let rect = match &self.rect {
             Some(r) => *r,
@@ -33,7 +27,7 @@ impl<T> MapArchitect<T> for SetBuilder<T> {
 
         if !data.terrain_grid.in_bounds(rect.min()) || !data.terrain_grid.in_bounds(rect.max()) {
             error!(
-                "SetBuilder Rectangle{{ {}, {} }} is outside of bounds for Grid({}, {})",
+                "ScatterBuilder Rectangle{{ {}, {} }} is outside of bounds for Grid({}, {})",
                 rect.min(),
                 rect.max(),
                 data.terrain_grid.width(),
@@ -43,7 +37,8 @@ impl<T> MapArchitect<T> for SetBuilder<T> {
         }
 
         rect.for_each(|v| {
-            data.terrain_grid.set(v, self.value);
+            // TODO: look into different rng function. rng.gen_range() is for only 1 lookup.
+            data.terrain_grid.set(v, data.random.prng.range(0..u32::MAX));
         });
     }
 }

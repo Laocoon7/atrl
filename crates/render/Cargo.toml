@@ -15,7 +15,6 @@ dev     = []
 release = []
 
 [dependencies]
-atrl-common = { workspace = true }
 atrl-data   = { workspace = true }
 atrl-raws   = { workspace = true }
 

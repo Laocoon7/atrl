@@ -46,8 +46,7 @@ mod map_renderer_settings;
 #[allow(unused_imports)]
 pub mod prelude {
     mod imports {
-        pub use atrl_common::prelude::*;
-        pub use atrl_data::prelude::{CurrentGameState, SplashTimer};
+        pub use atrl_data::prelude::*;
         pub use atrl_raws::prelude::TextureAssets;
         pub use bevy::{
             prelude::*,

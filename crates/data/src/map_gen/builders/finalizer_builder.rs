@@ -1,3 +1,5 @@
+use std::marker::PhantomData;
+
 use crate::prelude::*;
 pub struct FinalizerBuilder<T> {
     rect: Option<Rectangle>,

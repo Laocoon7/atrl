@@ -9,13 +9,11 @@ dev     = []
 release = []
 
 [dependencies]
-atrl-common  = { workspace = true }
-atrl-map-gen = { workspace = true }
-
 arrayvec               = { workspace = true }
 bevy                   = { workspace = true }
 bevy_ecs_tilemap       = { workspace = true }
 bevy_tileset           = { workspace = true }
+bitvec                 = { workspace = true }
 index_list             = { workspace = true }
 iyes_loopless          = { workspace = true }
 leafwing-input-manager = { workspace = true }
@@ -27,3 +25,13 @@ parking_lot            = { workspace = true }
 pathfinding            = { workspace = true }
 ron                    = { workspace = true }
 serde                  = { workspace = true }
+thiserror              = { workspace = true }
+
+#################################
+#########       Random
+#################################
+noise       = { workspace = true }
+rand        = { workspace = true }
+rand_pcg    = { workspace = true }
+rand_seeder = { workspace = true }
+xxhash-rust = { workspace = true }

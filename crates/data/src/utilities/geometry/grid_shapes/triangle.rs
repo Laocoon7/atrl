@@ -17,9 +17,9 @@ impl Triangle {
 
 impl GridShape for Triangle {
     // TODO: check for bugs, this is just a quick implementation I thought of.
-    fn get_points(&self) -> HashSet<IVec2> {
+    fn get_positions(&self) -> HashSet<IVec2> {
         let mut discovered = HashSet::new();
-        for end_point in Line::new(self.point1, self.point2).get_points() {
+        for end_point in Line::new(self.point1, self.point2).get_positions() {
             for current_point in Line::new(self.start, end_point) {
                 discovered.insert(current_point);
             }
@@ -27,14 +27,14 @@ impl GridShape for Triangle {
         discovered
     }
 
-    fn contains(&self, point: impl GridPoint) -> bool { self.get_points().contains(&point.as_ivec2()) }
+    fn contains(&self, point: impl GridPoint) -> bool { self.get_positions().contains(&point.as_ivec2()) }
 
     // FIX: PERF
-    fn get_count(&self) -> u32 { self.get_points().len() as u32 }
+    fn get_count(&self) -> u32 { self.get_positions().len() as u32 }
 }
 
 impl GridShapeWithBorder for Triangle {
-    fn get_border_points(&self) -> HashSet<IVec2> {
+    fn get_border_positions(&self) -> HashSet<IVec2> {
         let mut discovered = HashSet::new();
         for point in Line::new(self.start, self.point1) {
             discovered.insert(point);
@@ -49,8 +49,8 @@ impl GridShapeWithBorder for Triangle {
     }
 
     fn border_contains(&self, point: impl GridPoint) -> bool {
-        self.get_border_points().contains(&point.as_ivec2())
+        self.get_border_positions().contains(&point.as_ivec2())
     }
 
-    fn get_border_count(&self) -> usize { self.get_border_points().len() }
+    fn get_border_count(&self) -> usize { self.get_border_positions().len() }
 }

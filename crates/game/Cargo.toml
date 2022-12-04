@@ -28,9 +28,7 @@ rand_pcg               = { workspace = true }
 smart-default          = { workspace = true }
 
 atrl-camera   = { workspace = true }
-atrl-common   = { workspace = true }
 atrl-data     = { workspace = true }
-atrl-map-gen  = { workspace = true }
 atrl-raws     = { workspace = true }
 atrl-renderer = { workspace = true }
 atrl-saveload = { workspace = true }

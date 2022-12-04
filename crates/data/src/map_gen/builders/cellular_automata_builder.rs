@@ -1,6 +1,10 @@
+use std::marker::PhantomData;
+
 use crate::prelude::*;
+
 const DEFAULT_ITERATIONS: u32 = 10;
 const U32_MIDDLE: u32 = u32::MAX / 2;
+
 pub struct CellularAutomataBuilder<T> {
     rect: Option<Rectangle>,
 
@@ -8,6 +12,7 @@ pub struct CellularAutomataBuilder<T> {
 
     phantom: PhantomData<T>,
 }
+
 impl<T> CellularAutomataBuilder<T> {
     pub fn new() -> Box<Self> {
         Box::new(Self {
@@ -46,6 +51,7 @@ impl<T> CellularAutomataBuilder<T> {
         neighbors
     }
 }
+
 impl<T> MapArchitect<T> for CellularAutomataBuilder<T> {
     fn generate(&mut self, data: &mut MapGenData<T>) {
         let rect = match &self.rect {

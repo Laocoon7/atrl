@@ -32,7 +32,6 @@ pub mod prelude {
     }
     pub(crate) use internal::*;
     mod import {
-        pub use atrl_common::prelude::*;
         pub use atrl_data::prelude::*;
         pub use bevy::prelude::*;
         pub use bevy_tileset::prelude::*;

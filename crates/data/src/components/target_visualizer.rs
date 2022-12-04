@@ -20,10 +20,10 @@ impl From<TargetVisualizerStyle> for usize {
 #[derive(Component, Clone)]
 pub struct TargetVisualizer {
     color: Color,
-    end: Option<IVec2>,
-    start: Option<IVec2>,
+    end: Option<Position>,
+    start: Option<Position>,
     style: TargetVisualizerStyle,
-    entity_list: Vec<(IVec2, Entity)>,
+    entity_list: Vec<(Position, Entity)>,
 }
 
 impl Default for TargetVisualizer {
@@ -39,19 +39,19 @@ impl Default for TargetVisualizer {
 }
 
 impl TargetVisualizer {
-    pub fn new(start: UVec2, end: UVec2, style: TargetVisualizerStyle, color: Color) -> Self {
+    pub fn new(style: TargetVisualizerStyle, color: Color) -> Self {
         Self {
             color,
             style,
             entity_list: Vec::new(),
-            start: Some(start.as_ivec2()),
-            end: Some(end.as_ivec2()),
+            start: None,
+            end: None,
         }
     }
 
-    pub fn update(&mut self, commands: &mut Commands, tilesets: &Tilesets, start: UVec2, end: UVec2) {
-        let start = start.as_ivec2();
-        let end = end.as_ivec2();
+    pub fn update(&mut self, commands: &mut Commands, map_manager: &MapManager, tilesets: &Tilesets, start: Position, end: Position) {
+        start.set_layer(MapLayer::UI as u32);
+        end.set_layer(MapLayer::UI as u32);
         self.start = Some(start);
         self.end = Some(end);
 
@@ -63,27 +63,26 @@ impl TargetVisualizer {
 
         self.clear(commands);
         let line = grid_shapes::Line::new(start, end);
-        for point in line.iter() {
-            self.entity_list.push((
-                point,
-                commands
-                    .spawn(SpriteSheetBundle {
-                        sprite: TextureAtlasSprite {
-                            color: self.color,
-                            index: usize::from(self.style),
-                            custom_size: Some(Vec2::ONE),
-                            ..Default::default()
-                        },
-                        texture_atlas: tileset.atlas().clone(),
-                        transform: Transform::from_xyz(
-                            (point.x) as f32 + 0.5,
-                            (point.y) as f32 + 0.5,
-                            f32::from(MapLayer::UI),
-                        ),
-                        ..default()
-                    })
-                    .id(),
-            ));
+        for position: Position in line.iter() {
+            if position.get_world_position() == map_manager.get_current_world_position() {
+                self.entity_list.push((
+                    position,
+                    commands
+                        .spawn(SpriteSheetBundle {
+                            sprite: TextureAtlasSprite {
+                                color: self.color,
+                                index: usize::from(self.style),
+                                custom_size: Some(Vec2::ONE),
+                                ..Default::default()
+                            },
+                            texture_atlas: tileset.atlas().clone(),
+                            transform: Transform::from_translation(position.translation()),
+                            ..default()
+                        })
+                        .id(),
+                ));
+            }
+
         }
     }
 
@@ -96,7 +95,7 @@ impl TargetVisualizer {
         }
     }
 
-    pub const fn get(&self) -> Option<(IVec2, IVec2)> {
+    pub const fn get(&self) -> Option<(Position, Position)> {
         let Some(start) = self.start else {return None;};
         let Some(end) = self.end else {return None;};
         Some((start, end))

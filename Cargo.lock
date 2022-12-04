@@ -215,10 +215,8 @@ name = "atrl"
 version = "0.1.0"
 dependencies = [
  "atrl-camera",
- "atrl-common",
  "atrl-data",
  "atrl-game",
- "atrl-map-gen",
  "atrl-raws",
  "atrl-renderer",
  "bevy",
@@ -240,12 +238,15 @@ dependencies = [
 ]
 
 [[package]]
-name = "atrl-common"
+name = "atrl-data"
 version = "0.1.0"
 dependencies = [
+ "arrayvec",
  "bevy",
  "bevy_ecs_tilemap",
+ "bevy_tileset",
  "bitvec",
+ "index_list",
  "iyes_loopless",
  "leafwing-input-manager",
  "noise",
@@ -254,6 +255,7 @@ dependencies = [
  "once_cell",
  "ordered-float",
  "parking_lot 0.12.1",
+ "pathfinding",
  "rand 0.8.5",
  "rand_pcg",
  "rand_seeder",
@@ -264,36 +266,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "atrl-data"
-version = "0.1.0"
-dependencies = [
- "arrayvec",
- "atrl-common",
- "atrl-map-gen",
- "bevy",
- "bevy_ecs_tilemap",
- "bevy_tileset",
- "index_list",
- "iyes_loopless",
- "leafwing-input-manager",
- "num-derive",
- "num-traits",
- "once_cell",
- "ordered-float",
- "parking_lot 0.12.1",
- "pathfinding",
- "ron 0.8.0",
- "serde",
-]
-
-[[package]]
 name = "atrl-game"
 version = "0.1.0"
 dependencies = [
  "atrl-camera",
- "atrl-common",
  "atrl-data",
- "atrl-map-gen",
  "atrl-raws",
  "atrl-renderer",
  "atrl-saveload",
@@ -312,20 +289,9 @@ dependencies = [
 ]
 
 [[package]]
-name = "atrl-map-gen"
-version = "0.1.0"
-dependencies = [
- "atrl-common",
- "bevy",
- "iyes_loopless",
- "rand 0.8.5",
-]
-
-[[package]]
 name = "atrl-raws"
 version = "0.1.0"
 dependencies = [
- "atrl-common",
  "atrl-data",
  "bevy",
  "bevy_tileset",
@@ -339,7 +305,6 @@ dependencies = [
 name = "atrl-renderer"
 version = "0.1.0"
 dependencies = [
- "atrl-common",
  "atrl-data",
  "atrl-raws",
  "bevy",
@@ -356,7 +321,6 @@ dependencies = [
 name = "atrl-saveload"
 version = "0.1.0"
 dependencies = [
- "atrl-common",
  "atrl-data",
  "bevy",
 ]

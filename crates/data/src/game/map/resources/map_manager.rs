@@ -172,8 +172,12 @@ impl<'w, 's> MapManager<'w, 's> {
 //    }
 //}
 
-// Map Manipulation
+// Map Manipulation / General
 impl<'w, 's> MapManager<'w, 's> {
+    pub fn get_current_world_position(&self) -> WorldPosition {
+        self.map_manager.current_map.0.clone()
+    }
+
     pub fn set_visibility(&mut self, visibility_map: VisibilityMap) {
         for position in visibility_map.get_all().iter() {
             let Some(map) = self.get_map(position.get_world_position()) else { return; };
@@ -217,11 +221,7 @@ impl<'w, 's> MapManager<'w, 's> {
     }
 
     fn create_map(&mut self, world_position: WorldPosition) -> bool {
-        let map = Self::internal_create_map(
-            &mut self.commands,
-            &mut self.game_context,
-            world_position,
-        );
+        let map = Self::internal_create_map(&mut self.commands, &mut self.game_context, world_position);
         info!("Generated map at {:?}", world_position.xyz());
         self.add_to_loaded_maps(world_position, map);
 

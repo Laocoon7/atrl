@@ -58,13 +58,13 @@ impl Circle {
 impl GridShape for Circle {
     #[inline]
     // FIX: PERF
-    fn get_count(&self) -> u32 { self.get_points().len() as u32 }
+    fn get_count(&self) -> u32 { self.get_positions().len() as u32 }
 
     #[inline]
-    fn contains(&self, point: impl GridPoint) -> bool { self.get_points().contains(&point.as_ivec2()) }
+    fn contains(&self, point: impl GridPoint) -> bool { self.get_positions().contains(&point.as_ivec2()) }
 
     #[inline]
-    fn get_points(&self) -> HashSet<IVec2> {
+    fn get_positions(&self) -> HashSet<IVec2> {
         let mut discovered = HashSet::new();
         let mut d = (5 - (self.radius as i32 * 4)) / 4;
         let mut x = 0;
@@ -75,7 +75,7 @@ impl GridShape for Circle {
                 (self.center.x + x, self.center.y + y),
                 (self.center.x + x, self.center.y - y),
             );
-            for point in line.get_points() {
+            for point in line.get_positions() {
                 discovered.insert(point);
             }
 
@@ -83,7 +83,7 @@ impl GridShape for Circle {
                 (self.center.x - x, self.center.y + y),
                 (self.center.x - x, self.center.y - y),
             );
-            for point in line.get_points() {
+            for point in line.get_positions() {
                 discovered.insert(point);
             }
 
@@ -91,7 +91,7 @@ impl GridShape for Circle {
                 (self.center.x + y, self.center.y + x),
                 (self.center.x + y, self.center.y - x),
             );
-            for point in line.get_points() {
+            for point in line.get_positions() {
                 discovered.insert(point);
             }
 
@@ -99,7 +99,7 @@ impl GridShape for Circle {
                 (self.center.x - y, self.center.y + x),
                 (self.center.x - y, self.center.y - x),
             );
-            for point in line.get_points() {
+            for point in line.get_positions() {
                 discovered.insert(point);
             }
 

@@ -122,7 +122,7 @@ impl Rectangle {
 
 impl GridShape for Rectangle {
     #[inline]
-    fn get_count(&self) -> u32 { self.get_points().len() as u32 }
+    fn get_count(&self) -> u32 { self.get_positions().len() as u32 }
 
     #[inline]
     fn contains(&self, point: impl GridPoint) -> bool {
@@ -130,7 +130,7 @@ impl GridShape for Rectangle {
     }
 
     #[inline]
-    fn get_points(&self) -> HashSet<IVec2> {
+    fn get_positions(&self) -> HashSet<IVec2> {
         let mut result = HashSet::new();
         for y in self.min.y..self.max.y {
             for x in self.min.x..self.max.x {
