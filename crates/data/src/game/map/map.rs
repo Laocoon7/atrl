@@ -8,10 +8,6 @@ pub struct Map {
     pub world_position: WorldPosition,
     pub random: Random,
 
-    // Child Layers
-    pub terrain_layer_entity: Entity,
-    pub feature_layer_entity: Entity,
-
     // Update Flags
     pub update_all: bool,
     pub update_tiles: HashSet<UVec2>,

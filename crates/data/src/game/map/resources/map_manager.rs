@@ -250,7 +250,42 @@ impl<'w, 's> MapManager<'w, 's> {
 
 // "Static" functions
 impl<'w, 's> MapManager<'w, 's> {
-    pub fn internal_create_map(
+    fn internal_create_tilemaps(
+        commands: &mut Commands,
+        tilesets: &Tilesets,
+    ) -> (Entity, Entity) {
+        let map_size = UVec2::new(GRID_WIDTH, GRID_HEIGHT);
+
+        let tileset = tilesets.get_by_id(&TILESET_TERRAIN_ID).expect("Cannot find TILESET_TERRAIN_ID.");
+        let terrain_layer_entity = commands
+            .spawn(Name::new(format!("TERRAIN_LAYER")))
+            .id();
+        create_tilemap_on_entity(
+            commands,
+            terrain_layer_entity,
+            map_size,
+            MapLayer::Terrain,
+            tileset,
+            1.0,
+        );
+        
+        let tileset = tilesets.get_by_id(&TILESET_FEATURES_ID).expect("Cannot find TILESET_FEATURES_ID.");
+        let features_layer_entity = commands
+            .spawn(Name::new(format!("FEATURES_Layer")))
+            .id();
+        create_tilemap_on_entity(
+            commands,
+            features_layer_entity,
+            map_size,
+            MapLayer::Features,
+            tileset,
+            1.0,
+        );
+
+        (terrain_layer_entity, features_layer_entity)
+    }
+
+    fn internal_create_map(
         commands: &mut Commands,
         game_context: &mut ResMut<GameContext>,
         world_position: WorldPosition,
@@ -267,50 +302,10 @@ impl<'w, 's> MapManager<'w, 's> {
         // Create the entity to hold the map.
         let map_entity = commands.spawn_empty().id();
 
-        // Create the entities for each layer of the map which uses bevy_ecs_tilemap. - TERRAIN
-        let tileset = tilesets.get_by_id(&TILESET_TERRAIN_ID).expect("Cannot find TILESET_TERRAIN_ID.");
-        let terrain_layer_entity = commands
-            .spawn(Name::new(format!(
-                "TERRAIN ({}, {}, {})",
-                world_position.x(),
-                world_position.y(),
-                world_position.z()
-            )))
-            .id();
-        create_tilemap_on_entity(
-            commands,
-            terrain_layer_entity,
-            map_size,
-            MapLayer::Terrain,
-            tileset,
-            1.0,
-        );
-
-        // Create the entities for each layer of the map which uses bevy_ecs_tilemap. - FEATURES
-        let tileset = tilesets.get_by_id(&TILESET_FEATURES_ID).expect("Cannot find TILESET_FEATURES_ID.");
-        let features_layer_entity = commands
-            .spawn(Name::new(format!(
-                "FEATURES ({}, {}, {})",
-                world_position.x(),
-                world_position.y(),
-                world_position.z()
-            )))
-            .id();
-        create_tilemap_on_entity(
-            commands,
-            features_layer_entity,
-            map_size,
-            MapLayer::Features,
-            tileset,
-            1.0,
-        );
-
         // Create the map.
         let map = Self::generate_map(map_size, random, MapPassThroughData {
             world_position,
             map_entity,
-            terrain_layer_entity,
-            features_layer_entity,
         });
 
         // Build the map entity.
@@ -325,9 +320,7 @@ impl<'w, 's> MapManager<'w, 's> {
                 )),
                 // map,
                 SpatialBundle::default(),
-            ))
-            .add_child(terrain_layer_entity)
-            .add_child(features_layer_entity);
+            ));
 
         // This map is currently loaded, add it to loaded_maps
         map
@@ -347,21 +340,30 @@ pub fn startup_map_manager(
     // TODO: Deserialize map
     let world_position = WorldPosition::new(0, 0, 0);
     let map = MapManager::internal_create_map(&mut commands, &mut game_context, world_position, &tilesets);
-    commands.insert_resource(MapManagerResource::new(world_position, map));
+    let (terrain_layer, features_layer) = MapManager::internal_create_tilemaps(&mut commands, &tilesets);
+    commands.insert_resource(MapManagerResource::new(world_position, map, terrain_layer, features_layer));
 }
 
 pub fn set_current_map_to_current_player(
-    mut map_manger: MapManager,
+    mut map_manager: MapManager,
     player_entity: Res<PlayerEntity>,
     q_positions: Query<&Position>,
 ) {
     if let Ok(position) = q_positions.get(player_entity.current()) {
-        map_manger.set_current_map(position.get_world_position());
+        if map_manager.map_manager.current_map.0 != position.get_world_position() {
+            map_manager.set_current_map(position.get_world_position());
+            map_manager.map_manager.current_map.1.update_all = true;
+        }
     }
 }
 
-pub fn update_tilemaps() {
-    // TODO: Rewrite
+pub fn update_tilemaps(
+    mut map_manger: MapManager,
+    q_storage: Query<&TileStorage>,
+    mut q_tiles: Query<&mut TileTextureIndex>,
+    mut q_visibility: Query<&mut Visibility>,
+) {
+    
 
     // pub fn update_tilemaps(
     // mut map_manager: ResMut<MapManagerResource>,

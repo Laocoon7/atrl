@@ -1,11 +1,9 @@
 use crate::prelude::*;
 
 pub struct MapPassThroughData {
+    pub map_entity: Entity,
     pub world_position: WorldPosition,
 
-    pub map_entity: Entity,
-    pub terrain_layer_entity: Entity,
-    pub features_layer_entity: Entity,
     // TODO: Explored tiles should be passed from serialized data for the map on loading, or just a
     // new HashSet pub explored_tiles: HashSet<UVec2>
 }
@@ -25,9 +23,6 @@ impl From<MapGenData<MapPassThroughData>> for Map {
             size: data.size,
             world_position: data.user_data.world_position,
             random: data.random,
-
-            terrain_layer_entity: data.user_data.terrain_layer_entity,
-            feature_layer_entity: data.user_data.features_layer_entity,
 
             update_all: true,
             update_tiles: HashSet::new(),
