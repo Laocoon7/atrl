@@ -27,7 +27,7 @@ pub fn player_input(
 
     let Ok(player_position) = q_position.get(player_entity.current()) else { return; };
 
-    for (action_state) in query.iter_mut() {
+    for action_state in query.iter_mut() {
         // Actions
         if action_state.just_pressed(PlayerAction::Wait) {
             action_queue.add_action(ActionType::Wait);

@@ -10,8 +10,6 @@ pub fn spawn_ai(
     mut turn_manager: ResMut<TurnManager>,
     q_blocks_movement: Query<&BlocksMovement>,
 ) {
-    let world_position = IVec3::ZERO;
-
     let Some(tileset) = tilesets.get_by_id(&TILESET_ACTORS_ID) else {
         // let's not crash the program just because we can't spawn an ai.
         error!("Couldn't find tilemap_id: {:?}. Refusing to spawn ai.", TILESET_ACTORS_ID);

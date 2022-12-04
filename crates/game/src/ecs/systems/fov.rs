@@ -1,12 +1,11 @@
 use crate::prelude::*;
 pub fn fov<'w, 's>(
     mut map_manager: MapManager,
-    mut q_tile: Query<(&mut TileVisible, &mut TileColor, &TilePos)>,
     player_entity: Res<PlayerEntity>,
-    mut q_vision: Query<(&Position, &FieldOfView, &Vision, &mut Visibility)>,
+    q_vision: Query<(&Position, &FieldOfView, &Vision)>,
     q_blocks_vision: Query<'w, 's, &'static BlocksVision>,
 ) {
-    let Ok((player_position, fov, vision_component, _)) = q_vision.get(player_entity.current()) else {
+    let Ok((player_position, fov, vision_component)) = q_vision.get(player_entity.current()) else {
         error!("No player");
         return;
     };

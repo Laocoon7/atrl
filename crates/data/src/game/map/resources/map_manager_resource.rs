@@ -1,5 +1,7 @@
 use crate::prelude::*;
 #[derive(Resource)]
+/// DON'T USE THIS!!!
+/// USE MapManager instead!!!!
 pub struct MapManagerResource {
     pub current_map: (WorldPosition, Map),
     pub loaded_maps: HashMap<WorldPosition, Map>,

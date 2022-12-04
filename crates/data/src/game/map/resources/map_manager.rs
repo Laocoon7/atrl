@@ -6,7 +6,6 @@ pub struct MapManager<'w, 's> {
     map_manager: ResMut<'w, MapManagerResource>,
     commands: Commands<'w, 's>,
     game_context: ResMut<'w, GameContext>,
-    tilesets: Tilesets<'w, 's>,
 }
 
 // Perform actor functions on maps
@@ -222,7 +221,6 @@ impl<'w, 's> MapManager<'w, 's> {
             &mut self.commands,
             &mut self.game_context,
             world_position,
-            &self.tilesets,
         );
         info!("Generated map at {:?}", world_position.xyz());
         self.add_to_loaded_maps(world_position, map);
@@ -285,7 +283,6 @@ impl<'w, 's> MapManager<'w, 's> {
         commands: &mut Commands,
         game_context: &mut ResMut<GameContext>,
         world_position: WorldPosition,
-        tilesets: &Tilesets,
     ) -> Map {
         // Create the map size.
         let map_size = UVec2::new(GRID_WIDTH, GRID_HEIGHT);
@@ -334,7 +331,7 @@ pub fn startup_map_manager(
 ) {
     // TODO: Deserialize map
     let world_position = WorldPosition::new(0, 0, 0);
-    let map = MapManager::internal_create_map(&mut commands, &mut game_context, world_position, &tilesets);
+    let map = MapManager::internal_create_map(&mut commands, &mut game_context, world_position);
     let (terrain_layer, features_layer) = MapManager::internal_create_tilemaps(&mut commands, &tilesets);
     commands.insert_resource(MapManagerResource::new(
         world_position,
