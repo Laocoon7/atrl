@@ -15,6 +15,8 @@ pub fn chase_action<'w, 's>(
     mut map_manager: MapManager,
     player_entity: Res<PlayerEntity>,
     mut target_q: Query<&mut TargetVisualizer>,
+    q_blocks_vision: Query<'w, 's, &'static BlocksVision>,
+    q_blocks_movement: Query<'w, 's, &'static BlocksMovement>,
     mut action_q: Query<(&Actor, &mut ActionState, &mut ChaseActor)>,
     mut mobs_q: Query<(
         &Position,
@@ -24,8 +26,6 @@ pub fn chase_action<'w, 's>(
         &Name,
         &mut AIComponent,
     )>,
-    q_blocks_movement: Query<'w, 's, &'static BlocksMovement>,
-    q_blocks_vision: Query<'w, 's, &'static BlocksVision>,
 ) {
     use ActionState::*;
 

@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-#[derive(Resource)]
+#[derive(Resource, Deref, DerefMut)]
 pub struct PlayerEntity {
     current_entity: Entity,
 }
