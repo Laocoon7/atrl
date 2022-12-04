@@ -8,62 +8,61 @@ pub fn try_move(
     // q_position: &mut Query<&mut Position>,
     // q_movement: &Query<&Movement>,
 ) -> Result<(), ActionType> {
-    // TODO: Rewrite
+    let mut system_state: SystemState<(
+        MapManager,
+        Query<(&mut Position, &Movement)>,
+        Query<&BlocksMovement>,
+    )> = SystemState::new(world);
+    let (
+        mut map_manager,
+        mut spatial_q,
+        q_blocks_movement
+    ) = system_state.get_mut(world);
 
-    //    world.resource_scope(|world, mut map_manager: Mut<MapManager>| {
-    //        let mut spatial_q = world.query::<(&mut Position, &Movement)>();
-    //
-    //        spatial_q.get_mut(world, entity).map_or_else(
-    //            |err| {
-    //                info!("Couldn't find entities position components: {}", err);
-    //                Err(ActionType::Wait)
-    //            },
-    //            |(mut from_position, movement_component)| {
-    //                map_manager.get_current_map_mut().map_or_else(
-    //                    || {
-    //                        info!("Couldn't find the map.");
-    //                        Err(ActionType::Wait)
-    //                    },
-    //                    |map| {
-    //                        PathFinder::Astar
-    //                            .compute(
-    //                                from_position.gridpoint(),
-    //                                destination.gridpoint(),
-    //                                movement_component.0,
-    //                                true,
-    //                                map,
-    //                            )
-    //                            .map_or_else(
-    //                                || {
-    //                                    info!("Couldn't find a path to {:?}", destination);
-    //                                    Err(ActionType::Wait)
-    //                                },
-    //                                |mut path| {
-    //                                    path.pop().map_or_else(
-    //                                        || {
-    //                                            info!("Couldn't find a long enough path to {:?}",
-    // destination);                                            Err(ActionType::Wait)
-    //                                        },
-    //                                        |destination| {
-    //                                            if map.try_move_actor(
-    //                                                from_position.gridpoint(),
-    //                                                destination.as_uvec2(),
-    //                                                movement_component.0,
-    //                                            ) {
-    //                                                from_position.set_xy(destination.as_uvec2());
-    //                                                Ok(())
-    //                                            } else {
-    //                                                info!("{:?} is blocked!", destination);
-    //                                                Err(ActionType::Wait)
-    //                                            }
-    //                                        },
-    //                                    )
-    //                                },
-    //                            )
-    //                    },
-    //                )
-    //            },
-    //        )
-    //    })
-    Ok(())
+    spatial_q.get_mut(entity).map_or_else(
+        |err| {
+            info!("Couldn't find entities position components: {}", err);
+            Err(ActionType::Wait)
+        },
+        |(mut from_position, movement_component)| {
+            PathFinder::Astar
+                .compute(
+                    *from_position,
+                    destination,
+                    movement_component.0,
+                    true,
+                    &mut map_manager,
+                    &q_blocks_movement
+                )
+                .map_or_else(
+                    || {
+                        info!("Couldn't find a path to {:?}", destination);
+                        Err(ActionType::Wait)
+                    },
+                    |mut path| {
+                        path.pop().map_or_else(
+                            || {
+                                info!("Couldn't find a long enough path to {:?}", destination);
+                                Err(ActionType::Wait)
+                            },
+                            |destination| {
+                                if map_manager.move_actor(
+                                    entity,
+                                    *from_position,
+                                    destination,
+                                    movement_component.0,
+                                    &q_blocks_movement,
+                                ) {
+                                    from_position.set_xy(destination.gridpoint());
+                                    Ok(())
+                                } else {
+                                    info!("{:?} is blocked!", destination);
+                                    Err(ActionType::Wait)
+                                }
+                            },
+                        )
+                    },
+                )
+        },
+    )
 }
