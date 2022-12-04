@@ -1,4 +1,3 @@
-use super::{grid_shape::*, line::Line};
 use crate::prelude::*;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq)]
@@ -55,7 +54,7 @@ impl Circle {
     pub fn as_ellipse(&self) -> Ellipse { Ellipse::new(self.center, [self.radius * 2, self.radius * 2]) }
 }
 
-impl GridShape for Circle {
+impl Shape for Circle {
     #[inline]
     // FIX: PERF
     fn get_count(&self) -> u32 { self.get_positions().len() as u32 }

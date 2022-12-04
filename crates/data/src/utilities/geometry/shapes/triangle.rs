@@ -15,7 +15,7 @@ impl Triangle {
     }
 }
 
-impl GridShape for Triangle {
+impl Shape for Triangle {
     // TODO: check for bugs, this is just a quick implementation I thought of.
     fn get_positions(&self) -> HashSet<IVec2> {
         let mut discovered = HashSet::new();
@@ -33,7 +33,7 @@ impl GridShape for Triangle {
     fn get_count(&self) -> u32 { self.get_positions().len() as u32 }
 }
 
-impl GridShapeWithBorder for Triangle {
+impl ShapeWithBorder for Triangle {
     fn get_border_positions(&self) -> HashSet<IVec2> {
         let mut discovered = HashSet::new();
         for point in Line::new(self.start, self.point1) {

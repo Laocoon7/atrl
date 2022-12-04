@@ -1,6 +1,5 @@
 use std::ops::Sub;
 
-use super::grid_shape::*;
 use crate::prelude::*;
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq)]
 pub struct Line {
@@ -20,7 +19,7 @@ impl Line {
     fn into_iter_exlusive(self) -> BresenhamLineIter { BresenhamLineIter::new(self.start, self.end) }
 }
 
-impl GridShape for Line {
+impl Shape for Line {
     #[inline]
     fn get_count(&self) -> u32 { self.start.sub(self.end).abs().max_element() as u32 }
 

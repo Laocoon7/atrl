@@ -1,19 +1,18 @@
 use std::ops::Div;
 
-use super::grid_shape::*;
 use crate::prelude::*;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq)]
-pub struct Rectangle {
+pub struct GridRectangle {
     pub min: IVec2,
     pub max: IVec2,
 }
 
-impl Default for Rectangle {
+impl Default for GridRectangle {
     fn default() -> Self { Self::new_with_size(IVec2::ZERO, IVec2::ONE) }
 }
 
-impl Rectangle {
+impl GridRectangle {
     #[inline]
     pub fn new(min: impl GridPoint, max: impl GridPoint) -> Self {
         let min = min.as_ivec2();
@@ -31,7 +30,7 @@ impl Rectangle {
     }
 }
 
-impl Rectangle {
+impl GridRectangle {
     #[inline]
     pub const fn width(&self) -> i32 { self.max.x - self.min.x }
 
@@ -51,7 +50,7 @@ impl Rectangle {
     }
 }
 
-impl Rectangle {
+impl GridRectangle {
     #[inline]
     fn center(&self) -> IVec2 { self.min.mid_point(self.max) }
 
@@ -120,7 +119,7 @@ impl Rectangle {
     }
 }
 
-impl GridShape for Rectangle {
+impl Shape for GridRectangle {
     #[inline]
     fn get_count(&self) -> u32 { self.get_positions().len() as u32 }
 

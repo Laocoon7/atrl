@@ -272,16 +272,7 @@ mod utilities {
         pub use math::*;
 
         pub mod grid_shapes {
-            mod circle;
-            pub use circle::*;
-            mod grid_shape;
-            pub use grid_shape::*;
-            mod line;
-            pub use line::*;
-            mod rectangle;
-            pub use rectangle::*;
-            mod triangle;
-            pub use triangle::*;
+            
         }
         pub use grid_shapes::*;
 
@@ -296,13 +287,19 @@ mod utilities {
             }
             pub use iter::*;
 
-            mod ellipse;
-            pub use ellipse::*;
-            mod polygon;
-            pub use polygon::*;
+            mod circle;
+            pub use circle::*;
+            mod line;
+            pub use line::*;
+            mod grid_rectangle;
+            pub use grid_rectangle::*;
+            mod triangle;
+            pub use triangle::*;
         }
         pub use shapes::*;
 
+        mod rectangle;
+        pub use rectangle::*;
         mod shape;
         pub use shape::*;
         mod shape_iter;
