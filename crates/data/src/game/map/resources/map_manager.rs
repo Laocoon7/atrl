@@ -461,7 +461,7 @@ pub fn update_tilemaps(
     }
 
     let mut position = Position::new(
-        map_manager.map_manager.current_map.0.clone(),
+        map_manager.map_manager.current_map.0,
         LocalPosition::new(0, 0, MapLayer::Terrain as u32), // MapLayer is ignored
     );
 

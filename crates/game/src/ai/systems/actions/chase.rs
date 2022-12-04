@@ -15,9 +15,13 @@ pub fn chase_action<'w, 's>(
     mut map_manager: MapManager,
     player_entity: Res<PlayerEntity>,
     mut target_q: Query<&mut TargetVisualizer>,
-    q_blocks_vision: Query<'w, 's, &'static BlocksVision>,
-    q_blocks_movement: Query<'w, 's, &'static BlocksMovement>,
     mut action_q: Query<(&Actor, &mut ActionState, &mut ChaseActor)>,
+
+    mut blocking_set: ParamSet<(
+        Query<'w, 's, &'static BlocksVision>,
+        Query<'w, 's, &'static BlocksMovement>,
+    )>,
+
     mut mobs_q: Query<(
         &Position,
         &FieldOfView,
@@ -30,7 +34,7 @@ pub fn chase_action<'w, 's>(
     use ActionState::*;
 
     let Ok((&player_position, ..)) = mobs_q.get(player_entity.current()) else {
-        error!("No player found!");
+        info!("No player found!");
         return;
     };
 
@@ -89,7 +93,7 @@ pub fn chase_action<'w, 's>(
 
         let position = if entity_in_fov(
             &mut map_manager,
-            &q_blocks_vision,
+            &blocking_set.p0(),
             fov,
             vision,
             ai_position,
@@ -126,7 +130,7 @@ pub fn chase_action<'w, 's>(
                     last_seen,
                     movement.0,
                     &mut map_manager,
-                    &q_blocks_movement,
+                    &blocking_set.p1(),
                 );
                 let point = path.first().unwrap_or(&last_seen);
 
