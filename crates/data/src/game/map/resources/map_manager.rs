@@ -364,9 +364,9 @@ pub fn set_current_map_to_current_player(
 pub fn update_tilemaps(
     mut map_manager: MapManager,
     q_storage: Query<&TileStorage>,
-    mut q_tiles: Query<&mut TileTextureIndex>,
+    mut q_tiles: Query<(&mut TileTextureIndex, &mut TileVisible, &mut TileColor)>,
     // TODO: Component for holding image index on features???
-    mut q_visibility: Query<(&mut Visibility, &mut TileVisible, &mut TileColor)>,
+    mut q_visibility: Query<&mut Visibility>,
 ) {
     // Get storages
     let Ok(terrain_storage) = q_storage.get(map_manager.map_manager.terrain_layer) else {
@@ -393,7 +393,7 @@ pub fn update_tilemaps(
                     check_next.insert(UVec2::new(x, y));
                     continue;
                 };
-                let Ok(mut tile_texture_index) = q_tiles.get_mut(entity) else {
+                let Ok((mut tile_texture_index, ..)) = q_tiles.get_mut(entity) else {
                     check_next.insert(UVec2::new(x, y));
                     continue;
                 };
@@ -405,7 +405,7 @@ pub fn update_tilemaps(
                     check_next.insert(UVec2::new(x, y));
                     continue;
                 };
-                let Ok(mut _tile_texture_index) = q_tiles.get_mut(entity) else {
+                let Ok((mut _tile_texture_index, ..)) = q_tiles.get_mut(entity) else {
                     check_next.insert(UVec2::new(x, y));
                     continue;
                 };
@@ -432,7 +432,7 @@ pub fn update_tilemaps(
                 check_next.insert(UVec2::new(point.x, point.y));
                 continue;
             };
-            let Ok(mut tile_texture_index) = q_tiles.get_mut(entity) else {
+            let Ok((mut tile_texture_index, ..)) = q_tiles.get_mut(entity) else {
                 check_next.insert(UVec2::new(point.x, point.y));
                 continue;
             };
@@ -444,7 +444,7 @@ pub fn update_tilemaps(
                 check_next.insert(UVec2::new(point.x, point.y));
                 continue;
             };
-            let Ok(mut _tile_texture_index) = q_tiles.get_mut(entity) else {
+            let Ok((mut _tile_texture_index, ..)) = q_tiles.get_mut(entity) else {
                 check_next.insert(UVec2::new(point.x, point.y));
                 continue;
             };
@@ -475,12 +475,12 @@ pub fn update_tilemaps(
         for x in 0..map.size.width() {
             position.set_x(x);
             let tile_pos = TilePos::new(x, y);
+            let is_explored = map.explored_tiles.contains(&UVec2::new(x, y));
             if let Some(entity) = terrain_storage.get(&tile_pos) {
-                if let Ok((mut visibility, mut tile_visibility, mut tile_color)) =
-                    q_visibility.get_mut(entity)
-                {
-                    let is_explored = map.explored_tiles.contains(&UVec2::new(x, y));
+                if let Ok(mut visibility) = q_visibility.get_mut(entity) {
                     visibility.is_visible = is_explored;
+                }
+                if let Ok((_index, mut tile_visibility, mut tile_color)) = q_tiles.get_mut(entity) {
                     tile_visibility.0 = is_explored;
                     tile_color.0.set_a(0.15);
                     if visible_tiles.contains(&position) {
@@ -490,11 +490,10 @@ pub fn update_tilemaps(
             }
 
             if let Some(entity) = feature_storage.get(&tile_pos) {
-                if let Ok((mut visibility, mut tile_visibility, mut tile_color)) =
-                    q_visibility.get_mut(entity)
-                {
+                if let Ok(mut visibility) = q_visibility.get_mut(entity) {
                     visibility.is_visible = map.explored_tiles.contains(&UVec2::new(x, y));
                 }
+                // tiles too
             }
         }
     }

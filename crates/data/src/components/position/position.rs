@@ -1,4 +1,5 @@
 use std::{
+    fmt::Display,
     hash::Hash,
     ops::{Add, AddAssign},
 };
@@ -108,6 +109,20 @@ impl Hash for Position {
     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
         self.world_position.hash(state);
         self.gridpoint().hash(state);
+    }
+}
+
+impl Display for Position {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "Position{{({}, {}, {})::({}, {})}}",
+            self.world_x(),
+            self.world_y(),
+            self.world_z(),
+            self.x(),
+            self.y()
+        )
     }
 }
 
