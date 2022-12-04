@@ -1,10 +1,11 @@
-use std::ops::{Add, AddAssign};
+use std::{
+    hash::Hash,
+    ops::{Add, AddAssign},
+};
 
 use crate::prelude::*;
 
-#[derive(
-    Default, Component, Reflect, FromReflect, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Hash, Debug,
-)]
+#[derive(Default, Component, Reflect, FromReflect, Serialize, Deserialize, Clone, Copy, Debug)]
 pub struct Position {
     world_position: WorldPosition,
     local_position: LocalPosition,
@@ -93,6 +94,21 @@ impl Position {
     pub fn set_world_xy(&mut self, value: IVec2) { self.world_position.set_xy(value.x, value.y); }
 
     pub fn set_world_xyz(&mut self, value: IVec3) { self.world_position.set_xyz(value.x, value.y, value.z); }
+}
+
+impl PartialEq for Position {
+    fn eq(&self, other: &Self) -> bool {
+        self.world_position == other.world_position && self.gridpoint() == other.gridpoint()
+    }
+}
+
+impl Eq for Position {}
+
+impl Hash for Position {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        self.world_position.hash(state);
+        self.gridpoint().hash(state);
+    }
 }
 
 impl Add<IVec2> for Position {

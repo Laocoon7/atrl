@@ -175,10 +175,13 @@ impl<'w, 's> MapManager<'w, 's> {
 
 // Map Manipulation
 impl<'w, 's> MapManager<'w, 's> {
-    pub fn mark_explored(&mut self, position: Position) {
-        let Some(map) = self.get_map(position.get_world_position()) else { return; };
+    pub fn set_visibility(&mut self, visibility_map: VisibilityMap) {
+        for position in visibility_map.get_all().iter() {
+            let Some(map) = self.get_map(position.get_world_position()) else { return; };
 
-        map.explored_tiles.insert(position.gridpoint());
+            map.explored_tiles.insert(position.gridpoint());
+        }
+        self.map_manager.visible_tiles = visibility_map;
     }
 }
 
@@ -198,7 +201,6 @@ impl<'w, 's> MapManager<'w, 's> {
             self.deserialize_map(world_position) ||
             self.create_map(world_position)
         {
-            info!("Generated map at {:?}", world_position.xyz());
         } else {
             // If this fails something is terribly wrong!!!
             panic!("Error loading map at {:?}", world_position.xyz());
@@ -222,6 +224,7 @@ impl<'w, 's> MapManager<'w, 's> {
             world_position,
             &self.tilesets,
         );
+        info!("Generated map at {:?}", world_position.xyz());
         self.add_to_loaded_maps(world_position, map);
 
         true
@@ -327,6 +330,7 @@ pub fn startup_map_manager(
     mut commands: Commands,
     mut game_context: ResMut<GameContext>,
     tilesets: Tilesets,
+    state: Res<CurrentGameState>,
 ) {
     // TODO: Deserialize map
     let world_position = WorldPosition::new(0, 0, 0);
@@ -338,6 +342,10 @@ pub fn startup_map_manager(
         terrain_layer,
         features_layer,
     ));
+
+    if let Some(next_state) = state.0.next() {
+        commands.insert_resource(NextState(next_state))
+    }
 }
 
 pub fn set_current_map_to_current_player(
@@ -358,7 +366,7 @@ pub fn update_tilemaps(
     q_storage: Query<&TileStorage>,
     mut q_tiles: Query<&mut TileTextureIndex>,
     // TODO: Component for holding image index on features???
-    mut q_visibility: Query<&mut Visibility>,
+    mut q_visibility: Query<(&mut Visibility, &mut TileVisible, &mut TileColor)>,
 ) {
     // Get storages
     let Ok(terrain_storage) = q_storage.get(map_manager.map_manager.terrain_layer) else {
@@ -371,9 +379,9 @@ pub fn update_tilemaps(
         return;
     };
 
-    let map = &mut map_manager.map_manager.current_map.1;
-
     let mut check_next = HashSet::new();
+
+    let map = &mut map_manager.map_manager.current_map.1;
 
     if map.update_all {
         for y in 0..map.size.height() {
@@ -452,17 +460,39 @@ pub fn update_tilemaps(
         map.update_tiles = check_next;
     }
 
+    let mut position = Position::new(
+        map_manager.map_manager.current_map.0.clone(),
+        LocalPosition::new(0, 0, MapLayer::Terrain as u32), // MapLayer is ignored
+    );
+
+    let visible_tiles = map_manager.map_manager.visible_tiles.get_all();
+
+    // refresh mutable reference for borrow checker...
+    let map = &mut map_manager.map_manager.current_map.1;
+
     for y in 0..map.size.height() {
+        position.set_y(y);
         for x in 0..map.size.width() {
+            position.set_x(x);
             let tile_pos = TilePos::new(x, y);
             if let Some(entity) = terrain_storage.get(&tile_pos) {
-                if let Ok(mut visibility) = q_visibility.get_mut(entity) {
-                    visibility.is_visible = map.explored_tiles.contains(&UVec2::new(x, y));
+                if let Ok((mut visibility, mut tile_visibility, mut tile_color)) =
+                    q_visibility.get_mut(entity)
+                {
+                    let is_explored = map.explored_tiles.contains(&UVec2::new(x, y));
+                    visibility.is_visible = is_explored;
+                    tile_visibility.0 = is_explored;
+                    tile_color.0.set_a(0.15);
+                    if visible_tiles.contains(&position) {
+                        tile_color.0.set_a(1.0);
+                    }
                 }
             }
 
             if let Some(entity) = feature_storage.get(&tile_pos) {
-                if let Ok(mut visibility) = q_visibility.get_mut(entity) {
+                if let Ok((mut visibility, mut tile_visibility, mut tile_color)) =
+                    q_visibility.get_mut(entity)
+                {
                     visibility.is_visible = map.explored_tiles.contains(&UVec2::new(x, y));
                 }
             }
