@@ -93,9 +93,12 @@ impl Map {
         )
     }
 
-    // TODO: pub?
-    fn _get_actor(&self, position_idx: usize) -> Option<Entity> {
-        self.actors[position_idx].as_ref().copied()
+    pub fn get_actor(&self, position: Position) -> Option<Entity> {
+        let Some(position_index) = position.grid_index(self.size) else {
+            return None;
+          };
+
+        self.actors[position_index]
     }
 
     // TODO: pub?

@@ -1,23 +1,5 @@
 use crate::prelude::*;
 
-// #[derive(Resource)]
-// pub struct CachedTurnSystemState(
-//     pub  SystemState<(
-//         ResMut<'static, MapManager>,
-//         ResMut<'static, TurnManager>,
-//         ResMut<'static, ActionQueue>,
-//         Query<'static, 'static, &'static Player>,       // player query
-//         Query<'static, 'static, &'static Movement>,     // movement query
-//         Query<'static, 'static, &'static mut Position>, // position query
-//         Query<'static, 'static, (&'static mut AIComponent, &'static Name)>, // ai query
-//         Query<'static, 'static, &'static mut Health>,   // health query
-//     )>,
-// );
-
-// impl FromWorld for CachedTurnSystemState {
-//     fn from_world(world: &mut World) -> Self { Self(SystemState::new(world)) }
-// }
-
 pub fn perform_turns(world: &mut World) {
     world.resource_scope(|world, mut turn_manager: Mut<TurnManager>| {
         loop {
@@ -52,7 +34,7 @@ pub fn perform_turns(world: &mut World) {
                 };
 
                 loop {
-                    match perform_action2(entity, action, world) {
+                    match perform_action(entity, action, world) {
                         Ok(time_spent) => {
                             turn_manager.end_entity_turn(entity, time_spent);
                             break;
