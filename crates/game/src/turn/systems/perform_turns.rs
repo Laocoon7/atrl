@@ -1,40 +1,30 @@
 use crate::prelude::*;
 
-#[derive(Resource)]
-pub struct CachedTurnSystemState(
-    pub  SystemState<(
-        ResMut<'static, MapManager>,
-        ResMut<'static, TurnManager>,
-        ResMut<'static, ActionQueue>,
-        Query<'static, 'static, &'static Player>,       // player query
-        Query<'static, 'static, &'static Movement>,     // movement query
-        Query<'static, 'static, &'static mut Position>, // position query
-        Query<'static, 'static, (&'static mut AIComponent, &'static Name)>, // ai query
-        Query<'static, 'static, &'static mut Health>,   // health query
-    )>,
-);
+// #[derive(Resource)]
+// pub struct CachedTurnSystemState(
+//     pub  SystemState<(
+//         ResMut<'static, MapManager>,
+//         ResMut<'static, TurnManager>,
+//         ResMut<'static, ActionQueue>,
+//         Query<'static, 'static, &'static Player>,       // player query
+//         Query<'static, 'static, &'static Movement>,     // movement query
+//         Query<'static, 'static, &'static mut Position>, // position query
+//         Query<'static, 'static, (&'static mut AIComponent, &'static Name)>, // ai query
+//         Query<'static, 'static, &'static mut Health>,   // health query
+//     )>,
+// );
 
-impl FromWorld for CachedTurnSystemState {
-    fn from_world(world: &mut World) -> Self { Self(SystemState::new(world)) }
-}
+// impl FromWorld for CachedTurnSystemState {
+//     fn from_world(world: &mut World) -> Self { Self(SystemState::new(world)) }
+// }
 
 pub fn perform_turns(world: &mut World) {
-    world.resource_scope(|world, mut cached_state: Mut<CachedTurnSystemState>| {
-        let (
-            mut map_manager,
-            mut turn_manager,
-            mut action_queue,
-            q_player,
-            q_movement,
-            mut q_position,
-            mut q_ai,
-            mut health_q,
-        ) = cached_state.0.get_mut(world);
-
+    world.resource_scope(|world, mut turn_manager: Mut<TurnManager>| {
         loop {
-            // Select next entity
             if let Some(entity) = turn_manager.start_entity_turn() {
-                let is_player = q_player.get(entity).is_ok();
+                let is_player = world.get::<Player>(entity).is_some();
+                let mut ai_q = world.query::<(&mut AIComponent, &Name)>();
+                let mut action_queue = world.resource_mut::<ActionQueue>();
 
                 let mut action = if is_player {
                     if let Some(a) = action_queue.get_action() {
@@ -43,10 +33,10 @@ pub fn perform_turns(world: &mut World) {
                         turn_manager.end_entity_turn(entity, 0);
                         return;
                     }
-                } else if let Ok((mut ai_component, name)) = q_ai.get_mut(entity) {
+                } else if let Ok((ai_component, name)) = ai_q.get_mut(world, entity) {
                     info!("Starting turn for {}", name);
 
-                    if let Some(a) = std::mem::take(&mut ai_component.preferred_action) {
+                    if let Some(a) = ai_component.preferred_action {
                         info!("{} is performing {:?}", name, a);
                         a
                     } else {
@@ -62,14 +52,7 @@ pub fn perform_turns(world: &mut World) {
                 };
 
                 loop {
-                    match perform_action(
-                        entity,
-                        action,
-                        &mut map_manager,
-                        &mut q_position,
-                        &q_movement,
-                        &mut health_q,
-                    ) {
+                    match perform_action2(entity, action, world) {
                         Ok(time_spent) => {
                             turn_manager.end_entity_turn(entity, time_spent);
                             break;
@@ -79,7 +62,7 @@ pub fn perform_turns(world: &mut World) {
                 }
 
                 if is_player {
-                    for (mut ai_component, _name) in q_ai.iter_mut() {
+                    for (mut ai_component, _name) in ai_q.iter_mut(world) {
                         ai_component.preferred_action = None;
                     }
                     return;

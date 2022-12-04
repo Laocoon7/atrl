@@ -59,6 +59,11 @@ pub fn attack_action(
                 info!("{} gonna start attacking!", name);
                 *action_state = Executing;
                 ai_component.preferred_action = Some(ActionType::Attack(*player_position));
+
+                if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
+                    target_visualizer.set_color(Color::RED);
+                    target_visualizer.set_style(TargetVisualizerStyle::Target);
+                }
             },
             ActionState::Executing => {},
         }

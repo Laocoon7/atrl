@@ -30,8 +30,6 @@ impl<T: StateNext> Plugin for ProccessTurnsPlugin<T> {
     fn build(&self, app: &mut App) {
         self.setup_turn_stages(app).setup_turn_plugins(app);
 
-        app.init_resource::<CachedTurnSystemState>();
-
         app.add_system_set_to_stage(
             AtrlStage::ProcessTurns,
             ConditionSet::new().run_in_state(self.state_running).with_system(perform_turns).into(),

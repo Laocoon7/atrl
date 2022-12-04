@@ -27,6 +27,8 @@ pub fn player_input(
         // Actions
         if action_state.just_pressed(PlayerAction::Wait) {
             action_queue.add_action(ActionType::Wait);
+            println!();
+            info!("Player gave input: WAIT");
         }
 
         // Movement
@@ -41,7 +43,7 @@ pub fn player_input(
                     action_queue.add_action(ActionType::Movement(*player_pos + direction));
 
                     println!();
-                    info!("Player turn end");
+                    info!("Player gave input: MOVE");
                 }
             }
         }
