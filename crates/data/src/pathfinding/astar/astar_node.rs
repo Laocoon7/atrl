@@ -103,8 +103,14 @@ impl AStarNode {
                         Self::insert_ordered(open_nodes, neighbor);
                     }
                 } else {
-                    let new_neighbor =
-                        self.create_neighbor(position, is_diagonal, destination, provider, q_blocks_movement, movement_type);
+                    let new_neighbor = self.create_neighbor(
+                        position,
+                        is_diagonal,
+                        destination,
+                        provider,
+                        q_blocks_movement,
+                        movement_type,
+                    );
                     if new_neighbor.is_walkable {
                         Self::insert_ordered(open_nodes, new_neighbor);
                     }

@@ -16,14 +16,18 @@ pub fn player_input(
     time: Res<Time>,
     mut timer: Local<PlayerTimer>,
     mut action_queue: ResMut<ActionQueue>,
-    mut query: Query<&ActionState<PlayerAction>>, // TODO: removed player tag... is it needed?
+    mut query: Query<&ActionState<PlayerAction>>,
+    player_entity: Res<PlayerEntity>,
+    q_position: Query<&Position>,
 ) {
     // Tick timer until duration is met.
     if !timer.finished() {
         timer.tick(time.delta());
     }
 
-    for (player_pos, action_state) in query.iter_mut() {
+    let Ok(player_position) = q_position.get(player_entity.current()) else { return; };
+
+    for (action_state) in query.iter_mut() {
         // Actions
         if action_state.just_pressed(PlayerAction::Wait) {
             action_queue.add_action(ActionType::Wait);
@@ -40,7 +44,7 @@ pub fn player_input(
             {
                 if let Some(direction) = input_direction.direction() {
                     timer.reset();
-                    action_queue.add_action(ActionType::Movement(*player_pos + direction));
+                    action_queue.add_action(ActionType::Movement(*player_position + direction));
 
                     println!();
                     info!("Player gave input: MOVE");

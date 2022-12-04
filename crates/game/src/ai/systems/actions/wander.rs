@@ -30,10 +30,11 @@ impl Default for Wander {
 
 pub fn wander_action(
     mut commands: Commands,
-    map_manager: MapManager,
+    mut map_manager: MapManager,
     mut ctx: ResMut<GameContext>,
     mut target_q: Query<&mut TargetVisualizer>,
-    mut action_q: Query<(&Actor, &mut ActionState, &mut Wander)>, // TODO: Can these be one query / SystemParam?
+    mut action_q: Query<(&Actor, &mut ActionState, &mut Wander)>, /* TODO: Can these be one query /
+                                                                   * SystemParam? */
     mut spatial_q: Query<(&Position, &Movement, &Name, &mut AIComponent)>, // TODO: Or a ParamSet?
     player_entity: Res<PlayerEntity>,
     q_blocks_movement: Query<&BlocksMovement>,
@@ -45,7 +46,6 @@ pub fn wander_action(
         if *actor == player_entity.current() {
             return;
         }
-
 
         // TODO: This is currently using the general game rng?
         // Should AI have it's own rng?
@@ -99,14 +99,24 @@ pub fn wander_action(
         let destination = match std::mem::take(&mut wander.destination) {
             Some(destination) => {
                 if ai_position.distance(destination) <= 1 {
-                    generate_wander_path(rng, &mut map_manager, *ai_position, movement.0, &q_blocks_movement)
+                    generate_wander_path(
+                        rng,
+                        &mut map_manager,
+                        *ai_position,
+                        movement.0,
+                        &q_blocks_movement,
+                    )
                 } else {
                     destination
                 }
             },
-            None => {
-                generate_wander_path(rng, &mut map_manager, *ai_position, movement.0, &q_blocks_movement)
-            },
+            None => generate_wander_path(
+                rng,
+                &mut map_manager,
+                *ai_position,
+                movement.0,
+                &q_blocks_movement,
+            ),
         };
 
         wander.destination = Some(destination);

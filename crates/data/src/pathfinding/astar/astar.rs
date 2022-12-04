@@ -44,10 +44,10 @@ impl PathAlgorithm for AStar {
                         q_blocks_movement,
                         movement_type,
                         &mut open_nodes,
-                        &mut closed_nodes
+                        &mut closed_nodes,
                     );
                 }
-                
+
                 // update ordinals
                 for ordinal in OrdinalDirection::all() {
                     let current_position = current_node.position() + ordinal.coord();
@@ -59,7 +59,7 @@ impl PathAlgorithm for AStar {
                         q_blocks_movement,
                         movement_type,
                         &mut open_nodes,
-                        &mut closed_nodes
+                        &mut closed_nodes,
                     );
                 }
 

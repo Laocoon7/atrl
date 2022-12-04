@@ -15,8 +15,8 @@ pub fn attack_action(
 ) {
     use ActionState::*;
 
-    let (player_entity, player_position) = match mobs_q.get(player_entity.current()) {
-        Ok((p, ..)) => (player_entity.current(), p),
+    let player_position = match mobs_q.get(player_entity.current()) {
+        Ok((p, ..)) => p.clone(),
         Err(err) => {
             info!("No player found: {}", err);
             return;
@@ -58,7 +58,7 @@ pub fn attack_action(
             ActionState::Init | ActionState::Requested => {
                 info!("{} gonna start attacking!", name);
                 *action_state = Executing;
-                ai_component.preferred_action = Some(ActionType::Attack(*player_position));
+                ai_component.preferred_action = Some(ActionType::Attack(player_position));
 
                 if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
                     target_visualizer.set_color(Color::RED);
@@ -68,13 +68,13 @@ pub fn attack_action(
             ActionState::Executing => {},
         }
 
-        if in_attack_range(*ai_position, *player_position) {
+        if in_attack_range(*ai_position, player_position) {
             println!("{} is in attack range!", name);
             // *action_state = ActionState::Success;
-            ai_component.preferred_action = Some(ActionType::Attack(*player_position));
+            ai_component.preferred_action = Some(ActionType::Attack(player_position));
         } else {
             *action_state = ActionState::Failure;
-            ai_component.preferred_action = Some(ActionType::Movement(*player_position));
+            ai_component.preferred_action = Some(ActionType::Movement(player_position));
         }
     }
 }

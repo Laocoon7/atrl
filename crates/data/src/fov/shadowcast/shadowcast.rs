@@ -14,7 +14,14 @@ impl<'w, 's> FovAlgorithm<'w, 's> for Shadowcast {
     ) {
         receiver.set_visible(origin);
         CardinalDirection::all().enumerate().for_each(|(_index, direction)| {
-            let mut quadrant = Quadrant::new(direction, origin, vision_type, provider, q_blocks_vision, receiver);
+            let mut quadrant = Quadrant::new(
+                direction,
+                origin,
+                vision_type,
+                provider,
+                q_blocks_vision,
+                receiver,
+            );
             let mut first_row = Row::new(1, Slope::new(-1, 1), Slope::new(1, 1));
             Self::scan_recursive(range, &mut quadrant, &mut first_row);
         });
@@ -31,7 +38,14 @@ impl<'w, 's> Shadowcast {
         direction: CardinalDirection,
     ) {
         receiver.set_visible(origin);
-        let mut quadrant = Quadrant::new(direction, origin, vision_type, provider, q_blocks_vision, receiver);
+        let mut quadrant = Quadrant::new(
+            direction,
+            origin,
+            vision_type,
+            provider,
+            q_blocks_vision,
+            receiver,
+        );
         let mut first_row = Row::new(1, Slope::new(-1, 1), Slope::new(1, 1));
         Self::scan_recursive(range, &mut quadrant, &mut first_row);
     }

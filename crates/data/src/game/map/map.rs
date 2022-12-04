@@ -16,26 +16,31 @@ pub struct Map {
     pub update_all: bool,
     pub update_tiles: HashSet<UVec2>,
     pub explored_tiles: HashSet<UVec2>,
-    
+
     // Object containers
     pub terrain: Grid<TerrainType>,
     pub features: Grid<Option<Vec<Entity>>>,
-    //pub items: Grid<Option<ItemStack>>,
+    // pub items: Grid<Option<ItemStack>>,
     pub actors: Grid<Option<Vec<Entity>>>,
 }
 
 // Constructor: See MapPassThroughData
 
 //// Perform terrain functions on this map
-//impl Map {
-//    
+// impl Map {
+//
 //}
 
 // Perform actor functions on this map
 impl Map {
     /// Do not use this function!!!
     /// Use MapManager::can_place_actor instead!!!
-    pub fn can_place_actor(&self, position: LocalPosition, movement_type: u8, q_blocks_movement: &Query<&BlocksMovement>) -> bool {
+    pub fn can_place_actor(
+        &self,
+        position: LocalPosition,
+        movement_type: u8,
+        q_blocks_movement: &Query<&BlocksMovement>,
+    ) -> bool {
         let Some(index) = position.grid_index(self.size) else { return false; };
 
         !self.is_blocked(index, movement_type, q_blocks_movement)
@@ -43,7 +48,13 @@ impl Map {
 
     /// Do not use this function!!!
     /// Use MapManager::add_actor instead!!!
-    pub fn add_actor(&mut self, actor: Entity, position: LocalPosition, movement_type: u8, q_blocks_movement: &Query<&BlocksMovement>) -> bool {
+    pub fn add_actor(
+        &mut self,
+        actor: Entity,
+        position: LocalPosition,
+        movement_type: u8,
+        q_blocks_movement: &Query<&BlocksMovement>,
+    ) -> bool {
         let Some(index) = position.grid_index(self.size) else { return false; };
 
         if self.can_place_actor(position, movement_type, q_blocks_movement) {
@@ -61,7 +72,7 @@ impl Map {
             false
         }
     }
-    
+
     /// Do not use this function!!!
     /// Use MapManager::remove_actor instead!!!
     pub fn remove_actor(&mut self, actor: Entity, position: LocalPosition) {
@@ -103,7 +114,7 @@ impl Map {
 
         true
     }
-    
+
     /// Do not use this function!!!
     /// Use MapManager::remove_feature instead!!!
     pub fn remove_feature(&mut self, feature: Entity, position: LocalPosition) {
@@ -128,13 +139,18 @@ impl Map {
 }
 
 //// Perform item functions on this map
-//impl Map {
-//    
+// impl Map {
+//
 //}
 
 // Blocked
 impl Map {
-    fn is_blocked(&self, index: usize, movement_type: u8, q_blocks_movement: &Query<&BlocksMovement>) -> bool {
+    fn is_blocked(
+        &self,
+        index: usize,
+        movement_type: u8,
+        q_blocks_movement: &Query<&BlocksMovement>,
+    ) -> bool {
         // if there are actors
         if let Some(actors) = self.actors[index].as_ref() {
             // for each actor
@@ -171,6 +187,4 @@ impl Map {
 }
 
 // Map Systems
-impl Map {
-    
-}
+impl Map {}

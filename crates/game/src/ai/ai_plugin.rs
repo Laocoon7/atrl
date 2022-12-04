@@ -32,7 +32,7 @@ impl<T: StateNext> Plugin for AIPlugin<T> {
                 ConditionSet::new()
                     .run_in_state(self.state_running)
                     .with_system(wander_action)
-                    .with_system(chase_action)
+                    //.with_system(chase_action)
                     .with_system(attack_action)
                     .into(),
             );

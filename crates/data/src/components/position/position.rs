@@ -28,12 +28,12 @@ impl Position {
     }
 
     pub fn distance(&self, other: Self) -> u32 {
-        let dist_x =
-        ((other.world_x() * GRID_WIDTH as i32 + other.x() as i32) -
-        (self.world_x() * GRID_WIDTH as i32 + self.x() as i32)).abs() as u32;
-        let dist_y = 
-        ((other.world_y() * GRID_HEIGHT as i32 + other.y() as i32) -
-        (self.world_y() * GRID_HEIGHT as i32 + self.y() as i32)).abs() as u32;
+        let dist_x = ((other.world_x() * GRID_WIDTH as i32 + other.x() as i32) -
+            (self.world_x() * GRID_WIDTH as i32 + self.x() as i32))
+            .abs() as u32;
+        let dist_y = ((other.world_y() * GRID_HEIGHT as i32 + other.y() as i32) -
+            (self.world_y() * GRID_HEIGHT as i32 + self.y() as i32))
+            .abs() as u32;
 
         dist_x.max(dist_y)
     }

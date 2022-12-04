@@ -177,8 +177,8 @@ mod pathfinding {
     pub use astar::*;
 
     mod dijkstra {
-        //mod dijkstra;
-        //pub use dijkstra::*;
+        // mod dijkstra;
+        // pub use dijkstra::*;
     }
     pub use dijkstra::*;
 

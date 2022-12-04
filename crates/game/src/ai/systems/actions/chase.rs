@@ -10,24 +10,22 @@ pub struct ChaseActor {
     last_seen_pt: Option<Position>,
 }
 
-pub fn chase_action(
+pub fn chase_action<'w, 's>(
     mut commands: Commands,
-    map_manager: MapManager,
+    mut map_manager: MapManager,
     player_entity: Res<PlayerEntity>,
     mut target_q: Query<&mut TargetVisualizer>,
     mut action_q: Query<(&Actor, &mut ActionState, &mut ChaseActor)>,
-    mut mobs_q: Query<
-        (
-            &Position,
-            &FieldOfView,
-            &Movement,
-            &Vision,
-            &Name,
-            &mut AIComponent,
-        ),
-    >,
-    q_blocks_movement: Query<&BlocksMovement>,
-    q_blocks_vision: Query<&BlocksVision>,
+    mut mobs_q: Query<(
+        &Position,
+        &FieldOfView,
+        &Movement,
+        &Vision,
+        &Name,
+        &mut AIComponent,
+    )>,
+    q_blocks_movement: Query<'w, 's, &'static BlocksMovement>,
+    q_blocks_vision: Query<'w, 's, &'static BlocksVision>,
 ) {
     use ActionState::*;
 
@@ -89,7 +87,14 @@ pub fn chase_action(
 
         info!("{} executing chase!", name);
 
-        let position = if entity_in_fov(&mut map_manager, &q_blocks_vision, fov, vision, ai_position, player_position) {
+        let position = if entity_in_fov(
+            &mut map_manager,
+            &q_blocks_vision,
+            fov,
+            vision,
+            ai_position,
+            player_position,
+        ) {
             if in_attack_range(ai_position, player_position) {
                 *action_state = Success;
                 continue;
@@ -116,13 +121,18 @@ pub fn chase_action(
             // partial path. We can expect the first element in the path to be a valid location
             // that is closest to the last_seen_pt.
             if !chase.generated_path {
-                let xy = generate_last_seen_path(ai_position, last_seen, movement.0, &mut map_manager, &q_blocks_movement)
-                    .first()
-                    .unwrap_or(&last_seen);
+                let path = generate_last_seen_path(
+                    ai_position,
+                    last_seen,
+                    movement.0,
+                    &mut map_manager,
+                    &q_blocks_movement,
+                );
+                let point = path.first().unwrap_or(&last_seen);
 
                 chase.generated_path = true;
-                chase.last_seen_pt = Some(*xy);
-                *xy
+                chase.last_seen_pt = Some(*point);
+                *point
             } else {
                 last_seen
             }

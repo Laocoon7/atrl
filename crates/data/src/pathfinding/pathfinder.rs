@@ -2,7 +2,7 @@ use super::shared::PathAlgorithm;
 use crate::prelude::*;
 pub enum PathFinder {
     Astar,
-    //Dijkstras,
+    // Dijkstras,
 }
 
 impl PathFinder {
@@ -24,7 +24,7 @@ impl PathFinder {
                 provider,
                 q_blocks_movement,
             ),
-            //Self::Dijkstras => Dijkstras::compute_path(
+            // Self::Dijkstras => Dijkstras::compute_path(
             //    origin,
             //    destination,
             //    movement_type,

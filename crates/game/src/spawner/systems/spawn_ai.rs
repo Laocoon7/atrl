@@ -29,7 +29,11 @@ pub fn spawn_ai(
 
             let position = Position::new(
                 WorldPosition::new(0, 0, 0),
-                LocalPosition::new(GRID_WIDTH / 3 + x, GRID_HEIGHT / 3 + y, MapLayer::Actors as u32),
+                LocalPosition::new(
+                    GRID_WIDTH / 3 + x,
+                    GRID_HEIGHT / 3 + y,
+                    MapLayer::Actors as u32,
+                ),
             );
 
             if map_manager.can_place_actor(position, movement_type.as_u8(), &q_blocks_movement) {
@@ -42,7 +46,12 @@ pub fn spawn_ai(
                     movement_type,
                 );
                 turn_manager.add_entity(ai_entity);
-                map_manager.add_actor(ai_entity, position, movement_type.as_u8(), &q_blocks_movement);
+                map_manager.add_actor(
+                    ai_entity,
+                    position,
+                    movement_type.as_u8(),
+                    &q_blocks_movement,
+                );
                 actor_count += 1;
             }
         }

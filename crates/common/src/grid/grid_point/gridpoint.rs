@@ -152,7 +152,6 @@ pub trait GridPoint: Clone + Copy {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use crate::prelude::*;

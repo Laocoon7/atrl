@@ -1,10 +1,10 @@
 use crate::prelude::*;
-pub fn fov(
+pub fn fov<'w, 's>(
     mut map_manager: MapManager,
     mut q_tile: Query<(&mut TileVisible, &mut TileColor, &TilePos)>,
     player_entity: Res<PlayerEntity>,
     mut q_vision: Query<(&Position, &FieldOfView, &Vision, &mut Visibility)>,
-    q_blocks_vision: Query<&BlocksVision>,
+    q_blocks_vision: Query<'w, 's, &'static BlocksVision>,
 ) {
     let Ok((player_position, fov, vision_component, _)) = q_vision.get(player_entity.current()) else {
         error!("No player");
@@ -34,7 +34,7 @@ pub fn fov(
     }
 
     //// Tiles
-    //for (mut tile_vis, mut tile_col, tile_pos) in q_tile.iter_mut() {
+    // for (mut tile_vis, mut tile_col, tile_pos) in q_tile.iter_mut() {
     //    if visibility_map.get_visible(tile_pos) |
     //        map.explored_tiles.contains(&tile_pos.as_uvec2())
     //    {
@@ -44,5 +44,4 @@ pub fn fov(
     //        tile_col.0 = *tile_col.0.set_a(0.15);
     //    }
     //}
-
 }
