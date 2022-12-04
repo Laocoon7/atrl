@@ -1,7 +1,7 @@
 use std::{
     fmt::Display,
     hash::Hash,
-    ops::{Add, AddAssign},
+    ops::{Add, AddAssign, Sub, SubAssign},
 };
 
 use crate::prelude::*;
@@ -30,14 +30,34 @@ impl Position {
     }
 
     pub fn distance(&self, other: Self) -> u32 {
-        let dist_x = ((other.world_x() * GRID_WIDTH as i32 + other.x() as i32) -
-            (self.world_x() * GRID_WIDTH as i32 + self.x() as i32))
-            .unsigned_abs();
-        let dist_y = ((other.world_y() * GRID_HEIGHT as i32 + other.y() as i32) -
-            (self.world_y() * GRID_HEIGHT as i32 + self.y() as i32))
-            .unsigned_abs();
+        let dist_x = self.distance_x(other);
+        let dist_y = self.distance_y(other);
 
         dist_x.max(dist_y)
+    }
+
+    pub fn distance_x(&self, other: Self) -> u32 {
+        ((other.world_x() * GRID_WIDTH as i32 + other.x() as i32) -
+            (self.world_x() * GRID_WIDTH as i32 + self.x() as i32))
+            .unsigned_abs()
+    }
+
+    pub fn distance_y(&self, other: Self) -> u32 {
+        ((other.world_y() * GRID_HEIGHT as i32 + other.y() as i32) -
+            (self.world_y() * GRID_HEIGHT as i32 + self.y() as i32))
+            .unsigned_abs()
+    }
+
+    pub fn lerp(&self, other: Self, percent: f32) -> Self {
+        let layer = self.layer();
+        let (abs_self_x, abs_self_y, abs_self_z) = self.to_absolute_position();
+        let (abs_other_x, abs_other_y, abs_other_z) = other.to_absolute_position();
+
+        let lerp_x = (abs_self_x as f64 + (abs_other_x - abs_self_x) as f64 * percent as f64) as i64;
+        let lerp_y = (abs_self_y as f64 + (abs_other_y - abs_self_y) as f64 * percent as f64) as i64;
+        let lerp_z = (abs_self_z as f64 + (abs_other_z - abs_self_z) as f64 * percent as f64) as i32;
+
+        Self::from_absolute_position((lerp_x, lerp_y, lerp_z), layer)
     }
 
     ///////////////////////////////
@@ -95,6 +115,31 @@ impl Position {
     pub fn set_world_xy(&mut self, value: IVec2) { self.world_position.set_xy(value.x, value.y); }
 
     pub fn set_world_xyz(&mut self, value: IVec3) { self.world_position.set_xyz(value.x, value.y, value.z); }
+
+    ///////////////////////////////
+    /// Internal
+    ///////////////////////////////
+    fn to_absolute_position(&self) -> (i64, i64, i32) {
+        (
+            (self.world_x() * GRID_WIDTH as i32 + self.x() as i32) as i64,
+            (self.world_y() * GRID_HEIGHT as i32 + self.y() as i32) as i64,
+            self.world_z()
+        )
+    }
+
+    fn from_absolute_position(absolute_position: (i64, i64, i32), layer: u32) -> Self {
+        let world_x = (absolute_position.0 / GRID_WIDTH as i64) as i32;
+        let world_y = (absolute_position.1 / GRID_HEIGHT as i64) as i32;
+        let world_z = absolute_position.2;
+
+        let local_x = (absolute_position.0 % GRID_WIDTH as i64) as u32;
+        let local_y = (absolute_position.1 % GRID_HEIGHT as i64) as u32;
+
+        Self::new(
+            WorldPosition::new(world_x, world_y, world_z),
+            LocalPosition::new(local_x, local_y, layer)
+        )
+    }
 }
 
 impl PartialEq for Position {
@@ -126,10 +171,11 @@ impl Display for Position {
     }
 }
 
+// Add offset to LocalPosition
 impl Add<IVec2> for Position {
     type Output = Self;
 
-    #[inline]
+    #[inline] // TODO: Rather large for inline isn't it??
     fn add(self, rhs: IVec2) -> Self::Output {
         let mut world_x = self.world_x();
         let mut world_y = self.world_y();
@@ -160,6 +206,7 @@ impl Add<IVec2> for Position {
     }
 }
 
+// Add offset to LocalPosition
 impl AddAssign<IVec2> for Position {
     #[inline]
     fn add_assign(&mut self, rhs: IVec2) {
@@ -194,5 +241,67 @@ impl Add<GridDirection> for Position {
     fn add(self, rhs: GridDirection) -> Self::Output {
         let coord = rhs.coord();
         self + coord
+    }
+}
+
+// Sub offset to LocalPosition
+impl Sub<IVec2> for Position {
+    type Output = Self;
+
+    fn sub(self, rhs: IVec2) -> Self::Output {
+        let mut world_x = self.world_x();
+        let mut world_y = self.world_y();
+
+        let mut local_x = self.x() as i32 - rhs.x;
+        let mut local_y = self.y() as i32 - rhs.y;
+
+        if local_x < 0 {
+            world_x -= 1;
+            local_x += GRID_WIDTH as i32;
+        } else if local_x >= GRID_WIDTH as i32 {
+            world_x += 1;
+            local_x -= GRID_WIDTH as i32;
+        }
+
+        if local_y < 0 {
+            world_y -= 1;
+            local_y += GRID_HEIGHT as i32;
+        } else if local_y >= GRID_HEIGHT as i32 {
+            world_y += 1;
+            local_y -= GRID_HEIGHT as i32;
+        }
+
+        Self::new(
+            WorldPosition::new(world_x, world_y, self.world_z()),
+            LocalPosition::new(local_x as u32, local_y as u32, self.layer()),
+        )
+    }
+}
+
+// Sub offset to LocalPosition
+impl SubAssign<IVec2> for Position {
+    fn sub_assign(&mut self, rhs: IVec2) {
+        let new_x = self.x() as i32 - rhs.x;
+        let new_y = self.y() as i32 - rhs.y;
+
+        if new_x < 0 {
+            self.set_world_x(self.world_x() - 1);
+            self.set_x((new_x + GRID_WIDTH as i32) as u32);
+        } else if new_x >= GRID_WIDTH as i32 {
+            self.set_world_x(self.world_x() + 1);
+            self.set_x((new_x - GRID_WIDTH as i32) as u32);
+        } else {
+            self.set_x(new_x as u32);
+        }
+
+        if new_y < 0 {
+            self.set_world_y(self.world_y() - 1);
+            self.set_y((new_y + GRID_HEIGHT as i32) as u32);
+        } else if new_y >= GRID_HEIGHT as i32 {
+            self.set_world_y(self.world_y() + 1);
+            self.set_y((new_y - GRID_HEIGHT as i32) as u32);
+        } else {
+            self.set_y(new_y as u32);
+        }
     }
 }
