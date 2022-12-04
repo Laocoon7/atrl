@@ -140,7 +140,7 @@ impl Shape for GridRectangle {
     }
 }
 
-impl IntoIterator for Rectangle {
+impl IntoIterator for GridRectangle {
     type IntoIter = RectIter;
     type Item = IVec2;
 
@@ -148,7 +148,7 @@ impl IntoIterator for Rectangle {
     fn into_iter(self) -> Self::IntoIter { RectIter::new(self.min, self.max) }
 }
 
-impl ShapeIter for Rectangle {
+impl ShapeIter for GridRectangle {
     type Iterator = RectIter;
 
     #[inline]

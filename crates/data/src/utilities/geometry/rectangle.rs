@@ -1,5 +1,3 @@
-use std::ops::Div;
-
 use crate::prelude::*;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq)]
@@ -66,42 +64,6 @@ impl Rectangle {
     #[inline]
     fn bottom(&self) -> i32 { self.min.y.min(self.max.y) }
 
-    /// Create a circle around the center to the closest edge
-    #[inline]
-    pub fn as_smallest_circle(&self) -> Circle {
-        let radius = self.width().div(2).min(self.height().div(2)) as u32;
-        Circle::new(self.center(), radius)
-    }
-
-    /// Create a circle around the center to the farthest edge
-    #[inline]
-    pub fn as_biggest_circle(&self) -> Circle {
-        let radius = self.width().div(2).max(self.height().div(2)) as u32;
-        Circle::new(self.center(), radius)
-    }
-
-    #[inline]
-    pub fn as_triangles(&self) -> (Triangle, Triangle) {
-        let bottom_left = IVec2::new(self.left(), self.bottom());
-        let top_left = IVec2::new(self.left(), self.top());
-        let bottom_right = IVec2::new(self.right(), self.bottom());
-        let top_right = IVec2::new(self.right(), self.top());
-        (
-            Triangle::new(bottom_left, top_right, top_left),
-            Triangle::new(bottom_left, bottom_right, top_right),
-        )
-    }
-
-    #[inline]
-    pub fn as_polygon(&self) -> Polygon {
-        let max = IVec2::new(self.right(), self.top());
-        let bottom_left = IVec2::new(self.left(), self.bottom());
-        Polygon::new(vec![self.min, max, self.max, bottom_left])
-    }
-
-    // #[inline]
-    // pub fn as_ellipse(&self) -> Ellipse { Ellipse::from_points(self.points()) }
-
     /// Check if this rectangle intersects another rectangle.
     #[inline]
     pub const fn intersects(&self, other: Self) -> bool {
@@ -119,38 +81,10 @@ impl Rectangle {
     }
 }
 
-impl Shape for Rectangle {
-    #[inline]
-    fn get_count(&self) -> u32 { self.get_positions().len() as u32 }
-
-    #[inline]
-    fn contains(&self, point: impl GridPoint) -> bool {
-        self.min.x <= point.x() && self.max.x > point.x() && self.min.y <= point.y() && self.max.y > point.y()
-    }
-
-    #[inline]
-    fn get_positions(&self) -> HashSet<IVec2> {
-        let mut result = HashSet::new();
-        for y in self.min.y..self.max.y {
-            for x in self.min.x..self.max.x {
-                result.insert(IVec2::new(x, y));
-            }
-        }
-        result
-    }
-}
-
 impl IntoIterator for Rectangle {
     type IntoIter = RectIter;
     type Item = IVec2;
 
     #[inline]
     fn into_iter(self) -> Self::IntoIter { RectIter::new(self.min, self.max) }
-}
-
-impl ShapeIter for Rectangle {
-    type Iterator = RectIter;
-
-    #[inline]
-    fn iter(&self) -> Self::Iterator { self.into_iter() }
 }
