@@ -8,9 +8,9 @@ pub struct Triangle {
 impl Triangle {
     pub fn new(start: Position, point1: Position, point2: Position) -> Self {
         Self {
-            start: start,
-            point1: point1,
-            point2: point2,
+            start,
+            point1,
+            point2,
         }
     }
 }
@@ -37,9 +37,7 @@ impl ShapeWithBorder for Triangle {
         discovered
     }
 
-    fn border_contains(&self, position: Position) -> bool {
-        self.get_border_positions().contains(&position)
-    }
+    fn border_contains(&self, position: Position) -> bool { self.get_border_positions().contains(&position) }
 
     fn get_border_count(&self) -> usize { self.get_border_positions().len() }
 }

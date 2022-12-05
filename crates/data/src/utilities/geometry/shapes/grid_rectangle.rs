@@ -10,10 +10,7 @@ impl GridRectangle {
     #[inline]
     pub fn new(min: Position, max: Position) -> Self {
         let (min, max) = Self::find_min_max(min, max);
-        Self {
-            min,
-            max,
-        }
+        Self { min, max }
     }
 
     fn find_min_max(min: Position, max: Position) -> (Position, Position) {
@@ -36,7 +33,6 @@ impl GridRectangle {
             Position::from_absolute_position((min_x, min_y, min_z), min_layer),
             Position::from_absolute_position((max_x, max_y, max_z), max_layer),
         )
-
     }
 }
 
@@ -54,9 +50,7 @@ impl GridRectangle {
     pub const fn max(&self) -> Position { self.max }
 
     #[inline]
-    pub fn is_square(&self) -> bool {
-        self.width() == self.height()
-    }
+    pub fn is_square(&self) -> bool { self.width() == self.height() }
 }
 
 impl GridRectangle {
@@ -84,10 +78,7 @@ impl GridRectangle {
         let (o_min_x, o_min_y, _o_min_z) = other.min.to_absolute_position();
         let (o_max_x, o_max_y, _o_max_z) = other.max.to_absolute_position();
         // (self.min.cmple(other.max) & self.max.cmpge(other.min)).all()
-        s_min_x <= o_max_x &&
-            s_max_x >= o_min_x &&
-            s_min_y <= o_max_y &&
-            s_max_y >= o_min_y
+        s_min_x <= o_max_x && s_max_x >= o_min_x && s_min_y <= o_max_y && s_max_y >= o_min_y
     }
 
     /// Calls a function for each x/y point in the rectangle

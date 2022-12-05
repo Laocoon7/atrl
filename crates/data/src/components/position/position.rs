@@ -207,6 +207,41 @@ impl Add<IVec2> for Position {
 }
 
 // Add offset to LocalPosition
+impl Add<UVec2> for Position {
+    type Output = Self;
+
+    #[inline] // TODO: Rather large for inline isn't it??
+    fn add(self, rhs: UVec2) -> Self::Output {
+        let mut world_x = self.world_x();
+        let mut world_y = self.world_y();
+
+        let mut local_x = self.x() + rhs.x;
+        let mut local_y = self.y() + rhs.y;
+
+        if local_x < 0 {
+            world_x -= 1;
+            local_x += GRID_WIDTH;
+        } else if local_x >= GRID_WIDTH {
+            world_x += 1;
+            local_x -= GRID_WIDTH;
+        }
+
+        if local_y < 0 {
+            world_y -= 1;
+            local_y += GRID_HEIGHT;
+        } else if local_y >= GRID_HEIGHT {
+            world_y += 1;
+            local_y -= GRID_HEIGHT;
+        }
+
+        Self::new(
+            WorldPosition::new(world_x, world_y, self.world_z()),
+            LocalPosition::new(local_x as u32, local_y as u32, self.layer()),
+        )
+    }
+}
+
+// Add offset to LocalPosition
 impl AddAssign<IVec2> for Position {
     #[inline]
     fn add_assign(&mut self, rhs: IVec2) {

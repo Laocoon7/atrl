@@ -10,21 +10,20 @@ struct Octant(u8);
 /// Line-drawing iterator
 #[derive(Debug, Clone)]
 pub struct BresenhamLineIter {
-    x: i32,
-    y: i32,
     dx: i32,
     dy: i32,
-    x1: i32,
+    x1: u32,
     diff: i32,
     octant: Octant,
+    pos: Position,
 }
 
 impl Octant {
     /// adapted from <http://codereview.stackexchange.com/a/95551>
     #[inline]
-    fn from_points(start: impl GridPoint, end: impl GridPoint) -> Self {
-        let mut dx = end.x() - start.x();
-        let mut dy = end.y() - start.y();
+    fn from_points(start: Position, end: Position) -> Self {
+        let mut dx = (end.x() - start.x()) as i32;
+        let mut dy = (end.y() - start.y()) as i32;
         let mut octant = 0;
         if dy < 0 {
             dx = -dx;
@@ -44,34 +43,42 @@ impl Octant {
     }
 
     #[inline]
-    fn to_octant(&self, p: impl GridPoint) -> IVec2 {
-        match self.0 {
-            0 => IVec2::new(p.x(), p.y()),
-            1 => IVec2::new(p.y(), p.x()),
-            2 => IVec2::new(p.y(), -p.x()),
-            3 => IVec2::new(-p.x(), p.y()),
-            4 => IVec2::new(-p.x(), -p.y()),
-            5 => IVec2::new(-p.y(), -p.x()),
-            6 => IVec2::new(-p.y(), p.x()),
-            7 => IVec2::new(p.x(), -p.y()),
+    fn to_octant(&self, p: Position) -> Position {
+        let IVec2 { x, y } = p.gridpoint().as_ivec2();
+        let new_lp = match self.0 {
+            0 => IVec2::new(x, y),
+            1 => IVec2::new(y, x),
+            2 => IVec2::new(y, -x),
+            3 => IVec2::new(-x, y),
+            4 => IVec2::new(-x, -y),
+            5 => IVec2::new(-y, -x),
+            6 => IVec2::new(-y, x),
+            7 => IVec2::new(x, -y),
             _ => unreachable!(),
-        }
+        };
+
+        p.set_xy(new_lp.as_uvec2());
+        p
     }
 
     #[inline]
     #[allow(clippy::wrong_self_convention)]
-    fn from_octant(&self, p: impl GridPoint) -> IVec2 {
-        match self.0 {
-            0 => IVec2::new(p.x(), p.y()),
-            1 => IVec2::new(p.y(), p.x()),
-            2 => IVec2::new(-p.y(), p.x()),
-            3 => IVec2::new(-p.x(), p.y()),
-            4 => IVec2::new(-p.x(), -p.y()),
-            5 => IVec2::new(-p.y(), -p.x()),
-            6 => IVec2::new(p.y(), -p.x()),
-            7 => IVec2::new(p.x(), -p.y()),
+    fn from_octant(&self, p: Position) -> Position {
+        let IVec2 { x, y } = p.gridpoint().as_ivec2();
+        let new_lp = match self.0 {
+            0 => IVec2::new(x, y),
+            1 => IVec2::new(y, x),
+            2 => IVec2::new(-y, x),
+            3 => IVec2::new(-x, y),
+            4 => IVec2::new(-x, -y),
+            5 => IVec2::new(-y, -x),
+            6 => IVec2::new(y, -x),
+            7 => IVec2::new(x, -y),
             _ => unreachable!(),
-        }
+        };
+
+        p.set_xy(new_lp.as_uvec2());
+        p
     }
 }
 
@@ -79,44 +86,43 @@ impl BresenhamLineIter {
     /// Creates a new iterator.Yields intermediate points between `start`
     /// and `end`. Does include `start` but not `end`.
     #[inline]
-    pub fn new(start: impl GridPoint, end: impl GridPoint) -> Self {
+    pub fn new(start: Position, end: Position) -> Self {
         let octant = Octant::from_points(start, end);
         let start = octant.to_octant(start);
         let end = octant.to_octant(end);
-        let dx = end.x() - start.x();
-        let dy = end.y() - start.y();
+        let dx = (end.x() - start.x()) as i32;
+        let dy = (end.y() - start.y()) as i32;
+
         Self {
-            x: start.x(),
-            y: start.y(),
             dx,
             dy,
+            octant,
+            pos: start,
             x1: end.x(),
             diff: dy - dx,
-            octant,
         }
     }
 
     /// Return the next point without checking if we are past `end`.
     #[inline]
-    pub fn advance(&mut self) -> IVec2 {
-        let p = IVec2::new(self.x, self.y);
+    pub fn advance(&mut self) -> Position {
         if self.diff >= 0 {
-            self.y += 1;
             self.diff -= self.dx;
+            self.pos.set_y(self.pos.y() + 1)
         }
         self.diff += self.dy;
         // loop inc
-        self.x += 1;
-        self.octant.from_octant(p)
+        self.pos.set_x(self.pos.x() + 1);
+        self.octant.from_octant(self.pos)
     }
 }
 
 impl Iterator for BresenhamLineIter {
-    type Item = IVec2;
+    type Item = Position;
 
     #[inline]
     fn next(&mut self) -> Option<Self::Item> {
-        if self.x >= self.x1 {
+        if self.pos.x() >= self.x1 {
             None
         } else {
             Some(self.advance())
@@ -134,107 +140,22 @@ pub struct BresenhamLineInclusiveIter(BresenhamLineIter);
 impl BresenhamLineInclusiveIter {
     /// Creates a new iterator. Yields points `start..=end`.
     #[inline]
-    pub fn new(start: impl GridPoint, end: impl GridPoint) -> Self {
-        Self(BresenhamLineIter::new(start, end))
-    }
+    pub fn new(start: Position, end: Position) -> Self { Self(BresenhamLineIter::new(start, end)) }
 
     /// Return the next point without checking if we are past `end`.
     #[inline]
-    pub fn advance(&mut self) -> impl GridPoint { self.0.advance() }
+    pub fn advance(&mut self) -> Position { self.0.advance() }
 }
 
 impl Iterator for BresenhamLineInclusiveIter {
-    type Item = IVec2;
+    type Item = Position;
 
     #[inline]
     fn next(&mut self) -> Option<Self::Item> {
-        if self.0.x > self.0.x1 {
+        if self.0.pos.x() > self.0.x1 {
             None
         } else {
             Some(self.0.advance())
-        }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    #[cfg(test)]
-    mod line {
-        use crate::prelude::*;
-
-        #[test]
-        fn line_vertical() {
-            let mut canvas = Canvas::new([11, 11]);
-            let line = Line::new((0, 0), (0, 10));
-            for p in line.iter() {
-                canvas.put(p, '*');
-            }
-            canvas.print();
-        }
-
-        #[test]
-        fn line_horizontal() {
-            let mut canvas = Canvas::new([11, 11]);
-            let line = Line::new((0, 0), (10, 0));
-            for p in line.iter() {
-                canvas.put(p, '*');
-            }
-            canvas.print();
-        }
-
-        #[test]
-        fn line_diagonal() {
-            let mut canvas = Canvas::new([10, 10]);
-            let line = Line::new((0, 0), (9, 9));
-            for p in line.iter() {
-                canvas.put(p, '*');
-            }
-            canvas.print();
-        }
-
-        #[test]
-        fn line_multi() {
-            let mut canvas = Canvas::new([11, 7]);
-            let lines = [
-                Line::new((5, 3), (10, 5)),
-                Line::new((5, 3), (10, 1)),
-                Line::new((5, 3), (0, 1)),
-                Line::new((5, 3), (0, 5)),
-            ];
-            for p in lines.iter().flat_map(|l| l.iter()) {
-                canvas.put(p, '*');
-            }
-            canvas.print();
-        }
-    }
-
-    #[cfg(test)]
-    mod bresenham {
-        use crate::prelude::*;
-
-        #[test]
-        fn line_diagonal() {
-            let mut canvas = Canvas::new([10, 10]);
-            let line = BresenhamLineIter::new((0, 0), (9, 9));
-            for p in line {
-                canvas.put(p, '*');
-            }
-            canvas.print();
-        }
-    }
-
-    #[cfg(test)]
-    mod bresenham_inclusive {
-        use crate::prelude::*;
-
-        #[test]
-        fn line_diagonal() {
-            let mut canvas = Canvas::new([10, 10]);
-            let line = BresenhamLineInclusiveIter::new((0, 0), (9, 9));
-            for p in line {
-                canvas.put(p, '*');
-            }
-            canvas.print();
         }
     }
 }

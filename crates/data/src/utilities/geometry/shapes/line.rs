@@ -8,12 +8,7 @@ pub struct Line {
 }
 
 impl Line {
-    pub fn new(start: Position, end: Position) -> Self {
-        Self {
-            start,
-            end,
-        }
-    }
+    pub fn new(start: Position, end: Position) -> Self { Self { start, end } }
 
     #[inline]
     fn into_iter_exlusive(self) -> BresenhamLineIter { BresenhamLineIter::new(self.start, self.end) }
@@ -29,7 +24,7 @@ impl Shape for Line {
 
 impl IntoIterator for Line {
     type IntoIter = BresenhamLineInclusiveIter;
-    type Item = IVec2;
+    type Item = Position;
 
     #[inline]
     fn into_iter(self) -> Self::IntoIter { BresenhamLineInclusiveIter::new(self.start, self.end) }
