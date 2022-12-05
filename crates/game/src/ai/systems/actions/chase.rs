@@ -14,6 +14,8 @@ pub fn chase_action<'w, 's>(
     mut commands: Commands,
     mut map_manager: MapManager,
     player_entity: Res<PlayerEntity>,
+
+    player_q: Query<&Position>,
     mut target_q: Query<&mut TargetVisualizer>,
     mut action_q: Query<(&Actor, &mut ActionState, &mut ChaseActor)>,
 
@@ -33,7 +35,7 @@ pub fn chase_action<'w, 's>(
 ) {
     use ActionState::*;
 
-    let Ok((&player_position, ..)) = mobs_q.get(player_entity.current()) else {
+    let Ok(player_position) = player_q.get(player_entity.current()) else {
         info!("No player found!");
         return;
     };
@@ -78,8 +80,8 @@ pub fn chase_action<'w, 's>(
                 *action_state = Executing;
 
                 chase.generated_path = false;
-                chase.last_seen_pt = Some(player_position);
-                ai_component.preferred_action = Some(ActionType::Movement(player_position));
+                chase.last_seen_pt = Some(*player_position);
+                ai_component.preferred_action = Some(ActionType::Movement(*player_position));
 
                 if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
                     target_visualizer.set_color(Color::RED);
@@ -97,16 +99,16 @@ pub fn chase_action<'w, 's>(
             fov,
             vision,
             ai_position,
-            player_position,
+            *player_position,
         ) {
-            if in_attack_range(ai_position, player_position) {
+            if in_attack_range(ai_position, *player_position) {
                 *action_state = Success;
                 continue;
             }
 
-            chase.last_seen_pt = Some(player_position);
+            chase.last_seen_pt = Some(*player_position);
             chase.generated_path = false;
-            player_position
+            *player_position
         } else {
             let Some(last_seen) = chase.last_seen_pt else {
                         error!("Executing chase with no target.");

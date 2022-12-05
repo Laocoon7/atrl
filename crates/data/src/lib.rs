@@ -54,8 +54,10 @@ mod components {
 
     mod bundles {
         mod actor_bundle;
-        mod player_bundle;
         pub use actor_bundle::*;
+        mod ai_bundle;
+        pub use ai_bundle::*;
+        mod player_bundle;
         pub use player_bundle::*;
     }
     pub use bundles::*;
@@ -242,16 +244,16 @@ mod resources {
 mod utilities {
     mod direction {
         mod bitmap;
-        mod cardinal;
-        mod direction;
-        mod iter;
-        mod ordinal;
-        mod table;
         pub use bitmap::*;
+        mod cardinal;
         pub use cardinal::*;
+        mod direction;
         pub use direction::*;
+        mod iter;
         pub use iter::*;
+        mod ordinal;
         pub use ordinal::*;
+        mod table;
         pub use table::*;
     }
     pub use direction::*;
@@ -339,6 +341,8 @@ mod utilities {
     pub use grid::*;
 
     mod macros {
+        mod embed;
+        pub use embed::*;
         mod generic_macros;
         pub use generic_macros::*;
         mod switch_in_game_state;
@@ -417,20 +421,15 @@ pub mod prelude {
         };
         pub use thiserror::Error;
         pub use xxhash_rust::xxh3::*;
-
-        // macros
-        pub use crate::{
-            impl_as_primative, impl_default, impl_new, insert_resource, remove_resource, spawn_component,
-            switch_in_game_state,
-        };
     }
     pub(crate) use import::*;
 
     mod export {
         pub use crate::pathfinding::PathFinder; // where's the redundancy lint???
         pub use crate::{
-            actions::*, actors::*, camera::*, components::*, fov::*, game::*, map_gen::*, pathfinding::*,
-            queries::*, resources::*, utilities::*,
+            actions::*, actors::*, camera::*, components::*, embedded_resource, fov::*, game::*,
+            impl_as_primative, impl_default, impl_new, insert_resource, map_gen::*, pathfinding::*,
+            queries::*, remove_resource, resources::*, spawn_component, switch_in_game_state, utilities::*,
         };
     }
     pub use export::*;

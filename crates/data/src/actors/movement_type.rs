@@ -24,6 +24,12 @@ pub enum MovementType {
     Any = !0,
 }
 
+impl MovementType {
+    pub fn as_u8(self) -> u8 { self.try_into().unwrap_or(Self::None as u8) }
+
+    pub fn from_vec(value: Vec<Self>) -> u8 { value.iter().fold(Self::None.as_u8(), |a, b| a | b.as_u8()) }
+}
+
 impl TryFrom<MovementType> for u8 {
     type Error = String;
 
@@ -35,8 +41,8 @@ impl TryFrom<MovementType> for u8 {
     }
 }
 
-impl MovementType {
-    pub fn as_u8(self) -> u8 { self.try_into().unwrap_or(Self::None as u8) }
+impl From<u8> for MovementType {
+    fn from(value: u8) -> Self { Self::try_from(value).expect("Failed to convert `u8` to `MovementType`") }
 }
 
 impl_as_primative!(MovementType);

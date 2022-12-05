@@ -2,7 +2,7 @@
 #![allow(clippy::module_inception)]
 #![allow(clippy::type_complexity)]
 #![allow(clippy::too_many_arguments)] // Bevy has a lot of arguments, so we shush clippy
-#![allow(unused_imports)] // TODO: REMOVE ME
+
 mod resources {
     mod loaded_tilesets;
     pub use loaded_tilesets::*;
@@ -13,6 +13,14 @@ mod resources {
     mod asset_settings;
     pub use asset_settings::*;
 }
+
+mod raw_master {
+    mod raw_master;
+    pub use raw_master::*;
+    mod spawn;
+    pub use spawn::*;
+}
+
 mod systems {
     mod load_tilesets;
     pub use load_tilesets::*;
@@ -25,24 +33,41 @@ mod systems {
     mod wait_for_tilesets_to_load;
     pub use wait_for_tilesets_to_load::*;
 }
+
+mod templates {
+    mod base_raw_component;
+    pub use base_raw_component::*;
+    mod player_template;
+    pub use player_template::*;
+    mod stat_templates;
+    pub use stat_templates::*;
+}
+
 mod raw_plugin;
+mod raws;
+
 pub mod prelude {
     mod internal {
         pub use crate::systems::*;
     }
     pub(crate) use internal::*;
     mod import {
-        pub use atrl_data::prelude::*;
-        pub use bevy::prelude::*;
+        pub use atrl_data::prelude::{embedded_resource, *};
+        pub use bevy::{
+            prelude::*,
+            utils::hashbrown::{HashMap, HashSet},
+        };
         pub use bevy_tileset::prelude::*;
         pub use iyes_loopless::prelude::*;
         pub use iyes_progress::prelude::*;
         pub use kayak_ui::{prelude::*, widgets::*};
+        pub use leafwing_input_manager::prelude::*;
+        pub use serde::Deserialize;
         pub use smart_default::SmartDefault;
     }
     pub(crate) use import::*;
     mod export {
-        pub use crate::{raw_plugin::*, resources::*};
+        pub use crate::{raw_master::*, raw_plugin::*, raws::*, resources::*, templates::*};
     }
     pub use export::*;
 }

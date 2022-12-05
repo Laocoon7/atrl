@@ -15,11 +15,15 @@ dev     = []
 release = []
 
 [dependencies]
-atrl-data   = { workspace = true }
+atrl-data = { workspace = true }
 
-bevy          = { workspace = true }
-bevy_tileset  = { workspace = true }
-iyes_loopless = { workspace = true }
-iyes_progress = { workspace = true }
-kayak_ui      = { workspace = true }
+bevy                   = { workspace = true }
+bevy_tileset           = { workspace = true }
+iyes_loopless          = { workspace = true }
+iyes_progress          = { workspace = true }
+kayak_ui               = { workspace = true }
+leafwing-input-manager = { workspace = true }
+
+ron           = { workspace = true }
+serde         = { workspace = true }
 smart-default = { workspace = true }

@@ -1,4 +1,5 @@
 use crate::prelude::*;
+
 #[derive(Bundle)]
 pub struct PlayerBundle {
     #[bundle]
@@ -6,6 +7,7 @@ pub struct PlayerBundle {
     #[bundle]
     pub input_manager: InputManagerBundle<PlayerAction>,
 }
+
 impl PlayerBundle {
     pub fn default_input_map() -> InputMap<PlayerAction> {
         // This allows us to replace `ArpgAction::Up` with `Up`,

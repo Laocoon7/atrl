@@ -9,14 +9,16 @@ pub struct AttackActor;
 pub fn attack_action(
     mut commands: Commands,
     player_entity: Res<PlayerEntity>,
+
+    player_q: Query<&Position>,
     mut target_q: Query<&mut TargetVisualizer>,
     mut mobs_q: Query<(&Position, &Name, &mut AIComponent)>,
     mut action_q: Query<(&Actor, &mut ActionState), With<AttackActor>>,
 ) {
     use ActionState::*;
 
-    let player_position = match mobs_q.get(player_entity.current()) {
-        Ok((p, ..)) => *p,
+    let player_position = match player_q.get(player_entity.current()) {
+        Ok(p) => *p,
         Err(err) => {
             info!("No player found: {}", err);
             return;

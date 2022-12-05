@@ -80,28 +80,30 @@ fn spawn_ai_at(
 
     commands
         .spawn((
-            ActorBundle {
-                mob: Mob,
-                position,
+            AIBundle {
                 ai: AIComponent::aggressive(),
-                name: Name::new(name.to_string()),
-                health: Health::full(5),
-                sprite: SpriteSheetBundle {
-                    sprite: TextureAtlasSprite {
-                        color: Color::RED,
-                        index: TILE_ACTOR_OGRE_ID,
-                        custom_size: Some(Vec2::ONE),
-                        ..Default::default()
+                actor: ActorBundle {
+                    mob: Mob,
+                    position,
+                    name: Name::new(name.to_string()),
+                    health: Health::full(5),
+                    sprite: SpriteSheetBundle {
+                        sprite: TextureAtlasSprite {
+                            color: Color::RED,
+                            index: TILE_ACTOR_OGRE_ID,
+                            custom_size: Some(Vec2::ONE),
+                            ..Default::default()
+                        },
+                        texture_atlas: texture_atlas.clone(),
+                        transform: Transform::from_translation(position.translation()),
+                        ..default()
                     },
-                    texture_atlas: texture_atlas.clone(),
-                    transform: Transform::from_translation(position.translation()),
-                    ..default()
-                },
 
-                fov: FieldOfView(8),
-                vision_component: Vision(vision_type.as_u8()),
-                movement_component: Movement(movement_type.as_u8()),
-                target_visualizer: TargetVisualizer::default(),
+                    fov: FieldOfView(8),
+                    vision_component: Vision(vision_type.as_u8()),
+                    movement_component: Movement(movement_type.as_u8()),
+                    target_visualizer: TargetVisualizer::default(),
+                },
             },
             thinker,
         ))
