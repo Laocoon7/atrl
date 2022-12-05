@@ -1,5 +1,3 @@
-use bevy::utils::tracing::instrument::WithSubscriber;
-
 use crate::prelude::*;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq)]
