@@ -79,7 +79,7 @@ pub fn draw_shape(
 
         let shape = Circle::new(*position, 15u32);
 
-        //let shape = Triangle::new(
+        // let shape = Triangle::new(
         //    position.gridpoint(),
         //    position.gridpoint() + UVec2::new(3, 5),
         //    position.gridpoint() + UVec2::new(3, 2),

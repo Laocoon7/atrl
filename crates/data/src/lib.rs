@@ -422,7 +422,7 @@ pub mod prelude {
 
         // macros
         pub use crate::{
-            impl_new, impl_as_primative, impl_default, insert_resource, remove_resource, spawn_component,
+            impl_as_primative, impl_default, impl_new, insert_resource, remove_resource, spawn_component,
             switch_in_game_state,
         };
     }

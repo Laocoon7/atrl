@@ -29,8 +29,9 @@ pub fn wander_action(
     mut map_manager: MapManager,
     mut ai_context: ResMut<AiContext>,
     mut target_q: Query<&mut TargetVisualizer>,
-    mut action_q: Query<(&Actor, &mut BigBrainActionState, &mut Wander)>, /* TODO: Can these be one query /
-                                                                   * SystemParam? */
+    mut action_q: Query<(&Actor, &mut BigBrainActionState, &mut Wander)>, /* TODO: Can these be one query
+                                                                           * /
+                                                                           * SystemParam? */
     mut spatial_q: Query<(&Position, &Movement, &Name, &mut AIComponent)>, // TODO: Or a ParamSet?
     player_entity: Res<PlayerEntity>,
     q_blocks_movement: Query<&BlocksMovement>,

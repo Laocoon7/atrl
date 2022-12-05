@@ -174,9 +174,7 @@ impl<'w, 's> MapManager<'w, 's> {
 
 // Map Manipulation / General
 impl<'w, 's> MapManager<'w, 's> {
-    pub fn get_current_world_position(&self) -> WorldPosition {
-        self.map_manager.current_map.0.clone()
-    }
+    pub fn get_current_world_position(&self) -> WorldPosition { self.map_manager.current_map.0.clone() }
 
     pub fn set_visibility(&mut self, visibility_map: VisibilityMap) {
         for position in visibility_map.get_all().iter() {
