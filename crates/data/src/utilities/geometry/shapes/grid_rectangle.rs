@@ -19,8 +19,8 @@ impl GridRectangle {
         let min_layer = min.layer().min(max.layer());
         let max_layer = min.layer().max(max.layer());
 
-        let (abs_min_x, abs_min_y, abs_min_z) = min.to_absolute_position();
-        let (abs_max_x, abs_max_y, abs_max_z) = max.to_absolute_position();
+        let (abs_min_x, abs_min_y, abs_min_z) = min.absolute_position();
+        let (abs_max_x, abs_max_y, abs_max_z) = max.absolute_position();
 
         let min_x = abs_min_x.min(abs_max_x);
         let max_x = abs_min_x.max(abs_max_x);
@@ -74,11 +74,11 @@ impl GridRectangle {
     /// Check if this rectangle intersects another rectangle.
     #[inline]
     pub const fn intersects(&self, other: Self) -> bool {
-        let (s_min_x, s_min_y, _s_min_z) = self.min.to_absolute_position();
-        let (s_max_x, s_max_y, _s_max_z) = self.max.to_absolute_position();
+        let (s_min_x, s_min_y, _s_min_z) = self.min.absolute_position();
+        let (s_max_x, s_max_y, _s_max_z) = self.max.absolute_position();
 
-        let (o_min_x, o_min_y, _o_min_z) = other.min.to_absolute_position();
-        let (o_max_x, o_max_y, _o_max_z) = other.max.to_absolute_position();
+        let (o_min_x, o_min_y, _o_min_z) = other.min.absolute_position();
+        let (o_max_x, o_max_y, _o_max_z) = other.max.absolute_position();
         // (self.min.cmple(other.max) & self.max.cmpge(other.min)).all()
         s_min_x <= o_max_x && s_max_x >= o_min_x && s_min_y <= o_max_y && s_max_y >= o_min_y
     }
@@ -96,10 +96,10 @@ impl Shape for GridRectangle {
 
     #[inline]
     fn contains(&self, position: Position) -> bool {
-        let (s_min_x, s_min_y, _s_min_z) = self.min.to_absolute_position();
-        let (s_max_x, s_max_y, _s_max_z) = self.max.to_absolute_position();
+        let (s_min_x, s_min_y, _s_min_z) = self.min.absolute_position();
+        let (s_max_x, s_max_y, _s_max_z) = self.max.absolute_position();
 
-        let (o_x, o_y, _o_z) = position.to_absolute_position();
+        let (o_x, o_y, _o_z) = position.absolute_position();
         s_min_x <= o_x && s_max_x > o_x && s_min_y <= o_y && s_max_y > o_y
     }
 

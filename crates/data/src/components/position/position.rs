@@ -62,8 +62,8 @@ impl Position {
 
     pub fn lerp(&self, other: Self, percent: f32) -> Self {
         let layer = self.layer();
-        let (abs_self_x, abs_self_y, abs_self_z) = self.to_absolute_position();
-        let (abs_other_x, abs_other_y, abs_other_z) = other.to_absolute_position();
+        let (abs_self_x, abs_self_y, abs_self_z) = self.absolute_position();
+        let (abs_other_x, abs_other_y, abs_other_z) = other.absolute_position();
 
         let lerp_x = ((abs_other_x - abs_self_x) as f64).mul_add(percent as f64, abs_self_x as f64) as i64;
         let lerp_y = ((abs_other_y - abs_self_y) as f64).mul_add(percent as f64, abs_self_y as f64) as i64;
@@ -143,13 +143,13 @@ impl Position {
     ///////////////////////////////
     /// Expert
     ///////////////////////////////
-    pub const fn to_absolute_position(&self) -> (i64, i64, i32) {
-        (
-            (self.world_x() * GRID_WIDTH as i32 + self.x() as i32) as i64,
-            (self.world_y() * GRID_HEIGHT as i32 + self.y() as i32) as i64,
-            self.world_z(),
-        )
+    pub const fn absolute_position(&self) -> (i64, i64, i32) {
+        (self.absolute_x(), self.absolute_y(), self.world_z())
     }
+
+    pub const fn absolute_x(&self) -> i64 { self.world_x() as i64 * GRID_WIDTH as i64 + self.x() as i64 }
+
+    pub const fn absolute_y(&self) -> i64 { self.world_y() as i64 * GRID_HEIGHT as i64 + self.y() as i64 }
 
     pub const fn from_absolute_position(absolute_position: (i64, i64, i32), layer: u32) -> Self {
         let world_x = (absolute_position.0 / GRID_WIDTH as i64) as i32;

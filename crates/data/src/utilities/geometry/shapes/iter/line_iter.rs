@@ -11,22 +11,26 @@ impl Octant {
     /// adapted from <http://codereview.stackexchange.com/a/95551>
     #[inline]
     const fn from_points(start: Position, end: Position) -> Self {
-        let mut dx = end.x() as i32 - start.x() as i32;
-        let mut dy = end.y() as i32 - start.y() as i32;
+        let (start_x, start_y, _start_z) = start.absolute_position();
+        let (end_x, end_y, _end_z) = end.absolute_position();
+
+        let mut delta_x = end_x - start_x;
+        let mut delta_y = end_y - start_y;
+
         let mut octant = 0;
 
-        if dy < 0 {
-            dx = -dx;
-            dy = -dy;
+        if delta_y < 0 {
+            delta_x = -delta_x;
+            delta_y = -delta_y;
             octant += 4;
         }
-        if dx < 0 {
-            let tmp = dx;
-            dx = dy;
-            dy = -tmp;
+        if delta_x < 0 {
+            let tmp = delta_x;
+            delta_x = delta_y;
+            delta_y = -tmp;
             octant += 2;
         }
-        if dx < dy {
+        if delta_x < delta_y {
             octant += 1;
         }
 
@@ -34,56 +38,52 @@ impl Octant {
     }
 
     #[inline]
-    fn to_octant(&self, mut p: Position) -> Position {
-        let IVec2 { x, y } = p.gridpoint().as_ivec2();
-        p.set_xy(
-            match self.0 {
-                0 => IVec2::new(x, y),
-                1 => IVec2::new(y, x),
-                2 => IVec2::new(y, -x),
-                3 => IVec2::new(-x, y),
-                4 => IVec2::new(-x, -y),
-                5 => IVec2::new(-y, -x),
-                6 => IVec2::new(-y, x),
-                7 => IVec2::new(x, -y),
-                _ => unreachable!(),
-            }
-            .as_uvec2(),
-        );
-        p
+    fn to_octant(&self, p: Position) -> Position {
+        let (mut x, mut y, z) = p.absolute_position();
+
+        (x, y) = match self.0 {
+            0 => (x, y),
+            1 => (y, x),
+            2 => (y, -x),
+            3 => (-x, y),
+            4 => (-x, -y),
+            5 => (-y, -x),
+            6 => (-y, x),
+            7 => (x, -y),
+            _ => unreachable!(),
+        };
+        Position::from_absolute_position((x, y, z), p.layer())
     }
 
     #[inline]
     #[allow(clippy::wrong_self_convention)]
-    fn from_octant(&self, mut p: Position) -> Position {
-        let IVec2 { x, y } = p.gridpoint().as_ivec2();
-        p.set_xy(
-            match self.0 {
-                0 => IVec2::new(x, y),
-                1 => IVec2::new(y, x),
-                2 => IVec2::new(-y, x),
-                3 => IVec2::new(-x, y),
-                4 => IVec2::new(-x, -y),
-                5 => IVec2::new(-y, -x),
-                6 => IVec2::new(y, -x),
-                7 => IVec2::new(x, -y),
-                _ => unreachable!(),
-            }
-            .as_uvec2(),
-        );
-        p
+    fn from_octant(&self, p: Position) -> Position {
+        let (mut x, mut y, z) = p.absolute_position();
+
+        (x, y) = match self.0 {
+            0 => (x, y),
+            1 => (y, x),
+            2 => (-y, x),
+            3 => (-x, y),
+            4 => (-x, -y),
+            5 => (-y, -x),
+            6 => (y, -x),
+            7 => (x, -y),
+            _ => unreachable!(),
+        };
+        Position::from_absolute_position((x, y, z), p.layer())
     }
 }
 
 /// Line-drawing iterator
 #[derive(Debug, Clone)]
 pub struct BresenhamLineIter {
-    dx: i32,
-    dy: i32,
-    x1: u32,
-    diff: i32,
-    pos: Position,
-    octant: Octant,
+    delta_x: i32,    // sub from step_ratio when step_ratio is 0/positive
+    delta_y: i32,    // add to step_ratio when step_ratio is negative
+    step_ratio: i32, // determines whether we need to move vertical or horizontal next
+    end_x: i64,      // determins whether we have moved far enough
+    pos: Position,   // our current position
+    octant: Octant,  // the direction we are moving
 }
 
 impl BresenhamLineIter {
@@ -91,19 +91,21 @@ impl BresenhamLineIter {
     /// and `end`. Does include `start` but not `end`.
     #[inline]
     pub fn new(start: Position, end: Position) -> Self {
+        let end_x = end.absolute_x();
         let octant = Octant::from_points(start, end);
-        let start = octant.to_octant(start);
-        let end = octant.to_octant(end);
-        let dx = (end.x() - start.x()) as i32;
-        let dy = (end.y() - start.y()) as i32;
+        let start_octant = octant.to_octant(start);
+        let end_octant = octant.to_octant(end);
+
+        let delta_x = end_octant.x() as i32 - start_octant.x() as i32;
+        let delta_y = end_octant.y() as i32 - start_octant.y() as i32;
 
         Self {
-            dx,
-            dy,
+            delta_x,
+            delta_y,
             octant,
-            pos: start,
-            x1: end.x(),
-            diff: dy - dx,
+            pos: start_octant,
+            end_x,
+            step_ratio: delta_y - delta_x,
         }
     }
 
@@ -111,11 +113,11 @@ impl BresenhamLineIter {
     #[inline]
     pub fn advance(&mut self) -> Position {
         let pos = self.pos;
-        if self.diff >= 0 {
-            self.diff -= self.dx;
+        if self.step_ratio >= 0 {
+            self.step_ratio -= self.delta_x;
             self.pos.set_y(self.pos.y() + 1);
         }
-        self.diff += self.dy;
+        self.step_ratio += self.delta_y;
 
         // loop inc
         self.pos.set_x(self.pos.x() + 1);
@@ -128,7 +130,8 @@ impl Iterator for BresenhamLineIter {
 
     #[inline]
     fn next(&mut self) -> Option<Self::Item> {
-        if self.pos.x() >= self.x1 {
+        let abs_x = self.pos.absolute_x();
+        if abs_x >= self.end_x {
             None
         } else {
             Some(self.advance())
@@ -158,7 +161,8 @@ impl Iterator for BresenhamLineInclusiveIter {
 
     #[inline]
     fn next(&mut self) -> Option<Self::Item> {
-        if self.0.pos.x() > self.0.x1 {
+        let (abs_x, _abs_y, _abs_z) = self.0.pos.absolute_position();
+        if abs_x > self.0.end_x {
             None
         } else {
             Some(self.0.advance())
