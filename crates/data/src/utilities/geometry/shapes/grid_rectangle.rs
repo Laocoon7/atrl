@@ -84,7 +84,7 @@ impl GridRectangle {
     /// Calls a function for each x/y point in the rectangle
     pub fn for_each<F>(&self, f: F)
     where F: FnMut(Position) {
-        RectIter::new(self.min, self.max).for_each(f);
+        self.into_iter().for_each(f)
     }
 }
 
@@ -100,18 +100,22 @@ impl Shape for GridRectangle {
         let (o_x, o_y, _o_z) = position.to_absolute_position();
         s_min_x <= o_x && s_max_x > o_x && s_min_y <= o_y && s_max_y > o_y
     }
+
+    /// returns an iterator over all of the points
+    #[inline]
+    fn get_positions(&self) -> HashSet<Position> { self.iter().collect() }
 }
 
 impl IntoIterator for GridRectangle {
-    type IntoIter = RectIter;
-    type Item = IVec2;
+    type IntoIter = GridRectIter;
+    type Item = Position;
 
     #[inline]
-    fn into_iter(self) -> Self::IntoIter { RectIter::new(self.min, self.max) }
+    fn into_iter(self) -> Self::IntoIter { GridRectIter::new(self.min, self.max) }
 }
 
 impl ShapeIter for GridRectangle {
-    type Iterator = RectIter;
+    type Iterator = GridRectIter;
 
     #[inline]
     fn iter(&self) -> Self::Iterator { self.into_iter() }

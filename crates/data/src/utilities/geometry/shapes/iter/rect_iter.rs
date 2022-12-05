@@ -1,6 +1,6 @@
 use crate::prelude::*;
+
 #[derive(Debug, Clone)]
-#[allow(clippy::module_name_repetitions)]
 pub struct RectIter {
     offset: IVec2,
     max_offset: IVec2,
@@ -38,16 +38,7 @@ impl Iterator for RectIter {
         Some(self.min + p)
     }
 }
+
 impl From<Rectangle> for RectIter {
     fn from(rect: Rectangle) -> Self { rect.into_iter() }
 }
-//#[cfg(test)]
-// mod test {
-//    use crate::prelude::*;
-//    #[test]
-//    fn test_rect_iter() {
-//        let rect = Rectangle::new((39i32, 21), (41, 23));
-//        assert_eq!(rect.iter().count(), 9);
-//    }
-//}
-//

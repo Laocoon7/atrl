@@ -290,13 +290,13 @@ mod utilities {
             pub use line::*;
             mod grid_rectangle;
             pub use grid_rectangle::*;
+            mod rectangle;
+            pub use rectangle::*;
             mod triangle;
             pub use triangle::*;
         }
         pub use shapes::*;
 
-        mod rectangle;
-        pub use rectangle::*;
         mod shape;
         pub use shape::*;
         mod shape_iter;

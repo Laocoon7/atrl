@@ -1,10 +1,9 @@
-use std::ops::Sub;
-
 use crate::prelude::*;
+
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq)]
 pub struct Line {
-    start: Position,
     end: Position,
+    start: Position,
 }
 
 impl Line {
@@ -21,6 +20,10 @@ impl Shape for Line {
 
     #[inline]
     fn contains(&self, position: Position) -> bool { self.get_positions().contains(&position) }
+
+    /// returns an iterator over all of the points
+    #[inline]
+    fn get_positions(&self) -> HashSet<Position> { self.iter().collect() }
 }
 
 impl IntoIterator for Line {

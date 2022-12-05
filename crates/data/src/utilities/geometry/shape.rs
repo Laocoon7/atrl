@@ -6,9 +6,12 @@ pub trait Shape: ShapeIter {
     /// returns `true` if the point is inside the shape
     fn contains(&self, point: Position) -> bool;
 
+    // /// returns an iterator over all of the points
+    // #[inline]
+    // fn get_positions(&self) -> HashSet<Position> { self.iter().collect() }
+
     /// returns an iterator over all of the points
-    #[inline]
-    fn get_positions(&self) -> HashSet<Position> { self.iter().collect::<HashSet<Position>>() }
+    fn get_positions(&self) -> HashSet<Position>;
 }
 
 pub trait ShapeWithBorder: Shape {
