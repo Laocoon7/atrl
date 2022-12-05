@@ -11,8 +11,8 @@ impl Octant {
     /// adapted from <http://codereview.stackexchange.com/a/95551>
     #[inline]
     const fn from_points(start: Position, end: Position) -> Self {
-        let mut dx = (end.x() - start.x()) as i32;
-        let mut dy = (end.y() - start.y()) as i32;
+        let mut dx = (end.x() as i32 - start.x() as i32);
+        let mut dy = (end.y() as i32 - start.y() as i32);
         let mut octant = 0;
         if dy < 0 {
             dx = -dx;

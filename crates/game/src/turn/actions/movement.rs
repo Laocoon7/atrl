@@ -49,7 +49,7 @@ pub fn try_move(
                                     movement_component.0,
                                     &q_blocks_movement,
                                 ) {
-                                    from_position.set_xy(destination.gridpoint());
+                                    *from_position = destination;
                                     Ok(())
                                 } else {
                                     info!("{:?} is blocked!", destination);
