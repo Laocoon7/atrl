@@ -44,12 +44,13 @@ impl Circle {
 
 impl Shape for Circle {
     #[inline]
-    // FIX: PERF
+    // FIX: PERF??
     fn get_count(&self) -> u32 { self.get_positions().len() as u32 }
 
     #[inline]
     fn contains(&self, position: Position) -> bool { self.get_positions().contains(&position) }
 
+    // TODO: Move to iter()
     #[inline]
     fn get_positions(&self) -> HashSet<Position> {
         let mut discovered = HashSet::new();
