@@ -1,10 +1,13 @@
 use crate::prelude::*;
+
+#[derive(Clone)]
 pub struct RawPlugin<T> {
     pub state_asset_load: T,
     pub state_construct: T,
     pub state_asset_load_failure: T,
     settings: AssetSettings,
 }
+
 impl<T: StateNext> RawPlugin<T> {
     pub fn new(state_asset_load: T, state_asset_load_failure: T, state_construct: T) -> Self {
         Self {
@@ -34,19 +37,32 @@ impl<T: StateNext> RawPlugin<T> {
         self.settings.font_folder_paths.push(folder.to_string());
         self
     }
+
+    pub fn add_plugins(&self, app: &mut App) {
+        app
+        // bevy_tileset
+        .add_plugin(TilesetPlugin::default())
+        // Progress Tracker
+        .add_plugin(ProgressPlugin::new(self.state_asset_load).continue_to(self.state_construct));
+    }
+
+    pub fn add_resources(&self, app: &mut App) {
+        app
+        .init_resource::<RawMaster>()
+        // hold `Handle<Tileset>`s so they don't get unloaded
+        .insert_resource(LoadedTilesets::new(&self.settings))
+        // hold `Handle<Font>`s so they don't get unloaded
+        .insert_resource(LoadedFonts::new(&self.settings));
+    }
 }
+
 impl<T: StateNext> Plugin for RawPlugin<T> {
     fn build(&self, app: &mut App) {
         let failure_state = self.state_asset_load_failure;
-        app
-            // bevy_tileset
-            .add_plugin(TilesetPlugin::default())
-            // Progress Tracker
-            .add_plugin(ProgressPlugin::new(self.state_asset_load).continue_to(self.state_construct))
-            // hold `Handle<Tileset>`s so they don't get unloaded
-            .insert_resource(LoadedTilesets::new(&self.settings))
-            // hold `Handle<Font>`s so they don't get unloaded
-            .insert_resource(LoadedFonts::new(&self.settings));
+
+        self.add_plugins(app);
+        self.add_resources(app);
+
         // Load Assets
         app.add_enter_system_set(
             self.state_asset_load,

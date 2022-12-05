@@ -5,7 +5,7 @@ use crate::prelude::*;
 //     pub julia_mono_bold: Handle<Font>,
 //     pub julia_mono_medium: Handle<Font>,
 // }
-use crate::prelude::*;
+
 #[derive(Resource)]
 pub struct LoadedFonts {
     pub font_files: Vec<String>,

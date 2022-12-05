@@ -28,6 +28,12 @@ pub enum VisionType {
     Any         = !0,
 }
 
+impl VisionType {
+    pub fn as_u8(self) -> u8 { self.try_into().unwrap_or(Self::None as u8) }
+
+    pub fn from_vec(value: Vec<Self>) -> u8 { value.iter().fold(Self::None.as_u8(), |a, b| a | b.as_u8()) }
+}
+
 impl TryFrom<VisionType> for u8 {
     type Error = String;
 
@@ -39,8 +45,8 @@ impl TryFrom<VisionType> for u8 {
     }
 }
 
-impl VisionType {
-    pub fn as_u8(self) -> u8 { self.try_into().unwrap_or(Self::None as u8) }
+impl From<u8> for VisionType {
+    fn from(value: u8) -> Self { Self::try_from(value).expect("Failed to convert `u8` to `MovementType`") }
 }
 
 impl_as_primative!(VisionType);
