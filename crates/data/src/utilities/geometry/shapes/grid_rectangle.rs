@@ -73,7 +73,7 @@ impl GridRectangle {
 
     /// Check if this rectangle intersects another rectangle.
     #[inline]
-    pub fn intersects(&self, other: Self) -> bool {
+    pub const fn intersects(&self, other: Self) -> bool {
         let (s_min_x, s_min_y, _s_min_z) = self.min.to_absolute_position();
         let (s_max_x, s_max_y, _s_max_z) = self.max.to_absolute_position();
 

@@ -3,9 +3,9 @@ use crate::prelude::*;
 /// MapManager SystemParam used for interacting with the maps.
 #[derive(SystemParam)]
 pub struct MapManager<'w, 's> {
-    map_manager: ResMut<'w, MapManagerResource>,
     commands: Commands<'w, 's>,
     game_context: ResMut<'w, GameContext>,
+    map_manager: ResMut<'w, MapManagerResource>,
 }
 
 // Perform actor functions on maps
@@ -174,7 +174,7 @@ impl<'w, 's> MapManager<'w, 's> {
 
 // Map Manipulation / General
 impl<'w, 's> MapManager<'w, 's> {
-    pub fn get_current_world_position(&self) -> WorldPosition { self.map_manager.current_map.0.clone() }
+    pub fn get_current_world_position(&self) -> WorldPosition { self.map_manager.current_map.0 }
 
     pub fn set_visibility(&mut self, visibility_map: VisibilityMap) {
         for position in visibility_map.get_all().iter() {

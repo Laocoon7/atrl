@@ -39,7 +39,7 @@ impl Default for TargetVisualizer {
 }
 
 impl TargetVisualizer {
-    pub fn new(style: TargetVisualizerStyle, color: Color) -> Self {
+    pub const fn new(style: TargetVisualizerStyle, color: Color) -> Self {
         Self {
             color,
             style,

@@ -275,8 +275,6 @@ mod utilities {
             mod iter {
                 mod line_iter;
                 pub use line_iter::*;
-                mod circle_iter;
-                pub use circle_iter::*;
                 mod grid_rect_iter;
                 pub use grid_rect_iter::*;
                 mod rect_iter;

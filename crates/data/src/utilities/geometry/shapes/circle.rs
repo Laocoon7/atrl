@@ -112,17 +112,8 @@ impl Shape for Circle {
     }
 }
 
-impl IntoIterator for Circle {
-    type IntoIter = BresenhamCircleIter;
-    type Item = Position;
-
-    #[inline]
-    fn into_iter(self) -> Self::IntoIter { BresenhamCircleIter::new(self.center, self.radius) }
-}
-
 impl ShapeIter for Circle {
-    type Iterator = BresenhamCircleIter;
+    type Iterator = bevy::utils::hashbrown::hash_set::IntoIter<Position>;
 
-    #[inline]
-    fn iter(&self) -> Self::Iterator { self.into_iter() }
+    fn iter(&self) -> Self::Iterator { self.get_positions().into_iter() }
 }
