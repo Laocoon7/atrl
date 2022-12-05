@@ -55,8 +55,7 @@ impl<'w, 's> Shadowcast {
     fn scan_recursive(range: u32, quadrant: &mut Quadrant, row: &mut Row) {
         let mut prev_tile = None;
         for tile in row.tiles() {
-            // compare the squares, it's faster!
-            if DistanceAlg::PythagorasSquared.distance2d(IVec2::ZERO, tile) > range.pow(2) as f32 {
+            if quadrant.distance(tile) > range {
                 continue;
             }
 

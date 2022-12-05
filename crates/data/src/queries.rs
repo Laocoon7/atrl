@@ -13,7 +13,7 @@ pub fn entity_in_fov<'w, 's>(
     let distance = current_pos.distance(destination_pos);
     if distance < fov.0 as u32 {
         let mut visibility_map = VisibilityMap::new();
-        let angle = (destination_pos.gridpoint().angle_to(current_pos.gridpoint()) - 180.0).abs();
+        let angle = current_pos.angle_to(destination_pos);
         Fov::ShadowcastDirection(CardinalDirection::from(angle as i32)).compute(
             current_pos,
             vision.0,

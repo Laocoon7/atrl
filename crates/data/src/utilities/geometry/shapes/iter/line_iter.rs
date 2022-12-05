@@ -4,73 +4,14 @@ use crate::prelude::*;
 /// Bresenham Algo
 //////////////////////////////////////////////////////////////////////////////////////////
 
-#[derive(Debug, Clone)]
-struct Octant(u8);
-
-impl Octant {
-    /// adapted from <http://codereview.stackexchange.com/a/95551>
-    #[inline(always)]
-    const fn from_points(start: (i64, i64), end: (i64, i64)) -> Self {
-        let mut dx = end.0 - start.0;
-        let mut dy = end.1 - start.1;
-        let mut octant = 0;
-        if dy < 0 {
-            dx = -dx;
-            dy = -dy;
-            octant += 4;
-        }
-        if dx < 0 {
-            let tmp = dx;
-            dx = dy;
-            dy = -tmp;
-            octant += 2;
-        }
-        if dx < dy {
-            octant += 1;
-        }
-        Self(octant)
-    }
-
-    #[inline(always)]
-    fn to_octant(&self, p: (i64, i64)) -> (i64, i64) {
-        match self.0 {
-            0 => (p.0, p.1),
-            1 => (p.1, p.0),
-            2 => (p.1, -p.0),
-            3 => (-p.0, p.1),
-            4 => (-p.0, -p.1),
-            5 => (-p.1, -p.0),
-            6 => (-p.1, p.0),
-            7 => (p.0, -p.1),
-            _ => unreachable!(),
-        }
-    }
-
-    #[inline(always)]
-    #[allow(clippy::wrong_self_convention)]
-    fn from_octant(&self, p: (i64, i64)) -> (i64, i64) {
-        match self.0 {
-            0 => (p.0, p.1),
-            1 => (p.1, p.0),
-            2 => (-p.1, p.0),
-            3 => (-p.0, p.1),
-            4 => (-p.0, -p.1),
-            5 => (-p.1, -p.0),
-            6 => (p.1, -p.0),
-            7 => (p.0, -p.1),
-            _ => unreachable!(),
-        }
-    }
-}
-
 /// Line-drawing iterator
 #[derive(Debug, Clone)]
 pub struct BresenhamLineIter {
-    x: i64,
-    y: i64,
-    z: i32,
-    x1: i64,
-    diff: i64,
+    abs_x: i64,
+    abs_y: i64,
+    abs_z: i32,
+    end_x: i64,
+    delta_step: i64,
     layer: u32,
     delta_x: i64,
     delta_y: i64,
@@ -82,44 +23,40 @@ impl BresenhamLineIter {
     /// and `end`. Does include `start` but not `end`.
     #[inline]
     pub fn new(start: Position, end: Position) -> Self {
-        let (s_abs_x, s_abs_y, s_abs_z) = start.absolute_position();
-        let (e_abs_x, e_abs_y, _e_abs_z) = end.absolute_position();
+        let octant = start.octant_to(end);
+        let start_offset = octant.to_offset(start);
+        let end_offset = octant.to_offset(end);
 
-        let octant = Octant::from_points((s_abs_x, s_abs_y), (e_abs_x, e_abs_y));
-        let start_octant = octant.to_octant((s_abs_x, s_abs_y));
-        let end_octant = octant.to_octant((e_abs_x, e_abs_y));
-
-        let delta_x = end_octant.0 - start_octant.0;
-        let delta_y = end_octant.1 - start_octant.1;
+        let delta_x = end_offset.0 - start_offset.0;
+        let delta_y = end_offset.1 - start_offset.1;
 
         Self {
             octant,
             delta_x,
             delta_y,
-            z: s_abs_z,
-            x1: end_octant.0,
-            x: start_octant.0,
-            y: start_octant.1,
+            abs_z: start.world_z(),
+            end_x: end_offset.0,
+            abs_x: start_offset.0,
+            abs_y: start_offset.1,
             layer: start.layer(),
-            diff: delta_y - delta_x,
+            delta_step: delta_y - delta_x,
         }
     }
 
     /// Return the next point without checking if we are past `end`.
     #[inline]
     pub fn advance(&mut self) -> Position {
-        let current_point = (self.x, self.y);
-        if self.diff >= 0 {
-            self.y += 1;
-            self.diff -= self.delta_x;
+        let current_point = (self.abs_x, self.abs_y);
+        if self.delta_step >= 0 {
+            self.abs_y += 1;
+            self.delta_step -= self.delta_x;
         }
 
-        self.diff += self.delta_y;
+        self.delta_step += self.delta_y;
 
         // loop inc
-        self.x += 1;
-        let (x, y) = self.octant.from_octant(current_point);
-        Position::from_absolute_position((x, y, self.z), self.layer)
+        self.abs_x += 1;
+        self.octant.from_offset(current_point, self.abs_z, self.layer)
     }
 }
 
@@ -128,7 +65,7 @@ impl Iterator for BresenhamLineIter {
 
     #[inline]
     fn next(&mut self) -> Option<Self::Item> {
-        if self.x >= self.x1 {
+        if self.abs_x >= self.end_x {
             None
         } else {
             Some(self.advance())
@@ -158,7 +95,7 @@ impl Iterator for BresenhamLineInclusiveIter {
 
     #[inline]
     fn next(&mut self) -> Option<Self::Item> {
-        if self.0.x > self.0.x1 {
+        if self.0.abs_x > self.0.end_x {
             None
         } else {
             Some(self.0.advance())

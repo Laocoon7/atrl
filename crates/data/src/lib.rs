@@ -71,10 +71,12 @@ mod components {
     mod position {
         mod local_position;
         pub use local_position::*;
-        mod world_position;
-        pub use world_position::*;
+        mod octant;
+        pub use octant::*;
         mod position;
         pub use position::*;
+        mod world_position;
+        pub use world_position::*;
     }
     pub use position::*;
 
@@ -425,11 +427,22 @@ pub mod prelude {
     pub(crate) use import::*;
 
     mod export {
-        pub use crate::pathfinding::PathFinder; // where's the redundancy lint???
         pub use crate::{
-            actions::*, actors::*, camera::*, components::*, embedded_resource, fov::*, game::*,
-            impl_as_primative, impl_default, impl_new, insert_resource, map_gen::*, pathfinding::*,
-            queries::*, remove_resource, resources::*, spawn_component, switch_in_game_state, utilities::*,
+            actions::*,
+            actors::*,
+            camera::*,
+            components::*,
+            embedded_resource,
+            fov::*,
+            game::*,
+            impl_as_primative, impl_default, impl_new, insert_resource,
+            map_gen::*,
+            pathfinding::{PathFinder, *},
+            queries::*,
+            remove_resource,
+            resources::*,
+            spawn_component, switch_in_game_state,
+            utilities::*,
         };
     }
     pub use export::*;

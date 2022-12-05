@@ -60,6 +60,16 @@ impl Position {
             .unsigned_abs()
     }
 
+    pub fn octant_to(&self, other: Self) -> Octant {
+        
+    }
+
+    pub fn angle_to(&self, other: Self) -> f64 {
+        let x = (other.absolute_x() - self.absolute_x()) as f64;
+        let y = (other.absolute_y() - self.absolute_y()) as f64;
+        y.atan2(x).to_degrees()
+    }
+
     pub fn lerp(&self, other: Self, percent: f32) -> Self {
         let layer = self.layer();
         let (abs_self_x, abs_self_y, abs_self_z) = self.absolute_position();

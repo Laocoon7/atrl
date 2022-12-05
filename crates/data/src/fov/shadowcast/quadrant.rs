@@ -27,22 +27,33 @@ impl<'a, 'w, 's> Quadrant<'a, 'w, 's> {
     }
 
     // adjust the transform based on which direction we are scanning
-    fn transform(&self, tile: IVec2) -> Position {
-        let offset = match self.direction {
+    fn transform(&self, tile: IVec2) -> IVec2 {
+        match self.direction {
             CardinalDirection::North => IVec2::new(tile.y, -tile.x),
             CardinalDirection::South => IVec2::new(tile.y, tile.x),
             CardinalDirection::East => IVec2::new(tile.x, tile.y),
             CardinalDirection::West => IVec2::new(-tile.x, tile.y),
-        };
-        self.origin + offset
+        }
+    }
+
+    pub fn distance(&self, tile: IVec2) -> u32 {
+        // we don't care about position, so no need to transform the tile
+        let end = self.origin + tile;
+        self.origin.distance(end)
     }
 
     // mark this tile as visible
-    pub fn set_visible(&mut self, tile: IVec2) { self.receiver.set_visible(self.transform(tile)); }
+    pub fn set_visible(&mut self, tile: IVec2) {
+        self.receiver.set_visible(self.origin + self.transform(tile));
+    }
 
     // check if this tile is opaque
     pub fn is_opaque(&mut self, tile: IVec2) -> bool {
-        self.provider.is_opaque(self.transform(tile), self.vision, self.q_blocks_vision)
+        self.provider.is_opaque(
+            self.origin + self.transform(tile),
+            self.vision,
+            self.q_blocks_vision,
+        )
     }
 
     pub fn is_clear(&mut self, tile: IVec2) -> bool { !self.is_opaque(tile) }
