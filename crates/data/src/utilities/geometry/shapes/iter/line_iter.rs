@@ -9,8 +9,8 @@ struct Octant(u8);
 
 impl Octant {
     /// adapted from <http://codereview.stackexchange.com/a/95551>
-    #[inline]
-    fn from_points(start: (i64, i64), end: (i64, i64)) -> Self {
+    #[inline(always)]
+    const fn from_points(start: (i64, i64), end: (i64, i64)) -> Self {
         let mut dx = end.0 - start.0;
         let mut dy = end.1 - start.1;
         let mut octant = 0;
@@ -31,7 +31,7 @@ impl Octant {
         Self(octant)
     }
 
-    #[inline]
+    #[inline(always)]
     fn to_octant(&self, p: (i64, i64)) -> (i64, i64) {
         match self.0 {
             0 => (p.0, p.1),
@@ -46,7 +46,7 @@ impl Octant {
         }
     }
 
-    #[inline]
+    #[inline(always)]
     #[allow(clippy::wrong_self_convention)]
     fn from_octant(&self, p: (i64, i64)) -> (i64, i64) {
         match self.0 {
@@ -69,11 +69,11 @@ pub struct BresenhamLineIter {
     x: i64,
     y: i64,
     z: i32,
+    x1: i64,
+    diff: i64,
     layer: u32,
     delta_x: i64,
     delta_y: i64,
-    x1: i64,
-    diff: i64,
     octant: Octant,
 }
 
@@ -93,15 +93,15 @@ impl BresenhamLineIter {
         let delta_y = end_octant.1 - start_octant.1;
 
         Self {
-            x: start_octant.0,
-            y: start_octant.1,
-            z: s_abs_z,
-            layer: start.layer(),
+            octant,
             delta_x,
             delta_y,
+            z: s_abs_z,
             x1: end_octant.0,
+            x: start_octant.0,
+            y: start_octant.1,
+            layer: start.layer(),
             diff: delta_y - delta_x,
-            octant,
         }
     }
 
@@ -113,11 +113,12 @@ impl BresenhamLineIter {
             self.y += 1;
             self.diff -= self.delta_x;
         }
+
         self.diff += self.delta_y;
+
         // loop inc
         self.x += 1;
         let (x, y) = self.octant.from_octant(current_point);
-
         Position::from_absolute_position((x, y, self.z), self.layer)
     }
 }
