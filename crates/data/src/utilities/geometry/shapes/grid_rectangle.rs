@@ -80,11 +80,16 @@ impl GridRectangle {
     /// Check if this rectangle intersects another rectangle.
     #[inline]
     pub const fn intersects(&self, other: Self) -> bool {
+        let (s_min_x, s_min_y, _s_min_z) = self.min.to_absolute_position();
+        let (s_max_x, s_max_y, _s_max_z) = self.max.to_absolute_position();
+
+        let (o_min_x, o_min_y, _o_min_z) = other.min.to_absolute_position();
+        let (o_max_x, o_max_y, _o_max_z) = other.max.to_absolute_position();
         // (self.min.cmple(other.max) & self.max.cmpge(other.min)).all()
-        self.min.x <= other.max.x &&
-            self.max.x >= other.min.x &&
-            self.min.y <= other.max.y &&
-            self.max.y >= other.min.y
+        s_min_x <= o_max_x &&
+            s_max_x >= o_min_x &&
+            s_min_y <= o_max_y &&
+            s_max_y >= o_min_y
     }
 
     /// Calls a function for each x/y point in the rectangle
@@ -100,18 +105,11 @@ impl Shape for GridRectangle {
 
     #[inline]
     fn contains(&self, position: Position) -> bool {
-        self.min.x <= position.x() && self.max.x > position.x() && self.min.y <= position.y() && self.max.y > position.y()
-    }
+        let (s_min_x, s_min_y, _s_min_z) = self.min.to_absolute_position();
+        let (s_max_x, s_max_y, _s_max_z) = self.max.to_absolute_position();
 
-    #[inline]
-    fn get_positions(&self) -> HashSet<Position> {
-        let mut result = HashSet::new();
-        for y in self.min.y..self.max.y {
-            for x in self.min.x..self.max.x {
-                result.insert(IVec2::new(x, y));
-            }
-        }
-        result
+        let (o_x, o_y, _o_z) = position.to_absolute_position();
+        s_min_x <= o_x && s_max_x > o_x && s_min_y <= o_y && s_max_y > o_y
     }
 }
 

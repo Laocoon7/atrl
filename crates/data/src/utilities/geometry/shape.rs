@@ -1,5 +1,5 @@
 use crate::prelude::*;
-pub trait Shape {
+pub trait Shape: Iterator<Item = Position> {
     /// returns the number of points in the shape
     fn get_count(&self) -> u32;
 
@@ -7,7 +7,8 @@ pub trait Shape {
     fn contains(&self, point: Position) -> bool;
 
     /// returns an iterator over all of the points
-    fn get_positions(&self) -> HashSet<Position>;
+    #[inline]
+    fn get_positions(&self) -> HashSet<Position> { self.iter().collect::<HashSet<Position>>() }
 }
 
 pub trait ShapeWithBorder: Shape {
