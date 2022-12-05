@@ -127,7 +127,7 @@ fn generate_wander_path(
 
     loop {
         // Default to the circle center
-        let destination = positions.iter().choose(rng).unwrap_or_else(|| &ai_pos);
+        let destination = positions.iter().choose(rng).unwrap_or(&ai_pos);
         if map.can_place_actor(*destination, movement_type, q_blocks_movement) {
             return *destination;
         }
