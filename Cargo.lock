@@ -249,6 +249,7 @@ dependencies = [
  "index_list",
  "iyes_loopless",
  "leafwing-input-manager",
+ "line_drawing",
  "noise",
  "num-derive",
  "num-traits",
@@ -2903,6 +2904,15 @@ checksum = "3c8469b4a23b962c1396b9b451dda50ef5b283e8dd309d69033475fa9b334324"
 dependencies = [
  "libc",
  "pkg-config",
+]
+
+[[package]]
+name = "line_drawing"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3d1478a313008a3e6c8149995e90a99ee9094034b5c5c3da1eeb81183cb61d1d"
+dependencies = [
+ "num-traits",
 ]
 
 [[package]]

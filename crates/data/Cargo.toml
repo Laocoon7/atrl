@@ -35,3 +35,5 @@ rand        = { workspace = true }
 rand_pcg    = { workspace = true }
 rand_seeder = { workspace = true }
 xxhash-rust = { workspace = true }
+
+line_drawing = "1"

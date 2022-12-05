@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use crate::prelude::*;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq)]

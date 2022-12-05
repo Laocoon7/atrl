@@ -20,16 +20,16 @@ impl Circle {
     pub const fn center(&self) -> Position { self.center }
 
     #[inline]
-    pub const fn left(&self) -> Position { self.center - IVec2::new(self.radius as i32, 0) }
+    pub fn left(&self) -> Position { self.center - IVec2::new(self.radius as i32, 0) }
 
     #[inline]
-    pub const fn right(&self) -> Position { self.center + IVec2::new(self.radius as i32, 0) }
+    pub fn right(&self) -> Position { self.center + IVec2::new(self.radius as i32, 0) }
 
     #[inline]
-    pub const fn top(&self) -> Position { self.center + IVec2::new(0, self.radius as i32) }
+    pub fn top(&self) -> Position { self.center + IVec2::new(0, self.radius as i32) }
 
     #[inline]
-    pub const fn bottom(&self) -> Position { self.center + IVec2::new(0, self.radius as i32) }
+    pub fn bottom(&self) -> Position { self.center + IVec2::new(0, self.radius as i32) }
 
     #[inline]
     pub fn as_horizontal_line(&self) -> Line { Line::new(self.left(), self.right()) }
@@ -114,10 +114,10 @@ impl Shape for Circle {
 
 impl IntoIterator for Circle {
     type IntoIter = BresenhamCircleIter;
-    type Item = IVec2;
+    type Item = Position;
 
     #[inline]
-    fn into_iter(self) -> Self::IntoIter { BresenhamCircleIter::new(self.center, self.radius as i32) }
+    fn into_iter(self) -> Self::IntoIter { BresenhamCircleIter::new(self.center, self.radius) }
 }
 
 impl ShapeIter for Circle {

@@ -6,7 +6,7 @@ pub struct Triangle {
     point2: Position,
 }
 impl Triangle {
-    pub fn new(start: Position, point1: Position, point2: Position) -> Self {
+    pub const fn new(start: Position, point1: Position, point2: Position) -> Self {
         Self {
             start,
             point1,

@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use crate::prelude::*;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq)]
@@ -50,7 +52,7 @@ impl GridRectangle {
     pub const fn max(&self) -> Position { self.max }
 
     #[inline]
-    pub fn is_square(&self) -> bool { self.width() == self.height() }
+    pub const fn is_square(&self) -> bool { self.width() == self.height() }
 }
 
 impl GridRectangle {
@@ -71,7 +73,7 @@ impl GridRectangle {
 
     /// Check if this rectangle intersects another rectangle.
     #[inline]
-    pub const fn intersects(&self, other: Self) -> bool {
+    pub fn intersects(&self, other: Self) -> bool {
         let (s_min_x, s_min_y, _s_min_z) = self.min.to_absolute_position();
         let (s_max_x, s_max_y, _s_max_z) = self.max.to_absolute_position();
 

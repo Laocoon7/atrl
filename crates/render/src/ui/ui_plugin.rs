@@ -1,4 +1,7 @@
+use atrl_data::spawn_component;
+
 use crate::prelude::*;
+
 #[derive(Component)]
 pub struct UICamera;
 pub struct UiPlugin<T: StateNext> {
