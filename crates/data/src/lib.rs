@@ -421,9 +421,8 @@ pub mod prelude {
         pub use xxhash_rust::xxh3::*;
 
         // macros
-        pub use crate::impl_new;
         pub use crate::{
-            impl_as_primative, impl_default, insert_resource, remove_resource, spawn_component,
+            impl_new, impl_as_primative, impl_default, insert_resource, remove_resource, spawn_component,
             switch_in_game_state,
         };
     }

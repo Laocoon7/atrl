@@ -77,13 +77,13 @@ pub fn draw_shape(
         //    position.gridpoint() + UVec2::new(7, 10),
         //);
 
-        // let shape = Circle::new(position.gridpoint(), 15u32);
+        let shape = Circle::new(*position, 15u32);
 
-        let shape = Triangle::new(
-            position.gridpoint(),
-            position.gridpoint() + UVec2::new(3, 5),
-            position.gridpoint() + UVec2::new(3, 2),
-        );
+        //let shape = Triangle::new(
+        //    position.gridpoint(),
+        //    position.gridpoint() + UVec2::new(3, 5),
+        //    position.gridpoint() + UVec2::new(3, 2),
+        //);
 
         // let shape = Rectangle::new(
         //     position.gridpoint(),
@@ -99,11 +99,7 @@ pub fn draw_shape(
                     index: TILE_UI_CURSOR_CURSOR_ID,
                     ..Default::default()
                 },
-                transform: Transform::from_translation(Vec3::new(
-                    point.x as f32 + 0.5,
-                    point.y as f32 + 0.5,
-                    f32::from(MapLayer::UI),
-                )),
+                transform: Transform::from_translation(point.translation()),
                 ..Default::default()
             });
         }

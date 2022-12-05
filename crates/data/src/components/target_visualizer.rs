@@ -54,13 +54,13 @@ impl TargetVisualizer {
         commands: &mut Commands,
         map_manager: &MapManager,
         tilesets: &Tilesets,
-        start: &mut Position,
-        end: &mut Position,
+        mut start: Position,
+        mut end: Position,
     ) {
         start.set_layer(MapLayer::UI as u32);
         end.set_layer(MapLayer::UI as u32);
-        self.start = Some(*start);
-        self.end = Some(*end);
+        self.start = Some(start);
+        self.end = Some(end);
 
         // TODO: reuse entities updating position...
         let Some(tileset) = tilesets.get_by_id(&TILESET_UI_ID) else {
@@ -69,7 +69,7 @@ impl TargetVisualizer {
         };
 
         self.clear(commands);
-        let line = Line::new(*start, *end);
+        let line = Line::new(start, end);
         for position in line.iter() {
             if position.get_world_position() == map_manager.get_current_world_position() {
                 self.entity_list.push((

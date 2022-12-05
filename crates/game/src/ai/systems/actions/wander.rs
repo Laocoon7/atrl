@@ -1,9 +1,5 @@
 use std::{collections::VecDeque, ops::RangeInclusive};
 
-use bevy::render::once_cell::sync::Lazy;
-use big_brain::actions::ActionState;
-use rand::distributions::Uniform;
-
 use crate::prelude::*;
 
 static WANDER_RANGE: Lazy<Uniform<u32>> = Lazy::new(|| Uniform::new_inclusive(3, 10));
@@ -33,13 +29,13 @@ pub fn wander_action(
     mut map_manager: MapManager,
     mut ai_context: ResMut<AiContext>,
     mut target_q: Query<&mut TargetVisualizer>,
-    mut action_q: Query<(&Actor, &mut ActionState, &mut Wander)>, /* TODO: Can these be one query /
+    mut action_q: Query<(&Actor, &mut BigBrainActionState, &mut Wander)>, /* TODO: Can these be one query /
                                                                    * SystemParam? */
     mut spatial_q: Query<(&Position, &Movement, &Name, &mut AIComponent)>, // TODO: Or a ParamSet?
     player_entity: Res<PlayerEntity>,
     q_blocks_movement: Query<&BlocksMovement>,
 ) {
-    use ActionState::*;
+    use BigBrainActionState::*;
 
     for (Actor(actor), mut action_state, mut wander) in action_q.iter_mut() {
         // don't work on the player...
@@ -133,12 +129,11 @@ fn generate_wander_path(
     q_blocks_movement: &Query<&BlocksMovement>,
 ) -> Position {
     let wander_radius = WANDER_RANGE.sample(rng);
-    let wander_circle = Circle::new((0u32, 0), wander_radius);
+    let wander_circle = Circle::new(ai_pos, wander_radius);
 
     loop {
         // Default to the circle center
-        let offset = wander_circle.iter().choose(rng).unwrap_or_else(|| wander_circle.center());
-        let destination = ai_pos + offset;
+        let destination = wander_circle.iter().choose(rng).unwrap_or_else(|| wander_circle.center());
         if map.can_place_actor(destination, movement_type, q_blocks_movement) {
             return destination;
         }

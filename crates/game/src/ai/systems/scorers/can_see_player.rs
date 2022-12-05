@@ -1,9 +1,5 @@
-use std::f32::consts::PI;
-
-use atrl_common::prelude::grid_shapes::GridShape;
-use num_traits::real::Real;
-
 use crate::prelude::*;
+
 #[derive(Clone, Component, Debug)]
 pub struct CanSeePlayer {
     pub score_if_true: f32,
