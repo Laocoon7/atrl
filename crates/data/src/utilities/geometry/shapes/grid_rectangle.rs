@@ -11,12 +11,34 @@ pub struct GridRectangle {
 impl GridRectangle {
     #[inline]
     pub fn new(min: Position, max: Position) -> Self {
-        let min = min;
-        let max = max;
+        let (min, max) = Self::find_min_max(min, max);
         Self {
-            min: min.min(max),
-            max: min.max(max),
+            min,
+            max,
         }
+    }
+
+    fn find_min_max(min: Position, max: Position) -> (Position, Position) {
+        let min_layer = min.layer().min(max.layer());
+        let max_layer = min.layer().max(max.layer());
+
+        let (abs_min_x, abs_min_y, abs_min_z) = min.to_absolute_position();
+        let (abs_max_x, abs_max_y, abs_max_z) = max.to_absolute_position();
+
+        let min_x = abs_min_x.min(abs_max_x);
+        let max_x = abs_min_x.max(abs_max_x);
+
+        let min_y = abs_min_y.min(abs_max_y);
+        let max_y = abs_min_y.max(abs_max_y);
+
+        let min_z = abs_min_z.min(abs_max_z);
+        let max_z = abs_min_z.max(abs_max_z);
+
+        (
+            Position::from_absolute_position((min_x, min_y, min_z), min_layer),
+            Position::from_absolute_position((max_x, max_y, max_z), max_layer),
+        )
+
     }
 }
 
@@ -28,10 +50,10 @@ impl GridRectangle {
     pub const fn height(&self) -> u32 { self.max.y() - self.min.y() }
 
     #[inline]
-    pub const fn min(&self) -> IVec2 { self.min }
+    pub const fn min(&self) -> Position { self.min }
 
     #[inline]
-    pub const fn max(&self) -> IVec2 { self.max }
+    pub const fn max(&self) -> Position { self.max }
 
     #[inline]
     pub fn is_square(&self) -> bool {
@@ -44,16 +66,16 @@ impl GridRectangle {
     fn center(&self) -> Position { self.min.lerp(self.max, 0.5) }
 
     #[inline]
-    fn left(&self) -> Position { self.center() }
+    fn left(&self) -> Position { self.center() - IVec2::new((self.width() / 2) as i32, 0) }
 
     #[inline]
-    fn right(&self) -> Position { self.center() }
+    fn right(&self) -> Position { self.center() + IVec2::new((self.width() / 2) as i32, 0) }
 
     #[inline]
-    fn top(&self) -> Position { self.center() }
+    fn top(&self) -> Position { self.center() + IVec2::new(0, (self.height() / 2) as i32) }
 
     #[inline]
-    fn bottom(&self) -> Position { self.center() }
+    fn bottom(&self) -> Position { self.center() - IVec2::new(0, (self.height() / 2) as i32) }
 
     /// Check if this rectangle intersects another rectangle.
     #[inline]
@@ -74,7 +96,7 @@ impl GridRectangle {
 
 impl Shape for GridRectangle {
     #[inline]
-    fn get_count(&self) -> u32 { self.get_positions().len() as u32 }
+    fn get_count(&self) -> u32 { self.width() * self.height() }
 
     #[inline]
     fn contains(&self, position: Position) -> bool {

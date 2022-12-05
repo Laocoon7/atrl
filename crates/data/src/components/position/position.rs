@@ -117,9 +117,9 @@ impl Position {
     pub fn set_world_xyz(&mut self, value: IVec3) { self.world_position.set_xyz(value.x, value.y, value.z); }
 
     ///////////////////////////////
-    /// Internal
+    /// Expert
     ///////////////////////////////
-    fn to_absolute_position(&self) -> (i64, i64, i32) {
+    pub fn to_absolute_position(&self) -> (i64, i64, i32) {
         (
             (self.world_x() * GRID_WIDTH as i32 + self.x() as i32) as i64,
             (self.world_y() * GRID_HEIGHT as i32 + self.y() as i32) as i64,
@@ -127,7 +127,7 @@ impl Position {
         )
     }
 
-    fn from_absolute_position(absolute_position: (i64, i64, i32), layer: u32) -> Self {
+    pub fn from_absolute_position(absolute_position: (i64, i64, i32), layer: u32) -> Self {
         let world_x = (absolute_position.0 / GRID_WIDTH as i64) as i32;
         let world_y = (absolute_position.1 / GRID_HEIGHT as i64) as i32;
         let world_z = absolute_position.2;
