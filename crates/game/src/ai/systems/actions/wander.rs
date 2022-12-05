@@ -28,22 +28,14 @@ pub fn wander_action(
     mut commands: Commands,
     mut map_manager: MapManager,
     mut ai_context: ResMut<AiContext>,
-    mut target_q: Query<&mut TargetVisualizer>,
-    mut action_q: Query<(&Actor, &mut BigBrainActionState, &mut Wander)>, /* TODO: Can these be one query
-                                                                           * /
-                                                                           * SystemParam? */
-    mut spatial_q: Query<(&Position, &Movement, &Name, &mut AIComponent)>, // TODO: Or a ParamSet?
-    player_entity: Res<PlayerEntity>,
     q_blocks_movement: Query<&BlocksMovement>,
+    mut target_q: Query<&mut TargetVisualizer>,
+    mut action_q: Query<(&Actor, &mut BigBrainActionState, &mut Wander)>,
+    mut spatial_q: Query<(&Position, &Movement, &Name, &mut AIComponent)>,
 ) {
     use BigBrainActionState::*;
 
     for (Actor(actor), mut action_state, mut wander) in action_q.iter_mut() {
-        // don't work on the player...
-        if *actor == player_entity.current() {
-            return;
-        }
-
         // TODO: This is currently using the general game rng?
         // Should AI have it's own rng?
         let rng = ai_context.random.prng.as_rngcore();

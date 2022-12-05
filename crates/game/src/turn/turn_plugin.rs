@@ -8,7 +8,8 @@ pub struct ProccessTurnsPlugin<T> {
 
 impl<T: StateNext> ProccessTurnsPlugin<T> {
     fn setup_turn_stages(self, app: &mut App) -> Self {
-        app.add_stage_after(
+        use CoreStage::*;
+        app.add_stage_after(PreUpdate, AtrlStage::AIThinking, SystemStage::parallel()).add_stage_after(
             AtrlStage::AIThinking,
             AtrlStage::ProcessTurns,
             SystemStage::parallel(),
@@ -20,6 +21,10 @@ impl<T: StateNext> ProccessTurnsPlugin<T> {
         app
         // Player
         .add_plugin(PlayerPlugin {
+            state_running: self.state_running,
+        })
+        // AI
+        .add_plugin(AIPlugin {
             state_running: self.state_running,
         });
         self

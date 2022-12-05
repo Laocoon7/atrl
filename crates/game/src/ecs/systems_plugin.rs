@@ -18,15 +18,12 @@ impl<T: StateNext> SystemsPlugin<T> {
 
 impl<T: StateNext> Plugin for SystemsPlugin<T> {
     fn build(&self, app: &mut App) {
-        app
-            // AI
-            .add_plugin(AIPlugin {
-                state_running: self.state_running,
-            }).add_plugin(ProccessTurnsPlugin {
-                state_running: self.state_running,
-            }).add_plugin(ProccessEventsPlugin {
-                state_running: self.state_running,
-            });
+        app.add_plugin(ProccessTurnsPlugin {
+            state_running: self.state_running,
+        })
+        .add_plugin(ProccessEventsPlugin {
+            state_running: self.state_running,
+        });
 
         self.setup_startup_systems(app);
 
