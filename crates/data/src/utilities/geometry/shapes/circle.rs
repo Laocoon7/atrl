@@ -17,28 +17,28 @@ impl Circle {
 
 impl Circle {
     #[inline]
-    pub const fn center(&self) -> IVec2 { self.center }
+    pub const fn center(&self) -> Position { self.center }
 
     #[inline]
-    pub const fn left(&self) -> i32 { self.center.x - self.radius as i32 }
+    pub const fn left(&self) -> Position { self.center - IVec2::new(self.radius as i32, 0) }
 
     #[inline]
-    pub const fn right(&self) -> i32 { self.center.x + self.radius as i32 }
+    pub const fn right(&self) -> Position { self.center + IVec2::new(self.radius as i32, 0) }
 
     #[inline]
-    pub const fn top(&self) -> i32 { self.center.y - self.radius as i32 }
+    pub const fn top(&self) -> Position { self.center + IVec2::new(0, self.radius as i32) }
 
     #[inline]
-    pub const fn bottom(&self) -> i32 { self.center.y + self.radius as i32 }
+    pub const fn bottom(&self) -> Position { self.center + IVec2::new(0, self.radius as i32) }
 
     #[inline]
     pub fn as_horizontal_line(&self) -> Line {
-        Line::new((self.left(), self.center.y), (self.right(), self.center.y))
+        Line::new(self.left(), self.right())
     }
 
     #[inline]
     pub fn as_vertical_line(&self) -> Line {
-        Line::new((self.center.x, self.bottom()), (self.center.x, self.top()))
+        Line::new(self.bottom(), self.top())
     }
 }
 
@@ -57,35 +57,34 @@ impl Shape for Circle {
         let mut x = 0;
         let mut y = self.radius as i32;
 
+        let mut start;
+        let mut end;
+        let mut line;
         loop {
-            let line = Line::new(
-                (self.center.x + x, self.center.y + y),
-                (self.center.x + x, self.center.y - y),
-            );
+            let start = self.center + IVec2::new(x, y);
+            end = self.center + IVec2::new(x, -y);
+            line = Line::new(start, end);
             for point in line.get_positions() {
                 discovered.insert(point);
             }
-
-            let line = Line::new(
-                (self.center.x - x, self.center.y + y),
-                (self.center.x - x, self.center.y - y),
-            );
+            
+            start = self.center + IVec2::new(-x, y);
+            end = self.center + IVec2::new(-x, -y);
+            line = Line::new(start, end);
             for point in line.get_positions() {
                 discovered.insert(point);
             }
-
-            let line = Line::new(
-                (self.center.x + y, self.center.y + x),
-                (self.center.x + y, self.center.y - x),
-            );
+            
+            start = self.center + IVec2::new(y, x);
+            end = self.center + IVec2::new(y, -x);
+            line = Line::new(start, end);
             for point in line.get_positions() {
                 discovered.insert(point);
             }
-
-            let line = Line::new(
-                (self.center.x - y, self.center.y + x),
-                (self.center.x - y, self.center.y - x),
-            );
+            
+            start = self.center + IVec2::new(-y, x);
+            end = self.center + IVec2::new(-y, -x);
+            line = Line::new(start, end);
             for point in line.get_positions() {
                 discovered.insert(point);
             }
