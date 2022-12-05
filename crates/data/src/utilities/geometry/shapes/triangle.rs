@@ -8,25 +8,14 @@ pub struct Triangle {
 impl Triangle {
     pub fn new(start: Position, point1: Position, point2: Position) -> Self {
         Self {
-            start: start.as_ivec2(),
-            point1: point1.as_ivec2(),
-            point2: point2.as_ivec2(),
+            start: start,
+            point1: point1,
+            point2: point2,
         }
     }
 }
 
 impl Shape for Triangle {
-    // TODO: check for bugs, this is just a quick implementation I thought of.
-    fn get_positions(&self) -> HashSet<Position> {
-        let mut discovered = HashSet::new();
-        for end_point in Line::new(self.point1, self.point2).get_positions() {
-            for current_point in Line::new(self.start, end_point) {
-                discovered.insert(current_point);
-            }
-        }
-        discovered
-    }
-
     fn contains(&self, position: Position) -> bool { self.get_positions().contains(&position) }
 
     // FIX: PERF
