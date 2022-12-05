@@ -25,7 +25,6 @@ pub fn entity_in_fov<'w, 's>(
         );
 
         let is_visible = visibility_map.get_visible(destination_pos);
-        println!("Player in the {} is visible: {}", direction, is_visible);
         is_visible
     } else {
         false
