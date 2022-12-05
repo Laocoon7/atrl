@@ -69,8 +69,6 @@ pub fn attack_action(
         }
 
         if in_attack_range(*ai_position, player_position) {
-            println!("{} is in attack range!", name);
-            // *action_state = ActionState::Success;
             ai_component.preferred_action = Some(ActionType::Attack(player_position));
         } else {
             *action_state = ActionState::Failure;
