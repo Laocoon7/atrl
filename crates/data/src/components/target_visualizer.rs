@@ -49,11 +49,18 @@ impl TargetVisualizer {
         }
     }
 
-    pub fn update(&mut self, commands: &mut Commands, map_manager: &MapManager, tilesets: &Tilesets, start: Position, end: Position) {
+    pub fn update(
+        &mut self,
+        commands: &mut Commands,
+        map_manager: &MapManager,
+        tilesets: &Tilesets,
+        start: &mut Position,
+        end: &mut Position,
+    ) {
         start.set_layer(MapLayer::UI as u32);
         end.set_layer(MapLayer::UI as u32);
-        self.start = Some(start);
-        self.end = Some(end);
+        self.start = Some(*start);
+        self.end = Some(*end);
 
         // TODO: reuse entities updating position...
         let Some(tileset) = tilesets.get_by_id(&TILESET_UI_ID) else {
@@ -62,8 +69,8 @@ impl TargetVisualizer {
         };
 
         self.clear(commands);
-        let line = grid_shapes::Line::new(start, end);
-        for position: Position in line.iter() {
+        let line = Line::new(*start, *end);
+        for position in line.iter() {
             if position.get_world_position() == map_manager.get_current_world_position() {
                 self.entity_list.push((
                     position,
@@ -71,7 +78,7 @@ impl TargetVisualizer {
                         .spawn(SpriteSheetBundle {
                             sprite: TextureAtlasSprite {
                                 color: self.color,
-                                index: usize::from(self.style),
+                                index: self.style.into(),
                                 custom_size: Some(Vec2::ONE),
                                 ..Default::default()
                             },
@@ -82,7 +89,6 @@ impl TargetVisualizer {
                         .id(),
                 ));
             }
-
         }
     }
 

@@ -28,7 +28,7 @@ impl Canvas {
 
         let chars: Vec<_> = self.string.replace(' ', ".").chars().collect();
         for (i, line) in chars.chunks(self.size.x as usize).enumerate() {
-            println!("{} {}", i, String::from_iter(line.iter()));
+            println!("{:>2} {}", i, String::from_iter(line.iter()));
         }
     }
 }

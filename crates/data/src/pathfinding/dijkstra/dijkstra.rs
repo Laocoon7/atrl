@@ -50,7 +50,7 @@ impl PathAlgorithm for Dijkstras {
 
 impl Dijkstras {
     pub fn neighbors(
-        provider: &impl PathProvider,
+        provider: &mut impl PathProvider,
         movement_type: u8,
         position: &Position,
         q_blocks_movement: &Query<&BlocksMovement>,

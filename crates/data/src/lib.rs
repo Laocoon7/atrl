@@ -271,11 +271,6 @@ mod utilities {
         }
         pub use math::*;
 
-        pub mod grid_shapes {
-            
-        }
-        pub use grid_shapes::*;
-
         mod shapes {
             mod iter {
                 mod line_iter;

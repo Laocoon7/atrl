@@ -7,21 +7,10 @@ use crate::prelude::*;
 #[derive(Debug, Clone)]
 struct Octant(u8);
 
-/// Line-drawing iterator
-#[derive(Debug, Clone)]
-pub struct BresenhamLineIter {
-    dx: i32,
-    dy: i32,
-    x1: u32,
-    diff: i32,
-    octant: Octant,
-    pos: Position,
-}
-
 impl Octant {
     /// adapted from <http://codereview.stackexchange.com/a/95551>
     #[inline]
-    fn from_points(start: Position, end: Position) -> Self {
+    const fn from_points(start: Position, end: Position) -> Self {
         let mut dx = (end.x() - start.x()) as i32;
         let mut dy = (end.y() - start.y()) as i32;
         let mut octant = 0;
@@ -43,43 +32,56 @@ impl Octant {
     }
 
     #[inline]
-    fn to_octant(&self, p: Position) -> Position {
+    fn to_octant(&self, mut p: Position) -> Position {
         let IVec2 { x, y } = p.gridpoint().as_ivec2();
-        let new_lp = match self.0 {
-            0 => IVec2::new(x, y),
-            1 => IVec2::new(y, x),
-            2 => IVec2::new(y, -x),
-            3 => IVec2::new(-x, y),
-            4 => IVec2::new(-x, -y),
-            5 => IVec2::new(-y, -x),
-            6 => IVec2::new(-y, x),
-            7 => IVec2::new(x, -y),
-            _ => unreachable!(),
-        };
-
-        p.set_xy(new_lp.as_uvec2());
+        p.set_xy(
+            match self.0 {
+                0 => IVec2::new(x, y),
+                1 => IVec2::new(y, x),
+                2 => IVec2::new(y, -x),
+                3 => IVec2::new(-x, y),
+                4 => IVec2::new(-x, -y),
+                5 => IVec2::new(-y, -x),
+                6 => IVec2::new(-y, x),
+                7 => IVec2::new(x, -y),
+                _ => unreachable!(),
+            }
+            .as_uvec2(),
+        );
         p
     }
 
     #[inline]
     #[allow(clippy::wrong_self_convention)]
-    fn from_octant(&self, p: Position) -> Position {
+    fn from_octant(&self, mut p: Position) -> Position {
         let IVec2 { x, y } = p.gridpoint().as_ivec2();
-        let new_lp = match self.0 {
-            0 => IVec2::new(x, y),
-            1 => IVec2::new(y, x),
-            2 => IVec2::new(-y, x),
-            3 => IVec2::new(-x, y),
-            4 => IVec2::new(-x, -y),
-            5 => IVec2::new(-y, -x),
-            6 => IVec2::new(y, -x),
-            7 => IVec2::new(x, -y),
-            _ => unreachable!(),
-        };
-
-        p.set_xy(new_lp.as_uvec2());
+        p.set_xy(
+            match self.0 {
+                0 => IVec2::new(x, y),
+                1 => IVec2::new(y, x),
+                2 => IVec2::new(-y, x),
+                3 => IVec2::new(-x, y),
+                4 => IVec2::new(-x, -y),
+                5 => IVec2::new(-y, -x),
+                6 => IVec2::new(y, -x),
+                7 => IVec2::new(x, -y),
+                _ => unreachable!(),
+            }
+            .as_uvec2(),
+        );
         p
     }
+}
+
+/// Line-drawing iterator
+#[derive(Debug, Clone)]
+pub struct BresenhamLineIter {
+    dx: i32,
+    dy: i32,
+    x1: u32,
+    diff: i32,
+    pos: Position,
+    octant: Octant,
 }
 
 impl BresenhamLineIter {
@@ -106,14 +108,16 @@ impl BresenhamLineIter {
     /// Return the next point without checking if we are past `end`.
     #[inline]
     pub fn advance(&mut self) -> Position {
+        let pos = self.pos;
         if self.diff >= 0 {
             self.diff -= self.dx;
-            self.pos.set_y(self.pos.y() + 1)
+            self.pos.set_y(self.pos.y() + 1);
         }
         self.diff += self.dy;
+
         // loop inc
         self.pos.set_x(self.pos.x() + 1);
-        self.octant.from_octant(self.pos)
+        self.octant.from_octant(pos)
     }
 }
 
@@ -156,6 +160,28 @@ impl Iterator for BresenhamLineInclusiveIter {
             None
         } else {
             Some(self.0.advance())
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #[cfg(test)]
+    mod line {
+        use crate::prelude::*;
+
+        #[test]
+        fn line_vertical() {
+            let p1 = Position::ZERO;
+            let mut p2 = Position::ZERO;
+            p2.set_xy(UVec2::new(0, 10));
+
+            let mut canvas = Canvas::new([11, 11]);
+            let line = Line::new(p1, p2);
+            for p in line.iter() {
+                canvas.put(p.gridpoint(), '*');
+            }
+            canvas.print();
         }
     }
 }

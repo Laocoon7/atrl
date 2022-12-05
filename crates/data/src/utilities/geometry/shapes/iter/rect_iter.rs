@@ -8,6 +8,7 @@ pub struct RectIter {
     /// The minimum corner point of the rect.
     pub min: IVec2,
 }
+
 impl RectIter {
     pub fn new(min: impl GridPoint, max: impl GridPoint) -> Self {
         let min = min.as_ivec2();
@@ -20,6 +21,7 @@ impl RectIter {
         }
     }
 }
+
 impl Iterator for RectIter {
     type Item = IVec2;
 
@@ -40,7 +42,7 @@ impl From<Rectangle> for RectIter {
     fn from(rect: Rectangle) -> Self { rect.into_iter() }
 }
 //#[cfg(test)]
-//mod test {
+// mod test {
 //    use crate::prelude::*;
 //    #[test]
 //    fn test_rect_iter() {

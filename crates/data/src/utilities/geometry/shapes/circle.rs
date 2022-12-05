@@ -9,7 +9,7 @@ pub struct Circle {
 impl Circle {
     pub fn new<R: Into<u32>>(center: Position, radius: R) -> Self {
         Self {
-            center: center,
+            center,
             radius: radius.into(),
         }
     }
@@ -32,14 +32,10 @@ impl Circle {
     pub const fn bottom(&self) -> Position { self.center + IVec2::new(0, self.radius as i32) }
 
     #[inline]
-    pub fn as_horizontal_line(&self) -> Line {
-        Line::new(self.left(), self.right())
-    }
+    pub fn as_horizontal_line(&self) -> Line { Line::new(self.left(), self.right()) }
 
     #[inline]
-    pub fn as_vertical_line(&self) -> Line {
-        Line::new(self.bottom(), self.top())
-    }
+    pub fn as_vertical_line(&self) -> Line { Line::new(self.bottom(), self.top()) }
 }
 
 impl Shape for Circle {
@@ -68,21 +64,21 @@ impl Shape for Circle {
             for point in line.get_positions() {
                 discovered.insert(point);
             }
-            
+
             start = self.center + IVec2::new(-x, y);
             end = self.center + IVec2::new(-x, -y);
             line = Line::new(start, end);
             for point in line.get_positions() {
                 discovered.insert(point);
             }
-            
+
             start = self.center + IVec2::new(y, x);
             end = self.center + IVec2::new(y, -x);
             line = Line::new(start, end);
             for point in line.get_positions() {
                 discovered.insert(point);
             }
-            
+
             start = self.center + IVec2::new(-y, x);
             end = self.center + IVec2::new(-y, -x);
             line = Line::new(start, end);

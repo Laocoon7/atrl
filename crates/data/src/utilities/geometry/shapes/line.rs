@@ -8,7 +8,8 @@ pub struct Line {
 }
 
 impl Line {
-    pub fn new(start: Position, end: Position) -> Self { Self { start, end } }
+    #[inline(always)]
+    pub const fn new(start: Position, end: Position) -> Self { Self { start, end } }
 
     #[inline]
     fn into_iter_exlusive(self) -> BresenhamLineIter { BresenhamLineIter::new(self.start, self.end) }

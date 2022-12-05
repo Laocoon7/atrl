@@ -13,11 +13,23 @@ pub struct Position {
 }
 
 impl Position {
+    /// All zeroes.
+    pub const ZERO: Self = Self::splat(0);
+
     #[inline(always)]
     pub const fn new(world_position: WorldPosition, local_position: LocalPosition) -> Self {
         Self {
             world_position,
             local_position,
+        }
+    }
+
+    /// Creates a `LocalPostion` with all elements set to `v`.
+    #[inline]
+    pub const fn splat(v: i32) -> Self {
+        Self {
+            world_position: WorldPosition::splat(v),
+            local_position: LocalPosition::splat(v as u32),
         }
     }
 
@@ -36,13 +48,13 @@ impl Position {
         dist_x.max(dist_y)
     }
 
-    pub fn distance_x(&self, other: Self) -> u32 {
+    pub const fn distance_x(&self, other: Self) -> u32 {
         ((other.world_x() * GRID_WIDTH as i32 + other.x() as i32) -
             (self.world_x() * GRID_WIDTH as i32 + self.x() as i32))
             .unsigned_abs()
     }
 
-    pub fn distance_y(&self, other: Self) -> u32 {
+    pub const fn distance_y(&self, other: Self) -> u32 {
         ((other.world_y() * GRID_HEIGHT as i32 + other.y() as i32) -
             (self.world_y() * GRID_HEIGHT as i32 + self.y() as i32))
             .unsigned_abs()
@@ -53,9 +65,9 @@ impl Position {
         let (abs_self_x, abs_self_y, abs_self_z) = self.to_absolute_position();
         let (abs_other_x, abs_other_y, abs_other_z) = other.to_absolute_position();
 
-        let lerp_x = (abs_self_x as f64 + (abs_other_x - abs_self_x) as f64 * percent as f64) as i64;
-        let lerp_y = (abs_self_y as f64 + (abs_other_y - abs_self_y) as f64 * percent as f64) as i64;
-        let lerp_z = (abs_self_z as f64 + (abs_other_z - abs_self_z) as f64 * percent as f64) as i32;
+        let lerp_x = ((abs_other_x - abs_self_x) as f64).mul_add(percent as f64, abs_self_x as f64) as i64;
+        let lerp_y = ((abs_other_y - abs_self_y) as f64).mul_add(percent as f64, abs_self_y as f64) as i64;
+        let lerp_z = ((abs_other_z - abs_self_z) as f64).mul_add(percent as f64, abs_self_z as f64) as i32;
 
         Self::from_absolute_position((lerp_x, lerp_y, lerp_z), layer)
     }
@@ -197,41 +209,6 @@ impl Add<IVec2> for Position {
         } else if local_y >= GRID_HEIGHT as i32 {
             world_y += 1;
             local_y -= GRID_HEIGHT as i32;
-        }
-
-        Self::new(
-            WorldPosition::new(world_x, world_y, self.world_z()),
-            LocalPosition::new(local_x as u32, local_y as u32, self.layer()),
-        )
-    }
-}
-
-// Add offset to LocalPosition
-impl Add<UVec2> for Position {
-    type Output = Self;
-
-    #[inline] // TODO: Rather large for inline isn't it??
-    fn add(self, rhs: UVec2) -> Self::Output {
-        let mut world_x = self.world_x();
-        let mut world_y = self.world_y();
-
-        let mut local_x = self.x() + rhs.x;
-        let mut local_y = self.y() + rhs.y;
-
-        if local_x < 0 {
-            world_x -= 1;
-            local_x += GRID_WIDTH;
-        } else if local_x >= GRID_WIDTH {
-            world_x += 1;
-            local_x -= GRID_WIDTH;
-        }
-
-        if local_y < 0 {
-            world_y -= 1;
-            local_y += GRID_HEIGHT;
-        } else if local_y >= GRID_HEIGHT {
-            world_y += 1;
-            local_y -= GRID_HEIGHT;
         }
 
         Self::new(
