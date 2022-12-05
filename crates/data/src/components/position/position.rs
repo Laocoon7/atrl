@@ -24,7 +24,7 @@ impl Position {
         }
     }
 
-    /// Creates a `LocalPostion` with all elements set to `v`.
+    /// Creates a `Postion` with all elements set to `v`.
     #[inline]
     pub const fn splat(v: i32) -> Self {
         Self {
@@ -92,11 +92,23 @@ impl Position {
 
     pub fn set_x(&mut self, value: u32) { self.local_position.set_x(value); }
 
+    pub fn add_x(&mut self, value: i32) { Self::add_assign(self, IVec2::new(value, 0)); }
+
+    pub fn sub_x(&mut self, value: i32) { Self::sub_assign(self, IVec2::new(value, 0)); }
+
     pub fn set_y(&mut self, value: u32) { self.local_position.set_y(value); }
+
+    pub fn add_y(&mut self, value: i32) { Self::add_assign(self, IVec2::new(0, value)); }
+
+    pub fn sub_y(&mut self, value: i32) { Self::sub_assign(self, IVec2::new(0, value)); }
 
     pub fn set_layer(&mut self, value: u32) { self.local_position.set_layer(value); }
 
     pub fn set_xy(&mut self, value: UVec2) { self.local_position.set_xy(value.x, value.y); }
+
+    pub fn add_xy(&mut self, x: i32, y: i32) { Self::add_assign(self, IVec2::new(x, y)); }
+
+    pub fn sub_xy(&mut self, x: i32, y: i32) { Self::sub_assign(self, IVec2::new(x, y)); }
 
     pub fn translation(&self) -> Vec3 { self.local_position.translation() }
 
