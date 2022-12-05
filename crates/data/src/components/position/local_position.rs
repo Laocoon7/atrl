@@ -54,3 +54,9 @@ impl LocalPosition {
         )
     }
 }
+
+impl std::fmt::Display for LocalPosition {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "LocalPosition{{({}, {})}}", self.x(), self.y())
+    }
+}

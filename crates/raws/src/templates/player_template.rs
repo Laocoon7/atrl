@@ -5,7 +5,11 @@ pub struct RawPlayer {
     pub name: String,
     pub stats: RawStats,
     pub vision_range: u8,
+
+    #[serde(default)]
     pub vision: Vec<VisionType>,
+
+    #[serde(default)]
     pub movement: Vec<MovementType>,
 }
 

@@ -3,10 +3,10 @@ use crate::prelude::*;
 // This needs to impl FromWorld not derive reflect
 pub struct Map {
     // Map Definitions
-    pub entity: Entity,
     pub size: UVec2,
-    pub world_position: WorldPosition,
+    pub entity: Entity,
     pub random: Random,
+    pub world_position: WorldPosition,
 
     // Update Flags
     pub update_all: bool,
@@ -87,7 +87,6 @@ impl Map {
     /// Use MapManager::get_actors instead!!!
     pub fn get_actors(&self, position: LocalPosition) -> Option<&Vec<Entity>> {
         let Some(index) = position.grid_index(self.size) else { return None; };
-
         self.actors[index].as_ref()
     }
 }

@@ -68,10 +68,14 @@ impl TargetVisualizer {
             return;
         };
 
+        // Wipe old visualizer
         self.clear(commands);
+
         let line = Line::new(start, end);
         for position in line.iter() {
-            if position.get_world_position() == map_manager.get_current_world_position() {
+            if position.get_world_position() == map_manager.get_current_world_position() &&
+                map_manager.is_visible(position)
+            {
                 self.entity_list.push((
                     position,
                     commands

@@ -30,6 +30,10 @@ impl RawMaster {
             info!("Player spawned at {:?}", position.gridpoint());
         }
 
+        println!(
+            "Player spawned at {:?}",
+            VisionType::from_vec(vision.to_vec())
+        );
         Some(
             commands
                 .entity(player)

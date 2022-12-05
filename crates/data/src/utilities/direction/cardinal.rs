@@ -183,6 +183,7 @@ impl From<i32> for CardinalDirection {
             }
             i += 360;
         }
+
         use self::CardinalDirection::*;
         match i % 360 {
             // loop 360deg back around.

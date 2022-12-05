@@ -10,6 +10,10 @@ pub struct MapManager<'w, 's> {
 
 // Perform actor functions on maps
 impl<'w, 's> MapManager<'w, 's> {
+    pub fn is_visible(&self, position: Position) -> bool {
+        self.map_manager.visible_tiles.get_visible(position)
+    }
+
     /// Works the same as `add_actor()` / `move_actor()` without
     /// actually changing anything. Mainly for use in algorithms.
     /// If you are planning on adding/moving the actor after, just
@@ -177,9 +181,8 @@ impl<'w, 's> MapManager<'w, 's> {
     pub fn get_current_world_position(&self) -> WorldPosition { self.map_manager.current_map.0 }
 
     pub fn set_visibility(&mut self, visibility_map: VisibilityMap) {
-        for position in visibility_map.get_all().iter() {
+        for position in visibility_map.iter() {
             let Some(map) = self.get_map(position.get_world_position()) else { return; };
-
             map.explored_tiles.insert(position.gridpoint());
         }
         self.map_manager.visible_tiles = visibility_map;
@@ -375,7 +378,6 @@ pub fn update_tilemaps(
     };
 
     let mut check_next = HashSet::new();
-
     let map = &mut map_manager.map_manager.current_map.1;
 
     if map.update_all {
@@ -461,7 +463,6 @@ pub fn update_tilemaps(
     );
 
     let visible_tiles = map_manager.map_manager.visible_tiles.get_all();
-
     // refresh mutable reference for borrow checker...
     let map = &mut map_manager.map_manager.current_map.1;
 
@@ -469,12 +470,16 @@ pub fn update_tilemaps(
         position.set_y(y);
         for x in 0..map.size.width() {
             position.set_x(x);
+
             let tile_pos = TilePos::new(x, y);
             let is_explored = map.explored_tiles.contains(&UVec2::new(x, y));
+
+            // Terrain
             if let Some(entity) = terrain_storage.get(&tile_pos) {
                 if let Ok(mut visibility) = q_visibility.get_mut(entity) {
                     visibility.is_visible = is_explored;
                 }
+
                 if let Ok((_index, mut tile_visibility, mut tile_color)) = q_tiles.get_mut(entity) {
                     tile_visibility.0 = is_explored;
                     tile_color.0.set_a(0.15);
@@ -484,11 +489,21 @@ pub fn update_tilemaps(
                 }
             }
 
+            // Features
             if let Some(entity) = feature_storage.get(&tile_pos) {
                 if let Ok(mut visibility) = q_visibility.get_mut(entity) {
                     visibility.is_visible = map.explored_tiles.contains(&UVec2::new(x, y));
                 }
                 // tiles too
+            }
+
+            // Actors
+            if let Some(actors) = map.get_actors(position.get_local_position()) {
+                actors.iter().for_each(|actor| {
+                    if let Ok(mut visibility) = q_visibility.get_mut(*actor) {
+                        visibility.is_visible = visible_tiles.contains(&position);
+                    }
+                });
             }
         }
     }

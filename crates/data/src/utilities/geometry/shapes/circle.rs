@@ -112,6 +112,14 @@ impl Shape for Circle {
     }
 }
 
+impl IntoIterator for Circle {
+    type IntoIter = bevy::utils::hashbrown::hash_set::IntoIter<Position>;
+    type Item = Position;
+
+    #[inline]
+    fn into_iter(self) -> Self::IntoIter { self.get_positions().into_iter() }
+}
+
 impl ShapeIter for Circle {
     type Iterator = bevy::utils::hashbrown::hash_set::IntoIter<Position>;
 
