@@ -8,10 +8,10 @@ pub struct Line {
 }
 
 impl Line {
-    pub fn new(start: impl GridPoint, end: impl GridPoint) -> Self {
+    pub fn new(start: Position, end: Position) -> Self {
         Self {
-            start: start.as_ivec2(),
-            end: end.as_ivec2(),
+            start: start,
+            end: end,
         }
     }
 
@@ -24,10 +24,10 @@ impl Shape for Line {
     fn get_count(&self) -> u32 { self.start.sub(self.end).abs().max_element() as u32 }
 
     #[inline]
-    fn contains(&self, point: impl GridPoint) -> bool { self.get_positions().contains(&point.as_ivec2()) }
+    fn contains(&self, position: Position) -> bool { self.get_positions().contains(&position) }
 
     #[inline]
-    fn get_positions(&self) -> HashSet<IVec2> {
+    fn get_positions(&self) -> HashSet<Position> {
         let mut discovered = HashSet::new();
         let max_delta = self.start.sub(self.end).abs().max_element();
         for step in 0..=max_delta {

@@ -2,15 +2,15 @@ use crate::prelude::*;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq)]
 pub struct Circle {
-    center: IVec2,
+    center: Position,
     radius: u32,
 }
 
 impl Circle {
-    pub fn new<R: Into<u32>>(center: impl GridPoint, radius: R) -> Self {
+    pub fn new<R: Into<u32>>(center: Position, radius: R) -> Self {
         Self {
+            center: center,
             radius: radius.into(),
-            center: center.as_ivec2(),
         }
     }
 }
@@ -32,15 +32,6 @@ impl Circle {
     pub const fn bottom(&self) -> i32 { self.center.y + self.radius as i32 }
 
     #[inline]
-    pub fn as_rect(&self) -> Rectangle {
-        Rectangle::new((self.left(), self.top()), (self.right(), self.bottom()))
-    }
-
-    /// Create line from center to edge at 0 degrees
-    // #[inline]
-    // pub fn as_radius_line(&self) -> Line { Line::from_points(self.get_points()) }
-
-    #[inline]
     pub fn as_horizontal_line(&self) -> Line {
         Line::new((self.left(), self.center.y), (self.right(), self.center.y))
     }
@@ -49,9 +40,6 @@ impl Circle {
     pub fn as_vertical_line(&self) -> Line {
         Line::new((self.center.x, self.bottom()), (self.center.x, self.top()))
     }
-
-    #[inline]
-    pub fn as_ellipse(&self) -> Ellipse { Ellipse::new(self.center, [self.radius * 2, self.radius * 2]) }
 }
 
 impl Shape for Circle {
@@ -60,10 +48,10 @@ impl Shape for Circle {
     fn get_count(&self) -> u32 { self.get_positions().len() as u32 }
 
     #[inline]
-    fn contains(&self, point: impl GridPoint) -> bool { self.get_positions().contains(&point.as_ivec2()) }
+    fn contains(&self, position: Position) -> bool { self.get_positions().contains(&position) }
 
     #[inline]
-    fn get_positions(&self) -> HashSet<IVec2> {
+    fn get_positions(&self) -> HashSet<Position> {
         let mut discovered = HashSet::new();
         let mut d = (5 - (self.radius as i32 * 4)) / 4;
         let mut x = 0;
