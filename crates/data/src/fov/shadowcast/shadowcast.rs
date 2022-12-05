@@ -55,7 +55,7 @@ impl<'w, 's> Shadowcast {
     fn scan_recursive(range: u32, quadrant: &mut Quadrant, row: &mut Row) {
         let mut prev_tile = None;
         for tile in row.tiles() {
-            if quadrant.distance(tile) > range {
+            if quadrant.distance_squared(tile) > (range as u64 * range as u64) {
                 continue;
             }
 

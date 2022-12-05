@@ -61,7 +61,29 @@ impl Position {
     }
 
     pub fn octant_to(&self, other: Self) -> Octant {
-        
+        // adapted from <http://codereview.stackexchange.com/a/95551>
+        let start = self.absolute_position();
+        let end = other.absolute_position();
+
+        let mut dx = end.0 - start.0;
+        let mut dy = end.1 - start.1;
+        let mut octant = 0;
+        if dy < 0 {
+            dx = -dx;
+            dy = -dy;
+            octant += 4;
+        }
+        if dx < 0 {
+            let tmp = dx;
+            dx = dy;
+            dy = -tmp;
+            octant += 2;
+        }
+        if dx < dy {
+            octant += 1;
+        }
+
+        Octant(octant)
     }
 
     pub fn angle_to(&self, other: Self) -> f64 {

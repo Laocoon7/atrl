@@ -1,4 +1,7 @@
+use std::fmt::Display;
+
 use crate::prelude::*;
+
 pub const NUM_CARDINAL_DIRECTIONS: usize = 4;
 pub const ALL_CARDINAL_DIRECTION_BITMAP_RAW: u8 = (1 << GridDirection::North as usize) |
     (1 << GridDirection::East as usize) |
@@ -22,6 +25,21 @@ impl CardinalDirection {
             [0, 1] => Self::South,
             [0, -1] => Self::North,
             _ => panic!("Unexpected coord: {:?}", coord),
+        }
+    }
+
+    pub fn from_octant(octant: Octant) -> Self {
+        // TODO: match on the range??
+        match octant.0 {
+            0 => Self::East,
+            1 => Self::North,
+            2 => Self::North,
+            3 => Self::West,
+            4 => Self::West,
+            5 => Self::South,
+            6 => Self::South,
+            7 => Self::East,
+            _ => unreachable!(),
         }
     }
 
@@ -135,6 +153,18 @@ impl CardinalDirection {
 
     pub const fn combine(self, other: Self) -> Option<OrdinalDirection> {
         OrdinalDirection::from_cardinals(self, other)
+    }
+}
+
+impl Display for CardinalDirection {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let dir = match self {
+            Self::North => "North",
+            Self::East => "East",
+            Self::South => "South",
+            Self::West => "West",
+        };
+        write!(f, "{}", dir)
     }
 }
 

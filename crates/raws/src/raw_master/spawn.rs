@@ -23,17 +23,12 @@ impl RawMaster {
 
         let player = commands.spawn_empty().id();
         if !map_manager.add_actor(player, *position, movement, q_blocks_movement) {
-            error!("Couldn't place player actor at {:?}", position.gridpoint());
+            error!("Couldn't place player actor at {}", position);
             commands.entity(player).despawn();
             return None;
         } else {
-            info!("Player spawned at {:?}", position.gridpoint());
+            info!("Player spawned at {}", position);
         }
-
-        println!(
-            "Player spawned at {:?}",
-            VisionType::from_vec(vision.to_vec())
-        );
         Some(
             commands
                 .entity(player)

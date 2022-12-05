@@ -11,10 +11,11 @@ pub fn entity_in_fov<'w, 's>(
 ) -> bool {
     // // If the player is within the FOV range of the AI, check line of sight
     let distance = current_pos.distance(destination_pos);
-    if distance < fov.0 as u32 {
+    if distance <= fov.0 as u32 {
         let mut visibility_map = VisibilityMap::new();
-        let angle = current_pos.angle_to(destination_pos);
-        Fov::ShadowcastDirection(CardinalDirection::from(angle as i32)).compute(
+        let octant = current_pos.octant_to(destination_pos);
+        let direction = CardinalDirection::from_octant(octant);
+        Fov::ShadowcastDirection(direction).compute(
             current_pos,
             vision.0,
             fov.0,
@@ -23,7 +24,9 @@ pub fn entity_in_fov<'w, 's>(
             &mut visibility_map,
         );
 
-        visibility_map.get_visible(destination_pos)
+        let is_visible = visibility_map.get_visible(destination_pos);
+        println!("Player in the {} is visible: {}", direction, is_visible);
+        is_visible
     } else {
         false
     }

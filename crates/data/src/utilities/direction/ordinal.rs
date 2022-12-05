@@ -1,4 +1,7 @@
+use std::fmt::Display;
+
 use crate::prelude::*;
+
 pub const NUM_ORDINAL_DIRECTIONS: usize = 4;
 pub const ALL_ORDINAL_DIRECTION_BITMAP_RAW: u8 = (1 << GridDirection::NorthEast as usize) |
     (1 << GridDirection::SouthEast as usize) |
@@ -22,6 +25,21 @@ impl OrdinalDirection {
             [-1, 1] => Self::SouthWest,
             [-1, -1] => Self::NorthWest,
             _ => panic!("Unexpected coord: {:?}", coord),
+        }
+    }
+
+    pub fn from_octant(octant: Octant) -> Self {
+        // TODO: match on the range??
+        match octant.0 {
+            0 => Self::NorthEast,
+            1 => Self::NorthEast,
+            2 => Self::NorthWest,
+            3 => Self::NorthWest,
+            4 => Self::SouthWest,
+            5 => Self::SouthWest,
+            6 => Self::SouthEast,
+            7 => Self::SouthEast,
+            _ => unreachable!(),
         }
     }
 
@@ -149,6 +167,18 @@ impl OrdinalDirection {
     pub const fn all() -> OrdinalDirectionIter { OrdinalDirectionIter::new() }
 
     pub const fn all_directions() -> DirectionOrdinalIter { DirectionOrdinalIter::new() }
+}
+
+impl Display for OrdinalDirection {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let dir = match self {
+            Self::NorthEast => "NorthEast",
+            Self::SouthEast => "SouthEast",
+            Self::SouthWest => "SouthWest",
+            Self::NorthWest => "NorthWest",
+        };
+        write!(f, "{}", dir)
+    }
 }
 
 impl From<OrdinalDirection> for [i32; 2] {

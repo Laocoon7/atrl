@@ -29,17 +29,21 @@ impl<'a, 'w, 's> Quadrant<'a, 'w, 's> {
     // adjust the transform based on which direction we are scanning
     fn transform(&self, tile: IVec2) -> IVec2 {
         match self.direction {
-            CardinalDirection::North => IVec2::new(tile.y, -tile.x),
-            CardinalDirection::South => IVec2::new(tile.y, tile.x),
+            CardinalDirection::South => IVec2::new(tile.y, -tile.x),
+            CardinalDirection::North => IVec2::new(tile.y, tile.x),
             CardinalDirection::East => IVec2::new(tile.x, tile.y),
             CardinalDirection::West => IVec2::new(-tile.x, tile.y),
         }
     }
 
-    pub fn distance(&self, tile: IVec2) -> u32 {
+    pub fn distance_squared(&self, tile: IVec2) -> u64 {
         // we don't care about position, so no need to transform the tile
         let end = self.origin + tile;
-        self.origin.distance(end)
+        let dx = end.absolute_x() - self.origin.absolute_x();
+        let dy = end.absolute_y() - self.origin.absolute_y();
+
+        // multiplying times itself is always positive
+        (dx * dx + dy * dy) as u64
     }
 
     // mark this tile as visible
