@@ -384,7 +384,7 @@ dependencies = [
  "bevy_pbr",
  "bevy_reflect",
  "bevy_render",
- "bevy_utils 0.9.1",
+ "bevy_utils",
  "egui",
  "image 0.24.5",
  "once_cell",
@@ -428,7 +428,7 @@ dependencies = [
  "bevy_reflect",
  "bevy_time",
  "bevy_transform",
- "bevy_utils 0.9.1",
+ "bevy_utils",
 ]
 
 [[package]]
@@ -440,7 +440,7 @@ dependencies = [
  "bevy_derive",
  "bevy_ecs",
  "bevy_reflect",
- "bevy_utils 0.9.1",
+ "bevy_utils",
  "downcast-rs",
  "wasm-bindgen",
  "web-sys",
@@ -459,7 +459,7 @@ dependencies = [
  "bevy_log",
  "bevy_reflect",
  "bevy_tasks",
- "bevy_utils 0.9.1",
+ "bevy_utils",
  "crossbeam-channel",
  "downcast-rs",
  "fastrand",
@@ -485,7 +485,7 @@ dependencies = [
  "bevy_asset",
  "bevy_ecs",
  "bevy_reflect",
- "bevy_utils 0.9.1",
+ "bevy_utils",
  "parking_lot 0.12.1",
  "rodio",
 ]
@@ -501,7 +501,7 @@ dependencies = [
  "bevy_math",
  "bevy_reflect",
  "bevy_tasks",
- "bevy_utils 0.9.1",
+ "bevy_utils",
  "bytemuck",
  "serde",
 ]
@@ -520,7 +520,7 @@ dependencies = [
  "bevy_reflect",
  "bevy_render",
  "bevy_transform",
- "bevy_utils 0.9.1",
+ "bevy_utils",
  "bitflags",
  "radsort",
  "serde",
@@ -548,7 +548,7 @@ dependencies = [
  "bevy_ecs",
  "bevy_log",
  "bevy_time",
- "bevy_utils 0.9.1",
+ "bevy_utils",
 ]
 
 [[package]]
@@ -571,7 +571,7 @@ dependencies = [
  "bevy_ptr",
  "bevy_reflect",
  "bevy_tasks",
- "bevy_utils 0.9.1",
+ "bevy_utils",
  "downcast-rs",
  "event-listener",
  "fixedbitset",
@@ -644,7 +644,7 @@ dependencies = [
  "bevy_app",
  "bevy_ecs",
  "bevy_input",
- "bevy_utils 0.9.1",
+ "bevy_utils",
  "gilrs",
 ]
 
@@ -671,7 +671,7 @@ dependencies = [
  "bevy_scene",
  "bevy_tasks",
  "bevy_transform",
- "bevy_utils 0.9.1",
+ "bevy_utils",
  "gltf",
  "percent-encoding",
  "thiserror",
@@ -688,7 +688,7 @@ dependencies = [
  "bevy_ecs",
  "bevy_log",
  "bevy_reflect",
- "bevy_utils 0.9.1",
+ "bevy_utils",
  "smallvec",
 ]
 
@@ -702,7 +702,7 @@ dependencies = [
  "bevy_ecs",
  "bevy_math",
  "bevy_reflect",
- "bevy_utils 0.9.1",
+ "bevy_utils",
  "serde",
  "thiserror",
 ]
@@ -739,7 +739,7 @@ dependencies = [
  "bevy_time",
  "bevy_transform",
  "bevy_ui",
- "bevy_utils 0.9.1",
+ "bevy_utils",
  "bevy_window",
  "bevy_winit",
  "ndk-glue",
@@ -754,7 +754,7 @@ dependencies = [
  "android_log-sys",
  "bevy_app",
  "bevy_ecs",
- "bevy_utils 0.9.1",
+ "bevy_utils",
  "console_error_panic_hook",
  "tracing-chrome",
  "tracing-error",
@@ -821,7 +821,7 @@ dependencies = [
  "bevy_reflect",
  "bevy_render",
  "bevy_transform",
- "bevy_utils 0.9.1",
+ "bevy_utils",
  "bevy_window",
  "bitflags",
  "bytemuck",
@@ -843,7 +843,7 @@ dependencies = [
  "bevy_math",
  "bevy_ptr",
  "bevy_reflect_derive",
- "bevy_utils 0.9.1",
+ "bevy_utils",
  "downcast-rs",
  "erased-serde",
  "glam",
@@ -889,7 +889,7 @@ dependencies = [
  "bevy_render_macros",
  "bevy_time",
  "bevy_transform",
- "bevy_utils 0.9.1",
+ "bevy_utils",
  "bevy_window",
  "bitflags",
  "codespan-reporting",
@@ -938,7 +938,7 @@ dependencies = [
  "bevy_reflect",
  "bevy_render",
  "bevy_transform",
- "bevy_utils 0.9.1",
+ "bevy_utils",
  "ron 0.8.0",
  "serde",
  "thiserror",
@@ -961,7 +961,7 @@ dependencies = [
  "bevy_reflect",
  "bevy_render",
  "bevy_transform",
- "bevy_utils 0.9.1",
+ "bevy_utils",
  "bitflags",
  "bytemuck",
  "fixedbitset",
@@ -1001,7 +1001,7 @@ dependencies = [
  "bevy_render",
  "bevy_sprite",
  "bevy_transform",
- "bevy_utils 0.9.1",
+ "bevy_utils",
  "bevy_window",
  "glyph_brush_layout",
  "serde",
@@ -1020,7 +1020,7 @@ dependencies = [
  "bevy_math",
  "bevy_render",
  "bevy_sprite",
- "bevy_utils 0.9.1",
+ "bevy_utils",
  "thiserror",
 ]
 
@@ -1071,7 +1071,7 @@ dependencies = [
  "bevy_app",
  "bevy_ecs",
  "bevy_reflect",
- "bevy_utils 0.9.1",
+ "bevy_utils",
  "crossbeam-channel",
  "serde",
 ]
@@ -1110,27 +1110,13 @@ dependencies = [
  "bevy_sprite",
  "bevy_text",
  "bevy_transform",
- "bevy_utils 0.9.1",
+ "bevy_utils",
  "bevy_window",
  "bytemuck",
  "serde",
  "smallvec",
  "taffy",
  "thiserror",
-]
-
-[[package]]
-name = "bevy_utils"
-version = "0.8.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f6e9aa1866c1cf7ee000f281ce9e90d02d701f5c7380a107252017e58e2f5246"
-dependencies = [
- "ahash 0.7.6",
- "getrandom 0.2.8",
- "hashbrown",
- "instant",
- "tracing",
- "uuid",
 ]
 
 [[package]]
@@ -1158,7 +1144,7 @@ dependencies = [
  "bevy_input",
  "bevy_math",
  "bevy_reflect",
- "bevy_utils 0.9.1",
+ "bevy_utils",
  "raw-window-handle 0.5.0",
  "serde",
 ]
@@ -1174,7 +1160,7 @@ dependencies = [
  "bevy_ecs",
  "bevy_input",
  "bevy_math",
- "bevy_utils 0.9.1",
+ "bevy_utils",
  "bevy_window",
  "crossbeam-channel",
  "raw-window-handle 0.5.0",
@@ -2657,7 +2643,7 @@ dependencies = [
  "bevy_app",
  "bevy_ecs",
  "bevy_time",
- "bevy_utils 0.9.1",
+ "bevy_utils",
 ]
 
 [[package]]
@@ -2669,7 +2655,7 @@ dependencies = [
  "bevy_app",
  "bevy_asset",
  "bevy_ecs",
- "bevy_utils 0.9.1",
+ "bevy_utils",
  "iyes_loopless",
 ]
 
@@ -4284,7 +4270,7 @@ dependencies = [
 name = "spancmp"
 version = "0.1.0"
 dependencies = [
- "bevy_utils 0.8.1",
+ "bevy_utils",
  "clap",
  "lazy_static",
  "regex",
