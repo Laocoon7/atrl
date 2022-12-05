@@ -58,7 +58,7 @@ impl Shape for Circle {
         let mut end;
         let mut line;
         loop {
-            let start = self.center + IVec2::new(x, y);
+            start = self.center + IVec2::new(x, y);
             end = self.center + IVec2::new(x, -y);
             line = Line::new(start, end);
             for point in line.get_positions() {
