@@ -123,12 +123,13 @@ fn generate_wander_path(
 ) -> Position {
     let wander_radius = WANDER_RANGE.sample(rng);
     let wander_circle = Circle::new(ai_pos, wander_radius);
+    let positions = wander_circle.get_positions();
 
     loop {
         // Default to the circle center
-        let destination = wander_circle.iter().choose(rng).unwrap_or_else(|| wander_circle.center());
-        if map.can_place_actor(destination, movement_type, q_blocks_movement) {
-            return destination;
+        let destination = positions.iter().choose(rng).unwrap_or_else(|| &ai_pos);
+        if map.can_place_actor(*destination, movement_type, q_blocks_movement) {
+            return *destination;
         }
     }
 }
