@@ -1,5 +1,5 @@
 use crate::prelude::*;
-pub trait Shape: Iterator<Item = Position> {
+pub trait Shape: ShapeIter {
     /// returns the number of points in the shape
     fn get_count(&self) -> u32;
 
