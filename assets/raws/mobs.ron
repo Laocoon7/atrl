@@ -1,0 +1,14 @@
+[
+    RawMob(
+        ai: Aggressive,
+        actor: RawActor(
+            name: "Gary the Destroyer",
+            vision_range: 16,
+            vision: [Normal],
+            movement: [Walk, Swim],
+                stats: RawStats(
+                max_hp: 10,
+            ),
+        ),
+    )
+]

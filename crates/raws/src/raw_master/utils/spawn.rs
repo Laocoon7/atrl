@@ -7,35 +7,36 @@ impl RawMaster {
         tileset: &Tileset,
         map_manager: &mut MapManager,
         q_blocks_movement: &Query<&BlocksMovement>,
-        position: &Position,
+        position: Position,
     ) -> Option<Entity> {
         let raws = self.get_raws();
 
-        let RawPlayer {
+        let RawActor {
             name,
             stats,
             vision,
             movement,
             vision_range,
-        } = raws.player.as_ref().expect("Player not loaded");
+        } = &raws.player;
 
         let movement = MovementType::from_vec(movement.to_vec());
 
         let player = commands.spawn_empty().id();
-        if !map_manager.add_actor(player, *position, movement, q_blocks_movement) {
-            error!("Couldn't place player actor at {}", position);
+        if !map_manager.add_actor(player, position, movement, q_blocks_movement) {
+            error!("Couldn't place player actor at {:?}", position.gridpoint());
             commands.entity(player).despawn();
             return None;
         } else {
-            info!("Player spawned at {}", position);
+            info!("Player spawned at {:?}", position.gridpoint());
         }
+
         Some(
             commands
                 .entity(player)
                 .insert(PlayerBundle {
                     actor: ActorBundle {
                         mob: Mob,
-                        position: *position,
+                        position,
                         name: Name::new(name.clone()),
                         fov: FieldOfView(*vision_range),
                         health: Health::full(stats.max_hp),

@@ -60,7 +60,7 @@ impl Position {
             .unsigned_abs()
     }
 
-    pub fn octant_to(&self, other: Self) -> Octant {
+    pub const fn octant_to(&self, other: Self) -> Octant {
         // adapted from <http://codereview.stackexchange.com/a/95551>
         let start = self.absolute_position();
         let end = other.absolute_position();

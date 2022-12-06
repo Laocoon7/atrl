@@ -27,7 +27,7 @@ pub fn spawn_player(
             tileset,
             &mut map_manager,
             &q_blocks_movement,
-            &position,
+            position,
         )
         .map_or_else(
             || {

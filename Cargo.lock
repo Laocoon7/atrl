@@ -296,6 +296,7 @@ dependencies = [
  "atrl-data",
  "bevy",
  "bevy_tileset",
+ "big-brain",
  "iyes_loopless",
  "iyes_progress",
  "kayak_ui",

@@ -1,7 +1,7 @@
 use crate::{impl_raw, prelude::*};
 
 #[derive(Deserialize, Debug, Clone)]
-pub struct RawPlayer {
+pub struct RawActor {
     pub name: String,
     pub stats: RawStats,
     pub vision_range: u8,
@@ -13,4 +13,4 @@ pub struct RawPlayer {
     pub movement: Vec<MovementType>,
 }
 
-impl_raw!(RawPlayer);
+impl_raw!(RawActor);

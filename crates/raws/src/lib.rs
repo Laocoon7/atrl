@@ -15,10 +15,16 @@ mod resources {
 }
 
 mod raw_master {
+    mod utils {
+        mod spawn;
+        pub use spawn::*;
+    }
+    pub use utils::*;
+
     mod raw_master;
     pub use raw_master::*;
-    mod spawn;
-    pub use spawn::*;
+    mod raws;
+    pub use raws::*;
 }
 
 mod systems {
@@ -35,16 +41,17 @@ mod systems {
 }
 
 mod templates {
+    mod actor_template;
+    pub use actor_template::*;
+    mod ai_template;
+    pub use ai_template::*;
     mod base_raw_component;
     pub use base_raw_component::*;
-    mod player_template;
-    pub use player_template::*;
     mod stat_templates;
     pub use stat_templates::*;
 }
 
 mod raw_plugin;
-mod raws;
 
 pub mod prelude {
     mod internal {
@@ -58,6 +65,7 @@ pub mod prelude {
             utils::hashbrown::{HashMap, HashSet},
         };
         pub use bevy_tileset::prelude::*;
+        pub use big_brain::prelude::*;
         pub use iyes_loopless::prelude::*;
         pub use iyes_progress::prelude::*;
         pub use kayak_ui::{prelude::*, widgets::*};
@@ -67,7 +75,7 @@ pub mod prelude {
     }
     pub(crate) use import::*;
     mod export {
-        pub use crate::{raw_master::*, raw_plugin::*, raws::*, resources::*, templates::*};
+        pub use crate::{raw_master::*, raw_plugin::*, resources::*, templates::*};
     }
     pub use export::*;
 }

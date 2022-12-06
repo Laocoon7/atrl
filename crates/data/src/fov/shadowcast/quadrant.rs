@@ -27,7 +27,7 @@ impl<'a, 'w, 's> Quadrant<'a, 'w, 's> {
     }
 
     // adjust the transform based on which direction we are scanning
-    fn transform(&self, tile: IVec2) -> IVec2 {
+    const fn transform(&self, tile: IVec2) -> IVec2 {
         match self.direction {
             CardinalDirection::South => IVec2::new(tile.y, -tile.x),
             CardinalDirection::North => IVec2::new(tile.y, tile.x),

@@ -19,6 +19,7 @@ atrl-data = { workspace = true }
 
 bevy                   = { workspace = true }
 bevy_tileset           = { workspace = true }
+big-brain              = { workspace = true }
 iyes_loopless          = { workspace = true }
 iyes_progress          = { workspace = true }
 kayak_ui               = { workspace = true }

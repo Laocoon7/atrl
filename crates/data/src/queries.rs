@@ -24,8 +24,7 @@ pub fn entity_in_fov<'w, 's>(
             &mut visibility_map,
         );
 
-        let is_visible = visibility_map.get_visible(destination_pos);
-        is_visible
+        visibility_map.get_visible(destination_pos)
     } else {
         false
     }
