@@ -185,8 +185,8 @@ version = "0.8"
 features = ["derive"]
 version  = "1"
 
-[workspace.dependencies.serde_yaml]
-version = "0.9"
+[workspace.dependencies.toml]
+version = "0.5"
 
 ######################################
 #########       States

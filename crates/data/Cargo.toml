@@ -26,8 +26,8 @@ parking_lot   = { workspace = true }
 pathfinding   = { workspace = true }
 ron           = { workspace = true }
 serde         = { workspace = true }
-serde_yaml    = { workspace = true }
 thiserror     = { workspace = true }
+toml          = { workspace = true }
 
 #################################
 #########       Random

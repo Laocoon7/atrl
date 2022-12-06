@@ -1,4 +1,4 @@
-use serde_yaml::from_slice;
+use toml::from_slice;
 
 use crate::prelude::*;
 
