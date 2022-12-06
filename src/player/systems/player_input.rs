@@ -2,20 +2,29 @@ use std::time::Duration;
 
 use crate::prelude::*;
 
-// TODO: Settings file, settings menu..
-const REPEAT_DURATION: Duration = Duration::from_millis(100);
-const PRESSED_DURATION: Duration = Duration::from_millis(500);
-const UNSAFE_DURATION: Duration = Duration::from_millis(1000);
-
 pub struct PlayerTimer {
     pub input_delay_timer: Timer,
     pub unsafe_delay_timer: Option<Timer>,
 }
 
-impl Default for PlayerTimer {
-    fn default() -> Self {
+impl FromWorld for PlayerTimer {
+    fn from_world(world: &mut World) -> Self {
+        if let Some(game_settings) = world.get_resource::<GameSettings>() {
+            Self {
+                input_delay_timer: Timer::new(game_settings.repeat_duration(), TimerMode::Once),
+                unsafe_delay_timer: None,
+            }
+        } else {
+            error!("PlayerTimer resource needs to be inserted after GameSettings ressource.");
+            Self::new()
+        }
+    }
+}
+
+impl PlayerTimer {
+    fn new() -> Self {
         Self {
-            input_delay_timer: Timer::new(REPEAT_DURATION, TimerMode::Once),
+            input_delay_timer: Timer::new(Duration::from_millis(500), TimerMode::Once),
             unsafe_delay_timer: None,
         }
     }
@@ -26,6 +35,7 @@ pub struct UnsafeInput;
 
 pub fn player_input(
     mut commands: Commands,
+    game_settings: Res<GameSettings>,
     time: Res<Time>,
     mut timer: Local<PlayerTimer>,
     mut action_queue: ResMut<ActionQueue>,
@@ -52,7 +62,7 @@ pub fn player_input(
             }
         } else {
             // start a new timer.
-            timer.unsafe_delay_timer = Some(Timer::new(UNSAFE_DURATION, TimerMode::Once));
+            timer.unsafe_delay_timer = Some(Timer::new(game_settings.unsafe_duration(), TimerMode::Once));
         }
 
         // No input this frame!
@@ -76,7 +86,7 @@ pub fn player_input(
         for input_direction in PlayerAction::DIRECTIONS {
             if action_state.just_pressed(input_direction) ||
                 (action_state.pressed(input_direction) &&
-                    action_state.current_duration(input_direction) > PRESSED_DURATION) &&
+                    action_state.current_duration(input_direction) > game_settings.pressed_duration()) &&
                     timer.input_delay_timer.finished()
             {
                 if let Some(direction) = input_direction.direction() {

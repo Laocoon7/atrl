@@ -6,9 +6,9 @@ use crate::prelude::*;
 pub struct LocalPosition(UVec3);
 
 impl LocalPosition {
+    pub const GRID_SIZED: Self = Self::new(GRID_WIDTH, GRID_HEIGHT, 0);
     /// All zeroes.
     pub const ZERO: Self = Self::splat(0);
-    pub const GRID_SIZED: Self = Self::new(GRID_WIDTH, GRID_HEIGHT, 0);
 
     #[inline(always)]
     pub const fn new(x: u32, y: u32, layer: u32) -> Self { Self(UVec3::new(x, y, layer)) }

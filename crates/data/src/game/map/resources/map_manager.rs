@@ -294,9 +294,7 @@ impl<'w, 's> MapManager<'w, 's> {
         let map_entity = commands.spawn_empty().id();
 
         // Create the map.
-        let map = Self::generate_map(world_position, random, MapPassThroughData {
-            map_entity,
-        });
+        let map = Self::generate_map(world_position, random, MapPassThroughData { map_entity });
 
         // Build the map entity.
         commands.entity(map_entity).insert((
@@ -319,11 +317,10 @@ impl<'w, 's> MapManager<'w, 's> {
             MapGenerator::new(
                 world_position,
                 random,
-                SetBuilder::new()
-                    .set_value(1),
-                user_data
+                SetBuilder::new().set_value(1),
+                user_data,
             )
-            .generate()
+            .generate(),
         )
     }
 }
