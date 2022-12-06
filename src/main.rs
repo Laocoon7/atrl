@@ -5,7 +5,50 @@
 
 use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
 
-use crate::prelude::*;
+mod ai {
+    mod systems {
+        mod scorers {
+            mod can_see_player;
+            pub use can_see_player::*;
+        }
+        pub use scorers::*;
+        mod actions {
+            mod attack;
+            pub use attack::*;
+            mod chase;
+            pub use chase::*;
+            mod wander;
+            pub use wander::*;
+        }
+        pub use actions::*;
+    }
+    pub use systems::*;
+    mod ai_plugin;
+    pub use ai_plugin::*;
+}
+
+mod camera {
+    mod resources {
+        mod camera_settings_resource;
+        pub use camera_settings_resource::*;
+        mod loaded_camera;
+        pub use loaded_camera::*;
+    }
+    pub use resources::*;
+
+    mod systems {
+        mod spawn_cameras;
+        pub use spawn_cameras::*;
+    }
+    pub use systems::*;
+
+    mod camera_plugin;
+    pub use camera_plugin::*;
+    mod camera_settings;
+    pub use camera_settings::*;
+    mod cameras;
+    pub use cameras::*;
+}
 
 #[cfg(feature = "debug")]
 pub(crate) mod debug {
@@ -21,8 +64,93 @@ pub(crate) mod debug {
     pub use debug_plugin::*;
 }
 
+mod ecs {
+    mod systems {
+        mod apply_damage;
+        pub use apply_damage::*;
+        mod cull_dead;
+        pub use cull_dead::*;
+        mod fov;
+        pub use fov::*;
+        mod perform_healing;
+        pub use perform_healing::*;
+        mod update_targeting;
+        pub use update_targeting::*;
+    }
+    pub use systems::*;
+
+    mod systems_plugin;
+    pub use systems_plugin::*;
+}
+
+mod events {
+    mod map {
+        mod map_events;
+        pub use map_events::*;
+    }
+    pub use map::*;
+
+    mod systems {
+        mod update_transforms;
+        pub use update_transforms::*;
+    }
+    pub use systems::*;
+
+    mod event_cleaner;
+    pub use event_cleaner::*;
+    mod event_plugin;
+    pub use event_plugin::*;
+}
+
+mod player {
+    mod systems {
+        mod player_input;
+        pub use player_input::*;
+    }
+    pub use systems::*;
+
+    mod player_plugin;
+    pub use player_plugin::*;
+}
+
+mod spawner {
+    mod systems {
+        mod spawn_ai;
+        pub use spawn_ai::*;
+        mod spawn_player;
+        pub use spawn_player::*;
+    }
+    pub use systems::*;
+
+    mod spawner_plugin;
+    pub use spawner_plugin::*;
+}
+
+mod turn {
+    mod actions {
+        mod attack;
+        pub use attack::*;
+        mod movement;
+        pub use movement::*;
+    }
+    pub use actions::*;
+
+    mod systems {
+        mod perform_action;
+        pub use perform_action::*;
+        mod perform_turns;
+        pub use perform_turns::*;
+    }
+    pub use systems::*;
+
+    mod turn_plugin;
+    pub use turn_plugin::*;
+}
+
+mod game_plugin;
 mod log;
 pub(crate) mod prelude;
+use crate::prelude::*;
 
 fn main() {
     let mut app = App::new();

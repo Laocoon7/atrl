@@ -30,9 +30,7 @@ members = ["tools/ci", "tools/spancmp", "./crates/*"]
 # configuration for release builds
 release = [
   "bevy_embedded_assets",
-  "atrl-camera/release",
   "atrl-data/release",
-  "atrl-game/release",
   "atrl-renderer/release",
   "atrl-raws/release",
 ]
@@ -45,9 +43,7 @@ debug = [
   "bevy-inspector-egui",
   "debug-graph",
   # "debug_asset_server",
-  "atrl-camera/debug",
   "atrl-data/debug",
-  "atrl-game/debug",
   "atrl-renderer/debug",
   "atrl-raws/debug",
 ]
@@ -58,9 +54,7 @@ debug-trace = ["debug", "trace"]
 dev = [
   "bevy/filesystem_watcher",
   "bevy/dynamic",
-  "atrl-camera/dev",
   "atrl-data/dev",
-  "atrl-game/dev",
   "atrl-renderer/dev",
   "atrl-raws/dev",
 ]
@@ -99,19 +93,31 @@ panic         = 'abort'
 #########       Internal Crate Dependencies
 ################################
 [workspace.dependencies]
-atrl-camera   = { path = "crates/camera" }
 atrl-data     = { path = "crates/data" }
-atrl-game     = { path = "crates/game" }
 atrl-raws     = { path = "crates/raws" }
 atrl-renderer = { path = "crates/render" }
 atrl-saveload = { path = "crates/saveload" }
 
 [dependencies]
-atrl-camera   = { workspace = true }
 atrl-data     = { workspace = true }
-atrl-game     = { workspace = true }
 atrl-raws     = { workspace = true }
 atrl-renderer = { workspace = true }
+atrl-saveload = { workspace = true }
+
+bevy                   = { workspace = true }
+bevy_ecs_tilemap       = { workspace = true }
+bevy_tileset           = { workspace = true }
+big-brain              = { workspace = true }
+iyes_loopless          = { workspace = true }
+kayak_font             = { workspace = true }
+kayak_ui               = { workspace = true }
+leafwing-input-manager = { workspace = true }
+
+index_list    = { workspace = true }
+num-traits    = { workspace = true }
+rand          = { workspace = true }
+rand_pcg      = { workspace = true }
+smart-default = { workspace = true }
 
 ######################################
 #########       Bevy
@@ -259,9 +265,6 @@ version = "0.3"
 [workspace.dependencies.num-traits]
 version = "0.2"
 
-[workspace.dependencies.once_cell]
-version = "1"
-
 [workspace.dependencies.parking_lot]
 version = "0.12"
 
@@ -289,12 +292,6 @@ version  = "3"
 ######################################
 
 ######################################
-#########       Build Dependencies
-######################################
-[build-dependencies]
-embed-resource = "1.4"
-
-######################################
 #########       Release
 ######################################
 [dependencies.bevy_embedded_assets]
@@ -320,9 +317,8 @@ version  = "0.6"
 optional = true
 version  = "1"
 
-[dependencies.bevy]
-workspace = true
-[dependencies.kayak_font]
-workspace = true
-[dependencies.kayak_ui]
-workspace = true
+######################################
+#########       Build Dependencies
+######################################
+[build-dependencies]
+embed-resource = "1.4"

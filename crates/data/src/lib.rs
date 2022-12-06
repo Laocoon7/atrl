@@ -409,7 +409,6 @@ pub mod prelude {
         pub use noise::{NoiseFn, Perlin};
         pub use num_derive::*;
         pub use num_traits::*;
-        pub use once_cell::sync::Lazy;
         pub use ordered_float::OrderedFloat;
         pub use parking_lot::{Mutex, MutexGuard};
         pub use rand::{distributions::Standard, prelude::*};

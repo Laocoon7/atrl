@@ -214,27 +214,28 @@ checksum = "73b5e5f48b927f04e952dedc932f31995a65a0bf65ec971c74436e51bf6e970d"
 name = "atrl"
 version = "0.1.0"
 dependencies = [
- "atrl-camera",
  "atrl-data",
- "atrl-game",
  "atrl-raws",
  "atrl-renderer",
+ "atrl-saveload",
  "bevy",
- "bevy-inspector-egui 0.15.0-pre.0",
+ "bevy-inspector-egui",
+ "bevy_ecs_tilemap",
  "bevy_embedded_assets",
  "bevy_mod_debugdump",
+ "bevy_tileset",
+ "big-brain",
  "embed-resource",
+ "index_list",
+ "iyes_loopless",
  "kayak_font",
  "kayak_ui",
+ "leafwing-input-manager",
+ "num-traits",
+ "rand 0.8.5",
+ "rand_pcg",
  "rayon",
-]
-
-[[package]]
-name = "atrl-camera"
-version = "0.1.0"
-dependencies = [
- "bevy",
- "iyes_loopless",
+ "smart-default",
 ]
 
 [[package]]
@@ -253,7 +254,6 @@ dependencies = [
  "noise",
  "num-derive",
  "num-traits",
- "once_cell",
  "ordered-float",
  "parking_lot 0.12.1",
  "pathfinding",
@@ -264,29 +264,6 @@ dependencies = [
  "serde",
  "thiserror",
  "xxhash-rust",
-]
-
-[[package]]
-name = "atrl-game"
-version = "0.1.0"
-dependencies = [
- "atrl-camera",
- "atrl-data",
- "atrl-raws",
- "atrl-renderer",
- "atrl-saveload",
- "bevy",
- "bevy-inspector-egui 0.14.0",
- "bevy_ecs_tilemap",
- "bevy_tileset",
- "big-brain",
- "index_list",
- "iyes_loopless",
- "leafwing-input-manager",
- "num-traits",
- "rand 0.8.5",
- "rand_pcg",
- "smart-default",
 ]
 
 [[package]]
@@ -360,23 +337,10 @@ dependencies = [
 
 [[package]]
 name = "bevy-inspector-egui"
-version = "0.14.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1bbe6f9142de83d656fb45e9629bd7f3ede71d202439922bdf473814daceefe4"
-dependencies = [
- "bevy",
- "bevy-inspector-egui-derive 0.14.0",
- "bevy_egui",
- "image 0.23.14",
- "pretty-type-name",
-]
-
-[[package]]
-name = "bevy-inspector-egui"
 version = "0.15.0-pre.0"
 source = "git+https://github.com/jakobhellermann/bevy-inspector-egui?branch=rework#5c14a0008c740015d57140cff9278104c95842a3"
 dependencies = [
- "bevy-inspector-egui-derive 0.15.0-pre.0",
+ "bevy-inspector-egui-derive",
  "bevy_app",
  "bevy_asset",
  "bevy_core",
@@ -394,17 +358,6 @@ dependencies = [
  "once_cell",
  "pretty-type-name",
  "smallvec",
-]
-
-[[package]]
-name = "bevy-inspector-egui-derive"
-version = "0.14.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d8369516ed94a814a8794a1e75acbd53e4f250da8f851e75870501ca0e7f083b"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
 ]
 
 [[package]]
