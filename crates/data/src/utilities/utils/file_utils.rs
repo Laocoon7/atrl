@@ -4,6 +4,7 @@ pub use std::{
 };
 
 use crate::prelude::*;
+
 pub fn read_str<Path: Into<PathBuf>>(path: Path) -> AtrlResult<String> {
     let path: PathBuf = path.into();
     match std::fs::read_to_string(path) {
@@ -11,6 +12,7 @@ pub fn read_str<Path: Into<PathBuf>>(path: Path) -> AtrlResult<String> {
         Err(e) => Err(AtrlError::Io(e)),
     }
 }
+
 pub fn write_str<Path: Into<PathBuf>>(path: Path, value: &str) -> AtrlResult<()> {
     let path: PathBuf = path.into();
     let path_string = match path.to_str() {
@@ -41,9 +43,11 @@ pub fn write_str<Path: Into<PathBuf>>(path: Path, value: &str) -> AtrlResult<()>
         Err(e) => Err(AtrlError::Io(e)),
     }
 }
+
 pub fn get_files_with_extension<Path: Into<PathBuf>>(path: Path, extension: &str) -> AtrlResult<Vec<String>> {
     get_files_with_extensions(path, vec![extension])
 }
+
 pub fn get_files_with_extensions<Path: Into<PathBuf>>(
     path: Path,
     extensions: Vec<&str>,
@@ -60,7 +64,7 @@ pub fn get_files_with_extensions<Path: Into<PathBuf>>(
                 extension_names = extension.to_string();
                 first = false;
             } else {
-                extension_names = format!("{}, {}", extension_names, extension);
+                extension_names = format!("{extension_names}, {extension}");
             }
         }
         info!("Looking for {{{}}} files in {:?}", extension_names, path);
@@ -90,10 +94,10 @@ pub fn get_files_with_extensions<Path: Into<PathBuf>>(
         let mut first = true;
         for file in &ret {
             if first {
-                found_names = format!("\t{}", file);
+                found_names = format!("\t{file}");
                 first = false;
             } else {
-                found_names = format!("{}\n\t{}", found_names, file);
+                found_names = format!("{found_names}\n\t{file}");
             }
         }
         info!("Found {{\n{}\n}}", found_names);

@@ -1,9 +1,9 @@
 use crate::prelude::*;
 
 // FIX: PERFORMANCE??
-pub fn entity_in_fov<'w, 's, Range: Into<u32>>(
+pub fn entity_in_fov<Range: Into<u32>>(
     map_manager: &mut impl FovProvider,
-    q_blocks_vision: &Query<'w, 's, &'static BlocksVision>,
+    q_blocks_vision: &Query<&'static BlocksVision>,
     range: Range,
     vision: &Vision,
     current_pos: Position,

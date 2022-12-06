@@ -24,7 +24,7 @@ impl CardinalDirection {
             [-1, 0] => Self::West,
             [0, 1] => Self::South,
             [0, -1] => Self::North,
-            _ => panic!("Unexpected coord: {:?}", coord),
+            _ => panic!("Unexpected coord: {coord:?}"),
         }
     }
 
@@ -164,7 +164,7 @@ impl Display for CardinalDirection {
             Self::South => "South",
             Self::West => "West",
         };
-        write!(f, "{}", dir)
+        write!(f, "{dir}")
     }
 }
 

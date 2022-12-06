@@ -22,7 +22,7 @@ impl Canvas {
     pub fn print(&self) {
         let width = self.size.width();
         print!("  ");
-        (0..width).for_each(|i| print!("{}", i));
+        (0..width).for_each(|i| print!("{i}"));
 
         println!();
 

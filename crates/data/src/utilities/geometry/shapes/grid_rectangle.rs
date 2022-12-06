@@ -37,16 +37,10 @@ impl GridRectangle {
         )
     }
 
-    pub fn new_grid_sized(world_position: WorldPosition) -> Self {
+    pub const fn new_grid_sized(world_position: WorldPosition) -> Self {
         Self {
-            min: Position::new(
-                world_position,
-                LocalPosition::ZERO,
-            ),
-            max: Position::new(
-                world_position,
-                LocalPosition::GRID_SIZED
-            )
+            min: Position::new(world_position, LocalPosition::ZERO),
+            max: Position::new(world_position, LocalPosition::GRID_SIZED),
         }
     }
 }

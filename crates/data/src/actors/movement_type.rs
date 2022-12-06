@@ -34,8 +34,8 @@ impl TryFrom<MovementType> for u8 {
     type Error = String;
 
     fn try_from(value: MovementType) -> Result<Self, Self::Error> {
-        value.to_u8().map_or(
-            Err("Failed to convert `MovementType` to `u8`".to_string()),
+        value.to_u8().map_or_else(
+            || Err("Failed to convert `MovementType` to `u8`".to_string()),
             Ok,
         )
     }

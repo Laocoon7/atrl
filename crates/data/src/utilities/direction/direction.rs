@@ -32,7 +32,7 @@ impl GridDirection {
             [1, -1] => Self::NorthEast,
             [-1, 1] => Self::SouthWest,
             [-1, -1] => Self::NorthWest,
-            _ => panic!("Unexpected coord: {:?}", coord),
+            _ => panic!("Unexpected coord: {coord:?}"),
         }
     }
 

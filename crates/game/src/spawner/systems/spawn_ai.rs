@@ -38,7 +38,7 @@ pub fn spawn_ai(
                 let ai_entity = spawn_ai_at(
                     &mut commands,
                     tileset.atlas(),
-                    format!("Gary ({})", actor_count).as_str(),
+                    format!("Gary ({actor_count})").as_str(),
                     position,
                     vision_type,
                     movement_type,

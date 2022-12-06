@@ -2,6 +2,8 @@
 #![allow(clippy::type_complexity)] // Bevy can have complex queries, so we shush clippy
 #![allow(clippy::too_many_arguments)] // Bevy has a lot of arguments, so we shush clippy
 #![allow(clippy::module_inception)]
+#![feature(associated_type_defaults)]
+#![feature(trait_alias)]
 
 mod actions {
     mod action_type;
@@ -301,10 +303,6 @@ mod utilities {
 
         mod shape;
         pub use shape::*;
-        mod shape_iter;
-        pub use shape_iter::*;
-        mod shape_iter_exclusive;
-        pub use shape_iter_exclusive::*;
     }
     pub use geometry::*;
 

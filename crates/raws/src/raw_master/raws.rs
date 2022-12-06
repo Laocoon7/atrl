@@ -14,7 +14,7 @@ impl Raws {
         // Retrieve the raw data as an array of u8 (8-bit unsigned chars)
         match from_bytes::<T>(raw_data) {
             Ok(template) => template,
-            Err(e) => panic!("Unable to load template: {}", e),
+            Err(e) => panic!("Unable to load template: {e}"),
         }
     }
 }

@@ -1,24 +1,22 @@
 use std::marker::PhantomData;
 
-use crate::prelude::ShapeIter;
-
 use crate::prelude::*;
 pub struct SetBuilder<T> {
-    shapes: Vec<Box<dyn Shape>>,
     value: u32,
     phantom: PhantomData<T>,
+    shapes: Vec<BoxedShape>,
 }
 
 impl<T> SetBuilder<T> {
     pub fn new() -> Box<Self> {
         Box::new(Self {
-            shapes: Vec::new(),
             value: u32::MAX,
+            shapes: Vec::new(),
             phantom: PhantomData,
         })
     }
 
-    fn with_shape(mut self, shape: impl Shape + 'static) -> Box<Self> {
+    fn with_shape(mut self, shape: impl Shape<Iterator = BoxedShapeIter> + 'static) -> Box<Self> {
         self.shapes.push(Box::new(shape));
         Box::new(self)
     }
@@ -28,61 +26,26 @@ impl<T> SetBuilder<T> {
         Box::new(self)
     }
 
-    fn apply_shape(&mut self, shape: Box<impl Shape + ?Sized>) {
-
-    }
+    fn apply_shape(&mut self, shape: Box<impl Shape + ?Sized>) {}
 }
 impl<T> MapArchitect<T> for SetBuilder<T> {
-
     fn generate(&mut self, data: &mut MapGenData<T>) {
-        if self.shapes.len() > 0 {
+        if !self.shapes.is_empty() {
             loop {
-                if self.shapes.len() == 0 {
+                if self.shapes.is_empty() {
                     break;
                 }
                 let shape = self.shapes.pop().unwrap();
                 self.apply_shape(shape);
             }
         } else {
-            self.apply_shape(
-                Box::new(
-                    GridRectangle::new(
-                        Position::new(
-                            data.world_position,
-                            LocalPosition::ZERO,
-                        ),
-                        Position::new(
-                            data.world_position,
-                            LocalPosition::new(
-                                data.size.x - 1,
-                                data.size.y - 1,
-                                MapLayer::Terrain as u32,
-                            )
-                        )
-                    )
-                )
-            );
+            self.apply_shape(Box::new(GridRectangle::new(
+                Position::new(data.world_position, LocalPosition::ZERO),
+                Position::new(
+                    data.world_position,
+                    LocalPosition::new(data.size.x - 1, data.size.y - 1, MapLayer::Terrain as u32),
+                ),
+            )));
         }
-
-        
-
-
     }
 }
-
-
-/*
-Box::new(GridRectangle::new(
-                    Position::new(
-                        data.world_position,
-                        LocalPosition::ZERO,
-                    ),
-                    Position::new(
-                        data.world_position,
-                        LocalPosition::new(
-                            data.size.x - 1,
-                            data.size.y - 1,
-                            MapLayer::Terrain as u32,
-                        )
-                    )
-                )) */

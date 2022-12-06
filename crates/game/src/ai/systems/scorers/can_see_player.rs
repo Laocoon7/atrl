@@ -9,12 +9,12 @@ impl Default for CanSeePlayer {
     fn default() -> Self { Self { score_if_true: 1.0 } }
 }
 
-pub fn can_see_player<'w, 's>(
+pub fn can_see_player(
     mut map_manager: MapManager,
-    mobs_q: Query<(&Position, &FieldOfView, &Vision)>,
     player_entity: Res<PlayerEntity>,
+    mobs_q: Query<(&Position, &FieldOfView, &Vision)>,
+    q_blocks_vision: Query<&'static BlocksVision>,
     mut query: Query<(&Actor, &mut Score, &CanSeePlayer)>,
-    q_blocks_vision: Query<'w, 's, &'static BlocksVision>,
 ) {
     let Ok((player_position, ..)) = mobs_q.get(player_entity.current()) else {
         error!("No player!");

@@ -24,7 +24,7 @@ impl OrdinalDirection {
             [1, -1] => Self::NorthEast,
             [-1, 1] => Self::SouthWest,
             [-1, -1] => Self::NorthWest,
-            _ => panic!("Unexpected coord: {:?}", coord),
+            _ => panic!("Unexpected coord: {coord:?}"),
         }
     }
 
@@ -177,7 +177,7 @@ impl Display for OrdinalDirection {
             Self::SouthWest => "SouthWest",
             Self::NorthWest => "NorthWest",
         };
-        write!(f, "{}", dir)
+        write!(f, "{dir}")
     }
 }
 

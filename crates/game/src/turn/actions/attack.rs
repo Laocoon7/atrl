@@ -24,10 +24,7 @@ pub fn try_attack(entity: Entity, position: Position, world: &mut World) -> Resu
             health.current_hp -= 1;
             let after = format!("{}/{}", health.current_hp, health.max_hp);
 
-            println!(
-                "{} is attacking {:?} before: ({}) after: ({})",
-                name, entity, before, after
-            );
+            println!("{name} is attacking {entity:?} before: ({before}) after: ({after})");
         }
     }
 

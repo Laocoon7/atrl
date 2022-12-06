@@ -21,7 +21,7 @@ pub fn cull_dead(
             println!("YOU DIED!");
             state.go_to(&mut commands, GameState::Dead);
         } else {
-            println!("{} DIED!", name);
+            println!("{name} DIED!");
         }
     }
 }

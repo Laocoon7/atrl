@@ -26,12 +26,7 @@ pub trait Size2d: Clone + Copy {
     // Panics if `width` or `height` is greater than `i32::MAX`
     fn new(width: u32, height: u32) -> UVec2 {
         Self::new_try(width, height).map_or_else(
-            || {
-                panic!(
-                    "Size is too big: ({}, {}). Max is {}.",
-                    width, height, MAX_SIZE
-                )
-            },
+            || panic!("Size is too big: ({width}, {height}). Max is {MAX_SIZE}."),
             |size| size,
         )
     }
