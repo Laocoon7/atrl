@@ -33,6 +33,10 @@ impl RawMaster {
     #[inline(always)]
     pub const fn get_raws(&self) -> &Raws { &self.raws }
 
+    pub fn get_mob(&self, mob_key: &str) -> Option<&RawActor> {
+        self.mob_indices.get(mob_key).map(|i| &self.raws.mobs[*i])
+    }
+
     pub fn load_entity_data<T: 'static + BaseRawComponent>(
         raws: &[T],
         entity_index: &mut HashMap<String, usize>,

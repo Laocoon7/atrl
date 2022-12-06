@@ -1,11 +1,11 @@
 [
     RawActor(
+        name: "Gary",
         ai: Aggressive,
-        name: "Gary the Destroyer",
         vision_range: 16,
         vision: [Normal],
-        movement: [Walk, Swim],
-            stats: RawStats(
+        movement: [Walk],
+        stats: RawStats(
             max_hp: 10,
         ),
     )

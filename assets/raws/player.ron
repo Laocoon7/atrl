@@ -3,7 +3,7 @@ RawActor(
     vision_range: 16,
     vision: [Normal],
     movement: [Walk, Swim],
-        stats: RawStats(
+    stats: RawStats(
         max_hp: 10,
     ),
 )
