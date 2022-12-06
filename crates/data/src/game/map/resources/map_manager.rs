@@ -315,7 +315,16 @@ impl<'w, 's> MapManager<'w, 's> {
     }
 
     fn generate_map(world_position: WorldPosition, random: Random, user_data: MapPassThroughData) -> Map {
-        Map::from(MapGenerator::new(world_position, random, SetBuilder::new().set_value(1), user_data).generate())
+        Map::from(
+            MapGenerator::new(
+                world_position,
+                random,
+                SetBuilder::new()
+                    .set_value(1),
+                user_data
+            )
+            .generate()
+        )
     }
 }
 

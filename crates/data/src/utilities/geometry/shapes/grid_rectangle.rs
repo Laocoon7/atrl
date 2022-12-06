@@ -36,6 +36,19 @@ impl GridRectangle {
             Position::from_absolute_position((max_x, max_y, max_z), max_layer),
         )
     }
+
+    pub fn new_grid_sized(world_position: WorldPosition) -> Self {
+        Self {
+            min: Position::new(
+                world_position,
+                LocalPosition::ZERO,
+            ),
+            max: Position::new(
+                world_position,
+                LocalPosition::GRID_SIZED
+            )
+        }
+    }
 }
 
 impl GridRectangle {

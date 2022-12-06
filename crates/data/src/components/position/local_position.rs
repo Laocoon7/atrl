@@ -8,13 +8,14 @@ pub struct LocalPosition(UVec3);
 impl LocalPosition {
     /// All zeroes.
     pub const ZERO: Self = Self::splat(0);
+    pub const GRID_SIZED: Self = Self::new(GRID_WIDTH, GRID_HEIGHT, 0);
 
     #[inline(always)]
     pub const fn new(x: u32, y: u32, layer: u32) -> Self { Self(UVec3::new(x, y, layer)) }
 
-    /// Creates a `LocalPostion` with all elements set to `v`.
+    /// Creates a `LocalPostion` with `x` and `y` set to `v`. and `layer` set to `0`
     #[inline]
-    pub const fn splat(v: u32) -> Self { Self(UVec3::splat(v)) }
+    pub const fn splat(v: u32) -> Self { Self(UVec2::splat(v).extend(0)) }
 
     ///////////////////////////////
     /// Getters
