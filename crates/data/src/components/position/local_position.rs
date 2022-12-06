@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use crate::prelude::*;
 
 #[derive(Default, Reflect, FromReflect, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Hash, Debug)]
@@ -55,8 +57,8 @@ impl LocalPosition {
     }
 }
 
-impl std::fmt::Display for LocalPosition {
+impl Display for LocalPosition {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "LocalPosition{{({}, {})}}", self.x(), self.y())
+        write!(f, "({}, {}):{}", self.x(), self.y(), self.layer())
     }
 }

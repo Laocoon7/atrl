@@ -183,18 +183,43 @@ impl Position {
 
     pub const fn absolute_y(&self) -> i64 { self.world_y() as i64 * GRID_HEIGHT as i64 + self.y() as i64 }
 
-    pub const fn from_absolute_position(absolute_position: (i64, i64, i32), layer: u32) -> Self {
-        let world_x = (absolute_position.0 / GRID_WIDTH as i64) as i32;
-        let world_y = (absolute_position.1 / GRID_HEIGHT as i64) as i32;
-        let world_z = absolute_position.2;
+    pub fn from_absolute_position(absolute_position: (i64, i64, i32), layer: u32) -> Self {
+        let (world_x, local_x) = if absolute_position.0 < 0 {
+            let abs_x = absolute_position.0.abs();
+            let world = abs_x / GRID_WIDTH as i64;
+            let local = GRID_WIDTH as i64 - (abs_x - (world * GRID_WIDTH as i64));
+            (-(world as i32) - 1, local as u32)
+        } else {
+            (
+                (absolute_position.0 / GRID_WIDTH as i64) as i32,
+                (absolute_position.0 % GRID_WIDTH as i64) as u32,
+            )
+        };
 
-        let local_x = (absolute_position.0 % GRID_WIDTH as i64) as u32;
-        let local_y = (absolute_position.1 % GRID_HEIGHT as i64) as u32;
+        let (world_y, local_y) = if absolute_position.1 < 0 {
+            let abs_y = absolute_position.1.abs();
+            let world = abs_y / GRID_HEIGHT as i64;
+            let local = GRID_HEIGHT as i64 - (abs_y - (world * GRID_HEIGHT as i64));
+            (-(world as i32) - 1, local as u32)
+        } else {
+            (
+                (absolute_position.1 / GRID_HEIGHT as i64) as i32,
+                (absolute_position.1 % GRID_HEIGHT as i64) as u32,
+            )
+        };
 
-        Self::new(
-            WorldPosition::new(world_x, world_y, world_z),
+        let x = Self::new(
+            WorldPosition::new(world_x, world_y, absolute_position.2),
             LocalPosition::new(local_x, local_y, layer),
-        )
+        );
+        info!(
+            "Converting: {}, {} into {}, {}",
+            absolute_position.0,
+            absolute_position.1,
+            x.get_world_position(),
+            x.get_local_position()
+        );
+        x
     }
 }
 
@@ -217,12 +242,8 @@ impl Display for Position {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
-            "Position{{({}, {}, {})::({}, {})}}",
-            self.world_x(),
-            self.world_y(),
-            self.world_z(),
-            self.x(),
-            self.y()
+            "Position{{{}::{}}}",
+            self.world_position, self.local_position,
         )
     }
 }

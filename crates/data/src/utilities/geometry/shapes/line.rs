@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use crate::prelude::*;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq)]
@@ -51,4 +53,10 @@ impl ShapeIterExclusive for Line {
 
     #[inline]
     fn iter_exlusive(&self) -> Self::ExlusiveIterator { self.into_iter_exlusive() }
+}
+
+impl Display for Line {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Line {{Start: {}, End: {}}}", self.start, self.end)
+    }
 }

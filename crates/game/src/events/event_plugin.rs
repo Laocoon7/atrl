@@ -45,7 +45,7 @@ impl<T: StateNext> Plugin for ProccessEventsPlugin<T> {
         // Game Events
         app.add_system_set_to_stage(
             AtrlStage::ProccessEvents,
-            ConditionSet::new().run_in_state(self.state_running).with_system(movement).into(),
+            ConditionSet::new().run_in_state(self.state_running).with_system(update_transforms).into(),
         );
     }
 }

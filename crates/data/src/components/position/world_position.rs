@@ -1,4 +1,7 @@
+use std::fmt::Display;
+
 use crate::prelude::*;
+
 #[derive(Default, Reflect, FromReflect, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct WorldPosition(IVec3);
 
@@ -48,5 +51,11 @@ impl WorldPosition {
     pub fn set_xyz(&mut self, x: i32, y: i32, z: i32) {
         self.set_xy(x, y);
         self.set_z(z);
+    }
+}
+
+impl Display for WorldPosition {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "({}, {}, {})", self.x(), self.y(), self.z())
     }
 }

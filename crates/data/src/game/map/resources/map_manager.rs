@@ -353,6 +353,10 @@ pub fn set_current_map_to_current_player(
 ) {
     if let Ok(position) = q_positions.get(player_entity.current()) {
         if map_manager.map_manager.current_map.0 != position.get_world_position() {
+            info!(
+                "Switching map to: WorldPosition:{}",
+                position.get_world_position()
+            );
             map_manager.set_current_map(position.get_world_position());
             map_manager.map_manager.current_map.1.update_all = true;
         }
