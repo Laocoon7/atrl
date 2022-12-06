@@ -11,7 +11,6 @@ impl<T: StateNext> Plugin for PlayerPlugin<T> {
                 ConditionSet::new()
                     .run_in_state(self.state_running)
                     .with_system(player_input)
-                    .with_system(draw_shape)
                     .into(),
             );
     }
