@@ -43,8 +43,6 @@ mod systems {
 mod templates {
     mod actor_template;
     pub use actor_template::*;
-    mod ai_template;
-    pub use ai_template::*;
     mod base_raw_component;
     pub use base_raw_component::*;
     mod stat_templates;
