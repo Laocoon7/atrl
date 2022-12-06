@@ -8,23 +8,6 @@ pub struct TurnManager {
 }
 
 impl TurnManager {
-    // This will go into an `impl FromWorld`
-    // FIX: Does it need to?? - Jacob
-    // Yes, as this needs to be serialized,
-    // and Entity is not reflectable. We will
-    // have to match new entity id's to the stored
-    // entities. FromWorld allows us access to all
-    // the resources and entities already generated.
-    // Serialization is going to be a pain! XD
-
-    // pub fn new() -> Self {
-    //     Self {
-    //         turn_number: 0,
-    //         current_time: 0,
-    //         entities: IndexList::new(),
-    //     }
-    // }
-
     /// Add entities to the TurnManager when building the map.
     pub fn add_entity(&mut self, entity: Entity) {
         if let Some((turn_number, current_time, _entity)) = self.entities.get_last() {
@@ -125,10 +108,3 @@ impl TurnManager {
         None
     }
 }
-
-// impl FromWorld for TurnManager {
-//     fn from_world(_world: &mut World) -> Self {
-//         println!("TurnManager::from_world");
-//         Self::new()
-//     }
-// }

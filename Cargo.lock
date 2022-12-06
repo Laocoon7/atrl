@@ -227,6 +227,7 @@ dependencies = [
  "kayak_font",
  "kayak_ui",
  "rayon",
+ "sqlite",
 ]
 
 [[package]]
@@ -1318,9 +1319,9 @@ checksum = "c1db59621ec70f09c5e9b597b220c7a2b43611f4710dc03ceb8748637775692c"
 
 [[package]]
 name = "calloop"
-version = "0.10.3"
+version = "0.10.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5bcf530afb40e45e14440701e5e996d7fd139e84a912a4d83a8d6a0fb3e58663"
+checksum = "19457a0da465234abd76134a5c2a910c14bd3c5558463e4396ab9a37a328e465"
 dependencies = [
  "log",
  "nix 0.25.1",
@@ -3614,9 +3615,9 @@ dependencies = [
 
 [[package]]
 name = "pathfinding"
-version = "3.0.14"
+version = "4.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cb45190a18e771c500291c549959777a3be38d30113a860930bc1f2119f0cc13"
+checksum = "09ba65132000a419ec9b12d1850a4f73896afd0e8575d4dae41097e17600048f"
 dependencies = [
  "fixedbitset",
  "indexmap",
@@ -4094,9 +4095,9 @@ dependencies = [
 
 [[package]]
 name = "rustix"
-version = "0.36.4"
+version = "0.36.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cb93e85278e08bb5788653183213d3a60fc242b10cb9be96586f5a73dcb67c23"
+checksum = "a3807b5d10909833d3e9acd1eb5fb988f79376ff10fce42937de71a449c4c588"
 dependencies = [
  "bitflags",
  "errno",
@@ -4168,18 +4169,18 @@ checksum = "388a1df253eca08550bef6c72392cfe7c30914bf41df5269b68cbd6ff8f570a3"
 
 [[package]]
 name = "serde"
-version = "1.0.148"
+version = "1.0.149"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e53f64bb4ba0191d6d0676e1b141ca55047d83b74f5607e6d8eb88126c52c2dc"
+checksum = "256b9932320c590e707b94576e3cc1f7c9024d0ee6612dfbcf1cb106cbe8e055"
 dependencies = [
  "serde_derive",
 ]
 
 [[package]]
 name = "serde_derive"
-version = "1.0.148"
+version = "1.0.149"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a55492425aa53521babf6137309e7d34c20bbfbbfcfe2c7f3a047fd1f6b92c0c"
+checksum = "b4eae9b04cbffdfd550eb462ed33bc6a1b68c935127d008b27444d08380f94e4"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -4314,6 +4315,36 @@ checksum = "246bfa38fe3db3f1dfc8ca5a2cdeb7348c78be2112740cc0ec8ef18b6d94f830"
 dependencies = [
  "bitflags",
  "num-traits",
+]
+
+[[package]]
+name = "sqlite"
+version = "0.30.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "12e072cb5fb89b3fe5e9c9584676348feb503f9fb3ae829d9868171bc5372d48"
+dependencies = [
+ "libc",
+ "sqlite3-sys",
+]
+
+[[package]]
+name = "sqlite3-src"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d1815a7a02c996eb8e5c64f61fcb6fd9b12e593ce265c512c5853b2513635691"
+dependencies = [
+ "cc",
+ "pkg-config",
+]
+
+[[package]]
+name = "sqlite3-sys"
+version = "0.14.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d47c99824fc55360ba00caf28de0b8a0458369b832e016a64c13af0ad9fbb9ee"
+dependencies = [
+ "libc",
+ "sqlite3-src",
 ]
 
 [[package]]
@@ -4646,9 +4677,9 @@ checksum = "375812fa44dab6df41c195cd2f7fecb488f6c09fbaafb62807488cefab642bff"
 
 [[package]]
 name = "typenum"
-version = "1.15.0"
+version = "1.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dcf81ac59edc17cc8697ff311e8f5ef2d99fcbd9817b34cec66f90b6c3dfd987"
+checksum = "497961ef93d974e23eb6f433eb5fe1b7930b659f06d12dec6fc44a8f554c0bba"
 
 [[package]]
 name = "unicode-bidi"

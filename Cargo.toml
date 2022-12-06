@@ -276,11 +276,14 @@ version  = "0.24"
 version = "1"
 
 [workspace.dependencies.pathfinding]
-version = "3"
+version = "4"
 
 [workspace.dependencies.ordered-float]
 features = ["serde"]
 version  = "3"
+
+[workspace.dependencies.sqlite]
+version = "0.30"
 
 ######################################
 ######################################
@@ -325,4 +328,6 @@ workspace = true
 [dependencies.kayak_font]
 workspace = true
 [dependencies.kayak_ui]
+workspace = true
+[dependencies.sqlite]
 workspace = true

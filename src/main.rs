@@ -3,7 +3,6 @@
 #![allow(clippy::too_many_arguments)] // Bevy has a lot of arguments, so we shush clippy
 #![allow(unused_imports)] // TODO: REMOVE ME
 
-pub(crate) mod prelude;
 use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
 
 use crate::prelude::*;
@@ -23,9 +22,12 @@ pub(crate) mod debug {
 }
 
 mod log;
+pub(crate) mod prelude;
 
 fn main() {
     let mut app = App::new();
+
+    // let connection = sqlite::open(":memory:").unwrap();
 
     // Default Plugins
     default_plugins(&mut app).insert_resource(ClearColor(Color::BLACK));
