@@ -285,9 +285,6 @@ impl<'w, 's> MapManager<'w, 's> {
         game_context: &mut ResMut<GameContext>,
         world_position: WorldPosition,
     ) -> Map {
-        // Create the map size.
-        let map_size = UVec2::new(GRID_WIDTH, GRID_HEIGHT);
-
         // Create a Random for the map to be generated from and then use as it's own.
         let map_seed =
             game_context.random.prht.get(world_position.x(), world_position.y(), world_position.z());
@@ -297,8 +294,7 @@ impl<'w, 's> MapManager<'w, 's> {
         let map_entity = commands.spawn_empty().id();
 
         // Create the map.
-        let map = Self::generate_map(map_size, random, MapPassThroughData {
-            world_position,
+        let map = Self::generate_map(world_position, random, MapPassThroughData {
             map_entity,
         });
 
@@ -318,8 +314,8 @@ impl<'w, 's> MapManager<'w, 's> {
         map
     }
 
-    fn generate_map(size: UVec2, random: Random, user_data: MapPassThroughData) -> Map {
-        Map::from(MapGenerator::new(size, random, SetBuilder::new().set_value(1), user_data).generate())
+    fn generate_map(world_position: WorldPosition, random: Random, user_data: MapPassThroughData) -> Map {
+        Map::from(MapGenerator::new(world_position, random, SetBuilder::new().set_value(1), user_data).generate())
     }
 }
 

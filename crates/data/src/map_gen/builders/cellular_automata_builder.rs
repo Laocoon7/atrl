@@ -59,28 +59,28 @@ impl<T> MapArchitect<T> for CellularAutomataBuilder<T> {
             None => Rectangle::new((0i32, 0), data.size - UVec2::new(1, 1)),
         };
 
-        if !data.terrain_grid.in_bounds(rect.min()) || !data.terrain_grid.in_bounds(rect.max()) {
+        if !data.output_grid.in_bounds(rect.min()) || !data.output_grid.in_bounds(rect.max()) {
             error!(
                 "CellularAutomataBuilder Rectangle{{ {}, {} }} is outside of bounds for Grid({}, {})",
                 rect.min(),
                 rect.max(),
-                data.terrain_grid.width(),
-                data.terrain_grid.height()
+                data.output_grid.width(),
+                data.output_grid.height()
             );
             return;
         }
 
         for _ in 0..self.number_of_iterations {
-            let mut new_tiles = data.terrain_grid.clone();
+            let mut new_tiles = data.output_grid.clone();
             rect.for_each(|index| {
-                let neighbors = Self::count_neighbors(&data.terrain_grid, index);
+                let neighbors = Self::count_neighbors(&data.output_grid, index);
                 if neighbors > 4 || neighbors == 0 {
                     new_tiles.set(index, u32::MAX);
                 } else {
                     new_tiles.set(index, u32::MIN);
                 }
             });
-            data.terrain_grid = new_tiles;
+            data.output_grid = new_tiles;
         }
     }
 }

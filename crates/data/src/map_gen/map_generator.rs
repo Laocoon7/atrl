@@ -5,10 +5,10 @@ pub struct MapGenerator<T> {
 }
 
 impl<T> MapGenerator<T> {
-    pub fn new(size: impl Size2d, random: Random, starter: Box<dyn MapArchitect<T>>, user_data: T) -> Self {
+    pub fn new(world_position: WorldPosition, random: Random, starter: Box<dyn MapArchitect<T>>, user_data: T) -> Self {
         Self {
             builders: vec![starter],
-            map_gen_data: MapGenData::new(size.as_uvec2(), random, user_data),
+            map_gen_data: MapGenData::new(world_position, random, user_data),
         }
     }
 

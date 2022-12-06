@@ -1,8 +1,10 @@
 use std::marker::PhantomData;
 
+use crate::prelude::ShapeIter;
+
 use crate::prelude::*;
 pub struct SetBuilder<T> {
-    rect: Option<Rectangle>,
+    shapes: Vec<Box<dyn Shape>>,
     value: u32,
     phantom: PhantomData<T>,
 }
@@ -10,14 +12,14 @@ pub struct SetBuilder<T> {
 impl<T> SetBuilder<T> {
     pub fn new() -> Box<Self> {
         Box::new(Self {
-            rect: None,
+            shapes: Vec::new(),
             value: u32::MAX,
             phantom: PhantomData,
         })
     }
 
-    pub fn with_rect(mut self, rectangle: Rectangle) -> Box<Self> {
-        self.rect = Some(rectangle);
+    fn with_shape(mut self, shape: impl Shape + 'static) -> Box<Self> {
+        self.shapes.push(Box::new(shape));
         Box::new(self)
     }
 
@@ -25,27 +27,62 @@ impl<T> SetBuilder<T> {
         self.value = value;
         Box::new(self)
     }
-}
-impl<T> MapArchitect<T> for SetBuilder<T> {
-    fn generate(&mut self, data: &mut MapGenData<T>) {
-        let rect = match &self.rect {
-            Some(r) => *r,
-            None => Rectangle::new((0i32, 0), data.size - UVec2::new(1, 1)),
-        };
 
-        if !data.terrain_grid.in_bounds(rect.min()) || !data.terrain_grid.in_bounds(rect.max()) {
-            error!(
-                "SetBuilder Rectangle{{ {}, {} }} is outside of bounds for Grid({}, {})",
-                rect.min(),
-                rect.max(),
-                data.terrain_grid.width(),
-                data.terrain_grid.height()
-            );
-            return;
-        }
+    fn apply_shape(&mut self, shape: Box<impl Shape + ?Sized>) {
 
-        rect.for_each(|v| {
-            data.terrain_grid.set(v, self.value);
-        });
     }
 }
+impl<T> MapArchitect<T> for SetBuilder<T> {
+
+    fn generate(&mut self, data: &mut MapGenData<T>) {
+        if self.shapes.len() > 0 {
+            loop {
+                if self.shapes.len() == 0 {
+                    break;
+                }
+                let shape = self.shapes.pop().unwrap();
+                self.apply_shape(shape);
+            }
+        } else {
+            self.apply_shape(
+                Box::new(
+                    GridRectangle::new(
+                        Position::new(
+                            data.world_position,
+                            LocalPosition::ZERO,
+                        ),
+                        Position::new(
+                            data.world_position,
+                            LocalPosition::new(
+                                data.size.x - 1,
+                                data.size.y - 1,
+                                MapLayer::Terrain as u32,
+                            )
+                        )
+                    )
+                )
+            );
+        }
+
+        
+
+
+    }
+}
+
+
+/*
+Box::new(GridRectangle::new(
+                    Position::new(
+                        data.world_position,
+                        LocalPosition::ZERO,
+                    ),
+                    Position::new(
+                        data.world_position,
+                        LocalPosition::new(
+                            data.size.x - 1,
+                            data.size.y - 1,
+                            MapLayer::Terrain as u32,
+                        )
+                    )
+                )) */

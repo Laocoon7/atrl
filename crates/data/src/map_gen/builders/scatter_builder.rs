@@ -25,20 +25,20 @@ impl<T> MapArchitect<T> for ScatterBuilder<T> {
             None => Rectangle::new((0i32, 0), data.size - UVec2::new(1, 1)),
         };
 
-        if !data.terrain_grid.in_bounds(rect.min()) || !data.terrain_grid.in_bounds(rect.max()) {
+        if !data.output_grid.in_bounds(rect.min()) || !data.output_grid.in_bounds(rect.max()) {
             error!(
                 "ScatterBuilder Rectangle{{ {}, {} }} is outside of bounds for Grid({}, {})",
                 rect.min(),
                 rect.max(),
-                data.terrain_grid.width(),
-                data.terrain_grid.height()
+                data.output_grid.width(),
+                data.output_grid.height()
             );
             return;
         }
 
         rect.for_each(|v| {
             // TODO: look into different rng function. rng.gen_range() is for only 1 lookup.
-            data.terrain_grid.set(v, data.random.prng.range(0..u32::MAX));
+            data.output_grid.set(v, data.random.prng.range(0..u32::MAX));
         });
     }
 }
