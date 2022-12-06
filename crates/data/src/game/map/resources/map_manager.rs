@@ -368,7 +368,10 @@ pub fn update_tilemaps(
     q_storage: Query<&TileStorage>,
     mut q_tiles: Query<(&mut TileTextureIndex, &mut TileVisible, &mut TileColor)>,
     // TODO: Component for holding image index on features???
-    mut q_visibility: Query<&mut Visibility>,
+    mut q_visibility: ParamSet<(
+        Query<&mut Visibility>,
+        Query<(&mut Visibility, &Position), With<Mob>>,
+    )>,
 ) {
     // Get storages
     let Ok(terrain_storage) = q_storage.get(map_manager.map_manager.terrain_layer) else {
@@ -468,7 +471,7 @@ pub fn update_tilemaps(
 
     let visible_tiles = map_manager.map_manager.visible_tiles.get_all();
     // refresh mutable reference for borrow checker...
-    let map = &mut map_manager.map_manager.current_map.1;
+    let (current_world_position, map) = &mut map_manager.map_manager.current_map;
 
     for y in 0..map.size.height() {
         position.set_y(y);
@@ -480,7 +483,7 @@ pub fn update_tilemaps(
 
             // Terrain
             if let Some(entity) = terrain_storage.get(&tile_pos) {
-                if let Ok(mut visibility) = q_visibility.get_mut(entity) {
+                if let Ok(mut visibility) = q_visibility.p0().get_mut(entity) {
                     visibility.is_visible = is_explored;
                 }
 
@@ -495,20 +498,20 @@ pub fn update_tilemaps(
 
             // Features
             if let Some(entity) = feature_storage.get(&tile_pos) {
-                if let Ok(mut visibility) = q_visibility.get_mut(entity) {
+                if let Ok(mut visibility) = q_visibility.p0().get_mut(entity) {
                     visibility.is_visible = map.explored_tiles.contains(&UVec2::new(x, y));
                 }
-                // tiles too
             }
+            // tiles too
+        }
+    }
 
-            // Actors
-            if let Some(actors) = map.get_actors(position.get_local_position()) {
-                actors.iter().for_each(|actor| {
-                    if let Ok(mut visibility) = q_visibility.get_mut(*actor) {
-                        visibility.is_visible = visible_tiles.contains(&position);
-                    }
-                });
-            }
+    // Actors
+    for (mut visibility, position) in q_visibility.p1().iter_mut() {
+        if position.get_world_position() == *current_world_position {
+            visibility.is_visible = visible_tiles.contains(position);
+        } else {
+            visibility.is_visible = false;
         }
     }
 }
