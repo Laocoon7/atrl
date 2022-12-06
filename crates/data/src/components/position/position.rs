@@ -208,18 +208,10 @@ impl Position {
             )
         };
 
-        let x = Self::new(
+        Self::new(
             WorldPosition::new(world_x, world_y, absolute_position.2),
             LocalPosition::new(local_x, local_y, layer),
-        );
-        info!(
-            "Converting: {}, {} into {}, {}",
-            absolute_position.0,
-            absolute_position.1,
-            x.get_world_position(),
-            x.get_local_position()
-        );
-        x
+        )
     }
 }
 
