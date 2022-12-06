@@ -1,4 +1,5 @@
 use crate::prelude::*;
+
 pub fn check_loaded_assets(
     splash_timer: Res<SplashTimer>,
     progress_counter: Option<Res<ProgressCounter>>,

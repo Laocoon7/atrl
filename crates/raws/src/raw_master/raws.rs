@@ -3,10 +3,12 @@ use ron::de::from_bytes;
 use crate::prelude::*;
 
 embedded_resource!(RAW_PLAYER_FILE, "../../../../assets/raws/player.ron");
+embedded_resource!(RAW_MOBS_FILE, "../../../../assets/raws/mobs.ron");
 
 #[derive(Debug)]
 pub struct Raws {
     pub player: RawActor,
+    pub mobs: Vec<RawActor>,
 }
 
 impl Raws {

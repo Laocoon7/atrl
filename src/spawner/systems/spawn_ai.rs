@@ -66,8 +66,6 @@ fn spawn_ai_at(
     vision_type: VisionType,
     movement_type: MovementType,
 ) -> Entity {
-    // let chase_and_attack = Steps::build().step(ChaseActor::default());
-
     // Build the thinker
     let thinker = Thinker::build()
         .picker(FirstToScore { threshold: 0.8 })
@@ -80,30 +78,28 @@ fn spawn_ai_at(
 
     commands
         .spawn((
-            AIBundle {
+            ActorBundle {
+                mob: Mob,
+                position,
                 ai: AIComponent::aggressive(),
-                actor: ActorBundle {
-                    mob: Mob,
-                    position,
-                    name: Name::new(name.to_string()),
-                    health: Health::full(5),
-                    sprite: SpriteSheetBundle {
-                        sprite: TextureAtlasSprite {
-                            color: Color::RED,
-                            index: TILE_ACTOR_OGRE_ID,
-                            custom_size: Some(Vec2::ONE),
-                            ..Default::default()
-                        },
-                        texture_atlas: texture_atlas.clone(),
-                        transform: Transform::from_translation(position.translation()),
-                        ..default()
+                name: Name::new(name.to_string()),
+                health: Health::full(5),
+                sprite: SpriteSheetBundle {
+                    sprite: TextureAtlasSprite {
+                        color: Color::RED,
+                        index: TILE_ACTOR_OGRE_ID,
+                        custom_size: Some(Vec2::ONE),
+                        ..Default::default()
                     },
-
-                    fov: FieldOfView(8),
-                    vision_component: Vision(vision_type.as_u8()),
-                    movement_component: Movement(movement_type.as_u8()),
-                    target_visualizer: TargetVisualizer::default(),
+                    texture_atlas: texture_atlas.clone(),
+                    transform: Transform::from_translation(position.translation()),
+                    ..default()
                 },
+
+                fov: FieldOfView(8),
+                vision_component: Vision(vision_type.as_u8()),
+                movement_component: Movement(movement_type.as_u8()),
+                target_visualizer: TargetVisualizer::default(),
             },
             thinker,
         ))

@@ -4,12 +4,6 @@ use big_brain::actions::ActionState;
 
 use crate::prelude::*;
 
-#[derive(Debug, Default, Component, Clone)]
-pub struct ChaseActor {
-    generated_path: bool,
-    last_seen_pt: Option<Position>,
-}
-
 pub fn chase_action<'w, 's>(
     mut commands: Commands,
     mut map_manager: MapManager,

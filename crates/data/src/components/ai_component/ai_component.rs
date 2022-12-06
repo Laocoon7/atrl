@@ -18,7 +18,7 @@ impl AIComponent {
 }
 
 impl AIComponent {
-    pub const fn human() -> Self {
+    pub const fn player() -> Self {
         Self {
             ai_type: AIType::Player,
             preferred_action: None,

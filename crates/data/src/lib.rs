@@ -39,10 +39,14 @@ mod components {
     };
 
     mod ai_component {
+        mod actions;
+        pub use actions::*;
         mod ai_component;
-        mod ai_type;
         pub use ai_component::*;
+        mod ai_type;
         pub use ai_type::*;
+        mod scorers;
+        pub use scorers::*;
     }
     pub use ai_component::*;
 
@@ -57,8 +61,6 @@ mod components {
     mod bundles {
         mod actor_bundle;
         pub use actor_bundle::*;
-        mod ai_bundle;
-        pub use ai_bundle::*;
         mod player_bundle;
         pub use player_bundle::*;
     }
@@ -239,8 +241,8 @@ mod resources {
     pub use tileset_ids::*;
     mod timer;
     pub use timer::*;
-    mod font_paths;
-    pub use font_paths::*;
+    mod font_ids;
+    pub use font_ids::*;
     mod turn_manager;
     pub use turn_manager::*;
 }

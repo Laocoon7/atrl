@@ -4,26 +4,6 @@ use crate::prelude::*;
 
 static WANDER_RANGE: Lazy<Uniform<u32>> = Lazy::new(|| Uniform::new_inclusive(3, 10));
 
-// could be used for temporary storage for multi turn actions
-#[derive(Debug, Reflect, Component, Clone, Eq, PartialEq)]
-#[reflect(Component)]
-pub struct Wander {
-    destination: Option<Position>,
-    my_previous_location: Position,
-}
-
-impl Default for Wander {
-    fn default() -> Self {
-        Self {
-            destination: None,
-            my_previous_location: Position::new(
-                WorldPosition::ZERO,
-                LocalPosition::new(0, 0, MapLayer::Actors as u32),
-            ),
-        }
-    }
-}
-
 pub fn wander_action(
     mut commands: Commands,
     mut map_manager: MapManager,

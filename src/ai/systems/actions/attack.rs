@@ -2,10 +2,6 @@ use big_brain::actions::ActionState;
 
 use crate::prelude::*;
 
-#[derive(Debug, Default, Component, Clone)]
-// could be used for temporary storage for multi turn actions
-pub struct AttackActor;
-
 pub fn attack_action(
     mut commands: Commands,
     player_entity: Res<PlayerEntity>,

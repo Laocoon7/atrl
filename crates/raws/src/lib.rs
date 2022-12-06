@@ -15,6 +15,16 @@ mod resources {
 }
 
 mod raw_master {
+    mod templates {
+        mod actor_template;
+        pub use actor_template::*;
+        mod base_raw_component;
+        pub use base_raw_component::*;
+        mod stat_templates;
+        pub use stat_templates::*;
+    }
+    pub use templates::*;
+
     mod utils {
         mod spawn;
         pub use spawn::*;
@@ -38,15 +48,6 @@ mod systems {
     pub use check_loaded_assets::*;
     mod wait_for_tilesets_to_load;
     pub use wait_for_tilesets_to_load::*;
-}
-
-mod templates {
-    mod actor_template;
-    pub use actor_template::*;
-    mod base_raw_component;
-    pub use base_raw_component::*;
-    mod stat_templates;
-    pub use stat_templates::*;
 }
 
 mod raw_plugin;
@@ -73,7 +74,7 @@ pub mod prelude {
     }
     pub(crate) use import::*;
     mod export {
-        pub use crate::{raw_master::*, raw_plugin::*, resources::*, templates::*};
+        pub use crate::{raw_master::*, raw_plugin::*, resources::*};
     }
     pub use export::*;
 }
