@@ -27,8 +27,6 @@ pub(crate) mod prelude;
 fn main() {
     let mut app = App::new();
 
-    // let connection = sqlite::open(":memory:").unwrap();
-
     // Default Plugins
     default_plugins(&mut app).insert_resource(ClearColor(Color::BLACK));
 

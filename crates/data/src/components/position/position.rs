@@ -183,7 +183,7 @@ impl Position {
 
     pub const fn absolute_y(&self) -> i64 { self.world_y() as i64 * GRID_HEIGHT as i64 + self.y() as i64 }
 
-    pub fn from_absolute_position(absolute_position: (i64, i64, i32), layer: u32) -> Self {
+    pub const fn from_absolute_position(absolute_position: (i64, i64, i32), layer: u32) -> Self {
         let (world_x, local_x) = if absolute_position.0 < 0 {
             let abs_x = absolute_position.0.abs();
             let world = abs_x / GRID_WIDTH as i64;

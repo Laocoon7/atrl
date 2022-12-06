@@ -1,6 +1,6 @@
 use crate::prelude::*;
 
-pub const WAIT_TIME: u32 = SECONDS * 1;
+pub const WAIT_TIME: u32 = SECONDS;
 pub const MOVE_TIME: u32 = SECONDS * 2;
 pub const ATTACK_TIME: u32 = (SECONDS as f32 * 1.5) as u32;
 

@@ -3,6 +3,7 @@ use crate::prelude::*;
 pub fn perform_turns(world: &mut World) {
     world.resource_scope(|world, mut turn_manager: Mut<TurnManager>| {
         let player_entity = world.resource::<PlayerEntity>().current();
+
         loop {
             if let Some(entity) = turn_manager.start_entity_turn() {
                 let is_player = entity == player_entity;

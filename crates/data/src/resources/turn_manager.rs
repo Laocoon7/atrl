@@ -5,7 +5,7 @@ pub const MINUTES: u32 = SECONDS * 60;
 pub const HOURS: u32 = MINUTES * 60;
 pub const DAYS: u32 = HOURS * 24;
 
-pub const TURN_TIME: u32 = DAYS * 1; // 86_400_000;
+pub const TURN_TIME: u32 = DAYS; // 86_400_000;
 
 #[derive(Default, Resource)]
 pub struct TurnManager {
@@ -125,21 +125,25 @@ impl TurnManager {
 impl TurnManager {
     /// Which Day it is
     /// starting at Day 0
-    pub fn get_days(&self) -> u32 { self.current_time / DAYS }
+    #[inline]
+    pub const fn get_days(&self) -> u32 { self.current_time / DAYS }
 
     /// What Hour of the Day it is
     /// 0..=23
-    pub fn get_hours(&self) -> u32 { (self.current_time - self.get_days() * DAYS) / HOURS }
+    #[inline]
+    pub const fn get_hours(&self) -> u32 { (self.current_time - self.get_days() * DAYS) / HOURS }
 
     /// What Minute of the Hour it is
     /// 0..=59
-    pub fn get_minutes(&self) -> u32 {
+    #[inline]
+    pub const fn get_minutes(&self) -> u32 {
         (self.current_time - self.get_days() * DAYS - self.get_hours() * HOURS) / MINUTES
     }
 
     /// What Second of the Minute it is
     /// 0..=(SECONDS * 60) - 1
-    pub fn get_seconds(&self) -> u32 {
+    #[inline]
+    pub const fn get_seconds(&self) -> u32 {
         self.current_time - self.get_days() * DAYS - self.get_hours() * HOURS - self.get_minutes() * MINUTES
     }
 }
