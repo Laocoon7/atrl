@@ -149,13 +149,6 @@ features = [
 ]
 version = "0.9"
 
-######################################
-#########       Assets
-######################################
-[workspace.dependencies.bevy_common_assets]
-features = ["ron", "toml", "json"]
-version  = "0.4"
-
 [workspace.dependencies.bevy_tweening]
 features = ["bevy_asset"]
 version  = "0.6"
@@ -191,6 +184,9 @@ version = "0.8"
 [workspace.dependencies.serde]
 features = ["derive"]
 version  = "1"
+
+[workspace.dependencies.serde_yaml]
+version = "0.9"
 
 ######################################
 #########       States

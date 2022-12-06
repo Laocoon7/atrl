@@ -9,22 +9,25 @@ dev     = []
 release = []
 
 [dependencies]
-arrayvec               = { workspace = true }
+
 bevy                   = { workspace = true }
 bevy_ecs_tilemap       = { workspace = true }
 bevy_tileset           = { workspace = true }
-bitvec                 = { workspace = true }
-index_list             = { workspace = true }
-iyes_loopless          = { workspace = true }
 leafwing-input-manager = { workspace = true }
-num-derive             = { workspace = true }
-num-traits             = { workspace = true }
-ordered-float          = { workspace = true }
-parking_lot            = { workspace = true }
-pathfinding            = { workspace = true }
-ron                    = { workspace = true }
-serde                  = { workspace = true }
-thiserror              = { workspace = true }
+
+arrayvec      = { workspace = true }
+bitvec        = { workspace = true }
+index_list    = { workspace = true }
+iyes_loopless = { workspace = true }
+num-derive    = { workspace = true }
+num-traits    = { workspace = true }
+ordered-float = { workspace = true }
+parking_lot   = { workspace = true }
+pathfinding   = { workspace = true }
+ron           = { workspace = true }
+serde         = { workspace = true }
+serde_yaml    = { workspace = true }
+thiserror     = { workspace = true }
 
 #################################
 #########       Random

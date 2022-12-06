@@ -31,9 +31,12 @@ impl<T: StateNext> GamePlugin<T> {
         app
             // Game Contexts
             .init_resource::<GameContext>()
+            // Ai Context
             .init_resource::<AiContext>()
             // Turn Manager
-            .init_resource::<TurnManager>();
+            .init_resource::<TurnManager>()
+            // Game Settings
+            .init_resource::<GameSettings>();
         self
     }
 

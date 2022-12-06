@@ -233,6 +233,10 @@ mod resources {
     pub use action_queue::*;
     mod app_settings;
     pub use app_settings::*;
+    mod font_ids;
+    pub use font_ids::*;
+    mod game_settings;
+    pub use game_settings::*;
     mod player_entity;
     pub use player_entity::*;
     mod tile_ids;
@@ -241,8 +245,6 @@ mod resources {
     pub use tileset_ids::*;
     mod timer;
     pub use timer::*;
-    mod font_ids;
-    pub use font_ids::*;
     mod turn_manager;
     pub use turn_manager::*;
 }
