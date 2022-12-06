@@ -1,24 +1,25 @@
 use crate::prelude::*;
 
 // FIX: PERFORMANCE??
-pub fn entity_in_fov<'w, 's>(
+pub fn entity_in_fov<'w, 's, Range: Into<u32>>(
     map_manager: &mut impl FovProvider,
     q_blocks_vision: &Query<'w, 's, &'static BlocksVision>,
-    fov: &FieldOfView,
+    range: Range,
     vision: &Vision,
     current_pos: Position,
     destination_pos: Position,
 ) -> bool {
     // // If the player is within the FOV range of the AI, check line of sight
     let distance = current_pos.distance(destination_pos);
-    if distance <= fov.0 as u32 {
+    let range = range.into();
+    if distance <= range {
         let mut visibility_map = VisibilityMap::new();
         let octant = current_pos.octant_to(destination_pos);
         let direction = CardinalDirection::from_octant(octant);
         Fov::ShadowcastDirection(direction).compute(
             current_pos,
             vision.0,
-            fov.0,
+            range,
             map_manager,
             q_blocks_vision,
             &mut visibility_map,

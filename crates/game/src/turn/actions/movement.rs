@@ -20,6 +20,8 @@ pub fn try_move(
             info!("Couldn't find entities position components: {}", err);
             Err(ActionType::Wait)
         },
+        // OPTIMIZE: ActionType: AiPath?? so we only have to calculate this for the AI? it's not terribly
+        // expensive having the player do it, but eh??
         |(mut from_position, movement_component)| {
             PathFinder::Astar
                 .compute(

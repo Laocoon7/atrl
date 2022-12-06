@@ -83,6 +83,10 @@ pub fn chase_action<'w, 's>(
                 chase.last_seen_pt = Some(*player_position);
                 ai_component.preferred_action = Some(ActionType::Movement(*player_position));
 
+                // Enemy AI chasing the player is cause for alarm!
+                // Lets stop all input from the player for a short time so they have a chance to react!
+                commands.init_resource::<UnsafeInput>();
+
                 if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
                     target_visualizer.set_color(Color::RED);
                     target_visualizer.set_style(TargetVisualizerStyle::Target);
@@ -96,7 +100,7 @@ pub fn chase_action<'w, 's>(
         let position = if entity_in_fov(
             &mut map_manager,
             &blocking_set.p0(),
-            fov,
+            fov.0 as u32 + 2,
             vision,
             ai_position,
             *player_position,

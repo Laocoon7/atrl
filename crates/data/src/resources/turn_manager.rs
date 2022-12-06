@@ -1,5 +1,12 @@
 use crate::prelude::*;
 
+pub const SECONDS: u32 = 1000;
+pub const MINUTES: u32 = SECONDS * 60;
+pub const HOURS: u32 = MINUTES * 60;
+pub const DAYS: u32 = HOURS * 24;
+
+pub const TURN_TIME: u32 = DAYS * 1; // 86_400_000;
+
 #[derive(Default, Resource)]
 pub struct TurnManager {
     turn_number: u32,
@@ -7,6 +14,7 @@ pub struct TurnManager {
     entities: IndexList<(u32, u32, Entity)>,
 }
 
+// Actor Turns
 impl TurnManager {
     /// Add entities to the TurnManager when building the map.
     pub fn add_entity(&mut self, entity: Entity) {
@@ -57,6 +65,9 @@ impl TurnManager {
     /// ```
     pub fn start_entity_turn(&mut self) -> Option<Entity> {
         if let Some((turn_number, current_time, entity)) = self.entities.remove_first() {
+            if self.turn_number != turn_number {
+                info!("Starting Turn: {}", turn_number);
+            }
             // we are at least to turn_number:current_time
             self.turn_number = turn_number;
             self.current_time = current_time;
@@ -74,6 +85,7 @@ impl TurnManager {
             self.entities.insert_first((self.turn_number, self.current_time, entity));
             return;
         }
+        info!("Turn took {}", time_spent);
 
         let mut next_turn = self.turn_number;
         let mut next_time = self.current_time + time_spent;
@@ -106,5 +118,28 @@ impl TurnManager {
             index = self.entities.next_index(index);
         }
         None
+    }
+}
+
+// Time
+impl TurnManager {
+    /// Which Day it is
+    /// starting at Day 0
+    pub fn get_days(&self) -> u32 { self.current_time / DAYS }
+
+    /// What Hour of the Day it is
+    /// 0..=23
+    pub fn get_hours(&self) -> u32 { (self.current_time - self.get_days() * DAYS) / HOURS }
+
+    /// What Minute of the Hour it is
+    /// 0..=59
+    pub fn get_minutes(&self) -> u32 {
+        (self.current_time - self.get_days() * DAYS - self.get_hours() * HOURS) / MINUTES
+    }
+
+    /// What Second of the Minute it is
+    /// 0..=(SECONDS * 60) - 1
+    pub fn get_seconds(&self) -> u32 {
+        self.current_time - self.get_days() * DAYS - self.get_hours() * HOURS - self.get_minutes() * MINUTES
     }
 }

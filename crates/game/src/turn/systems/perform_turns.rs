@@ -11,16 +11,29 @@ pub fn perform_turns(world: &mut World) {
 
                 let mut action = if is_player {
                     if let Some(a) = action_queue.get_action() {
+                        info!(
+                            "Starting turn for Player on Days:Hours:Minutes:Seconds {{{}:{}:{}:{}}}",
+                            turn_manager.get_days(),
+                            turn_manager.get_hours(),
+                            turn_manager.get_minutes(),
+                            turn_manager.get_seconds()
+                        );
                         a
                     } else {
                         turn_manager.end_entity_turn(entity, 0);
                         return;
                     }
                 } else if let Ok((ai_component, name)) = ai_q.get_mut(world, entity) {
-                    info!("Starting turn for {}", name);
+                    info!(
+                        "Starting turn for {} on Days:Hours:Minutes:Seconds {{{}:{}:{}:{}}}",
+                        name,
+                        turn_manager.get_days(),
+                        turn_manager.get_hours(),
+                        turn_manager.get_minutes(),
+                        turn_manager.get_seconds()
+                    );
 
                     if let Some(a) = ai_component.preferred_action {
-                        info!("{} is performing {:?}", name, a);
                         a
                     } else {
                         info!("{} has no preferred action!", name);

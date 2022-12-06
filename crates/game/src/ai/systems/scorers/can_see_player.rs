@@ -31,7 +31,7 @@ pub fn can_see_player<'w, 's>(
             if entity_in_fov(
                 &mut map_manager,
                 &q_blocks_vision,
-                fov,
+                fov.0 as u32,
                 vision,
                 *ai_position,
                 *player_position,
