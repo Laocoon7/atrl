@@ -2,7 +2,8 @@ use crate::prelude::*;
 
 #[derive(Debug, Resource)]
 pub struct MousePosition {
-    pub position: Position,
+    position: Position,
+    screen_coords: Vec2,
 }
 
 impl std::fmt::Display for MousePosition {
@@ -27,7 +28,22 @@ impl FromWorld for MousePosition {
 
 impl MousePosition {
     #[inline(always)]
-    pub const fn new(position: Position) -> Self { Self { position } }
+    pub const fn new(position: Position) -> Self {
+        Self {
+            position,
+            screen_coords: Vec2::ZERO,
+        }
+    }
 
+    #[inline(always)]
+    pub const fn get_mouse_position(&self) -> Position { self.position }
+
+    #[inline(always)]
+    pub const fn get_screen_coords(&self) -> Vec2 { self.screen_coords }
+
+    #[inline]
     pub fn set_mouse_position(&mut self, position: Position) { self.position = position; }
+
+    #[inline]
+    pub fn set_screen_coords(&mut self, screen_coords: Vec2) { self.screen_coords = screen_coords; }
 }

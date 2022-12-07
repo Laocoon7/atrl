@@ -39,6 +39,7 @@ pub fn player_input(
     mut commands: Commands,
     mut timer: Local<PlayerTimer>,
     game_settings: Res<GameSettings>,
+    mouse_position: Res<MousePosition>,
     check_safe: Option<Res<UnsafeInput>>,
     mut action_queue: ResMut<ActionQueue>,
     mut query: Query<&ActionState<PlayerAction>>,
@@ -101,6 +102,13 @@ pub fn player_input(
                     info!("Player gave input: MOVE");
                 }
             }
+        }
+
+        if action_state.just_pressed(PlayerAction::MouseLeftClick) {
+            let pos = mouse_position.get_mouse_position();
+            action_queue.add_action(ActionType::Movement(pos));
+            println!();
+            info!("Player gave input: MouseLeftClick");
         }
     }
 }

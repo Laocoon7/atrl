@@ -16,6 +16,9 @@ impl PlayerBundle {
 
         let mut input_map = InputMap::default();
 
+        // Mouse Mapping
+        input_map.insert(MouseButton::Left, MouseLeftClick);
+
         /////////////////////////////
         // Movement
         /////////////////////////////

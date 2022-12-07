@@ -13,6 +13,8 @@ pub enum PlayerAction {
     West,
 
     Wait,
+
+    MouseLeftClick,
 }
 impl PlayerAction {
     // Lists like this can be very useful for quickly matching subsets of actions
