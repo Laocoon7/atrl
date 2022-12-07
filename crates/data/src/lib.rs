@@ -50,14 +50,6 @@ mod components {
     }
     pub use ai_component::*;
 
-    mod blocks {
-        mod blocks_movement;
-        pub use blocks_movement::*;
-        mod blocks_vision;
-        pub use blocks_vision::*;
-    }
-    pub use blocks::*;
-
     mod bundles {
         mod actor_bundle;
         pub use actor_bundle::*;
@@ -69,6 +61,8 @@ mod components {
     mod movement {
         mod movement;
         pub use movement::*;
+        mod blocks_movement;
+        pub use blocks_movement::*;
     }
     pub use movement::*;
 
@@ -87,6 +81,8 @@ mod components {
     mod vision {
         mod vision;
         pub use vision::*;
+        mod blocks_vision;
+        pub use blocks_vision::*;
     }
     pub use vision::*;
 
