@@ -1,10 +1,10 @@
 use std::marker::PhantomData;
 
 use crate::prelude::*;
+
 pub struct SetBuilder<T> {
     value: u32,
     shapes: Vec<BoxedShape>,
-
     phantom: PhantomData<T>,
 }
 
@@ -27,7 +27,7 @@ impl<T> SetBuilder<T> {
         Box::new(self)
     }
 
-    fn apply_shape<S: Into<BoxedShape>>(&mut self, shape: S, data: &mut MapGenData<T>) {
+    fn apply_shape<S: Into<BoxedShape>>(&self, shape: S, data: &mut MapGenData<T>) {
         let shape: BoxedShape = shape.into();
         for position in shape.boxed_iter() {
             if data.world_position == position.get_world_position() {

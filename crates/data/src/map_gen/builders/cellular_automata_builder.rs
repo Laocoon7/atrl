@@ -7,13 +7,12 @@ const DEAD_VALUE: u32 = 0;
 const ALIVE_VALUE: u32 = 1;
 
 pub struct CellularAutomataBuilder<T> {
+    phantom: PhantomData<T>,
     shapes: Vec<BoxedShape>,
 
     number_of_iterations: u32,
     alive_value: u32,
     dead_value: u32,
-
-    phantom: PhantomData<T>,
 }
 
 impl<T> CellularAutomataBuilder<T> {

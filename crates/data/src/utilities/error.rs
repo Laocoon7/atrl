@@ -1,5 +1,7 @@
 use crate::prelude::*;
+
 pub type AtrlResult<T> = std::result::Result<T, AtrlError>;
+
 #[derive(Error, Debug)]
 pub enum AtrlError {
     #[error("{} is not a directory,", .0)]
@@ -14,6 +16,10 @@ pub enum AtrlError {
 
     #[error(transparent)]
     Io(#[from] std::io::Error),
+
     #[error(transparent)]
     Std(Box<dyn std::error::Error>),
+
+    #[error(transparent)]
+    RonError(#[from] ron::Error),
 }

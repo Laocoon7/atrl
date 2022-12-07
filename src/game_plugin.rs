@@ -22,7 +22,7 @@ impl<T: StateNext> GamePlugin<T> {
     fn setup_states(self, app: &mut App) -> Self {
         app.add_loopless_state(GameState::Initializing).add_enter_system(
             GameState::Initializing,
-            switch_in_game_state!(self.state_asset_load),
+            switch_game_state!(self.state_asset_load),
         );
         self
     }

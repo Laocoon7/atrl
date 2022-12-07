@@ -20,9 +20,11 @@ pub fn load_game_fonts<T: StateNext>(
             },
         }
     }
+
     loaded_tilesets.font_files.iter().for_each(|path| {
         let handle = asset_server.load(path);
         handles.push(handle);
     });
+
     loaded_tilesets.handles = handles;
 }

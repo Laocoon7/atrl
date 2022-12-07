@@ -5,7 +5,7 @@ mod import {
     pub use atrl_data::{
         impl_as_primative, impl_default, impl_new, insert_resource,
         prelude::{AssetLoadState::*, ConstructState::*, UiState::*, *},
-        remove_resource, spawn_component, switch_in_game_state,
+        remove_resource, spawn_component, switch_game_state,
     };
     pub use atrl_raws::prelude::*;
     pub use atrl_renderer::prelude::*;

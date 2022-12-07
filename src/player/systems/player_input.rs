@@ -9,23 +9,24 @@ pub struct PlayerTimer {
 
 impl FromWorld for PlayerTimer {
     fn from_world(world: &mut World) -> Self {
-        if let Some(game_settings) = world.get_resource::<GameSettings>() {
-            Self {
+        world.get_resource::<GameSettings>().map_or_else(
+            || {
+                error!("PlayerTimer resource needs to be inserted after GameSettings ressource.");
+                Self::new()
+            },
+            |game_settings| Self {
                 input_delay_timer: Timer::new(game_settings.repeat_duration(), TimerMode::Once),
                 unsafe_delay_timer: None,
-            }
-        } else {
-            error!("PlayerTimer resource needs to be inserted after GameSettings ressource.");
-            Self::new()
-        }
+            },
+        )
     }
 }
 
 impl PlayerTimer {
     fn new() -> Self {
         Self {
-            input_delay_timer: Timer::new(Duration::from_millis(500), TimerMode::Once),
             unsafe_delay_timer: None,
+            input_delay_timer: Timer::new(Duration::from_millis(500), TimerMode::Once),
         }
     }
 }
@@ -34,13 +35,13 @@ impl PlayerTimer {
 pub struct UnsafeInput;
 
 pub fn player_input(
-    mut commands: Commands,
-    game_settings: Res<GameSettings>,
     time: Res<Time>,
+    mut commands: Commands,
     mut timer: Local<PlayerTimer>,
+    game_settings: Res<GameSettings>,
+    check_safe: Option<Res<UnsafeInput>>,
     mut action_queue: ResMut<ActionQueue>,
     mut query: Query<&ActionState<PlayerAction>>,
-    check_safe: Option<Res<UnsafeInput>>,
 ) {
     // If an event happens which the player should pay attention to,
     // UnsafeInput should be inserted as a resource.

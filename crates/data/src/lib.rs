@@ -343,8 +343,8 @@ mod utilities {
         pub use embed::*;
         mod generic_macros;
         pub use generic_macros::*;
-        mod switch_in_game_state;
-        pub use switch_in_game_state::*;
+        mod switch_game_state;
+        pub use switch_game_state::*;
         mod primative;
         pub use primative::*;
     }
@@ -436,7 +436,7 @@ pub mod prelude {
             queries::*,
             remove_resource,
             resources::*,
-            spawn_component, switch_in_game_state,
+            spawn_component, switch_game_state,
             utilities::*,
         };
     }

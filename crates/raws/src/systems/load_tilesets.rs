@@ -20,6 +20,7 @@ pub fn load_game_tilesets<T: StateNext>(
             },
         }
     }
+
     for path in loaded_tilesets.tileset_files.iter() {
         let handle = asset_server.load(path);
         handles.push(handle);

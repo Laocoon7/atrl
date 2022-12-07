@@ -1,5 +1,3 @@
-use atrl_data::spawn_component;
-
 use crate::prelude::*;
 
 #[derive(Component)]
@@ -13,7 +11,6 @@ impl<T: StateNext + std::default::Default> Plugin for UiPlugin<T> {
         app.add_plugin(KayakContextPlugin)
             .add_plugin(KayakWidgets)
             .add_plugin(SplashPlugin::new(self.state_asset_load))
-            .add_startup_system(spawn_component!((UICameraBundle::default(), UICamera)))
             .add_plugin(MainMenuPlugin {
                 state_main_menu: self.state_main_menu,
             });
