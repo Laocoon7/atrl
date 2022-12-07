@@ -1,6 +1,7 @@
 use crate::prelude::*;
 
 // This needs to impl FromWorld not derive reflect
+#[derive(Debug)]
 pub struct Map {
     // Map Definitions
     pub size: UVec2,

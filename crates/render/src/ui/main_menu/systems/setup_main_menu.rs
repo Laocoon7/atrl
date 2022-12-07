@@ -105,6 +105,6 @@ pub fn setup_main_menu(
                 </ElementBundle>
             </NinePatchBundle>
         </KayakAppBundle>
-    }
+    };
     commands.spawn((UICameraBundle::new(widget_context), StartMenu));
 }

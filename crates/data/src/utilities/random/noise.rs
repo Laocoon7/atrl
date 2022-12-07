@@ -412,7 +412,7 @@ impl NoiseParams {
     /// Value: 0..=1
     /// Default: 0.5
     pub fn set_persistence(&mut self, persistence: f64) -> &mut Self {
-        self.persistence = persistence.max(0.0).min(1.0);
+        self.persistence = persistence.clamp(0.0, 1.0);
         self
     }
 

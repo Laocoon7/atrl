@@ -22,13 +22,14 @@ pub enum TerrainType {
     #[default]
     None,
     Floor,
+    Wall,
 }
 
 impl TerrainType {
     /// Movement is allowed if MovementComponent allows any of these types
     pub const fn allowed_movement(&self) -> u8 {
         match self {
-            Self::None => (MovementType::None) as u8,
+            Self::None | Self::Wall => (MovementType::None) as u8,
             Self::Floor => {
                 (MovementType::Walk as u8) |
                     (MovementType::Run as u8) |
@@ -41,7 +42,7 @@ impl TerrainType {
     /// The tile is opaque except to these vision types
     pub const fn vision_penetrates(&self) -> u8 {
         match self {
-            Self::None => VisionType::None as u8,
+            Self::None | Self::Wall => VisionType::None as u8,
             Self::Floor => {
                 (VisionType::Normal as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
             },
@@ -49,10 +50,10 @@ impl TerrainType {
     }
 
     /// Movement cost per tile
-    pub const fn get_movement_cost(&self) -> f32 {
+    pub const fn get_movement_cost(&self) -> u32 {
         match self {
-            Self::None => 0.0,
-            Self::Floor => 1.0,
+            Self::None | Self::Wall => 0,
+            Self::Floor => 1,
         }
     }
 }

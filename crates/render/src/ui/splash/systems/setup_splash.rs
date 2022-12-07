@@ -32,7 +32,7 @@ pub fn setup_splash(
                 }}
             />
         </KayakAppBundle>
-    }
+    };
 
     commands.spawn((UICameraBundle::new(widget_context), OnSplashScreen));
     commands.insert_resource(SplashTimer(Timer::from_seconds(timer, TimerMode::Once)));

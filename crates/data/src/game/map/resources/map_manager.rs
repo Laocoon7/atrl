@@ -257,6 +257,7 @@ impl<'w, 's> MapManager<'w, 's> {
 
         let tileset = tilesets.get_by_id(&TILESET_TERRAIN_ID).expect("Cannot find TILESET_TERRAIN_ID.");
         let terrain_layer_entity = commands.spawn(Name::new("TERRAIN_LAYER".to_string())).id();
+
         create_tilemap_on_entity(
             commands,
             terrain_layer_entity,
@@ -378,7 +379,7 @@ impl<'w, 's> MapManager<'w, 's> {
                     1 => continue,
                     2 => {
                         // Create Wall Feature at Position
-                        map.terrain.set_unchecked(position.gridpoint(), TerrainType::None);
+                        map.terrain.set_unchecked(position.gridpoint(), TerrainType::Wall);
                     },
                     _ => continue,
                 }
@@ -614,7 +615,11 @@ impl<'w, 's> FovProvider for MapManager<'w, 's> {
 
 // Implement PathProvider
 impl<'w, 's> PathProvider for MapManager<'w, 's> {
-    fn cost(&mut self, _position: Position, _movement_type: u8) -> u32 { 1 }
+    fn cost(&mut self, position: Position, _movement_type: u8) -> u32 {
+        self.get_map(position.get_world_position()).map_or(0, |map| {
+            map.terrain.get_unchecked(position.get_local_position().gridpoint()).get_movement_cost()
+        })
+    }
 
     fn is_walkable(
         &mut self,

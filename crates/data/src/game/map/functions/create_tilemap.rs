@@ -24,7 +24,6 @@ pub fn create_tilemap_on_entity<ZLevel: Into<f32>>(
     tileset: &Tileset,
     tile_scale: f32,
 ) {
-    let texture_handle = tileset.texture().clone();
     let tilemap_size = TilemapSize {
         x: size.width(),
         y: size.height(),
@@ -33,8 +32,7 @@ pub fn create_tilemap_on_entity<ZLevel: Into<f32>>(
         x: tileset.tile_size().x,
         y: tileset.tile_size().y,
     };
-    let grid_size = tile_size.into();
-    let map_type = TilemapType::Square;
+
     let mut tile_storage = TileStorage::empty(tilemap_size);
     for y in 0..tilemap_size.y {
         for x in 0..tilemap_size.x {
@@ -42,22 +40,23 @@ pub fn create_tilemap_on_entity<ZLevel: Into<f32>>(
             let tile_entity = commands
                 .spawn(TileBundle {
                     position: tile_pos,
+                    visible: TileVisible(false),
                     tilemap_id: TilemapId(entity),
                     texture_index: TileTextureIndex(0),
-                    visible: TileVisible(false),
                     ..Default::default()
                 })
                 .id();
             tile_storage.set(&tile_pos, tile_entity);
         }
     }
+
     commands.entity(entity).insert(TilemapBundle {
-        texture: TilemapTexture::Single(texture_handle),
-        size: tilemap_size,
         tile_size,
-        grid_size,
-        map_type,
+        size: tilemap_size,
         storage: tile_storage,
+        grid_size: tile_size.into(),
+        map_type: TilemapType::Square,
+        texture: TilemapTexture::Single(tileset.texture().clone()),
         transform: Transform {
             translation: Vec3 {
                 x: 0.5,
