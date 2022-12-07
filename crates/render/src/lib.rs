@@ -10,24 +10,26 @@ mod ui {
             pub use setup_main_menu::*;
         }
         pub use systems::*;
+
         mod main_menu_plugin;
         pub use main_menu_plugin::*;
     }
     pub use main_menu::*;
+
     mod widgets {
         mod systems {
             mod menu_button_render;
             pub use menu_button_render::*;
-            mod menu_render;
-            pub use menu_render::*;
         }
         pub use systems::*;
+
         mod menu_button;
         pub use menu_button::*;
         mod menu;
         pub use menu::*;
     }
     pub use widgets::*;
+
     mod splash {
         mod systems {
             mod setup_splash;
@@ -38,11 +40,14 @@ mod ui {
         pub use splash_plugin::*;
     }
     pub use splash::*;
+
     mod ui_plugin;
     pub use ui_plugin::*;
 }
+
 mod map_renderer_plugin;
 mod map_renderer_settings;
+
 #[allow(unused_imports)]
 pub mod prelude {
     mod imports {

@@ -391,10 +391,10 @@ impl<'w, 's> MapManager<'w, 's> {
 
 // MapManager Systems
 pub fn startup_map_manager(
-    mut commands: Commands,
-    mut game_context: ResMut<GameContext>,
     tilesets: Tilesets,
+    mut commands: Commands,
     state: Res<CurrentGameState>,
+    mut game_context: ResMut<GameContext>,
 ) {
     // TODO: Deserialize map
     let world_position = WorldPosition::new(0, 0, 0);
@@ -407,9 +407,7 @@ pub fn startup_map_manager(
         features_layer,
     ));
 
-    if let Some(next_state) = state.0.next() {
-        commands.insert_resource(NextState(next_state))
-    }
+    state.set_next(&mut commands);
 }
 
 pub fn set_current_map_to_current_player(

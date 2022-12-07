@@ -1,5 +1,5 @@
 #[macro_export]
-macro_rules! switch_in_game_state {
+macro_rules! switch_game_state {
     ($e:expr) => {
         move |mut commands: Commands| {
             commands.insert_resource(iyes_loopless::prelude::NextState($e));
