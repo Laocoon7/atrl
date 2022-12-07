@@ -3,21 +3,22 @@ use std::marker::PhantomData;
 use crate::prelude::*;
 pub struct SetBuilder<T> {
     value: u32,
-    phantom: PhantomData<T>,
     shapes: Vec<BoxedShape>,
+
+    phantom: PhantomData<T>,
 }
 
 impl<T> SetBuilder<T> {
     pub fn new() -> Box<Self> {
         Box::new(Self {
-            value: u32::MAX,
+            value: u32::MIN,
             shapes: Vec::new(),
             phantom: PhantomData,
         })
     }
 
-    fn with_shape(mut self, shape: impl Shape<Iterator = BoxedShapeIter> + 'static) -> Box<Self> {
-        self.shapes.push(Box::new(shape));
+    pub fn with_shape<S: Into<BoxedShape>>(mut self, shape: S) -> Box<Self> {
+        self.shapes.push(shape.into());
         Box::new(self)
     }
 
@@ -26,7 +27,14 @@ impl<T> SetBuilder<T> {
         Box::new(self)
     }
 
-    fn apply_shape(&mut self, shape: Box<impl Shape + ?Sized>) {}
+    fn apply_shape<S: Into<BoxedShape>>(&mut self, shape: S, data: &mut MapGenData<T>) {
+        let shape: BoxedShape = shape.into();
+        for position in shape.boxed_iter() {
+            if data.world_position == position.get_world_position() {
+                data.output_grid.set_unchecked(position.gridpoint(), self.value);
+            }
+        }
+    }
 }
 impl<T> MapArchitect<T> for SetBuilder<T> {
     fn generate(&mut self, data: &mut MapGenData<T>) {
@@ -36,16 +44,10 @@ impl<T> MapArchitect<T> for SetBuilder<T> {
                     break;
                 }
                 let shape = self.shapes.pop().unwrap();
-                self.apply_shape(shape);
+                self.apply_shape(shape, data);
             }
         } else {
-            self.apply_shape(Box::new(GridRectangle::new(
-                Position::new(data.world_position, LocalPosition::ZERO),
-                Position::new(
-                    data.world_position,
-                    LocalPosition::new(data.size.x - 1, data.size.y - 1, MapLayer::Terrain as u32),
-                ),
-            )));
+            self.apply_shape(GridRectangle::new_grid_sized(data.world_position), data);
         }
     }
 }

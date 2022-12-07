@@ -1,7 +1,7 @@
 use crate::prelude::*;
 
+pub type BoxedShape = Box<dyn Shape>;
 pub type BoxedShapeIter = Box<dyn Iterator<Item = Position>>;
-pub type BoxedShape = Box<dyn Shape<Iterator = BoxedShapeIter> + 'static>;
 
 pub trait ShapeIter {
     type Iterator: Iterator<Item = Position>;
@@ -10,7 +10,7 @@ pub trait ShapeIter {
     fn iter(&self) -> Self::Iterator;
 }
 
-pub trait Shape: ShapeIter {
+pub trait Shape {
     /// returns the number of points in the shape
     fn get_count(&self) -> u32;
 
@@ -19,6 +19,8 @@ pub trait Shape: ShapeIter {
 
     /// returns an iterator over all of the points
     fn get_positions(&self) -> HashSet<Position>;
+
+    fn boxed_iter(&self) -> BoxedShapeIter;
 }
 
 pub trait ShapeWithBorder: Shape {

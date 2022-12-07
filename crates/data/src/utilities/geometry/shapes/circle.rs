@@ -110,6 +110,9 @@ impl Shape for Circle {
         }
         discovered
     }
+
+    #[inline]
+    fn boxed_iter(&self) -> BoxedShapeIter { Box::new(self.into_iter()) }
 }
 
 impl ShapeIter for Circle {
@@ -125,4 +128,8 @@ impl IntoIterator for Circle {
 
     #[inline]
     fn into_iter(self) -> Self::IntoIter { self.get_positions().into_iter() }
+}
+
+impl From<Circle> for BoxedShape {
+    fn from(value: Circle) -> Self { Box::new(value) }
 }

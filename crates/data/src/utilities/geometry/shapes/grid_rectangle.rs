@@ -113,6 +113,9 @@ impl Shape for GridRectangle {
     /// returns an iterator over all of the points
     #[inline]
     fn get_positions(&self) -> HashSet<Position> { self.iter().collect() }
+
+    #[inline]
+    fn boxed_iter(&self) -> BoxedShapeIter { Box::new(self.into_iter()) }
 }
 
 impl IntoIterator for GridRectangle {
@@ -128,4 +131,8 @@ impl ShapeIter for GridRectangle {
 
     #[inline]
     fn iter(&self) -> Self::Iterator { self.into_iter() }
+}
+
+impl From<GridRectangle> for BoxedShape {
+    fn from(value: GridRectangle) -> Self { Box::new(value) }
 }

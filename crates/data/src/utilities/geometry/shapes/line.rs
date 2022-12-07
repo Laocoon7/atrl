@@ -26,6 +26,9 @@ impl Shape for Line {
 
     #[inline]
     fn get_positions(&self) -> HashSet<Position> { self.iter().collect() }
+
+    #[inline]
+    fn boxed_iter(&self) -> BoxedShapeIter { Box::new(self.into_iter()) }
 }
 
 impl ShapeIter for Line {
@@ -47,4 +50,8 @@ impl Display for Line {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "Line {{Start: {}, End: {}}}", self.start, self.end)
     }
+}
+
+impl From<Line> for BoxedShape {
+    fn from(value: Line) -> Self { Box::new(value) }
 }
