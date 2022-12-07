@@ -39,7 +39,7 @@ pub fn update_mouse_position(
                 LocalPosition::new(world_pos.x as u32, world_pos.y as u32, MapLayer::UI as u32),
             ));
 
-            info!("Mouse position: {}", *mouse_position);
+            // info!("Mouse position: {}", *mouse_position);
         }
     }
 }

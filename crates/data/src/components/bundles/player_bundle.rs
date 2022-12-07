@@ -18,6 +18,7 @@ impl PlayerBundle {
 
         // Mouse Mapping
         input_map.insert(MouseButton::Left, MouseLeftClick);
+        input_map.insert(MouseButton::Right, MouseRightClick);
 
         /////////////////////////////
         // Movement

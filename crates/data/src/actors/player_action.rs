@@ -15,6 +15,7 @@ pub enum PlayerAction {
     Wait,
 
     MouseLeftClick,
+    MouseRightClick,
 }
 impl PlayerAction {
     // Lists like this can be very useful for quickly matching subsets of actions

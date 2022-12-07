@@ -104,6 +104,10 @@ pub fn player_input(
             }
         }
 
+        if action_state.just_pressed(PlayerAction::MouseRightClick) {
+            info!("Mouse position: {}", *mouse_position);
+        }
+
         if action_state.just_pressed(PlayerAction::MouseLeftClick) {
             let pos = mouse_position.get_mouse_position();
             action_queue.add_action(ActionType::Movement(pos));
