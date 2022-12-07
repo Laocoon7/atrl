@@ -1,11 +1,3 @@
-[pressed_duration]
-nanos = 100000000
-secs  = 0
-
-[repeat_duration]
-nanos = 500000000
-secs  = 0
-
-[unsafe_duration]
-nanos = 500000000
-secs  = 0
+pressed_duration = 100
+repeat_duration  = 500
+unsafe_duration  = 500
