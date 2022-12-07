@@ -1,5 +1,14 @@
 use crate::prelude::*;
 
+const RAW_MOBS_FILE: &str = "assets/raws/mobs.ron";
+const RAW_PLAYER_FILE: &str = "assets/raws/player.ron";
+
+#[derive(Debug)]
+pub struct Raws {
+    pub player: RawActor,
+    pub mobs: Vec<RawActor>,
+}
+
 #[derive(Resource)]
 pub struct RawMaster {
     raws: Raws,
@@ -8,10 +17,10 @@ pub struct RawMaster {
 
 impl FromWorld for RawMaster {
     fn from_world(_world: &mut World) -> Self {
-        let player = Raws::load_raw::<RawActor>(RAW_PLAYER_FILE);
-        let mobs = Raws::load_raw::<Vec<RawActor>>(RAW_MOBS_FILE);
-        let mut master = Self::new(player, mobs);
+        let player = AtrlFileUtils::read_ron(RAW_PLAYER_FILE).unwrap();
+        let mobs = AtrlFileUtils::read_ron(RAW_MOBS_FILE).unwrap();
 
+        let mut master = Self::new(player, mobs);
         let mut used_names: HashSet<String> = HashSet::new();
 
         // Hostiles

@@ -1,15 +1,11 @@
 use std::time::Duration;
 
-use toml::from_slice;
-
 use crate::prelude::*;
 
-// TODO: embedding means we will not be able to change these values and re-serialize them for
-// next time the game runs.
-embedded_resource!(
-    GAME_SETTINGS_FILE,
-    "../../../../assets/raws/settings/settings.toml"
-);
+const DEFAULT_UNSAFE_MS: u64 = 500;
+const DEFAULT_REPEAT_MS: u64 = 500;
+const DEFAULT_PRESSED_MS: u64 = 100;
+const GAME_SETTINGS_FILE: &str = "assets/settings/game_settings.toml";
 
 #[derive(Debug, Resource, Serialize, Deserialize)]
 pub struct GameSettings {
@@ -26,7 +22,7 @@ impl FromWorld for GameSettings {
         let mut settings = Self::new();
 
         // load anything serialized
-        let loaded_settings = Self::load::<Self>(GAME_SETTINGS_FILE);
+        let loaded_settings = Self::load_settings();
 
         // overwrite any default settings with the serialized settings
         if loaded_settings.pressed_duration.is_some() {
@@ -48,20 +44,23 @@ impl FromWorld for GameSettings {
 }
 
 impl GameSettings {
-    fn new() -> Self {
+    #[inline(always)]
+    const fn new() -> Self {
         // as these are our defaults, every one should be Some([default_value])
         Self {
-            pressed_duration: Some(Duration::from_millis(100)),
-            repeat_duration: Some(Duration::from_millis(500)),
-            unsafe_duration: Some(Duration::from_millis(500)),
+            pressed_duration: Some(Duration::from_millis(DEFAULT_PRESSED_MS)),
+            repeat_duration: Some(Duration::from_millis(DEFAULT_REPEAT_MS)),
+            unsafe_duration: Some(Duration::from_millis(DEFAULT_UNSAFE_MS)),
         }
     }
 
-    fn load<'a, T: serde::Deserialize<'a>>(raw_data: &'static [u8]) -> T {
-        // Retrieve the raw data as an array of u8 (8-bit unsigned chars)
-        match from_slice::<T>(raw_data) {
+    fn load_settings() -> Self {
+        match AtrlFileUtils::read_toml::<Self>(GAME_SETTINGS_FILE) {
             Ok(settings) => settings,
-            Err(e) => panic!("Unable to load settings: {e}"),
+            Err(err) => {
+                error!("Unable to load settings: {err}");
+                Self::new()
+            },
         }
     }
 

@@ -37,9 +37,9 @@ impl<T> ScatterBuilder<T> {
     }
 
     pub fn with_value_array<const COUNT: usize>(mut self, values: [u32; COUNT]) -> Box<Self> {
-        for index in 0..COUNT {
-            self.values.push(values[index]);
-        }
+        values.iter().take(COUNT).for_each(|value| {
+            self.values.push(*value);
+        });
 
         Box::new(self)
     }
@@ -61,7 +61,7 @@ impl<T> ScatterBuilder<T> {
 impl<T> MapArchitect<T> for ScatterBuilder<T> {
     fn generate(&mut self, data: &mut MapGenData<T>) {
         let mut values = self.values.clone();
-        if values.len() == 0 {
+        if values.is_empty() {
             values.push(0);
         }
 

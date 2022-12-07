@@ -9,6 +9,7 @@ dev     = []
 release = []
 
 [dependencies]
+directories = "4"
 
 bevy                   = { workspace = true }
 bevy_ecs_tilemap       = { workspace = true }
