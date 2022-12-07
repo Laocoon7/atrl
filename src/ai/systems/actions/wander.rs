@@ -16,8 +16,6 @@ pub fn wander_action(
     use BigBrainActionState::*;
 
     for (Actor(actor), mut action_state, mut wander) in action_q.iter_mut() {
-        // TODO: This is currently using the general game rng?
-        // Should AI have it's own rng?
         let rng = ai_context.random.prng.as_rngcore();
 
         let Ok((ai_position, movement,name, mut ai_component)) =

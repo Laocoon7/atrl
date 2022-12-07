@@ -252,7 +252,7 @@ impl Display for Position {
 impl Add<IVec2> for Position {
     type Output = Self;
 
-    #[inline] // TODO: Rather large for inline isn't it??
+    #[inline]
     fn add(self, rhs: IVec2) -> Self::Output {
         let mut world_x = self.world_x();
         let mut world_y = self.world_y();
