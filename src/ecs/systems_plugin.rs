@@ -18,6 +18,8 @@ impl<T: StateNext> SystemsPlugin<T> {
 
 impl<T: StateNext> Plugin for SystemsPlugin<T> {
     fn build(&self, app: &mut App) {
+        self.setup_startup_systems(app);
+
         app.add_plugin(ProccessTurnsPlugin {
             state_running: self.state_running,
         })
@@ -25,9 +27,11 @@ impl<T: StateNext> Plugin for SystemsPlugin<T> {
             state_running: self.state_running,
         });
 
-        self.setup_startup_systems(app);
-
         app.add_system_set_to_stage(
+            CoreStage::First,
+            ConditionSet::new().run_in_state(self.state_running).with_system(update_mouse_position).into(),
+        )
+        .add_system_set_to_stage(
             CoreStage::Last,
             ConditionSet::new()
                 .label("cull_dead")

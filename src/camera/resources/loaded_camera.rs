@@ -4,6 +4,7 @@ use crate::prelude::*;
 pub struct LoadedCameras {
     cameras: HashMap<u8, Entity>,
 }
+
 impl LoadedCameras {
     pub(crate) fn new() -> Self {
         Self {

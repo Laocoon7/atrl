@@ -36,7 +36,9 @@ impl<T: StateNext> GamePlugin<T> {
             // Turn Manager
             .init_resource::<TurnManager>()
             // Game Settings
-            .init_resource::<GameSettings>();
+            .init_resource::<GameSettings>()
+            // Mouse Position
+            .init_resource::<MousePosition>();
         self
     }
 

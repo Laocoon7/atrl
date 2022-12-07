@@ -163,6 +163,7 @@ mod tests {
         let dist = GridPoint::taxi_dist(a, b);
         assert_eq!(dist, 20.);
     }
+
     #[test]
     fn adj() {
         let points: Vec<IVec2> = (10, 10).neighbors_cardinal().collect();

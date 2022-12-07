@@ -231,6 +231,8 @@ mod resources {
     pub use font_ids::*;
     mod game_settings;
     pub use game_settings::*;
+    mod mouse_position;
+    pub use mouse_position::*;
     mod player_entity;
     pub use player_entity::*;
     mod tile_ids;

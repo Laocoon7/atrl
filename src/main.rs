@@ -74,6 +74,8 @@ mod ecs {
         pub use fov::*;
         mod perform_healing;
         pub use perform_healing::*;
+        mod update_mouse;
+        pub use update_mouse::*;
         mod update_targeting;
         pub use update_targeting::*;
     }

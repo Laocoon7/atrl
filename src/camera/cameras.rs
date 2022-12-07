@@ -3,7 +3,6 @@ use crate::prelude::*;
 #[derive(SystemParam)]
 pub struct Cameras<'w, 's> {
     loaded_cameras: Res<'w, LoadedCameras>,
-
     // this allows us to add `'s` lifetime
     _query: Query<'w, 's, ()>,
 }
