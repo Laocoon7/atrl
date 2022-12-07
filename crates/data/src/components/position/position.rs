@@ -186,8 +186,12 @@ impl Position {
     pub const fn from_absolute_position(absolute_position: (i64, i64, i32), layer: u32) -> Self {
         let (world_x, local_x) = if absolute_position.0 < 0 {
             let abs_x = absolute_position.0.abs();
-            let world = abs_x / GRID_WIDTH as i64;
-            let local = GRID_WIDTH as i64 - (abs_x - (world * GRID_WIDTH as i64));
+            let mut world = abs_x / GRID_WIDTH as i64;
+            let mut local = GRID_WIDTH as i64 - (abs_x - (world * GRID_WIDTH as i64));
+            if local == GRID_WIDTH as i64 {
+                world -= 1;
+                local = 0;
+            }
             (-(world as i32) - 1, local as u32)
         } else {
             (
@@ -198,8 +202,12 @@ impl Position {
 
         let (world_y, local_y) = if absolute_position.1 < 0 {
             let abs_y = absolute_position.1.abs();
-            let world = abs_y / GRID_HEIGHT as i64;
-            let local = GRID_HEIGHT as i64 - (abs_y - (world * GRID_HEIGHT as i64));
+            let mut world = abs_y / GRID_HEIGHT as i64;
+            let mut local = GRID_HEIGHT as i64 - (abs_y - (world * GRID_HEIGHT as i64));
+            if local == GRID_HEIGHT as i64 {
+                world -= 1;
+                local = 0;
+            }
             (-(world as i32) - 1, local as u32)
         } else {
             (
