@@ -339,7 +339,7 @@ impl<'w, 's> MapManager<'w, 's> {
                         world_position,
                         LocalPosition::new(GRID_WIDTH / 2, GRID_HEIGHT / 2, MapLayer::Features as u32),
                     ),
-                    15u32,
+                    5u32,
                 )),
         )
         .with(
