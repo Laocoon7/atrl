@@ -1,5 +1,6 @@
 #[repr(u8)]
 pub enum MapLayer {
+    Unknown = 0,
     Terrain = 1,
     Features,
     Items,

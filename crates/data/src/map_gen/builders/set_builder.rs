@@ -40,11 +40,12 @@ impl<T> MapArchitect<T> for SetBuilder<T> {
     fn generate(&mut self, data: &mut MapGenData<T>) {
         if !self.shapes.is_empty() {
             loop {
+                let shape = self.shapes.pop().unwrap();
+                self.apply_shape(shape, data);
+
                 if self.shapes.is_empty() {
                     break;
                 }
-                let shape = self.shapes.pop().unwrap();
-                self.apply_shape(shape, data);
             }
         } else {
             self.apply_shape(GridRectangle::new_grid_sized(data.world_position), data);

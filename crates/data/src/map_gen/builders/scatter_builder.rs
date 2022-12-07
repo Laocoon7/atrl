@@ -36,11 +36,19 @@ impl<T> ScatterBuilder<T> {
         Box::new(self)
     }
 
+    pub fn with_value_array<const COUNT: usize>(mut self, values: [u32; COUNT]) -> Box<Self> {
+        for index in 0..COUNT {
+            self.values.push(values[index]);
+        }
+
+        Box::new(self)
+    }
+
     fn apply_shape<S: Into<BoxedShape>>(&mut self, shape: S, data: &mut MapGenData<T>, values: &Vec<u32>) {
         let shape: BoxedShape = shape.into();
         // let world_position = data.world_position;
         let rng = &mut data.random.prng;
-        let length = values.len() as u32;
+        let length = values.len() as u32 - 1;
         for position in shape.boxed_iter() {
             if data.world_position == position.get_world_position() {
                 let index = rng.range(0..length) as usize;

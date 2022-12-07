@@ -22,8 +22,6 @@ pub enum TerrainType {
     #[default]
     None,
     Floor,
-    Wall,
-    Water,
 }
 
 impl TerrainType {
@@ -31,15 +29,11 @@ impl TerrainType {
     pub const fn allowed_movement(&self) -> u8 {
         match self {
             Self::None => (MovementType::None) as u8,
-            Self::Wall => (MovementType::Fly as u8) | (MovementType::Phase as u8),
             Self::Floor => {
                 (MovementType::Walk as u8) |
                     (MovementType::Run as u8) |
                     (MovementType::Fly as u8) |
                     (MovementType::Phase as u8)
-            },
-            Self::Water => {
-                (MovementType::Swim as u8) | (MovementType::Fly as u8) | (MovementType::Phase as u8)
             },
         }
     }
@@ -48,11 +42,7 @@ impl TerrainType {
     pub const fn vision_penetrates(&self) -> u8 {
         match self {
             Self::None => VisionType::None as u8,
-            Self::Wall => VisionType::XRay as u8,
             Self::Floor => {
-                (VisionType::Normal as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
-            },
-            Self::Water => {
                 (VisionType::Normal as u8) | (VisionType::Infared as u8) | (VisionType::XRay as u8)
             },
         }
@@ -62,9 +52,7 @@ impl TerrainType {
     pub const fn get_movement_cost(&self) -> f32 {
         match self {
             Self::None => 0.0,
-            Self::Wall => 0.0,
             Self::Floor => 1.0,
-            Self::Water => 1.45,
         }
     }
 }

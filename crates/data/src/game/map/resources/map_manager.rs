@@ -313,7 +313,7 @@ impl<'w, 's> MapManager<'w, 's> {
     }
 
     fn generate_map(world_position: WorldPosition, random: Random, user_data: MapPassThroughData) -> Map {
-        Map::from(
+        let mut map = Map::from(
             MapGenerator::new(
                 world_position,
                 random,
@@ -321,7 +321,71 @@ impl<'w, 's> MapManager<'w, 's> {
                 user_data,
             )
             .generate(),
+        );
+
+        let feature_map = MapGenerator::new(
+            world_position,
+            Random::from_entropy(), // TODO: need to generate a new random differently
+            ScatterBuilder::new().with_value_array::<2>([1, 2]),
+            0,
         )
+        .with(
+            CellularAutomataBuilder::new()
+                .with_alive_value(2)
+                .with_dead_value(1)
+                .with_iterations(10)
+                .with_shape(Circle::new(
+                    Position::new(
+                        world_position,
+                        LocalPosition::new(GRID_WIDTH / 2, GRID_HEIGHT / 2, MapLayer::Features as u32),
+                    ),
+                    15u32,
+                )),
+        )
+        .with(
+            SetBuilder::new().set_value(0).with_shape(GridRectangle::new(
+                Position::new(
+                    world_position,
+                    LocalPosition::new(
+                        GRID_WIDTH / 2 - 4,
+                        GRID_HEIGHT / 2 - 4,
+                        MapLayer::Features as u32,
+                    ),
+                ),
+                Position::new(
+                    world_position,
+                    LocalPosition::new(
+                        GRID_WIDTH / 2 + 4,
+                        GRID_HEIGHT / 2 + 4,
+                        MapLayer::Features as u32,
+                    ),
+                ),
+            )),
+        )
+        .generate();
+
+        let mut position = Position::new(
+            world_position,
+            LocalPosition::new(0, 0, MapLayer::Features as u32),
+        );
+        for y in 0..GRID_HEIGHT {
+            position.add_y(1);
+            for x in 0..GRID_WIDTH {
+                position.add_x(1);
+
+                match feature_map.output_grid.get_unchecked((x, y)) {
+                    0 => continue,
+                    1 => continue,
+                    2 => {
+                        // Create Wall Feature at Position
+                        map.terrain.set_unchecked(position.gridpoint(), TerrainType::None);
+                    },
+                    _ => continue,
+                }
+            }
+        }
+
+        map
     }
 }
 
