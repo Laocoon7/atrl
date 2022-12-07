@@ -1,4 +1,5 @@
 use crate::prelude::*;
+
 pub struct CameraPlugin {
     camera_settings: Vec<CameraSettings>,
 }

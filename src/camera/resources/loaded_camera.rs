@@ -1,4 +1,5 @@
 use crate::prelude::*;
+
 #[derive(Resource)]
 pub struct LoadedCameras {
     cameras: HashMap<u8, Entity>,

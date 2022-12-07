@@ -5,7 +5,7 @@ use crate::prelude::*;
 const DEFAULT_UNSAFE_MS: u64 = 500;
 const DEFAULT_REPEAT_MS: u64 = 500;
 const DEFAULT_PRESSED_MS: u64 = 100;
-const GAME_SETTINGS_FILE: &str = "assets/settings/game_settings.toml";
+const GAME_SETTINGS_FILE: &str = "assets/raws/settings/game_settings.toml";
 
 #[derive(Debug, Resource, Serialize, Deserialize)]
 pub struct GameSettings {
@@ -21,8 +21,12 @@ impl FromWorld for GameSettings {
         // create with defaults
         let mut settings = Self::new();
 
+        let config = toml::to_string(&settings);
+        info!("Config: {config:?}");
+
         // load anything serialized
         let loaded_settings = Self::load_settings();
+        info!("Loaded Settings: {loaded_settings:?}");
 
         // overwrite any default settings with the serialized settings
         if loaded_settings.pressed_duration.is_some() {

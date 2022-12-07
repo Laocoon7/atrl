@@ -22,11 +22,11 @@ impl AtrlFileUtils {
         std::fs::canonicalize::<PathBuf>(path).map_or_else(
             |err| Err(AtrlError::NotAFile(err.to_string())),
             |path| {
-                path.to_str().map_or_else(
-                    || Err(AtrlError::NotAString),
-                    |path_str| match ron::de::from_str::<T>(path_str) {
-                        Ok(ron) => Ok(ron),
-                        Err(e) => Err(AtrlError::RonError(e.code)),
+                std::fs::File::open(path).map_or_else(
+                    |err| Err(AtrlError::Io(err)),
+                    |file| {
+                        ron::de::from_reader::<_, T>(file)
+                            .map_or_else(|err| Err(AtrlError::RonError(err.code)), |ron| Ok(ron))
                     },
                 )
             },
@@ -37,14 +37,10 @@ impl AtrlFileUtils {
         let path: PathBuf = path.into();
         std::fs::canonicalize::<PathBuf>(path).map_or_else(
             |err| Err(AtrlError::NotAFile(err.to_string())),
-            |path| {
-                path.to_str().map_or_else(
-                    || Err(AtrlError::NotAString),
-                    |path_str| match toml::from_str::<T>(path_str) {
-                        Ok(ron) => Ok(ron),
-                        Err(e) => Err(AtrlError::Io(e.into())),
-                    },
-                )
+            |path| match path.to_str().map_or_else(|| Err(AtrlError::NotAString), Self::read_str) {
+                Ok(file) => toml::from_str::<T>(&file)
+                    .map_or_else(|err| Err(AtrlError::Io(err.into())), |toml| Ok(toml)),
+                Err(err) => Err(err),
             },
         )
     }

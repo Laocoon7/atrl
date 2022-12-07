@@ -16,6 +16,7 @@ pub struct CameraSettings {
     pub(crate) window_origin: WindowOrigin,
     pub(crate) render_target: Option<RenderTarget>,
 }
+
 impl CameraSettings {
     pub fn new() -> Self { Self::default() }
 
@@ -103,6 +104,7 @@ impl Default for CameraSettings {
         }
     }
 }
+
 impl From<CameraSettings> for Camera2dBundle {
     fn from(settings: CameraSettings) -> Self {
         let target = settings.render_target.map_or_else(RenderTarget::default, |t| t);
@@ -116,8 +118,10 @@ impl From<CameraSettings> for Camera2dBundle {
                 Transform::from_xyz(x, y, far - 0.1)
             },
         };
+
         let clear_color_config =
             settings.clear_color.map_or(ClearColorConfig::Default, ClearColorConfig::Custom);
+
         Self {
             camera: Camera {
                 viewport: settings.viewport,
