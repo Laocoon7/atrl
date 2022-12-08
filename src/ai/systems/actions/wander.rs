@@ -20,7 +20,7 @@ pub fn wander_action(
         let Ok((ai_position, movement,name, mut ai_component)) =
         spatial_q.get_mut(*actor) else {
             info!("Actor must have spatial components");
-                return
+            continue
             };
 
         if ai_component.has_action() {
@@ -30,21 +30,21 @@ pub fn wander_action(
 
         match *action_state {
             // Success | Failure
-            Success | Failure => {
+            Init | Success | Failure => {
                 // Nothing to do here
                 info!("{} wander state: {:?}", name, action_state);
-                return;
+                continue;
             },
             Cancelled => {
                 info!("{} cancelled wander", name);
                 *action_state = Failure;
                 ai_component.clear_action();
 
-                return;
+                continue;
             },
 
             // These two states will fall through to execution
-            Init | Requested => {
+            Requested => {
                 info!("{} gonna start wandering!", name);
                 *action_state = Executing;
 
@@ -98,11 +98,17 @@ fn generate_wander_path(
     let wander_circle = Circle::new(ai_pos, wander_radius);
     let positions = wander_circle.get_positions();
 
-    loop {
-        // Default to the circle center
-        let destination = positions.iter().choose(rng).unwrap_or(&ai_pos);
-        if map.can_place_actor(*destination, movement_type, q_blocks_movement) {
-            return *destination;
-        }
-    }
+    // Loop through all positions trying to find a place the AI can path to,
+    // if we can't find a place, just return the AI's current position
+    (0..positions.len())
+        .try_for_each(|_| {
+            let destination = positions.iter().choose(rng).unwrap_or(&ai_pos);
+            if map.can_place_actor(*destination, movement_type, q_blocks_movement) {
+                std::ops::ControlFlow::Break(*destination)
+            } else {
+                std::ops::ControlFlow::Continue(())
+            }
+        })
+        .break_value()
+        .unwrap_or(ai_pos)
 }

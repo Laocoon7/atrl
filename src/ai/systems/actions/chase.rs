@@ -48,7 +48,7 @@ pub fn chase_action<'w, 's>(
 
         match *action_state {
             // Success | Failure
-            Success | Failure => {
+            Success | Failure | Init => {
                 info!("{} chase state: {:?}", name, action_state);
                 ai_component.clear_action();
 
@@ -61,7 +61,7 @@ pub fn chase_action<'w, 's>(
 
                 continue;
             },
-            Init | Requested => {
+            Requested => {
                 info!("{} gonna start chasing!", name);
                 *action_state = Executing;
 
@@ -92,6 +92,7 @@ pub fn chase_action<'w, 's>(
             *player_position,
         ) {
             if in_attack_range(ai_position, *player_position) {
+                info!("{} is in attack range. Moving to attack action", name);
                 *action_state = Success;
                 continue;
             }
@@ -108,6 +109,7 @@ pub fn chase_action<'w, 's>(
 
             // We reached the end of our chase path and we do not see the player :(
             if last_seen == ai_position {
+                info!("{} lost sight of player and reached end of path", name);
                 *action_state = Failure;
                 continue;
             }

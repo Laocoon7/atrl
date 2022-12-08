@@ -35,12 +35,12 @@ pub fn attack_action(
 
         match *action_state {
             // Success | Failure
-            Success | Failure => {
+            Init | Success | Failure => {
                 // Nothing to do here
                 info!("{} attack state: {:?}", name, action_state);
                 continue;
             },
-            ActionState::Cancelled => {
+            Cancelled => {
                 info!("{} cancelled attack!", name);
                 *action_state = Failure;
                 ai_component.clear_action();
@@ -53,7 +53,7 @@ pub fn attack_action(
             },
 
             // these final two fall through to logic
-            ActionState::Init | ActionState::Requested => {
+            Requested => {
                 info!("{} gonna start attacking!", name);
                 *action_state = Executing;
                 ai_component.set_action(AttackAction(player_position).boxed());
@@ -63,14 +63,14 @@ pub fn attack_action(
                     target_visualizer.set_style(TargetVisualizerStyle::Target);
                 }
             },
-            ActionState::Executing => {},
+            Executing => {},
         }
 
         if in_attack_range(*ai_position, player_position) {
             println!("{name} is attacking!");
             ai_component.set_action(AttackAction(player_position).boxed());
         } else {
-            *action_state = ActionState::Failure;
+            *action_state = Failure;
             ai_component.set_action(MovementAction(player_position).boxed());
         }
     }
