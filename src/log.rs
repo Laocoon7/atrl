@@ -2,7 +2,7 @@ use bevy::log::Level;
 
 use crate::prelude::*;
 
-pub fn atlr_log_plugin() -> bevy::log::LogPlugin {
+pub fn atrl_log_plugin() -> bevy::log::LogPlugin {
     let log_level = get_log_level();
     bevy::log::LogPlugin {
         level: log_level,

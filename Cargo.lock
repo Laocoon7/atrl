@@ -214,44 +214,25 @@ checksum = "73b5e5f48b927f04e952dedc932f31995a65a0bf65ec971c74436e51bf6e970d"
 name = "atrl"
 version = "0.1.0"
 dependencies = [
- "atrl-data",
- "atrl-raws",
- "atrl-renderer",
- "atrl-saveload",
+ "anyhow",
+ "arrayvec",
  "bevy",
  "bevy-inspector-egui",
  "bevy_ecs_tilemap",
  "bevy_embedded_assets",
  "bevy_mod_debugdump",
+ "bevy_tile_atlas",
  "bevy_tileset",
+ "bevy_tweening",
  "big-brain",
+ "bitvec",
  "embed-resource",
  "index_list",
  "iyes_loopless",
+ "iyes_progress",
  "kayak_font",
  "kayak_ui",
  "leafwing-input-manager",
- "num-traits",
- "rand 0.8.5",
- "rand_pcg",
- "rayon",
- "smart-default",
-]
-
-[[package]]
-name = "atrl-data"
-version = "0.1.0"
-dependencies = [
- "arrayvec",
- "bevy",
- "bevy_ecs_tilemap",
- "bevy_tileset",
- "bitvec",
- "directories",
- "index_list",
- "iyes_loopless",
- "leafwing-input-manager",
- "line_drawing",
  "noise",
  "num-derive",
  "num-traits",
@@ -261,52 +242,14 @@ dependencies = [
  "rand 0.8.5",
  "rand_pcg",
  "rand_seeder",
+ "rayon",
  "ron 0.8.0",
  "serde",
+ "smart-default",
+ "strum",
  "thiserror",
  "toml",
  "xxhash-rust",
-]
-
-[[package]]
-name = "atrl-raws"
-version = "0.1.0"
-dependencies = [
- "atrl-data",
- "bevy",
- "bevy_tileset",
- "big-brain",
- "iyes_loopless",
- "iyes_progress",
- "kayak_ui",
- "leafwing-input-manager",
- "ron 0.8.0",
- "serde",
- "smart-default",
-]
-
-[[package]]
-name = "atrl-renderer"
-version = "0.1.0"
-dependencies = [
- "atrl-data",
- "atrl-raws",
- "bevy",
- "bevy_ecs_tilemap",
- "bevy_tileset",
- "iyes_loopless",
- "iyes_progress",
- "kayak_font",
- "kayak_ui",
- "smart-default",
-]
-
-[[package]]
-name = "atrl-saveload"
-version = "0.1.0"
-dependencies = [
- "atrl-data",
- "bevy",
 ]
 
 [[package]]
@@ -1050,6 +993,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "bevy_tweening"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6d38b2abf5518df10c3c32ee57a54b9ba7067f3bd1c137b912e286d573962145"
+dependencies = [
+ "bevy",
+ "interpolation",
+]
+
+[[package]]
 name = "bevy_ui"
 version = "0.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1735,26 +1688,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
-]
-
-[[package]]
-name = "directories"
-version = "4.0.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f51c5d4ddabd36886dd3e1438cb358cdcb0d7c499cb99cb4ac2e38e18b5cb210"
-dependencies = [
- "dirs-sys",
-]
-
-[[package]]
-name = "dirs-sys"
-version = "0.3.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1b1d1d91c932ef41c0f2663aa8b0ca0342d444d842c06914aa0a7e352d0bada6"
-dependencies = [
- "libc",
- "redox_users",
- "winapi",
 ]
 
 [[package]]
@@ -2581,6 +2514,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "interpolation"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d3b7357d2bbc5ee92f8e899ab645233e43d21407573cceb37fed8bc3dede2c02"
+
+[[package]]
 name = "io-kit-sys"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2883,15 +2822,6 @@ checksum = "3c8469b4a23b962c1396b9b451dda50ef5b283e8dd309d69033475fa9b334324"
 dependencies = [
  "libc",
  "pkg-config",
-]
-
-[[package]]
-name = "line_drawing"
-version = "1.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3d1478a313008a3e6c8149995e90a99ee9094034b5c5c3da1eeb81183cb61d1d"
-dependencies = [
- "num-traits",
 ]
 
 [[package]]
@@ -3963,17 +3893,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "redox_users"
-version = "0.4.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b033d837a7cf162d7993aded9304e30a83213c648b6e389db233191f891e5c2b"
-dependencies = [
- "getrandom 0.2.8",
- "redox_syscall",
- "thiserror",
-]
-
-[[package]]
 name = "regex"
 version = "1.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4368,6 +4287,28 @@ name = "strsim"
 version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "73473c0e59e6d5812c5dfe2a064a6444949f089e20eec9a2e5506596494e4623"
+
+[[package]]
+name = "strum"
+version = "0.24.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "063e6045c0e62079840579a7e47a355ae92f60eb74daaf156fb1e84ba164e63f"
+dependencies = [
+ "strum_macros",
+]
+
+[[package]]
+name = "strum_macros"
+version = "0.24.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1e385be0d24f186b4ce2f9982191e7101bb737312ad61c1f2f984f34bcf85d59"
+dependencies = [
+ "heck",
+ "proc-macro2",
+ "quote",
+ "rustversion",
+ "syn",
+]
 
 [[package]]
 name = "svg_fmt"
