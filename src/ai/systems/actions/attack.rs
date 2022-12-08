@@ -28,7 +28,7 @@ pub fn attack_action(
             continue
         };
 
-        if ai_component.preferred_action.is_some() {
+        if ai_component.get_action().is_some() {
             // already attacking, quick return;
             continue;
         }
@@ -43,7 +43,7 @@ pub fn attack_action(
             ActionState::Cancelled => {
                 info!("{} cancelled attack!", name);
                 *action_state = Failure;
-                ai_component.preferred_action = None;
+                ai_component.clear_action();
 
                 if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
                     target_visualizer.clear(&mut commands);
@@ -56,7 +56,7 @@ pub fn attack_action(
             ActionState::Init | ActionState::Requested => {
                 info!("{} gonna start attacking!", name);
                 *action_state = Executing;
-                ai_component.preferred_action = Some(AttackAction(player_position).boxed());
+                ai_component.set_action(AttackAction(player_position).boxed());
 
                 if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
                     target_visualizer.set_color(Color::RED);
@@ -67,10 +67,10 @@ pub fn attack_action(
         }
 
         if in_attack_range(*ai_position, player_position) {
-            ai_component.preferred_action = Some(AttackAction(player_position).boxed());
+            ai_component.set_action(AttackAction(player_position).boxed());
         } else {
             *action_state = ActionState::Failure;
-            ai_component.preferred_action = Some(AttackAction(player_position).boxed());
+            ai_component.set_action(MovementAction(player_position).boxed());
         }
     }
 }

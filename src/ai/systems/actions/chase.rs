@@ -41,7 +41,7 @@ pub fn chase_action<'w, 's>(
                 continue;
             };
 
-        if ai_component.preferred_action.is_some() {
+        if ai_component.get_action().is_some() {
             // already chasing, quick return;
             continue;
         }
@@ -50,22 +50,14 @@ pub fn chase_action<'w, 's>(
             // Success | Failure
             Success | Failure => {
                 info!("{} chase state: {:?}", name, action_state);
-                ai_component.preferred_action = None;
-
-                if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
-                    target_visualizer.clear(&mut commands);
-                }
+                ai_component.clear_action();
 
                 continue;
             },
             Cancelled => {
                 info!("{} cancelled chase!", name);
                 *action_state = Failure;
-                ai_component.preferred_action = None;
-
-                if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
-                    target_visualizer.clear(&mut commands);
-                }
+                ai_component.clear_action();
 
                 continue;
             },
@@ -75,7 +67,7 @@ pub fn chase_action<'w, 's>(
 
                 chase.generated_path = false;
                 chase.last_seen_pt = Some(*player_position);
-                ai_component.preferred_action = Some(MovementAction(*player_position).boxed());
+                ai_component.set_action(MovementAction(*player_position).boxed());
 
                 // Enemy AI chasing the player is cause for alarm!
                 // Lets stop all input from the player for a short time so they have a chance to react!
@@ -110,7 +102,7 @@ pub fn chase_action<'w, 's>(
         } else {
             let Some(last_seen) = chase.last_seen_pt else {
                         error!("Executing chase with no target.");
-                        ai_component.preferred_action = Some(WaitAction.boxed());
+                        ai_component.set_action(WaitAction.boxed());
                         continue;
                     };
 
@@ -142,7 +134,7 @@ pub fn chase_action<'w, 's>(
             }
         };
 
-        ai_component.preferred_action = Some(MovementAction(position).boxed());
+        ai_component.set_action(MovementAction(position).boxed());
     }
 }
 

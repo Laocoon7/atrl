@@ -5,7 +5,6 @@ use crate::prelude::*;
 static WANDER_RANGE: Lazy<Uniform<u32>> = Lazy::new(|| Uniform::new_inclusive(3, 10));
 
 pub fn wander_action(
-    mut commands: Commands,
     mut map_manager: MapManager,
     mut ai_context: ResMut<AiContext>,
     q_blocks_movement: Query<&BlocksMovement>,
@@ -24,7 +23,7 @@ pub fn wander_action(
                 return
             };
 
-        if ai_component.preferred_action.is_some() {
+        if ai_component.get_action().is_some() {
             // already wandering, quick return;
             return;
         }
@@ -38,12 +37,8 @@ pub fn wander_action(
             },
             Cancelled => {
                 info!("{} cancelled wander", name);
-                ai_component.preferred_action = None;
                 *action_state = Failure;
-
-                if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
-                    target_visualizer.clear(&mut commands);
-                }
+                ai_component.clear_action();
 
                 return;
             },
@@ -88,7 +83,7 @@ pub fn wander_action(
 
         wander.destination = Some(destination);
         wander.my_previous_location = *ai_position;
-        ai_component.preferred_action = Some(MovementAction(destination).boxed());
+        ai_component.set_action(MovementAction(destination).boxed());
     }
 }
 

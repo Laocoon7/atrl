@@ -60,7 +60,7 @@ pub fn perform_turns(world: &mut World) {
 
                 if is_player {
                     for (mut ai_component, _name) in ai_q.iter_mut(world) {
-                        ai_component.preferred_action = None;
+                        ai_component.clear_action()
                     }
                     return;
                 }

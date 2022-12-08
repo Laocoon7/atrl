@@ -3,7 +3,7 @@ use crate::prelude::*;
 #[derive(Component, Default)]
 pub struct AIComponent {
     ai_type: AIType,
-    pub preferred_action: Option<Box<dyn Action>>,
+    preferred_action: Option<Box<dyn Action>>,
 }
 
 impl AIComponent {
@@ -17,6 +17,12 @@ impl AIComponent {
 
     #[inline]
     pub fn get_action(&mut self) -> Option<BoxedAction> { std::mem::take(&mut self.preferred_action) }
+
+    #[inline]
+    pub fn set_action(&mut self, action: BoxedAction) { self.preferred_action = Some(action); }
+
+    #[inline]
+    pub fn clear_action(&mut self) { self.preferred_action = None; }
 }
 
 impl AIComponent {
