@@ -16,10 +16,7 @@ impl AIComponent {
     }
 
     #[inline]
-    pub fn get_action(&self) -> Option<Box<dyn AtrlAction>> {
-        let action = self.preferred_action.as_deref()?;
-        Some(dyn_clone::clone_box(action))
-    }
+    pub fn get_action(&self) -> Option<Box<dyn AtrlAction>> { self.preferred_action.clone() }
 
     #[inline]
     pub fn take_action(&mut self) -> Option<BoxedAction> { self.preferred_action.take() }

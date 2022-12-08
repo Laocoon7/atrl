@@ -22,3 +22,5 @@ pub trait AtrlAction: Sync + Send + Debug + 'static + DynClone {
         Box::new(self)
     }
 }
+
+dyn_clone::clone_trait_object!(AtrlAction);
