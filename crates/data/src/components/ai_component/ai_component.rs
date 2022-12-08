@@ -28,7 +28,7 @@ impl AIComponent {
     pub fn clear_action(&mut self) { self.preferred_action = None; }
 
     #[inline]
-    pub fn has_action(&mut self) -> bool { self.preferred_action.is_some() }
+    pub fn has_action(&self) -> bool { self.preferred_action.is_some() }
 }
 
 impl AIComponent {

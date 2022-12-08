@@ -26,6 +26,7 @@ macro_rules! make_direction_iter {
         }
     };
 }
+
 // IntoIter implementations for iterating over all directions of a type. E.g.:
 // for direction in CardinalDirections { ... }
 make_direction_iter! {Directions, DirectionIter, GridDirection, NUM_DIRECTIONS}

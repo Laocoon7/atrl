@@ -25,7 +25,7 @@ pub fn wander_action(
 
         if ai_component.has_action() {
             // already wandering, quick return;
-            return;
+            continue;
         }
 
         match *action_state {
