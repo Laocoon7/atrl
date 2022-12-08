@@ -57,16 +57,16 @@ pub use direction::*;
 pub mod fov {
     mod fov_algorithm;
     pub use fov_algorithm::*;
-
     mod fov_provider;
     pub use fov_provider::*;
-
     mod fov_receiver;
     pub use fov_receiver::*;
-
     mod fov;
     pub use fov::*;
-
+    mod shadowcast_quadrant;
+    pub use shadowcast_quadrant::*;
+    mod shadowcast_row;
+    pub use shadowcast_row::*;
 }
 pub use fov::*;
 
@@ -97,20 +97,36 @@ pub mod grid_point {
 pub use grid_point::*;
 
 pub mod map {
+    mod architect;
+    pub use architect::*;
+    mod builder_cellular_automata;
+    pub use builder_cellular_automata::*;
+    mod builder_noise;
+    pub use builder_noise::*;
+    mod builder_scatter;
+    pub use builder_scatter::*;
+    mod builder_set;
+    pub use builder_set::*;
+    mod map_gen_data;
+    pub use map_gen_data::*;
+    mod map_generator;
+    pub use map_generator::*;
     mod map_layer;
     pub use map_layer::*;
+    mod map_pass_through_data;
+    pub use map_pass_through_data::*;
     mod map;
     pub use map::*;
 }
 pub use map::*;
 
 pub mod pathfinding {
+    mod astar_node;
+    pub use astar_node::*;
     mod path_algorithm;
     pub use path_algorithm::*;
-
     mod path_provider;
     pub use path_provider::*;
-
     mod pathfinder;
     pub use pathfinder::*;
 }

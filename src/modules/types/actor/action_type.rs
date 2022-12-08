@@ -1,4 +1,7 @@
-use crate::prelude::*;
+use crate::prelude::{
+    *,
+    resources::*,
+};
 
 pub const WAIT_TIME: u32 = SECONDS;
 pub const MOVE_TIME: u32 = SECONDS * 2;

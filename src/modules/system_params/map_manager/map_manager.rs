@@ -1,9 +1,7 @@
 use crate::prelude::{
     *,
-    resources::{
-        game_context::*,
-        map_manager::*,
-    },
+    resources::*,
+    systems::*,
 };
 
 /// MapManager SystemParam used for interacting with the maps.

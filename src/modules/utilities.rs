@@ -15,10 +15,10 @@ pub mod file {
 // No need to pub use macros files. they are always exported at the `crate::*` level. Use
 // src/prelude/macros.rs to list each macro individually for inclusion in the prelude.
 pub mod macros {
-    mod embed;
-    mod generic_macros;
-    mod primative;
-    mod switch_app_state;
+    pub mod embed;
+    pub mod generic_macros;
+    pub mod primative;
+    pub mod switch_app_state;
 }
 
 pub mod query_extensions {

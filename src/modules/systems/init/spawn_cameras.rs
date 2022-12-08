@@ -1,6 +1,6 @@
 use crate::prelude::{
     *,
-    resources::camera::*,
+    resources::*,
 };
 
 pub fn spawn_cameras(mut commands: Commands, mut camera_settings: ResMut<CameraSettingsResource>) {

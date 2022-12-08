@@ -1,6 +1,6 @@
 use crate::prelude::{
     *,
-    resources::camera::*,
+    resources::*,
 };
 
 #[derive(SystemParam)]

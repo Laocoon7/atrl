@@ -15,7 +15,7 @@ pub struct Map {
     pub explored_tiles: HashSet<UVec2>,
 
     // Object containers
-    pub terrain: Grid<TerrainType>,
+    pub terrain: Grid<usize>,
     pub features: Grid<Option<Vec<Entity>>>,
     // pub items: Grid<Option<ItemStack>>,
     pub actors: Grid<Option<Vec<Entity>>>,
@@ -181,6 +181,3 @@ impl Map {
         false
     }
 }
-
-// Map Systems
-impl Map {}

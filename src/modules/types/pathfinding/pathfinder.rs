@@ -1,4 +1,7 @@
-use crate::prelude::*;
+use crate::prelude::{
+    *,
+    systems::pathfinding::*,
+};
 
 pub enum PathFinder {
     Astar,
