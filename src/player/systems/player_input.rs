@@ -15,8 +15,8 @@ impl FromWorld for PlayerTimer {
                 Self::new()
             },
             |game_settings| Self {
-                input_delay_timer: Timer::new(game_settings.repeat_duration(), TimerMode::Once),
                 unsafe_delay_timer: None,
+                input_delay_timer: Timer::new(game_settings.pressed_duration(), TimerMode::Once),
             },
         )
     }
@@ -26,7 +26,7 @@ impl PlayerTimer {
     fn new() -> Self {
         Self {
             unsafe_delay_timer: None,
-            input_delay_timer: Timer::new(Duration::from_millis(500), TimerMode::Once),
+            input_delay_timer: Timer::new(Duration::from_millis(150), TimerMode::Once),
         }
     }
 }

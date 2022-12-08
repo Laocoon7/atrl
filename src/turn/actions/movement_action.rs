@@ -43,8 +43,9 @@ pub fn try_move(world: &mut World, entity: Entity, destination: Position) -> Res
         MapManager,
         Query<(&mut Position, &Movement)>,
         Query<&BlocksMovement>,
+        Res<PlayerEntity>,
     )> = SystemState::new(world);
-    let (mut map_manager, mut spatial_q, q_blocks_movement) = system_state.get_mut(world);
+    let (mut map_manager, mut spatial_q, q_blocks_movement, player) = system_state.get_mut(world);
 
     spatial_q.get_mut(entity).map_or_else(
         |err| {
@@ -54,44 +55,49 @@ pub fn try_move(world: &mut World, entity: Entity, destination: Position) -> Res
         // OPTIMIZE: ActionType: AiPath?? so we only have to calculate this for the AI? it's not terribly
         // expensive having the player do it, but eh??
         |(mut from_position, movement_component)| {
-            PathFinder::Astar
-                .compute(
+            if **player == entity {
+                Ok(destination)
+            } else {
+                PathFinder::Astar
+                    .compute(
+                        *from_position,
+                        destination,
+                        movement_component.0,
+                        true,
+                        &mut map_manager,
+                        &q_blocks_movement,
+                    )
+                    .map_or_else(
+                        || {
+                            info!("Couldn't find a path to {:?}", destination);
+                            Err(WaitAction.boxed())
+                        },
+                        |mut path| {
+                            path.pop().map_or_else(
+                                || {
+                                    info!("Couldn't find a long enough path to {:?}", destination);
+                                    Err(WaitAction.boxed())
+                                },
+                                Ok,
+                            )
+                        },
+                    )
+            }
+            .map_or_else(Err, |destination| {
+                if map_manager.move_actor(
+                    entity,
                     *from_position,
                     destination,
                     movement_component.0,
-                    true,
-                    &mut map_manager,
                     &q_blocks_movement,
-                )
-                .map_or_else(
-                    || {
-                        info!("Couldn't find a path to {:?}", destination);
-                        Err(WaitAction.boxed())
-                    },
-                    |mut path| {
-                        path.pop().map_or_else(
-                            || {
-                                info!("Couldn't find a long enough path to {:?}", destination);
-                                Err(WaitAction.boxed())
-                            },
-                            |destination| {
-                                if map_manager.move_actor(
-                                    entity,
-                                    *from_position,
-                                    destination,
-                                    movement_component.0,
-                                    &q_blocks_movement,
-                                ) {
-                                    *from_position = destination;
-                                    Ok(())
-                                } else {
-                                    info!("{:?} is blocked!", destination);
-                                    Err(WaitAction.boxed())
-                                }
-                            },
-                        )
-                    },
-                )
+                ) {
+                    *from_position = destination;
+                    Ok(())
+                } else {
+                    info!("{:?} is blocked!", destination);
+                    Err(WaitAction.boxed())
+                }
+            })
         },
     )
 }

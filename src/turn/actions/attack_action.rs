@@ -2,7 +2,7 @@ use bevy::ecs::system::CommandQueue;
 
 use crate::prelude::*;
 
-pub const ATTACK_TIME: u32 = (SECONDS as f32 * 1.5) as u32;
+pub const ATTACK_TIME: u32 = SECONDS * 2; // Same as Movement, otherwise, they get another attack after player moves.
 
 #[derive(Debug, Clone)]
 pub struct AttackAction(pub Position);
@@ -46,10 +46,8 @@ pub fn try_attack(entity: Entity, position: Position, world: &mut World) -> Resu
             let before = format!("{}/{}", health.current_hp, health.max_hp);
             health.current_hp -= 1;
             let after = format!("{}/{}", health.current_hp, health.max_hp);
-
-            effects_writer.send(EffectType::Damage(1));
-
             println!("{name} is attacking {entity:?} before: ({before}) after: ({after})");
+            effects_writer.send(EffectType::Damage(1));
         }
     }
 

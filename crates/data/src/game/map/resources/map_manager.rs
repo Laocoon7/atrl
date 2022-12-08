@@ -379,7 +379,7 @@ impl<'w, 's> MapManager<'w, 's> {
                     1 => continue,
                     2 => {
                         // Create Wall Feature at Position
-                        map.terrain.set_unchecked(position.gridpoint(), TerrainType::Wall);
+                        map.terrain.set_unchecked(position.gridpoint(), TerrainType::None);
                     },
                     _ => continue,
                 }

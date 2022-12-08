@@ -67,6 +67,7 @@ pub fn attack_action(
         }
 
         if in_attack_range(*ai_position, player_position) {
+            println!("{name} is attacking!");
             ai_component.set_action(AttackAction(player_position).boxed());
         } else {
             *action_state = ActionState::Failure;

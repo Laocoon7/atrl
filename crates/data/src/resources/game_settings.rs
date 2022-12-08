@@ -3,8 +3,7 @@ use std::time::Duration;
 use crate::prelude::*;
 
 const DEFAULT_UNSAFE_MS: u64 = 500;
-const DEFAULT_REPEAT_MS: u64 = 500;
-const DEFAULT_PRESSED_MS: u64 = 100;
+const DEFAULT_PRESSED_MS: u64 = 150;
 const GAME_SETTINGS_FILE: &str = "assets/raws/settings/game_settings.toml";
 
 #[derive(Debug, Resource, Serialize, Deserialize)]
@@ -12,38 +11,21 @@ pub struct GameSettings {
     // Everything here needs to be Option so we can differentiate between Serialized or not. IF the settings
     // file does not have a setting defined, it will return back `None`.
     pressed_duration: Option<u64>,
-    repeat_duration: Option<u64>,
     unsafe_duration: Option<u64>,
 }
 
-impl FromWorld for GameSettings {
-    fn from_world(_world: &mut World) -> Self {
-        // create with defaults
-        let mut settings = Self::new();
+impl Default for GameSettings {
+    fn default() -> Self { Self::extend_settings(Self::new(), Self::load_settings()) }
+}
 
-        let config = toml::to_string(&settings);
-        info!("Config: {config:?}");
-
-        // load anything serialized
-        let loaded_settings = Self::load_settings();
-        info!("Loaded Settings: {loaded_settings:?}");
-
-        // overwrite any default settings with the serialized settings
-        if loaded_settings.pressed_duration.is_some() {
-            settings.pressed_duration = loaded_settings.pressed_duration;
-        }
-
-        if loaded_settings.repeat_duration.is_some() {
-            settings.repeat_duration = loaded_settings.repeat_duration;
-        }
-
-        if loaded_settings.unsafe_duration.is_some() {
-            settings.unsafe_duration = loaded_settings.unsafe_duration;
-        }
-
-        // Return GameSettings
-        info!("Game Settings: {settings:?}");
-        settings
+impl std::fmt::Display for GameSettings {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "GameSettings {{ PressedDuration: {}, UnsafeDuration: {} }}",
+            self.pressed_duration.unwrap(),
+            self.unsafe_duration.unwrap()
+        )
     }
 }
 
@@ -53,7 +35,6 @@ impl GameSettings {
         // as these are our defaults, every one should be Some([default_value])
         Self {
             pressed_duration: Some(DEFAULT_PRESSED_MS),
-            repeat_duration: Some(DEFAULT_REPEAT_MS),
             unsafe_duration: Some(DEFAULT_UNSAFE_MS),
         }
     }
@@ -68,20 +49,28 @@ impl GameSettings {
         }
     }
 
+    fn extend_settings(self, loaded_settings: Self) -> Self {
+        info!("Extending settings {self} with loaded settings: {loaded_settings}");
+
+        let new_settings = Self {
+            pressed_duration: loaded_settings.pressed_duration.or(self.pressed_duration),
+            unsafe_duration: loaded_settings.unsafe_duration.or(self.unsafe_duration),
+        };
+
+        info!("New settings: {new_settings}");
+        new_settings
+    }
+
     // Getters:
     // As we build from defaults in `Self::new()` every `self.Option` is guaranteed to be
     // `Some([value])` so unwrap the first `Option` in the getter
     pub fn pressed_duration(&self) -> Duration { Duration::from_millis(self.pressed_duration.unwrap()) }
-
-    pub fn repeat_duration(&self) -> Duration { Duration::from_millis(self.repeat_duration.unwrap()) }
 
     pub fn unsafe_duration(&self) -> Duration { Duration::from_millis(self.unsafe_duration.unwrap()) }
 
     // Setters:
     // Set a value
     pub fn set_pressed_duration(&mut self, millis: u64) { self.pressed_duration = Some(millis); }
-
-    pub fn set_repeat_duration(&mut self, millis: u64) { self.repeat_duration = Some(millis); }
 
     pub fn set_unsafe_duration(&mut self, millis: u64) { self.unsafe_duration = Some(millis); }
 }
