@@ -6,9 +6,7 @@ pub fn update_targeting(
     map_manager: MapManager,
     mut target_q: Query<(&Position, &mut AIComponent, &mut TargetVisualizer), Changed<AIComponent>>,
 ) {
-    for (ai_position, mut ai_component, mut target_visualizer) in target_q.iter_mut() {
-        // let Some(action) = &ai_component.preferred_action {}else{}
-
+    for (ai_position, ai_component, mut target_visualizer) in target_q.iter_mut() {
         let Some(action) = ai_component.get_action() else{
             target_visualizer.clear(&mut commands);
             continue;

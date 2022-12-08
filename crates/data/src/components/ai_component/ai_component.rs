@@ -3,7 +3,7 @@ use crate::prelude::*;
 #[derive(Component, Default)]
 pub struct AIComponent {
     ai_type: AIType,
-    pub preferred_action: Option<BoxedAction>,
+    preferred_action: Option<BoxedAction>,
 }
 
 impl AIComponent {
