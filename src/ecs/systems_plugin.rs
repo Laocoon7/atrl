@@ -23,6 +23,9 @@ impl<T: StateNext> Plugin for SystemsPlugin<T> {
         app.add_plugin(ProccessTurnsPlugin {
             state_running: self.state_running,
         })
+        .add_plugin(ProcessEffectsPlugin {
+            state_running: self.state_running,
+        })
         .add_plugin(ProccessEventsPlugin {
             state_running: self.state_running,
         });

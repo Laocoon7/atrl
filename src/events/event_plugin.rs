@@ -10,7 +10,8 @@ impl<T: StateNext> ProccessEventsPlugin<T> {
     fn setup_events(self, app: &mut App) -> Self {
         app.init_resource::<Events<OnMapLoaded>>()
             .init_resource::<Events<OnMapTileEnter>>()
-            .init_resource::<Events<OnMapTileExit>>();
+            .init_resource::<Events<OnMapTileExit>>()
+            .init_resource::<Events<EffectType>>();
 
         self
     }
@@ -39,6 +40,7 @@ impl<T: StateNext> Plugin for ProccessEventsPlugin<T> {
                 .with_system(event_cleaner::<OnMapLoaded>)
                 .with_system(event_cleaner::<OnMapTileEnter>)
                 .with_system(event_cleaner::<OnMapTileExit>)
+                .with_system(event_cleaner::<EffectType>)
                 .into(),
         );
 

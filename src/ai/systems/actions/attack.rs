@@ -28,7 +28,7 @@ pub fn attack_action(
             continue
         };
 
-        if ai_component.get_action().is_some() {
+        if ai_component.has_action() {
             // already attacking, quick return;
             continue;
         }

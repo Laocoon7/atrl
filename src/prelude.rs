@@ -50,5 +50,5 @@ mod import {
 pub use import::*;
 
 pub use crate::{
-    ai::*, camera::*, ecs::*, events::*, game_plugin::*, log::*, player::*, spawner::*, turn::*,
+    ai::*, camera::*, ecs::*, effects::*, events::*, game_plugin::*, log::*, player::*, spawner::*, turn::*,
 };

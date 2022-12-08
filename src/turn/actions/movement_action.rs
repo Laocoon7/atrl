@@ -2,10 +2,10 @@ use crate::prelude::*;
 
 pub const MOVE_TIME: u32 = SECONDS * 2;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MovementAction(pub Position);
 
-impl Action for MovementAction {
+impl AtrlAction for MovementAction {
     fn get_base_time_to_perform(&self) -> u32 { MOVE_TIME }
 
     fn perform(&mut self, world: &mut World, entity: Entity) -> Result<u32, BoxedAction> {
@@ -22,10 +22,10 @@ impl Action for MovementAction {
     fn get_target_position(&self) -> Option<Position> { Some(self.0) }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MovementDeltaAction(pub IVec2);
 
-impl Action for MovementDeltaAction {
+impl AtrlAction for MovementDeltaAction {
     fn get_base_time_to_perform(&self) -> u32 { MOVE_TIME }
 
     fn perform(&mut self, world: &mut World, entity: Entity) -> Result<u32, BoxedAction> {

@@ -4,16 +4,11 @@
 #![allow(clippy::module_inception)]
 #![feature(associated_type_defaults)]
 #![feature(trait_alias)]
+#![feature(mem_copy_fn)]
 
 mod actions {
-    mod action_type;
-    pub use action_type::*;
-    mod attack_action;
-    pub use attack_action::*;
-    mod movement_action;
-    pub use movement_action::*;
-    mod wait_action;
-    pub use wait_action::*;
+    mod action;
+    pub use action::*;
 }
 
 mod actors {
@@ -30,13 +25,11 @@ mod actors {
     mod vision_type;
     pub use vision_type::*;
 }
-pub use actors::*;
 
 mod camera {
     mod camera_id;
     pub use camera_id::*;
 }
-pub use camera::*;
 
 mod components {
     pub use bevy::{
@@ -395,6 +388,7 @@ mod utilities {
 }
 
 mod queries;
+
 pub mod prelude {
     mod import {
         pub use bevy::{

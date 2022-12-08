@@ -9,7 +9,7 @@ dev     = []
 release = []
 
 [dependencies]
-directories = "4"
+dyn-clone = "1.0.9"
 
 bevy                   = { workspace = true }
 bevy_ecs_tilemap       = { workspace = true }
@@ -38,5 +38,3 @@ rand        = { workspace = true }
 rand_pcg    = { workspace = true }
 rand_seeder = { workspace = true }
 xxhash-rust = { workspace = true }
-
-line_drawing = "1"

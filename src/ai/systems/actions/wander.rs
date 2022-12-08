@@ -23,7 +23,7 @@ pub fn wander_action(
                 return
             };
 
-        if ai_component.get_action().is_some() {
+        if ai_component.has_action() {
             // already wandering, quick return;
             return;
         }

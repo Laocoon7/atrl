@@ -85,7 +85,24 @@ mod ecs {
     pub use systems_plugin::*;
 }
 
+mod effects {
+    mod systems {
+        mod process_effects;
+        pub use process_effects::*;
+    }
+    pub use systems::*;
+
+    mod effects_plugin;
+    pub use effects_plugin::*;
+}
+
 mod events {
+    mod effects {
+        mod effect_events;
+        pub use effect_events::*;
+    }
+    pub use effects::*;
+
     mod map {
         mod map_events;
         pub use map_events::*;
@@ -129,6 +146,16 @@ mod spawner {
 }
 
 mod turn {
+    mod actions {
+        mod attack_action;
+        pub use attack_action::*;
+        mod movement_action;
+        pub use movement_action::*;
+        mod wait_action;
+        pub use wait_action::*;
+    }
+    pub use actions::*;
+
     mod systems {
         mod perform_turns;
         pub use perform_turns::*;

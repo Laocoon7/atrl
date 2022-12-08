@@ -16,5 +16,6 @@ pub enum AtrlStage {
     AIThinking,
     ProcessTurns,
     ProccessEvents,
+    ProcessEffects,
     CleanupEvents,
 }

@@ -1,11 +1,15 @@
+use bevy::ecs::system::CommandQueue;
+
 use crate::prelude::*;
 
 pub const ATTACK_TIME: u32 = (SECONDS as f32 * 1.5) as u32;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AttackAction(pub Position);
 
-impl Action for AttackAction {
+impl AtrlAction for AttackAction {
+    fn get_target_position(&self) -> Option<Position> { Some(self.0) }
+
     fn get_base_time_to_perform(&self) -> u32 { ATTACK_TIME }
 
     fn perform(&mut self, world: &mut World, entity: Entity) -> Result<u32, BoxedAction> {
@@ -14,13 +18,15 @@ impl Action for AttackAction {
             Err(a) => Err(a),
         }
     }
-
-    fn get_target_position(&self) -> Option<Position> { Some(self.0) }
 }
 
 pub fn try_attack(entity: Entity, position: Position, world: &mut World) -> Result<(), BoxedAction> {
-    let mut system_state: SystemState<(MapManager, Query<(&mut Health, &Name)>)> = SystemState::new(world);
-    let (mut map_manager, mut health_q) = system_state.get_mut(world);
+    let mut system_state: SystemState<(
+        MapManager,
+        Query<(&mut Health, &Name)>,
+        EventWriter<EffectType>,
+    )> = SystemState::new(world);
+    let (mut map_manager, mut health_q, mut effects_writer) = system_state.get_mut(world);
 
     let mut actors = Vec::new();
     let mut features = Vec::new();
@@ -40,6 +46,8 @@ pub fn try_attack(entity: Entity, position: Position, world: &mut World) -> Resu
             let before = format!("{}/{}", health.current_hp, health.max_hp);
             health.current_hp -= 1;
             let after = format!("{}/{}", health.current_hp, health.max_hp);
+
+            effects_writer.send(EffectType::Damage(1));
 
             println!("{name} is attacking {entity:?} before: ({before}) after: ({after})");
         }

@@ -41,7 +41,7 @@ pub fn chase_action<'w, 's>(
                 continue;
             };
 
-        if ai_component.get_action().is_some() {
+        if ai_component.has_action() {
             // already chasing, quick return;
             continue;
         }

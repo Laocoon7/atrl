@@ -1,10 +1,12 @@
 use std::fmt::Debug;
 
+use dyn_clone::DynClone;
+
 use crate::prelude::*;
 
-pub type BoxedAction = Box<dyn Action>;
+pub type BoxedAction = Box<dyn AtrlAction>;
 
-pub trait Action: Sync + Send + Debug + 'static {
+pub trait AtrlAction: Sync + Send + Debug + 'static + DynClone {
     /// Returns the base time it takes to perform the action.
     fn get_base_time_to_perform(&self) -> u32;
 
@@ -15,7 +17,7 @@ pub trait Action: Sync + Send + Debug + 'static {
     fn perform(&mut self, world: &mut World, entity: Entity) -> Result<u32, BoxedAction>;
 
     /// Returns the action as a boxed trait object.
-    fn boxed(self) -> Box<dyn Action>
+    fn boxed(self) -> Box<dyn AtrlAction>
     where Self: std::marker::Sized {
         Box::new(self)
     }
