@@ -1,13 +1,44 @@
 use crate::prelude::*;
 
-pub fn try_move(
-    entity: Entity,
-    destination: Position,
-    world: &mut World,
-    // map_manager: &mut ResMut<MapManager>,
-    // q_position: &mut Query<&mut Position>,
-    // q_movement: &Query<&Movement>,
-) -> Result<(), ActionType> {
+pub const MOVE_TIME: u32 = SECONDS * 2;
+
+#[derive(Debug)]
+pub struct MovementAction(pub Position);
+
+impl Action for MovementAction {
+    fn get_base_time_to_perform(&self) -> u32 { MOVE_TIME }
+
+    fn perform(&mut self, world: &mut World, entity: Entity) -> Result<u32, BoxedAction> {
+        let destination = self.0;
+        match try_move(world, entity, destination) {
+            Ok(_) => {
+                info!("Movement({})", destination);
+                Ok(self.get_base_time_to_perform())
+            },
+            Err(a) => Err(a),
+        }
+    }
+
+    fn get_target_position(&self) -> Option<Position> { Some(self.0) }
+}
+
+#[derive(Debug)]
+pub struct MovementDeltaAction(pub IVec2);
+
+impl Action for MovementDeltaAction {
+    fn get_base_time_to_perform(&self) -> u32 { MOVE_TIME }
+
+    fn perform(&mut self, world: &mut World, entity: Entity) -> Result<u32, BoxedAction> {
+        let mut position_q = world.query::<&mut Position>();
+        position_q.get(world, entity).map_or(Err(WaitAction.boxed()), |entity_position| {
+            let delta = self.0;
+            info!("MovementDelta({:?}) from {}", delta, entity_position);
+            Err(MovementAction(*entity_position + delta).boxed())
+        })
+    }
+}
+
+pub fn try_move(world: &mut World, entity: Entity, destination: Position) -> Result<(), BoxedAction> {
     let mut system_state: SystemState<(
         MapManager,
         Query<(&mut Position, &Movement)>,
@@ -18,7 +49,7 @@ pub fn try_move(
     spatial_q.get_mut(entity).map_or_else(
         |err| {
             info!("Couldn't find entities position components: {}", err);
-            Err(ActionType::Wait)
+            Err(WaitAction.boxed())
         },
         // OPTIMIZE: ActionType: AiPath?? so we only have to calculate this for the AI? it's not terribly
         // expensive having the player do it, but eh??
@@ -35,13 +66,13 @@ pub fn try_move(
                 .map_or_else(
                     || {
                         info!("Couldn't find a path to {:?}", destination);
-                        Err(ActionType::Wait)
+                        Err(WaitAction.boxed())
                     },
                     |mut path| {
                         path.pop().map_or_else(
                             || {
                                 info!("Couldn't find a long enough path to {:?}", destination);
-                                Err(ActionType::Wait)
+                                Err(WaitAction.boxed())
                             },
                             |destination| {
                                 if map_manager.move_actor(
@@ -55,7 +86,7 @@ pub fn try_move(
                                     Ok(())
                                 } else {
                                     info!("{:?} is blocked!", destination);
-                                    Err(ActionType::Wait)
+                                    Err(WaitAction.boxed())
                                 }
                             },
                         )

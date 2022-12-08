@@ -1,8 +1,25 @@
 use crate::prelude::*;
 
-pub fn try_attack(entity: Entity, position: Position, world: &mut World) -> Result<(), ActionType> {
-    let mut system_state: SystemState<(MapManager, Query<(&mut Health, &Name)>)> = SystemState::new(world);
+pub const ATTACK_TIME: u32 = (SECONDS as f32 * 1.5) as u32;
 
+#[derive(Debug)]
+pub struct AttackAction(pub Position);
+
+impl Action for AttackAction {
+    fn get_base_time_to_perform(&self) -> u32 { ATTACK_TIME }
+
+    fn perform(&mut self, world: &mut World, entity: Entity) -> Result<u32, BoxedAction> {
+        match try_attack(entity, self.0, world) {
+            Ok(_) => Ok(self.get_base_time_to_perform()),
+            Err(a) => Err(a),
+        }
+    }
+
+    fn get_target_position(&self) -> Option<Position> { Some(self.0) }
+}
+
+pub fn try_attack(entity: Entity, position: Position, world: &mut World) -> Result<(), BoxedAction> {
+    let mut system_state: SystemState<(MapManager, Query<(&mut Health, &Name)>)> = SystemState::new(world);
     let (mut map_manager, mut health_q) = system_state.get_mut(world);
 
     let mut actors = Vec::new();
@@ -32,6 +49,6 @@ pub fn try_attack(entity: Entity, position: Position, world: &mut World) -> Resu
         Ok(())
     } else {
         info!("Couldn't find entities with health components.");
-        Err(ActionType::Wait)
+        Err(WaitAction.boxed())
     }
 }

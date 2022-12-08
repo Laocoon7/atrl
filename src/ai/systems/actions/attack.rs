@@ -56,7 +56,7 @@ pub fn attack_action(
             ActionState::Init | ActionState::Requested => {
                 info!("{} gonna start attacking!", name);
                 *action_state = Executing;
-                ai_component.preferred_action = Some(ActionType::Attack(player_position));
+                ai_component.preferred_action = Some(AttackAction(player_position).boxed());
 
                 if let Ok(mut target_visualizer) = target_q.get_mut(*actor) {
                     target_visualizer.set_color(Color::RED);
@@ -67,10 +67,10 @@ pub fn attack_action(
         }
 
         if in_attack_range(*ai_position, player_position) {
-            ai_component.preferred_action = Some(ActionType::Attack(player_position));
+            ai_component.preferred_action = Some(AttackAction(player_position).boxed());
         } else {
             *action_state = ActionState::Failure;
-            ai_component.preferred_action = Some(ActionType::Movement(player_position));
+            ai_component.preferred_action = Some(AttackAction(player_position).boxed());
         }
     }
 }

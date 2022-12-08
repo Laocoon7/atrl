@@ -7,7 +7,7 @@ impl Plugin for SaveLoadPlugin {
             //.register_type::<Player>()
             // -- AI -- //
             .register_type::<AIType>()
-            .register_type::<AIComponent>()
+            // .register_type::<AIComponent>() // Removed due to dny Action not being able to be serialized
             // -- Stats -- //
             .register_type::<Health>()
             .register_type::<Equipable>()

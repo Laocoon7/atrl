@@ -88,7 +88,7 @@ pub fn wander_action(
 
         wander.destination = Some(destination);
         wander.my_previous_location = *ai_position;
-        ai_component.preferred_action = Some(ActionType::Movement(destination));
+        ai_component.preferred_action = Some(MovementAction(destination).boxed());
     }
 }
 

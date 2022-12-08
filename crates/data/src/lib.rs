@@ -8,6 +8,12 @@
 mod actions {
     mod action_type;
     pub use action_type::*;
+    mod attack_action;
+    pub use attack_action::*;
+    mod movement_action;
+    pub use movement_action::*;
+    mod wait_action;
+    pub use wait_action::*;
 }
 
 mod actors {

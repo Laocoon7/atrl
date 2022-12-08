@@ -1,10 +1,9 @@
 use crate::prelude::*;
 
-#[derive(Reflect, Component, Default, Clone, Copy)]
-#[reflect(Component)]
+#[derive(Component, Default)]
 pub struct AIComponent {
     ai_type: AIType,
-    pub preferred_action: Option<ActionType>,
+    pub preferred_action: Option<Box<dyn Action>>,
 }
 
 impl AIComponent {
@@ -15,6 +14,9 @@ impl AIComponent {
             preferred_action: None,
         }
     }
+
+    #[inline]
+    pub fn get_action(&mut self) -> Option<BoxedAction> { std::mem::take(&mut self.preferred_action) }
 }
 
 impl AIComponent {

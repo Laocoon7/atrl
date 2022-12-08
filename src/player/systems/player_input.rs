@@ -79,7 +79,7 @@ pub fn player_input(
     for action_state in query.iter_mut() {
         // Actions
         if action_state.just_pressed(PlayerAction::Wait) {
-            action_queue.add_action(ActionType::Wait);
+            action_queue.add_action(WaitAction.boxed());
             println!();
             info!("Player gave input: WAIT");
         }
@@ -96,7 +96,7 @@ pub fn player_input(
                     // Input is taken as a direction the player wants to move,
                     // We can apply that to the current position when the player
                     // *ACTUALLY* gets to move.
-                    action_queue.add_action(ActionType::MovementDelta(direction.coord()));
+                    action_queue.add_action(MovementDeltaAction(direction.coord()).boxed());
 
                     println!();
                     info!("Player gave input: MOVE");
@@ -110,7 +110,7 @@ pub fn player_input(
 
         if action_state.just_pressed(PlayerAction::MouseLeftClick) {
             let pos = mouse_position.get_mouse_position();
-            action_queue.add_action(ActionType::Movement(pos));
+            action_queue.add_action(MovementAction(pos).boxed());
             println!();
             info!("Player gave input: MouseLeftClick");
         }

@@ -24,7 +24,7 @@ pub fn perform_turns(world: &mut World) {
                         turn_manager.end_entity_turn(entity, 0);
                         return;
                     }
-                } else if let Ok((ai_component, name)) = ai_q.get_mut(world, entity) {
+                } else if let Ok((mut ai_component, name)) = ai_q.get_mut(world, entity) {
                     info!(
                         "Starting turn for {} on Days:Hours:Minutes:Seconds {{{}:{}:{}:{}}}",
                         name,
@@ -34,7 +34,7 @@ pub fn perform_turns(world: &mut World) {
                         turn_manager.get_seconds()
                     );
 
-                    if let Some(a) = ai_component.preferred_action {
+                    if let Some(a) = ai_component.get_action() {
                         a
                     } else {
                         info!("{} has no preferred action!", name);
@@ -49,7 +49,7 @@ pub fn perform_turns(world: &mut World) {
                 };
 
                 loop {
-                    match perform_action(entity, action, world) {
+                    match action.perform(world, entity) {
                         Ok(time_spent) => {
                             turn_manager.end_entity_turn(entity, time_spent);
                             break;

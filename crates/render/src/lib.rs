@@ -25,8 +25,6 @@ mod ui {
 
         mod menu_button;
         pub use menu_button::*;
-        mod menu;
-        pub use menu::*;
     }
     pub use widgets::*;
 

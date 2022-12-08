@@ -64,9 +64,10 @@ impl<T: StateNext> GamePlugin<T> {
             })
             // UI
             .add_plugin(UiPlugin {
+                state_main_menu: self.state_main_menu,
                 state_asset_load: self.state_asset_load,
-                state_main_menu: self.state_main_menu
             });
+
         self
     }
 

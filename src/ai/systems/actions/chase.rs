@@ -75,7 +75,7 @@ pub fn chase_action<'w, 's>(
 
                 chase.generated_path = false;
                 chase.last_seen_pt = Some(*player_position);
-                ai_component.preferred_action = Some(ActionType::Movement(*player_position));
+                ai_component.preferred_action = Some(MovementAction(*player_position).boxed());
 
                 // Enemy AI chasing the player is cause for alarm!
                 // Lets stop all input from the player for a short time so they have a chance to react!
@@ -110,7 +110,7 @@ pub fn chase_action<'w, 's>(
         } else {
             let Some(last_seen) = chase.last_seen_pt else {
                         error!("Executing chase with no target.");
-                        ai_component.preferred_action = Some(ActionType::Wait);
+                        ai_component.preferred_action = Some(WaitAction.boxed());
                         continue;
                     };
 
@@ -142,7 +142,7 @@ pub fn chase_action<'w, 's>(
             }
         };
 
-        ai_component.preferred_action = Some(ActionType::Movement(position));
+        ai_component.preferred_action = Some(MovementAction(position).boxed());
     }
 }
 
