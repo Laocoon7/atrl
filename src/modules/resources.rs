@@ -14,6 +14,8 @@ mod map_manager_resource;
 pub use map_manager_resource::*;
 mod mouse_position;
 pub use mouse_position::*;
+mod player_entity;
+pub use player_entity::*;
 mod turn_manager;
 pub use turn_manager::*;
 

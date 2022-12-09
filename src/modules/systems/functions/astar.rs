@@ -1,6 +1,6 @@
 use crate::prelude::{
     *,
-    systems::pathfinding::*,
+    systems::*,
 };
 
 pub struct AStar;

@@ -1,9 +1,6 @@
 // FoV implementation taken from:
 // https://www.albertford.com/shadowcasting/
-use crate::prelude::{
-    *,
-    systems::fov::*,
-};
+use crate::prelude::*;
 
 pub struct Shadowcast;
 

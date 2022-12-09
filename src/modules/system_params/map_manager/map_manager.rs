@@ -383,7 +383,7 @@ impl<'w, 's> MapManager<'w, 's> {
                     1 => continue,
                     2 => {
                         // Create Wall Feature at Position
-                        map.terrain.set_unchecked(position.gridpoint(), TerrainType::Wall);
+                        map.terrain.set_unchecked(position.gridpoint(), TILE_TERRAIN_MISSING_ID);
                     },
                     _ => continue,
                 }
@@ -621,9 +621,7 @@ impl<'w, 's> FovProvider for MapManager<'w, 's> {
 // Implement PathProvider
 impl<'w, 's> PathProvider for MapManager<'w, 's> {
     fn cost(&mut self, position: Position, _movement_type: u8) -> u32 {
-        self.get_map(position.get_world_position()).map_or(u32::MAX, |map| {
-            map.terrain.get_unchecked(position.get_local_position().gridpoint()).get_movement_cost()
-        })
+        1
     }
 
     fn is_walkable(

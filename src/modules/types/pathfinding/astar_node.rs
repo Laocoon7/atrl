@@ -7,7 +7,7 @@ const CARDINAL_COST: u32 = (CARDINAL_COST_F32 * SCALE_F32_TO_U32) as u32;
 const ORDINAL_COST: u32 = (ORDINAL_COST_F32 * SCALE_F32_TO_U32) as u32;
 
 #[derive(Debug)]
-pub(super) struct AStarNode {
+pub struct AStarNode {
     is_walkable: bool,
     position: Position,
     cost_multiplier: u32,

@@ -1,6 +1,10 @@
-use crate::prelude::*;
-
-use super::{white_pixel::init_white_pixel, camera::spawn_cameras};
+use crate::prelude::{
+    *,
+    systems::{
+        *,
+        init,
+    },
+};
 
 pub struct SystemsPlugin;
 impl Plugin for SystemsPlugin {

@@ -15,9 +15,11 @@ pub mod functions {
     mod dijkstra;
     pub use dijkstra::*;
 }
+pub use functions::*;
 
 pub mod run {
 }
+pub use run::*;
 
 
 
