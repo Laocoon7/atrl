@@ -553,7 +553,7 @@ dependencies = [
 [[package]]
 name = "bevy_ecs_tilemap"
 version = "0.9.0"
-source = "git+https://github.com/StarArawn/bevy_ecs_tilemap#eb20fcaccdd253ea5bf280cac7ffc5a69b674df2"
+source = "git+https://github.com/StarArawn/bevy_ecs_tilemap#e416b48c5b8b6be7d166b4e20c4571c716d711a2"
 dependencies = [
  "bevy",
  "log",
@@ -4908,7 +4908,7 @@ dependencies = [
  "js-sys",
  "log",
  "naga",
- "parking_lot 0.12.1",
+ "parking_lot 0.11.2",
  "raw-window-handle 0.5.0",
  "serde",
  "smallvec",
@@ -4935,7 +4935,7 @@ dependencies = [
  "fxhash",
  "log",
  "naga",
- "parking_lot 0.12.1",
+ "parking_lot 0.11.2",
  "profiling",
  "raw-window-handle 0.5.0",
  "ron 0.8.0",
@@ -4973,7 +4973,7 @@ dependencies = [
  "metal",
  "naga",
  "objc",
- "parking_lot 0.12.1",
+ "parking_lot 0.11.2",
  "profiling",
  "range-alloc",
  "raw-window-handle 0.5.0",
